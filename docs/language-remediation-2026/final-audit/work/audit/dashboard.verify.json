@@ -1,0 +1,233 @@
+{
+  "area": "dashboard",
+  "verdicts": [
+    {
+      "findingId": "DASH-001",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Reproduced with my own read-only probe (both demo books run through aggregateEngineInput → buildCommandObjects → summarizeCommandContext → explainCommandObject): all 11 items return \"Ranked first. Reasons: …\" in spotlight mode, and DashboardV4.tsx:65 always asks for that mode while :105 always prints \"Highest-priority recommended action\". The SMB walkthrough shows \"· #2 OF 11\" under that kicker. The fix is correct and small: an optional third argument on explainCommandObject leaves the other three callers (Slice.tsx, brief-narrative.ts, the tests) untouched, and \"Ranked 2 of 11. Reasons: …\" under \"Recommended action · #2 of 11\" states what is ordered and its basis (COPY_STANDARD §26). The existing tests at command-intelligence.test.ts:201-213 keep passing; add the position case as proposed.",
+      "checked": "src/dashboard/v4/DashboardV4.tsx:65,105; src/dashboard/lib/command-intelligence.ts:429-446; corpus-smb/dashboard.txt (\"· #2 OF 11\")"
+    },
+    {
+      "findingId": "DASH-002",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The label is not computed from any comparison: scoreRankingConfidence (scoring.ts:234-260) only adds terms for the one item. In my probe the three tied SMB items (score 89, ordered alphabetically) all read \"reasonably clear first choice\", and enterprise #2 and #3 read \"clear first choice\". The proposed wording (\"based on several / some / few recorded inputs\") is not accurate either, and it is the bland kind of copy the owner does not want: the number is mostly constants (base 36, +12 for two links, +6 for the same two links again, +4 when a readiness summary exists, +6 or +10 by kind of item), so a watched account with no signals at all scores 60–64 = \"supported\" (probe: \"Outbound to NoSignals Inc\" conf 60), and with the readiness summary present no aggregator-built card can fall below 58, so the third wording would never show. No statement about support or inputs is true for every item. The approved replacement \"priority remains stable\" is also unsupported (the stability bonus is never active: state.ts:63 passes no previous snapshot).",
+      "finalProposed": "Remove the label from the default cockpit instead of rewording it: delete CONFIDENCE_PLAIN (DashboardV4.tsx:26-31) and the label text plus its dot at :133-134; keep the \"Show next recommendation\" button and the \"Next:\" preview. The reasons line directly above already states the evidence. Leave rankingConfidence / rankingConfidenceLabel in the engine and the export untouched (keys). Record the obligation (B1-X-026 / INV-0633) as NO LONGER APPLICABLE once the label is gone. If the owner wants a line in that position, the only statement the code can support without new logic is a tie notice computed in DashboardV4 from the list itself: when ranked[idx+1] has the same score, print \"Tied with the next recommendation on score\".",
+      "checked": "src/dashboard/v4/DashboardV4.tsx:26-31,132-134; src/dashboard/lib/scoring.ts:234-266; src/dashboard/state.ts:62-65; probe output dash-verify/vt/a.out.txt"
+    },
+    {
+      "findingId": "DASH-003",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Reproduced: with one saved ICP in gtmos_icp_analytics and one open deal, the engine input carries shellContext {deals:1} only and the list contains \"Save an ideal customer profile this week.\" with the reason \"no saved ICP yet\"; both demo books (3 saved ICPs each) show the same card at #6. snapshot-aggregator.ts:264-270 never sets icps. The fix direction is right and gtmos_icp_analytics.icps is the same source the readiness aggregator counts (readiness-aggregator.ts:85-97). Narrowed for safety: also passing accounts and signals is not needed to remove the false statement and it changes ranking (scoreIcpCard adds 8 when either is non-zero, and the card would start appearing for workspaces that have accounts but no deals).",
+      "finalProposed": "snapshot-aggregator.ts:264-270 — add only the ICP count: `const icpRoot = asObject(parseJson(storage.getItem(\"gtmos_icp_analytics\")));` and `shellContext: { deals: dealActive, icps: asArray(icpRoot?.icps).length }`. Regression test as proposed (one saved ICP + one open deal → no object with id \"icp-truth\"). Card text at command-intelligence.ts:270, as proposed: \"No ICP is saved, so account scoring, prospecting and outreach have no target criteria to check accounts against. Save one in ICP Studio.\" Passing accounts/signals as well is optional and should be decided with the ranking questions in DASH-006, because it raises this card's score by 8 and shows it in more workspaces.",
+      "checked": "src/dashboard/lib/snapshot-aggregator.ts:256-271; src/dashboard/lib/command-intelligence.ts:261-291,370-377; src/dashboard/lib/scoring.ts:217-225; src/dashboard/lib/readiness-aggregator.ts:85-97"
+    },
+    {
+      "findingId": "DASH-004",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Confirmed in code and by probe: Deal Workspace's score is 0–230 (recovery.ts:57-88, 119), signal-profile.ts:117 clamps it to 100 and scoring.ts:24 prints \"out of 100\". Enterprise book: Nordstrom (130) and United Airlines (160) both read \"risk score 100 out of 100\", tie at 65 and Nordstrom is listed first, while the tile names United Airlines. git log -S confirms commit 6d11561 added \"out of 100\". Replacing the number with Deal Workspace's recorded condition is the right fix, but it does not need a new stored field or changes in three files: the aggregator already passes the condition text as rankingSignals.causeId (snapshot-aggregator.ts:131-134), and the text is a real condition exactly when the score is above 0 (recovery.ts returns a cause for every non-zero sub-score; the fallback to the suggested next step in health-snapshot.ts:64 only happens at score 0).",
+      "finalProposed": "One change, in scoring.ts:24 (import formatCauseLabel is already there): `if (profile.risk && profile.causeId) { const condition = formatCauseLabel(profile.causeId); pushReason(reasons, condition.charAt(0).toLowerCase() + condition.slice(1)); } else if (profile.risk) pushReason(reasons, \"it is one of the five open deals Deal Workspace lists first by risk\");` Result: \"Reasons: 21 days since last recorded activity.\" / \"Reasons: no recorded activity for 45 days.\" No change to the published summary shape, so stale published summaries and the test fixtures keep working. Do not add a `dealWorkspaceScore` field: the unclamped score is already kept in rankingSignals.risk for the tie-break in DASH-008. Add a test that two deals scored 130 and 160 no longer print a number and print their own conditions.",
+      "checked": "src/dashboard/lib/scoring.ts:19-48; src/dashboard/lib/signal-profile.ts:117; src/dashboard/lib/snapshot-aggregator.ts:104-134; src/deal-workspace/lib/recovery.ts:57-131; src/deal-workspace/lib/health-snapshot.ts:59-65; git log -S\"out of 100\""
+    },
+    {
+      "findingId": "DASH-005",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Reproduced: \"Ranked first. Reasons: risk score 100 out of 100 and evaluation.\" on every deal card and \"Ranked first. Reasons: prospect.\" for a deal with no risk factor. The only meta item the aggregator gives a deal card is its stage id (snapshot-aggregator.ts:113), and the loop at scoring.ts:40-46 appends it as a reason. Deleting the loop is safe: no unit test asserts a meta item as a reason (command-intelligence.test.ts:42-50 only requires a non-empty list, which the risk or staleness reason still provides), and the stage stays on the object's meta for any surface that wants to show it as a labelled fact.",
+      "checked": "src/dashboard/lib/scoring.ts:40-47; src/dashboard/lib/snapshot-aggregator.ts:113; src/dashboard/lib/command-intelligence.test.ts:19-50; probe C"
+    },
+    {
+      "findingId": "DASH-006",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Reproduced: a watched account with priority 1 of 99 scores 78 (62 base + 6 because its own title contains \"Outbound\" + 4 for having two links + 6 for its kind) and a deal that Deal Workspace scores 230 scores 65 (risk is clamped to 100 × 0.5, + 15.4 constant); the most a deal card can reach from the aggregator's inputs is about 70. So every outbound card outranks every deal in both demo books (#1–#5 outreach, #7–#11 deals), and the reasons shown do not say so. The owner-decision part is right: rebalancing changes which recommendation is first. The interim sentence needs two corrections: explainLeadCopy only receives the one object, so it cannot know whether deal cards exist (as written the sentence would be appended to every outreach card even with no deals), and the wording can be shorter.",
+      "finalProposed": "Interim copy, in DashboardV4.tsx where the whole list is available, not in explainLeadCopy: `const dealsListed = move.commandFamily === \"opportunity\" && ranked.some((o) => o.commandFamily === \"risk\");` and, after the reasons line, `{dealsListed ? <div class=\"db4-why\">{t(\"Open deals are listed after outreach to watched accounts.\", { class: \"body\" })}</div> : null}`. OWNER DECISION (unchanged from the finding): whether a deal Deal Workspace classes as critical or at risk should come before outreach to a low-priority account. If yes, the smallest change is in the score, not the copy: stop adding 6 for the word \"Outbound\" in the card's own title (signal-profile.ts:171-175 via scoring.ts:166) and 4 for the number of links (scoring.ts:174), and score deal cards from Deal Workspace's unclamped score (already in rankingSignals.risk). That changes the first recommendation in both demo books, so it must be approved first.",
+      "checked": "src/dashboard/lib/scoring.ts:133-201; src/dashboard/lib/signal-profile.ts:117,132,171-175; src/dashboard/lib/command-intelligence.ts:429-446; probe D"
+    },
+    {
+      "findingId": "DASH-007",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Confirmed from the seed data through the real aggregator: four of the five enterprise outreach cards (Boeing, OpenAI, Starbucks, United Airlines) and three of the five SMB ones (Sweetgreen, Chomps, Gymshark) are accounts with an open deal; \"Outbound to Boeing\" is #1 while Boeing's negotiation-stage deal is #11. signalSnapshotToMoveCards (snapshot-aggregator.ts:152-205) never looks at deals. The SMB walkthrough shows the contradiction when the title is clicked (\"$64k · Prospect · next step 2026-11-23 … Confirm what the buyer needs to evaluate next.\"). The relabel is an acceptable interim step and keeps scoring unchanged (the new title still matches the /outbound|signal/ test in inferMoveFamily). One wording correction: the count the card carries is signals dated within the last 60 days (heat.ts:132), not unseen signals, so \"new\" overstates it.",
+      "finalProposed": "As proposed, with \"recent\" for \"new\": title `Review recent signals for ${name}`; subtitle `${name} already has an open deal. ${recentCount} recent ${recentCount === 1 ? \"signal is\" : \"signals are\"} recorded.`; primary action { label: \"Check the signals\", href: hrefToSignalForAccount(name) }; second action { label: \"Open the deal\", href: hrefToDealForDeal(dealId, name) }; focusObject and rankingSignals unchanged. Read the open deals once in aggregateEngineInput (same parsing as cockpit.ts:138-151; open = not closed-won / closed-lost) and match on lower-cased account name. OWNER DECISION stays: whether such accounts should be left out of the list or merged with their deal card. No e2e test asserts the first card's label (program-6-pr2 walk checks only link parameters), so only snapshot-aggregator.test.ts needs a new case.",
+      "checked": "src/dashboard/lib/snapshot-aggregator.ts:152-205; src/signal-console/lib/heat.ts:130-133; corpus-smb/dashboard.txt (After clicking “Outbound to Chomps”); tests/e2e/program-6-pr2-dashboard-refacing-walk.spec.ts:240-258; probe A"
+    },
+    {
+      "findingId": "DASH-008",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Reproduced: SMB #1–#3 (Chomps, Duolingo, Sweetgreen) all score 89 with priority 26 and are in alphabetical order; Figma (priority 24) is listed above Gymshark (25) at 87; two accounts at priority 70 and 90 both clamp to 100 and the 70 (\"Alpha\") is listed first. The tile and the workspace map name Sweetgreen (first in Signal Console's order). The proposed tie-break is correct as written: for deal cards the fallback inside it already reads the unclamped Deal Workspace score from rankingSignals.risk (the aggregator passes it raw; only the profile clamps it), so no new field is required; kind of item is compared before the measure, so an account's priority is never compared with a deal's score; Array.sort is stable, so returning 0 keeps Signal Console's and Deal Workspace's own order. The stability test at command-intelligence.test.ts:231-243 still passes (equal inputs keep input order: Acme first). Update the comment in that test that says \"alphabetical tiebreak\".",
+      "checked": "src/dashboard/lib/command-intelligence.ts:382-397; src/dashboard/lib/engine-helpers.ts:131-143; src/dashboard/lib/snapshot-aggregator.ts:131-134; src/dashboard/lib/command-intelligence.test.ts:106-145,216-244; probes A and E"
+    },
+    {
+      "findingId": "DASH-009",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Reproduced: with a published summary naming only \"Old Co\" and a newer critical deal in gtmos_deal_workspaces, the list shows only Old Co while the tiles read \"1 at elevated risk\" and \"Highest deal risk: New Critical Co · 40d\". Only Deal Workspace's own persistence publishes gtmos_deal_workspace_health (persistence.ts:22-24, 89-210) and the Dashboard warm-up writes it only when the key is missing (snapshot-warmup.ts:65-71); Cold Call Studio, Call in a Favor, Pilot Desk, onboarding and the Settings backfill all write deals without republishing it. Reading live with the published key as fallback is what the cockpit tiles and the account side already do, and the unit fixtures that seed only the published key keep working through the fallback. Two notes for whoever applies it: (1) tests/e2e/program-6-pr2-dashboard-refacing-walk.spec.ts seeds both keys, with a hand-shaped summary; after this change the list is built from its three seeded deals, the ICP card becomes the first card there, and the walk's link check (returnTo / fromSurface on the first card) passes only if the ICP link fix in DASH-020 ships with it; (2) when the stored deal list is an empty array the helper returns null and falls back to a possibly stale summary — return an empty summary in that case.",
+      "checked": "src/dashboard/lib/snapshot-aggregator.ts:209-221,244-245; src/dashboard/v4/lib/cockpit.ts:138-166; src/deal-workspace/lib/persistence.ts (publishExternalState); src/dashboard/lib/snapshot-warmup.ts:65-71; tests/e2e/program-6-pr2-dashboard-refacing-walk.spec.ts:18-90,240-258; probe F"
+    },
+    {
+      "findingId": "DASH-010",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Confirmed: for a deal card DashboardV4.tsx:123 prints only the account name as the heading of a block titled \"recommended action\", and the card's own text (Deal Workspace's condition) is not printed on the default screen. Most of the unclearness described comes from the score and stage wording already covered by DASH-004 and DASH-005; what is left for this finding is the bare-name heading. Printing move.copy as well would repeat the condition once DASH-004 puts it in the reasons line (\"21 days since last recorded activity\" twice in one block), and for the ICP card it would add a three-line paragraph under a one-line heading.",
+      "finalProposed": "Heading only, at DashboardV4.tsx:123: `{move.commandFamily === \"risk\" ? `${t(\"Review the deal with\")} ${move.title}` : move.title}` → \"Review the deal with Nordstrom\" beside \"Open the deal →\". Do not print move.copy here; the condition reaches this block through the reasons line (DASH-004). Keep openFollow(…, move.focusObject) as is.",
+      "checked": "src/dashboard/v4/DashboardV4.tsx:101-131; src/dashboard/lib/snapshot-aggregator.ts:108-112; probe A (copy vs reasons per card)"
+    },
+    {
+      "findingId": "DASH-011",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Reproduced: cockpit.ts:188 pulls the first number followed by \"d\" or \"days\" out of whatever Deal Workspace condition is first, so \"Next step is due in 3 days\" renders \"Acme · 3d\", \"Next step is 5 days overdue\" → \"· 5d\", \"Expected close date is 12 days overdue\" → \"· 12d\", and the sub-line only repeats the tile's title. The approved replacement (\"Nordstrom · no recorded activity for 21 days\") states the fact in words; today's first condition is not always inactivity, so printing Deal Workspace's own sentence is the accurate way to meet it. One guard is missing: the published row's `cause` falls back to the suggested next step when the deal has no risk condition (health-snapshot.ts:64), which would print an instruction (\"review the current next step and keep it dated.\") as if it were the condition.",
+      "finalProposed": "cockpit.ts:188 → `const worstCause = worst && (worst.score ?? 0) > 0 && typeof worst.cause === \"string\" ? worst.cause.trim() : \"\";` and :269-270 → `value: worstName ?? t(\"None\"), sub: worstName ? (worstCause ? worstCause.charAt(0).toLowerCase() + worstCause.slice(1) : t(\"highest-risk open deal\")) : t(\"no open deal has elevated risk\"),`. Result: \"HIGHEST DEAL RISK — United Airlines — 16 days since last recorded activity\". Update cockpit.test.ts:98 (it expects \"Datadog · 16d\" from the retired fixture text \"16 days from lost\"): use a current Deal Workspace condition in the fixture and assert value \"Datadog\" and the sub-line.",
+      "checked": "src/dashboard/v4/lib/cockpit.ts:183-188,267-273; src/deal-workspace/lib/health-snapshot.ts:59-65; src/dashboard/v4/lib/cockpit.test.ts:68-105; probe G11"
+    },
+    {
+      "findingId": "DASH-012",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Reproduced with three deals that have no risk factor: tile 1 reads \"No elevated risk\" (green) and tile 4 reads \"Highest deal risk: Charlie — highest-risk open deal\" (red). top_pressure is the first five open deals whatever their class (health-snapshot.ts:59), so its first row is not necessarily an at-risk deal. Gating the name on the same count tile 1 uses is correct (the list is sorted by score, so when any deal is at risk the first row is one), and \"no open deal has elevated risk\" (six words, within the label limit) uses the same word as tile 1 instead of \"critical\". With old published summaries that lack the counts, the count falls back to the number of rows, so the tile still names a deal there.",
+      "checked": "src/dashboard/v4/lib/cockpit.ts:173-188,267-273; src/deal-workspace/lib/health-snapshot.ts:48-65; probe G12"
+    },
+    {
+      "findingId": "DASH-013",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "All three points hold. Probe: \"Account priority: Boeing · 62 | no high-priority accounts yet\" (both books, on the same screen as \"Highest-priority recommended action — Outbound to Boeing\") and, with readyCount 1, \"1 accounts ready for outreach\". readyCount is accounts scoring 75 or more (signal-console/lib/health-snapshot.ts:59), a different rule from Signal Console's own high-priority group (score ≥ 78 with a signal in the last two days, attention.ts:83). The proposed value follows the approved replacement (\"Boeing · score 62\") and adds the scale used elsewhere on the screen (\"out of 99\"); the sub-lines state the actual threshold instead of a readiness claim and are singularised. Each t() piece is within the six-word label limit, and cockpit.test.ts:94-95 still passes (\"Ramp\" in the value, \"4\" in the sub-line). The value will wrap to two lines for long account names at the tile's 18px size (dashboard-v4.css:59-64); if that is unwanted, use the approved short form \"Boeing · score 62\" and keep the scale in the reasons line.",
+      "checked": "src/dashboard/v4/lib/cockpit.ts:224-249; src/signal-console/lib/health-snapshot.ts:55-60; src/signal-console/v4/lib/attention.ts:79-88; src/dashboard/v4/dashboard-v4.css:58-65; src/dashboard/v4/lib/cockpit.test.ts:92-96; probe G13"
+    },
+    {
+      "findingId": "DASH-014",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "DashboardV4.tsx:45 leaves `move` null only when the ranked list is empty, so the sentence at :145 (\"No single action currently ranks above the rest\") describes a tie that cannot be the case: there is nothing to rank. On an empty store the tiles below read \"No elevated risk / None yet / Not set / None / 0 / 7\" (probe G12), so \"Review the status areas below\" sends the user to empty tiles. The replacement says what is missing and where to add it, and both halves are true to the code: any watched account produces an outreach card and any open deal produces a deal card. \"Yet\" here describes the list, not a failing of the reader, so it does not conflict with COPY_STANDARD §26. The string is not an approved replacement from the working set and no test asserts it.",
+      "checked": "src/dashboard/v4/DashboardV4.tsx:40-47,143-147; src/dashboard/lib/snapshot-aggregator.ts:253-254; grep for the string in tests and the working set; probe G12"
+    },
+    {
+      "findingId": "DASH-015",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Both lines are added by construction, not by evidence: scoring.ts:75 fires for every card of the outreach kind and :77 fires because the aggregator always attaches two links (signal-profile.ts:132 falls back to the link count). Probe: a watched account with priority 0 and no signals reads \"Ranked first. Reasons: account signal context is available and the source workspace has enough context to proceed.\"; the previous-surface walkthrough shows both lines as items 3 and 4 of every \"Why\" list. git history shows the language pass reworded them from \"signals are live\" / \"room is ready\" without checking what triggers them. Deleting the two lines leaves the real reasons (priority score, recent or high-confidence signals). The replacement for a zero-score account is accurate: Signal Console's score is 0 only when the account has no unflagged signal (heat.ts:57-66 — one signal of any age contributes at least 1). No test asserts either string. The two owner questions (should a zero-priority account be recommended at all; should two links add 4 points) are correctly left as decisions.",
+      "checked": "src/dashboard/lib/scoring.ts:50-82,155-201; src/dashboard/lib/signal-profile.ts:132,185; src/signal-console/lib/heat.ts:57-66; corpus-ds/dashboard.txt (After clicking “Why ▾”); git show 6d11561 -- src/dashboard/lib/scoring.ts; probe D0"
+    },
+    {
+      "findingId": "DASH-016",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "\"The readiness bar\" is not defined anywhere on screen; the flags are set below 14 of 20 (readiness-snapshot-publisher.ts:39, 91-97), which is the level the readiness panel words as \"solid\" (area-chip.ts:15-16). Rendered today on the ICP item in both books (\"your targeting is below the readiness bar and no saved ICP yet\"). The two structural points are also right: the discovery line is pushed for outreach cards although its 3 points apply only to a kind of card the aggregator never builds (scoring.ts:69 vs :196), and on a deal card the readiness line (scoring.ts:36) is added to every deal alike (the 5 points at :150 do not depend on the deal), so when deal management is rated below 14 it takes the second of the two reason slots the cockpit prints on every deal card. Wording amended: the proposed lines start with a capital in the middle of a sentence (reasons are joined after \"Reasons:\" with \"and\"), and \"rates … below solid\" is not something a seller would say.",
+      "finalProposed": "scoring.ts:68 → \"your outreach is rated less than solid for readiness\"; :69 → `if (profile.readinessDiscoveryWeak && family === \"move\") pushReason(reasons, \"your discovery calls are rated less than solid for readiness\");`; :36 → move to the end of buildRiskReasons (after the deal's own conditions, before the return) and word it \"your deal management is rated less than solid for readiness\"; :108 → \"your ICP and targeting are rated less than solid for readiness\"; :71 → \"your pilot records are rated less than solid for readiness\". (\"solid\" is the word the readiness panel shows for an area at 14 or more, so the reader can find the rating behind the reason.) Result on screen for the ICP item: \"Reasons: your ICP and targeting are rated less than solid for readiness and no saved ICP yet.\"",
+      "checked": "src/dashboard/lib/scoring.ts:36,68-72,108,150,190-197; src/dashboard/lib/readiness-snapshot-publisher.ts:38-98; src/dashboard/v4/lib/area-chip.ts:13-21; probe A (ICP item reasons)"
+    },
+    {
+      "findingId": "DASH-017",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Reproduced: an account named Tripadvisor becomes an \"Advisor requests\" item with the reason \"an advisor request can be reviewed\", score 97 against 91 for an identical account, and the oldest surface would print \"An advisor intro could get this deal moving — ask this week.\" for it; deals named Darktrace and Drift score 69 against 65 for an identical deal. The cause is text matching on a title the aggregator builds from the account name (command-intelligence.ts:337-343; signal-profile.ts:166-170). Carrying the kind explicitly is the correct fix and is backward compatible: `card.family ?? inferMoveFamily(card)` keeps the title-based path for cards without the field, so the existing family test (command-intelligence.test.ts:52-64) still passes, and no test relies on the text-based drift flag. A narrower alternative for the drift part, if the engine's text check should be kept for other callers, is to have the aggregator pass `driftSignal: false` in the deal card's rankingSignals (an explicit value wins in signalBool).",
+      "checked": "src/dashboard/lib/command-intelligence.ts:337-359; src/dashboard/lib/signal-profile.ts:166-175; src/dashboard/lib/engine-helpers.ts:145-149; src/dashboard/lib/scoring.ts:74,148,156,198; src/dashboard/lib/command-intelligence.test.ts:52-64; probe H"
+    },
+    {
+      "findingId": "DASH-018",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Reproduced for a deal with no risk factor and no stage: \"Ranked first. Reasons: its calculated priority score ranks it above the other available actions.\" The sentence is circular and names a score the user never sees. It becomes the normal text for every open deal without a risk factor once the stage is no longer appended (DASH-005), so it is worth fixing now. The proposed deal fallback says \"one of the five open deals\", which is wrong when fewer than five deals are open (all of them are listed), and it explains why the deal is on the list rather than what is known about it.",
+      "finalProposed": "scoring.ts, in buildRiskReasons before the return: `if (!reasons.length) pushReason(reasons, \"no risk condition is recorded for this deal\");` (true exactly when it fires: Deal Workspace records a condition for every deal whose score is above 0). command-intelligence.ts:424 → \"no specific risk or priority factor is recorded for it\" as proposed. Result: \"Ranked 11 of 11. Reasons: no risk condition is recorded for this deal.\"",
+      "checked": "src/dashboard/lib/command-intelligence.ts:422-427; src/dashboard/lib/scoring.ts:19-48; src/deal-workspace/lib/recovery.ts:114-131; probe C"
+    },
+    {
+      "findingId": "DASH-019",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "snapshot-aggregator.ts:126 sets the second link on every deal card to \"Pre-mortem the deal\"; it renders on the previous surface (walkthrough, Triage view, under Boeing). The original rewrite removed the same wording from Future Autopsy (\"PRE-MORTEM · WORST FIRST\" → \"DEAL RISK · HIGHEST RISK FIRST\"), the doctrine's CTA list names \"Review deal risk\", and the default Deal Workspace already labels its link to Future Autopsy \"Review deal risk\" (DealWorkspaceV4.tsx:305), so the replacement is the product's existing term. The warning about not putting \"autopsy\" in the label is correct: signal-profile.ts:183 matches the label text and scoring.ts:139 adds 11 points plus the reason \"a deal-risk review is available\" (the unit test at command-intelligence.test.ts:193-200 pins that behaviour). No unit or e2e test asserts the Dashboard's label (the \"Pre-mortem the deal\" in new-surface-seam-walk.spec.ts:75 belongs to Call in a Favor).",
+      "checked": "src/dashboard/lib/snapshot-aggregator.ts:119-130; src/dashboard/lib/signal-profile.ts:183; src/dashboard/lib/scoring.ts:39,139; src/deal-workspace/v4/DealWorkspaceV4.tsx:305; original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md (CTA standard); corpus-ds/dashboard.txt"
+    },
+    {
+      "findingId": "DASH-020",
+      "real": "AMENDED",
+      "fix": "AMENDED",
+      "reason": "Only the link half is a defect. command-intelligence.ts:278 is a bare \"/icp-studio/\", so ICP Studio opens without the return link every other Dashboard recommendation carries (handoff.ts:16-18 states the rule; the legacy walkthrough shows \"goes to /icp-studio/\"). \"This week\" in the title is advice, not a stated fact: nothing on screen contradicts it, it is not a number or a date, and removing it takes away the only decisiveness the line has. I would not treat it as a claims problem.",
+      "finalProposed": "Link only: command-intelligence.ts:278 → `href: buildDashboardHref({ href: \"/icp-studio/\", roomLabel: \"ICP Studio\" })` (import from ./handoff; that module has no imports, so no cycle). Keep the title \"Save an ideal customer profile this week.\" Ship this together with DASH-009: once the deal list is read live, the ICP card is the first card in the e2e walk's seeded workspace and that walk checks returnTo and fromSurface on the first card's link.",
+      "checked": "src/dashboard/lib/command-intelligence.ts:261-291; src/dashboard/lib/handoff.ts:16-48; tests/e2e/program-6-pr2-dashboard-refacing-walk.spec.ts:240-258; dash-work/fable/legacy-dashboard.txt (\"Open ICP Studio → … goes to /icp-studio/\")"
+    },
+    {
+      "findingId": "DASH-021",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings exist at the cited lines and I confirmed they cannot render today: Quota Workback writes quality_score / quality_band and no pressure score (quota-workback/lib/persistence.ts:109-127) while the engine reads qualityScore / pressureScore / qualityBand (signal-profile.ts:229-233); a search of src for writers of pressureScore, motionReady, evidenceThin, linkedRoomTop, hasReplies, dependencyWarnings and coverage_gap as engine inputs finds none; and the explanation title is printed only by the oldest surface for a card with no text of its own (Slice.tsx:91-95), which only outreach cards are. Severity 1 is right: no user sees these lines, but two of them are the phrases this audit was asked to judge (\"Your plan is ahead of the work logged\", \"Coverage gap needs more open opportunities\") and both would need translating if an input were ever connected (\"the work\" is the stand-in noun COPY_STANDARD §26 names; the second drops its subject). Of the two options offered, rewording is the safe one: the unit tests exercise several of these branches with hand-built inputs (command-intelligence.test.ts:183-191), so deleting branches means deleting tested behaviour.",
+      "finalProposed": "Reword, do not delete. command-intelligence.ts :499/:532 → \"Logged outreach is below what your quota plan requires. Log completed outreach or schedule more.\"; :489/:522 → \"Pipeline coverage is below target. This account could add an open opportunity.\"; :473/:506 → \"Your quota plan depends on this deal. Update its missing details this week.\"; :483/:516 → \"The prospect replied. Send the follow-up today.\" (keeps the urgency of the current line without the idiom); :476/:509 → \"Review this deal's recorded risk conditions.\"; :500/:533 → \"Resolve this so the recommendations use current data.\"; scoring.ts:29 → \"listed in Deal Workspace's at-risk deals\"; :38 → \"listed first in Deal Workspace\"; :76 → \"listed first in Signal Console\". The assertions at command-intelligence.test.ts:187-190 are not affected.",
+      "checked": "src/dashboard/lib/command-intelligence.ts:448-534; src/dashboard/lib/scoring.ts:29,37-38,65,76,98; src/dashboard/lib/signal-profile.ts:188-198,229-238; src/quota-workback/lib/persistence.ts:95-128; src/dashboard/components/Slice.tsx:90-95; grep for writers of the unused inputs"
+    },
+    {
+      "findingId": "DASH-022",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Reproduced in both books and present in both older walkthroughs: \"The current list includes 3 deals in recovery, 4 moves queued, and 1 system note.\" while the list holds 5 deals, 5 outreach items and the ICP item. The numbers are the lengths of capped subsets (command-intelligence.ts:410-416: first 3 deals, first 4 others, first 3 ICP/system), \"in recovery\" is applied to the first five deals whatever their risk class (Deal Workspace counts 4 at elevated risk in the same book), and \"moves queued\" is the private recommendation label. Counting the full list by kind and naming each kind (\"5 open deals to review, 5 accounts to contact, and 1 setup item\") is accurate to what is listed and reads naturally. brief-narrative.test.ts:71-80 matches /2 deals/ and must be updated to the new wording (\"2 open deals\"); that is a wording update, not a weaker assertion.",
+      "checked": "src/dashboard/lib/brief-narrative.ts:50-76; src/dashboard/lib/command-intelligence.ts:399-418; src/dashboard/lib/brief-narrative.test.ts:71-80; corpus-ds/dashboard.txt; probe A"
+    },
+    {
+      "findingId": "DASH-023",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The three sentences are chosen from the same per-item number as the cockpit label (see DASH-002) and say something about \"the ranking\" that the number does not measure: the SMB summary reads \"The ranking is well-supported by the live signals.\" while its first three items are tied and in alphabetical order. \"Live signals\" will also be read as account signals. The proposed rewording has the same weakness as in DASH-002: \"based on several / some recorded inputs\" is not true for every item (constants put a watched account with no signals in the middle band), the third variant can no longer occur once the readiness summary exists, and the sentence tells the seller nothing they can use.",
+      "finalProposed": "Delete the third sentence instead of rewording it: remove brief-narrative.ts:78-86 (the block that pushes one of the three confidence sentences). The summary then reads: \"The highest-ranked action is: Outbound to Boeing. The current list includes 5 open deals to review, 5 accounts to contact, and 1 setup item. Next up: Outbound to OpenAI.\", followed by the reasons line. brief-narrative.test.ts still passes its sentence-count bounds (2 to 5).",
+      "checked": "src/dashboard/lib/brief-narrative.ts:78-86; src/dashboard/lib/scoring.ts:234-266; src/dashboard/lib/brief-narrative.test.ts:47-57; probe A (SMB narrative)"
+    },
+    {
+      "findingId": "DASH-024",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The button sits in the readiness panel on all three generations and downloads the Dashboard's recommended-action list (exportCommandCenterJson), not readiness, so \"Export today's snapshot\" does not predict the result; the oldest surface's hover text says \"Export 11 ranked objects as JSON\" and its disabled text \"No ranked objects to export yet\" (legacy walkthrough), and \"ranked object\" is the internal phrasing the brief's rank row rules out. \"Export recommended actions (JSON)\" is four words, uses the product's own term for the list, and pairs with \"Export readiness + history\" beside it. No test asserts the label. (The panel copy belongs to the readiness area; apply once, in all three files.)",
+      "checked": "src/dashboard/v4/ClimbDrawer.tsx:164-182; src/dashboard/today/components/ReadinessPanel.tsx:132-149; src/dashboard/components/ReadinessDrawer.tsx:204-230; src/dashboard/lib/command-export.ts:86-97; grep of tests for the label"
+    },
+    {
+      "findingId": "DASH-025",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The facts hold: the file is named antaeus-command-center-<timestamp>.json (command-export.ts:94), a name the screen no longer uses, and the payload carries the engine's keys. Severity 1 is right. Most of the proposed fix should not be made, though: renaming or dropping riskCards / moveCards / systemCards changes a versioned export schema (schemaVersion 1, source \"antaeus-command-center-export-v1\"), which is the kind of key rename this pass must not do, and the proposed rankingConfidenceText would have no on-screen wording to copy once the cockpit label is removed (DASH-002).",
+      "finalProposed": "File name only: command-export.ts:94 → `filename: `antaeus-dashboard-recommendations-${timestampForFilename()}.json``. Leave the payload keys, `source` and values as they are. Nothing else in src, tests or tools references the file name.",
+      "checked": "src/dashboard/lib/command-export.ts:21-97; grep for \"antaeus-command-center\" across src, tests, tools"
+    },
+    {
+      "findingId": "DASH-026",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Confirmed by reading writer and reader side by side. The writer stores the change as data.transition = { from, to, direction, at } and the five-level state as data.verdict / data.verdict_label (readiness-history.ts:107-135), and fills the row's verdict column with a three-value approximation (\"thin\" for both of the first two states, :46-57). The export reads data.direction / data.from / data.to at the top level and row.verdict (readiness-export.ts:117-127), so every exported history entry has null from / to / direction and \"thin\" / \"partial\" / \"hire_ready\" as its state. The other reader of the same rows reads data.transition (founding-gtm/lib/ceremony.ts:104-105). There is no readiness-export test. The allowlist entry that calls `return \"thin\";` not rendered is at copy-allowlist.json:776-783. One correction to the fix: data.verdict_label is the label as it was when the row was written, so rows written before the 2026-11-06 rename would export the retired names (\"Building\", \"Inheritable with guardrails\"); derive the label from the stored key at export time instead.",
+      "finalProposed": "readiness-export.ts:117-127 — read what the writer stores and label it with the current names: `const tr = data ? asObject(data[\"transition\"]) : null; const key = (data ? asString(data[\"verdict\"]) : null) ?? row.verdict ?? \"\"; out.push({ id: row.id, atIso: row.created_at ?? \"\", verdict: key, verdictLabel: (VERDICT_LABEL as Record<string, string>)[key] ?? null, direction: tr ? asString(tr[\"direction\"]) : null, from: tr ? asString(tr[\"from\"]) : null, to: tr ? asString(tr[\"to\"]) : null });` (import VERDICT_LABEL from @/lib/readiness; add `verdictLabel: string | null` to HistoryEntry). Add readiness-export.test.ts with a row built from the writer's payload shape and assert from / to / direction and the label survive.",
+      "checked": "src/dashboard/lib/readiness-export.ts:41-48,104-133; src/dashboard/lib/readiness-history.ts:46-57,107-152; src/founding-gtm/lib/ceremony.ts:94-112; tools/language-remediation/copy-allowlist.json:776-783; src/lib/readiness/types.ts:30-36"
+    },
+    {
+      "findingId": "DASH-027",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "readiness-export.ts:64-68 writes the current state with its label but the next state only as its key (\"inheritable_with_guardrails\"), and history rows would carry only keys once DASH-026 is fixed. The file's header says it is meant to be opened and shared with advisors (:13-17), so the retired state names are what a reader of the file meets. Adding nextVerdictLabel and fromLabel / toLabel beside the keys is additive (no key is renamed) and uses VERDICT_LABEL, which holds the owner-decided names. Apply together with DASH-026 so labels are derived from the keys at export time.",
+      "checked": "src/dashboard/lib/readiness-export.ts:8-18,56-80; src/lib/readiness/types.ts:30-36"
+    },
+    {
+      "findingId": "DASH-028",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Confirmed. context.ts:75-80 reads recovery_rank / recoveryRank from each stored deal and ranker.ts:89 drops a deal whose value is 0. A search of src, js and supabase shows the only writers of that field are the cloud column and the cloud seed tool; nothing in Deal Workspace writes it to gtmos_deal_workspaces. My probe loads a stored proposal-stage deal with no next step and 40 days of inactivity as recovery_rank 0, ranking with deals only returns \"no-candidates\", and with the enterprise seed (United Airlines critical, score 160) the result is \"Compose outbound for Boeing\". The same ranker feeds the workspace map on every default page (GroundLine.tsx:40-55). The interim wording is accurate and the owner-decision framing is right, because connecting deals changes the map's recommendation on every page. One correction to the sketch for that decision: fromDeal caps every deal at 95 (ranker.ts:94), so two at-risk deals tie and the first in stored order wins, and its fixed sentence (\"… is currently the highest-ranked deal by risk\") could then name the wrong deal.",
+      "finalProposed": "Interim, as proposed — BirdseyeFloat.tsx:159 → \"No recommendation from watched accounts or scheduled checks right now. Open deals are reviewed in Deal Workspace.\" OWNER DECISION, with the sketch corrected: in loadDealsForRanking build the deals with legacyDealToDeal and rankRecovery (deal-workspace/lib/recovery.ts) and return only Deal Workspace's first-ranked deal whose lane is not \"healthy\" (recovery_rank = its score, plus `condition: causes[0]`), so the one deal candidate is the deal Deal Workspace itself lists first; in fromDeal use the condition as the reason (`${account}: ${condition}.`).",
+      "checked": "src/birdseye/lib/context.ts:46-96; src/birdseye/lib/ranker.ts:88-107,139-173; src/lib/ground/GroundLine.tsx:40-55; grep recovery_rank|recoveryRank in src, js, supabase; probes A and J"
+    },
+    {
+      "findingId": "DASH-029",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The eye button has no visible text, so \"Open current analysis\" is its whole name, and the panel it opens holds exactly one thing: a recommended action with its reason (legacy walkthrough: \"BIRDSEYE · CURRENT ANALYSIS / Compose outbound for Boeing / Boeing is currently the highest-priority account in your watchlist. / Open →\"). The migration map's row for \"system's read\" asks for the actual output category, which here is a recommendation; and in the empty state \"No higher-priority recommended action\" compares with nothing. Severity 1 is right. \"Recommended next action\" matches the default screens (\"Highest-priority recommended action\", \"Recommended next workspace\"). The e2e smoke test only checks that the heading contains \"BIRDSEYE\", which the new heading still does; no test uses the accessible name.",
+      "checked": "src/birdseye/BirdseyeFloat.tsx:95-104,126-161; tests/e2e/smoke.spec.ts (Birdseye block); dash-work/fable/legacy-dashboard.txt (After clicking “Open current analysis”)"
+    },
+    {
+      "findingId": "DASH-030",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "BirdseyeFloat.tsx:55-58 puts a thrown error's own message into the panel (:143-146) and does not report it. The path is narrow (the observations loader catches its own failures; the two storage loaders would throw only if localStorage access itself throws), so severity 1 is right, but it is the same pattern the Dashboard's observations card removed on 2026-06-17. reportError(err, context) exists in @/lib/observability. One wording point: the panel has no retry control, so \"Try again in a moment\" does not tell the user how; reopening the panel is what reruns the load (openBirdseye calls refresh).",
+      "finalProposed": "Replace lines 55-58 with `} catch (err) { reportError(err, { surface: \"birdseye\" }); errorSignal.value = \"Couldn't load the recommended next action. Close this panel and open it again to retry.\"; }` (import reportError from @/lib/observability).",
+      "checked": "src/birdseye/BirdseyeFloat.tsx:32-66,143-146; src/birdseye/lib/context.ts:132-138; src/lib/observability.ts (reportError)"
+    }
+  ],
+  "dispositionChallenges": [],
+  "missed": []
+}

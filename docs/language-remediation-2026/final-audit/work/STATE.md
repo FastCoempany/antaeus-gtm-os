@@ -1,6 +1,6 @@
 # Final audit — working state (resume from here)
 
-Updated 2026-11-16T22:37Z. This folder is the durable copy of the audit's working files. The live copies are in the session scratchpad; if the scratchpad is gone, run `tools/…` per "Restore" below.
+Updated 2026-11-16T23:57Z. This folder is the durable copy of the audit's working files. The live copies are in the session scratchpad; if the scratchpad is gone, run `tools/…` per "Restore" below.
 
 ## Where things stand
 
@@ -28,6 +28,7 @@ Updated 2026-11-16T22:37Z. This folder is the durable copy of the audit's workin
 | welcome | 38 | 23 | 14 | 23 verdicts |
 
   Areas not listed have not started. `welcome` is the only complete audit. `audit-leads/` holds partial notes from reviewers that briefly ran on Opus before the owner said Fable only — unverified leads, never authoritative.
+- Progress at this update: 16 areas have saved findings (619). Fully verified: welcome, backend-contracts, onboarding. Dashboard audit is complete and its verification is partly done (30 of 55). The container restarted a third time at 23:56 UTC on 2026-11-16 (cause unknown); reviewers resume from the saved files.
 - Not started: adjudication, fixes, regenerated walkthroughs, nine-dimension scoring, semantic-damage review, record-level reconciliation (3,584 records + 60 prose obligations), final suite, CI, certification, A–K report.
 
 ## How the audit runs

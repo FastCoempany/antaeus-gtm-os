@@ -118,6 +118,236 @@
     "src/outdoors-events/lib/discovery.ts"
    ],
    "note": "Read every HTTP handler from the first line of the serve callback to the last response, and every browser caller (grep for functions.invoke and .rpc across src and js). prospecting-research and outdoors-events-discovery validate the caller's JWT and workspace membership before any paid call, answer the CORS preflight, and return 400 for malformed bodies; their request and response field names match the clients (find/research: companies, not_found, budget.state, status; run_one: ok, result.status). inbound-email checks its shared secret before parsing. The other functions have the gaps filed as 018-022. Nothing here was executed against a deployed function, a live database or the Anthropic API; the statements about what an unauthenticated or cross-origin request does are from reading the handlers and the deploy command (--no-verify-jwt on line 113 of the workflow)."
+  },
+  {
+   "surface": "Routing: legacy /app/<area>/ stubs, renamed paths, retired Call Planner routes, Worker gate and preview lane, continuity parameters",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "app/advisor-deploy/index.html",
+    "app/discovery-agenda/index.html",
+    "app/poc-framework/index.html",
+    "app/sourcing-workbench/index.html",
+    "app/readiness/index.html",
+    "vite.config.ts",
+    "worker/index.ts",
+    "wrangler.jsonc",
+    "src/lib/continuity.ts",
+    "src/lib/continuity.test.ts",
+    "src/lib/back-button.tsx",
+    "src/components/navigation.tsx",
+    "src/lib/briefing-drafts.ts",
+    "src/briefing/lib/destinations.ts",
+    "src/lib/palette/registry.ts",
+    "src/lib/session/types.ts",
+    "js/supabase-config.js",
+    "js/workspace-guard.js"
+   ],
+   "note": "Read all 20 app/*/index.html stubs: each redirects to the current path and keeps the query string and hash (advisor-deploy -> /call-in-a-favor/, poc-framework -> /pilot-desk/, sourcing-workbench -> /prospecting-desk/, discovery-agenda -> /discovery-studio/, readiness -> /dashboard/?readiness=1). vite.config.ts RENAMED_PATHS emits stubs at /sourcing-workbench/, /poc-framework/, /negotiation/, /advisor-deploy/ and /call-planner/ (-> /discovery-studio/). grep found no source link to a retired path other than js/supabase-config.js:141 and js/workspace-guard.js:54, which point at /app/dashboard/, /app/welcome/ and /app/onboarding/ and are caught by the stubs. The Worker was read in full: the unlock redirect is origin-prefixed, the preview lane blocks onboarding and the sign-in pages, and the transcript route checks the code in the path. src/call-planner no longer exists; old room ids are kept only in src/lib/session/types.ts (so stored sessions parse) and as palette ids/keywords. Nothing was executed against a deployed Worker; the stub files in dist were not built here (the machine note forbids a build), so the generated stubs were read from the plugin source only. One defect in the returnTo guard (finding 024)."
+  },
+  {
+   "surface": "Re-verification of findings 001-022 saved by the interrupted reviewer",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/dashboard/today/lib/adapters.ts",
+    "src/dashboard/lib/scoring.ts",
+    "src/dashboard/lib/signal-profile.ts",
+    "src/dashboard/v4/lib/cockpit.ts",
+    "src/dashboard/lib/readiness-export.ts",
+    "src/dashboard/lib/readiness-history.ts",
+    "src/quota-workback/lib/persistence.ts",
+    "src/deal-workspace/lib/recovery.ts",
+    "src/founding-gtm/lib/ceremony.ts"
+   ],
+   "note": "Opened every cited file:line for all 22 findings (a script printed the five lines around each) and re-derived 013-017, which the previous notes marked as not yet re-checked: 013 (the 30+ day cause text is the card copy the Queue filter tests), 014 (risk is clamped to 0-100 by signalNumber before the 'out of 100' text), 015 (the regex takes the first number-plus-d from whichever cause sentence is first), 016 (the export reads data.direction/from/to while the writer nests them under data.transition; the Founding GTM reader in ceremony.ts reads data.transition correctly), 017 (gtmos_quota_targets is written in snake_case and has no pressure score). All five stand as written. 018-022 were re-read while auditing the edge functions."
+  },
+  {
+   "surface": "Heartbeat function against what the areas actually store: scheduled checks (deals, signals, pilots, discovery calls), observation writer and reader, scheduled-action firing, suggestion detection",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "supabase/functions/heartbeat/index.ts",
+    "supabase/functions/heartbeat/generators.ts",
+    "supabase/functions/heartbeat/phase-f-generators.ts",
+    "supabase/migrations/20260519180001_observations_ledger.sql",
+    "supabase/migrations/20260531120000_scheduled_skills.sql",
+    "src/lib/observations/reader.ts",
+    "src/lib/observations/generators/discovery-rhythm.ts",
+    "src/dashboard/lib/week-reads-filter.ts",
+    "src/skills/lib/schedule-storage.ts",
+    "src/skills/lib/scheduling.ts",
+    "src/lib/data-client.ts",
+    "src/discovery-studio/lib/persistence.ts",
+    "src/discovery-studio/lib/call-log.ts",
+    "src/cold-call-studio/lib/coldcall-bridge.ts",
+    "src/cold-call-studio/lib/cloud-persistence.ts",
+    "src/pilot-desk/lib/poc-bridge.ts",
+    "src/pilot-desk/lib/cloud-persistence.ts",
+    "src/pilot-desk/v4/PilotDeskV4.tsx",
+    "src/lib/session/helpers.ts"
+   ],
+   "note": "Read index.ts and generators.ts in full and each table's writer. Scheduled actions: the cadence keys the client stores (hour, minute, day_of_week, day_of_month; src/skills/lib/scheduling.ts:62-78) are the ones the function parses (index.ts:626-646), the pending-fire query uses the null-safe filter (data-client.ts:347-350), and cadence_kind stays inside its check constraint. The active-workspace list no longer depends on workspace_sessions (index.ts:150-171 scans the data tables), which matters because no area calls bootSession / setFocusedObject / pushRecentAction (grep: no caller outside src/lib/session), so that table has no rows. For the same reason the 'recurring focus' suggestion generator (phase-f-generators.ts:308-340, reads workspace_sessions.recent_actions) can never produce a suggestion; nothing wrong is shown, so it is recorded here and not filed. Wording of the generated sentences (stage key in the deal sentence, 'proof' / 'readout window' in the pilot sentence, area names in suggestions) is already filed by other reviewers as TERMS-014, TERMS-015, TERMS-016, TERMS-017, BRIEFING-UI-012, BRIEFING-UI-042 and is not repeated. Three contract defects are filed (025, 026, 029). Nothing was run against a database."
+  },
+  {
+   "surface": "LinkedIn Playbook stored action log (gtmos_linkedin_log and sequences rows): step names kept inside stored values",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/linkedin-playbook/lib/cues.ts",
+    "src/linkedin-playbook/lib/motion.ts",
+    "src/linkedin-playbook/lib/linkedin-bridge.ts",
+    "src/linkedin-playbook/lib/persistence.ts",
+    "src/linkedin-playbook/state.ts",
+    "src/linkedin-playbook/v4/LinkedInPlaybookV4.tsx",
+    "src/linkedin-playbook/ds/components/ChannelBoard.tsx",
+    "src/linkedin-playbook/components/CueLedger.tsx"
+   ],
+   "note": "Recovered every name each step has had from git (git show <commit>^:src/linkedin-playbook/lib/cues.ts for 4825d83, d177359, 6d11561) and compared them with the translation table on the default screen. The stored value is the display name of the step at the time it was logged (state.ts:181), so every rename needs an entry. One name is missing (027) and the two fallback versions print the stored text (028). Call in a Favor stores the same kind of label (momentName) but the default screen resolves the current name by id first (CallInAFavorV4.tsx:293), so nothing is filed there."
+  },
+  {
+   "surface": "Suggestions (heartbeat detection -> proposed_modifications -> Briefing suggestion band -> accepted changes), and Prospecting Desk saved-search re-run (schedule -> function -> studio_artifacts rows -> client parser)",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "supabase/functions/heartbeat/phase-f-writer.ts",
+    "supabase/functions/heartbeat/voice-document.ts",
+    "supabase/functions/heartbeat/phase-f-generators.ts",
+    "supabase/functions/heartbeat/phase-f-variant-runner.ts",
+    "supabase/migrations/20260602230000_phase_f_proposed_modifications.sql",
+    "supabase/migrations/20260613000000_density_state.sql",
+    "src/briefing/lib/phase-f-apply.ts",
+    "src/briefing/lib/suggestions.ts",
+    "src/settings/v4/SettingsV4.tsx",
+    "supabase/functions/prospecting-research/index.ts",
+    "supabase/functions/prospecting-research/_shared.ts",
+    "supabase/migrations/20261105200000_prospecting_auto_rerun.sql",
+    "supabase/migrations/20261105120000_prospecting_research_runs.sql",
+    "src/prospecting-desk/lib/sourcing-bridge.ts",
+    "src/prospecting-desk/lib/types.ts"
+   ],
+   "note": "Suggestions: the three kinds the client applies (skill_default, observation_generator, density_change) are the ones the check constraint allows; the apply step reads the payload keys the detectors write (skill_id/params, generator_id/variant_name/filter). The writer, however, reads a field the validator does not return, so nothing is ever written (finding 030). Prospecting re-run: the function identifies rows by data.kind 'sourcing.queryCard' / 'sourcing.prospect' and inserts studio 'sourcing', artifact_type 'prospect', stage 'captured' with a webResearch object; src/prospecting-desk/lib/sourcing-bridge.ts writes and parses exactly those values (KIND_QUERY_CARD / KIND_PROSPECT, asStage, parseProspectResearch), so automatically found companies load on the client. The run needs both the per-workspace switch and the server secret PROSPECTING_AUTO_RERUN, and status values written to prospecting_research_runs are inside its check constraint. The diff of the Prospecting stored types since f6416124 is additive only. Read, not executed."
+  },
+  {
+   "surface": "Cloud save paths per area and screen version (which user actions reach the cloud tables, and what the next load does with rows that did not)",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/outbound-studio/lib/cloud-persistence.ts",
+    "src/outbound-studio/lib/outbound-bridge.ts",
+    "src/outbound-studio/state.ts",
+    "src/outbound-studio/ds/components/SendLinePanel.tsx",
+    "src/outbound-studio/ds/components/TouchLogDS.tsx",
+    "src/outbound-studio/components/OutputPanel.tsx",
+    "src/outbound-studio/components/TouchLog.tsx",
+    "src/outbound-studio/v4/OutboundStudioV4.tsx",
+    "src/cold-call-studio/lib/cloud-persistence.ts",
+    "src/cold-call-studio/ds/components/ThreadConsole.tsx",
+    "src/linkedin-playbook/lib/cloud-persistence.ts",
+    "src/linkedin-playbook/ds/components/CueStage.tsx",
+    "src/linkedin-playbook/ds/components/ChannelBoard.tsx",
+    "src/quota-workback/lib/cloud-persistence.ts",
+    "src/quota-workback/lib/quota-bridge.ts",
+    "src/getting-to-signed/lib/cloud-persistence.ts",
+    "src/future-autopsy/lib/cloud-persistence.ts",
+    "src/pilot-desk/lib/cloud-persistence.ts",
+    "src/call-in-a-favor/lib/cloud-persistence.ts",
+    "src/call-in-a-favor/lib/advisor-bridge.ts",
+    "src/territory-architect/lib/cloud-persistence.ts",
+    "src/icp-studio/lib/cloud-persistence.ts",
+    "src/prospecting-desk/lib/cloud-persistence.ts",
+    "src/signal-console/lib/cloud-persistence.ts",
+    "src/lib/data-migration.ts"
+   ],
+   "note": "For each area, listed the exported save functions of its cloud module and grepped every caller in the three screen versions. Quota Workback, Getting to Signed and Future Autopsy save from an effect on their state, so all versions are covered. Pilot Desk, Call in a Favor, Territory Architect, ICP Studio and Prospecting Desk call the save function from all three versions. Outbound Studio, Cold Call Studio and LinkedIn Playbook call it from the default and oldest versions only (finding 031). Row discriminators (studio / artifact_type / sequence_key / log_type / data.kind) are unchanged since f6416124 apart from the removed Call Planner type, so no stored row was orphaned by the area renames. Call in a Favor's tier and outcome columns receive only values their check constraints allow (advisor-bridge.ts:75-78, 99-102). Signal Console loads up to 5,000 signals ordered by date. One schema risk that cannot be confirmed from this repository is filed as 032. Signed-in behavior was read, not run: the demo walkthrough uses no database."
+  },
+  {
+   "surface": "Schema against types and accessors; Settings download and delete coverage; type check of the Deno functions",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "supabase/migrations/20260424170003_new_noun_tables.sql",
+    "supabase/migrations/20261105130000_delete_workspace_data.sql",
+    "supabase-workspace-persistence.sql",
+    "src/lib/database.types.ts",
+    "src/lib/data-client.ts",
+    "src/settings/lib/workspace-tables.ts",
+    "src/settings/lib/cloud-sync.ts",
+    "src/settings/lib/storage.ts",
+    "src/settings/state.ts",
+    "src/dashboard/lib/readiness-history.ts",
+    "supabase/functions/briefing-pipeline/index.ts",
+    "supabase/functions/briefing-pipeline/llm/synthesis.ts"
+   ],
+   "note": "A script (scratchpad bc3-work/schema-diff.js) parsed every CREATE TABLE / ADD COLUMN in the root SQL files and supabase/migrations and compared the columns with the Row types: no column declared in SQL is missing from src/lib/database.types.ts; the five type-only names are views; briefing_html_snapshots is used only by the function and has no accessor. Every value check constraint was read and each client writer checked: readiness verdict (mapped to thin/partial/hire_ready), pilot outcome_state, advisor tier and outcome stamp, outdoors status / tier / source_kind, proposal kind and decision, scheduled cadence, observation status. No display label is written into a constrained column. The delete function's table list (39) equals the Settings registry minus the kept profile table, every listed table has workspace_id, and no workspace table is missing; Settings clears every gtmos_ key except the demo namespace after a cloud delete. The Deno functions are outside the project's type check (tsconfig.json includes src only), so each function's index.ts was type-checked here with a two-line shim for the URL imports (scratchpad bc3-work/denocheck, tsc --noEmit, nothing written to the repository): heartbeat reported the two errors behind finding 030; briefing-pipeline reported the wrong field behind finding 034 and three type-only mismatches with no runtime effect (two readonly arrays pushed to in llm/enrich.ts:349, 376; two reserved context fields in sources/github-releases-atom.ts and sources/html-diff.ts that nothing fills); the other six functions reported nothing that changes behavior."
+  },
+  {
+   "surface": "Scoring and selection rules compared with f6416124 (Dashboard ranking, Deal Workspace risk, Signal Console priority, Quota Workback, Readiness, Future Autopsy, Outbound, LinkedIn, ICP, Pilot Desk, Call in a Favor, Prospecting, Welcome)",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/dashboard/lib/scoring.ts",
+    "src/dashboard/lib/signal-profile.ts",
+    "src/dashboard/lib/command-intelligence.ts",
+    "src/deal-workspace/lib/recovery.ts",
+    "src/signal-console/lib/heat.ts",
+    "src/quota-workback/lib/engine.ts",
+    "src/quota-workback/lib/coverage.ts",
+    "src/lib/readiness/verdict.ts",
+    "src/lib/readiness/dimensions.ts",
+    "src/future-autopsy/lib/causes.ts",
+    "src/future-autopsy/lib/autopsy.ts",
+    "src/outbound-studio/lib/generator.ts",
+    "src/linkedin-playbook/lib/motion.ts",
+    "src/icp-studio/lib/quality.ts",
+    "src/pilot-desk/lib/quality.ts",
+    "src/call-in-a-favor/lib/score.ts",
+    "src/prospecting-desk/lib/quality.ts",
+    "src/welcome/lib/engine.ts"
+   ],
+   "note": "git diff f6416124..HEAD on each file, filtered to lines with numbers, comparisons or score arithmetic and then read. Unchanged: Dashboard score formulas and clamps; Deal Workspace risk points (100/70/35, 60/30/80, 50/30) and bands (150/80); Signal Console priority formula (heatFromStoredRow was added as the single reader and recomputes from stored signals); Readiness requirements (10/14/16/8 and the count checks); ICP points (15/10/15/15/15/10/10, warnings 4 and 2); Future Autopsy cause rules; Pilot Desk, Call in a Favor, Prospecting and Welcome numbers. Changed as approved: Outbound completeness score (noAsk +3 removed, nextQuestion +6; bands 80/55 as before); Quota Workback rounds once at the annual level (owner decision 2026-11-05) and its plan-quality formula is unchanged. The Dashboard next-step explanation was split into separate 'overdue' and 'stage age' sentences (text selection only). Readiness, Future Autopsy, LinkedIn and Outbound text selection is covered in depth by the approved-evolution reviewer (AE-001 to AE-024) and is not repeated here."
+  },
+  {
+   "surface": "Capture functions against their readers: BCC email capture (inbound-email -> sequences -> Outbound Studio and the areas that count outreach) and calendar capture (calendar-sync -> captured_meetings -> Quota Workback and the recent-activity panel)",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "supabase/functions/inbound-email/index.ts",
+    "supabase/functions/inbound-email/_shared.ts",
+    "supabase/functions/calendar-sync/index.ts",
+    "supabase/migrations/20260710210000_captured_meetings.sql",
+    "src/settings/lib/capture.ts",
+    "src/settings/v4/SettingsV4.tsx",
+    "src/outbound-studio/lib/outbound-bridge.ts",
+    "src/quota-workback/v4/lib/captured-meetings.ts",
+    "src/quota-workback/v4/lib/pace.ts",
+    "src/lib/edge/LiveEdge.tsx"
+   ],
+   "note": "Key names agree on both sides: Settings writes workspace_profile.data.capture_token and data.calendar_ics_url (capture.ts:95, 165) and the functions read the same keys (inbound-email/index.ts:85; calendar-sync/index.ts:95, 126). The captured email row uses the sequence_key, name, title and data fields Outbound Studio parses; the secret is checked before the body is parsed; the calendar upsert key (workspace_id, ics_uid, starts_at) matches the table's unique index. A captured email reaches Quota Workback, the recent-activity count, Signal Console's outreach status and Readiness only after Outbound Studio has been opened on that device, because those areas read the browser copy that only Outbound Studio refreshes from the cloud; that is already filed by the shared-chrome reviewer as SC-005 and is not repeated. The calendar check's browser failure is finding 020; what happens to a captured row when it is edited is finding 033. Neither function was called; no mail or calendar feed was used."
+  },
+  {
+   "surface": "Rendered walkthrough and original obligation records for this area",
+   "generation": "tooling",
+   "how": "not-verified",
+   "files": [],
+   "note": "This area is not in the walkthrough and no original record maps to it, so there is no rendered text to check and the dispositions list is empty. The enterprise walkthrough text of other areas (scratchpad corpus/dashboard.txt, deal-workspace.txt, pilot-desk.txt) was used only to confirm effects of contract defects, for example the readiness line that still asks for a pilot although the demo book has a converted one, and seeded deals shown as 'Prospect'. That corpus was built from the checked-in transcript and predates the 2026-11-06 readiness renames, so it was not used as evidence of current wording."
+  },
+  {
+   "surface": "Edge-function authentication, CORS and deployment (findings 018-022) re-derived",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "supabase/functions/briefing-pipeline/index.ts",
+    "supabase/functions/briefing-pattern-critic/index.ts",
+    "supabase/functions/heartbeat/index.ts",
+    "supabase/functions/calendar-sync/index.ts",
+    "supabase/functions/seeding-enrichment/index.ts",
+    "supabase/functions/prospecting-research/index.ts",
+    "supabase/functions/outdoors-events-discovery/index.ts",
+    ".github/workflows/deploy-supabase-functions.yml",
+    "src/briefing/lib/watchlist-client.ts"
+   ],
+   "note": "Checked again in this pass with a search of each entry file: briefing-pipeline, briefing-pattern-critic and heartbeat contain no read of the Authorization header and no getUser call, and no OPTIONS branch or Access-Control header; calendar-sync checks the caller's token for sync_one but has no OPTIONS branch; seeding-enrichment answers OPTIONS and checks no token; prospecting-research and outdoors-events-discovery do both. The deploy matrix lists four functions (workflow lines 76-80) and deploys with --no-verify-jwt (line 113). body.override is passed through at briefing-pipeline/index.ts:1406 and switches off the cost pause at :874. The five findings stand as written by the earlier reviewer."
   }
  ],
  "findings": [
@@ -487,9 +717,323 @@
     "src/onboarding/seeding/lib/enrichment-function.test.ts"
    ],
    "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-023",
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/founding-gtm/lib/sections.ts",
+   "line": 427,
+   "generation": "shared",
+   "state": "Founding GTM (all three versions), section 3 'Discovery questions used on calls that progressed', for a workspace that has logged calls in Cold Call Studio but has not yet recorded a result on a discovery call in Discovery Studio (gtmos_discovery_call_log is empty)",
+   "current": "`${plural(totalCalls, \"discovery call is\", \"discovery calls are\")} logged. ${advancedCalls} advanced to a next meeting, an observed advance rate of ${advanceRate}%.` (line 427); evidence `${advancedCalls} of ${totalCalls} calls recorded as advanced · ${advanceRate}%` (436); callouts \"No logged discovery call currently has an advanced outcome.\" (444), \"Fewer than one third of logged discovery calls are recorded as advanced.\" / `Only ${advanceRate}% of logged calls led to a next meeting. Tighten the questions and the next-step ask before the new hire learns the loose version.` (450-451), \"Most logged discovery calls are recorded as advanced.\" (456). totalCalls and advancedCalls come from gtmos_discovery_stats (cross-room.ts:452-461).",
+   "problem": "The only code that writes gtmos_discovery_stats today is Cold Call Studio: one is added to totalCalls for every cold call logged and one to advancedCalls when the outcome is 'Meeting booked' (src/cold-call-studio/lib/persistence.ts:186-199, called from state.ts:181). Discovery Studio writes gtmos_discovery_call_log only. The second writer, Call Planner, was removed in #324. So this branch presents cold-call counts as discovery calls, in the document a new hire reads. Example: 30 cold calls logged, 3 meetings booked, no discovery call recorded -> '30 discovery calls are logged. 3 advanced to a next meeting, an observed advance rate of 10%.' plus the corrective callout 'Fewer than one third of logged discovery calls are recorded as advanced … Tighten the questions and the next-step ask'. A 10% booking rate on cold calls is not a discovery problem; the 33% and 60% thresholds were written for discovery calls. The section is also marked ready on this evidence, which adds one to 'N of 7 sections ready' and to the readiness requirement that reads that count. Same root as AE-002 / DUI-009 / READINESS-003 (the Readiness side of the same key); this is the Founding GTM side, which those findings do not cover. sections.test.ts:217-236 and 283-300 feed discoveryStats directly and assert this wording.",
+   "governing": "AUDIT_BRIEF.md §5 Function ('copy that now claims something the code does not do, a number that no longer matches its formula'); COPY_STANDARD.md §21 (do not be more certain than the data); CLAUDE.md Part I §4.19 (section 3: the questions that won the next meeting come from Discovery Studio segment data)",
+   "proposed": "Say what the numbers are and drop the discovery-rate judgment in this branch. Line 427: `${plural(totalCalls, \"call is\", \"calls are\")} logged in Cold Call Studio. ${advancedCalls} booked a meeting (${advanceRate}%). No discovery call has a recorded result yet, so this page cannot show which questions come up on calls that advance. Record how each discovery call ended in Discovery Studio (After the call).` Evidence line 436: `${advancedCalls} of ${totalCalls} cold calls booked a meeting · ${advanceRate}%`. Replace the three callouts in this branch (lines 440-459) with one neutral note: headline \"Discovery call results are not recorded yet.\", body \"The counts above are cold calls. Record a result on your next few discovery calls so this section can compare the calls that advanced with the ones that did not.\" Update sections.test.ts:217-236 and 283-300 to the new wording. OWNER DECISION: whether section 3 should count as ready when the only evidence is cold-call counts (today it does, which raises 'N of 7 sections ready'); the alternative is to return status \"partial\" from this branch, which lowers the count for workspaces in this state and so can change the readiness state.",
+   "testsAffected": [
+    "src/founding-gtm/lib/sections.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-024",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/lib/continuity.ts",
+   "line": 91,
+   "generation": "shared",
+   "state": "Any page that shows the back link built from ?returnTo= (src/lib/back-button.tsx:51, src/components/navigation.tsx:83, Settings), opened from a crafted link such as /settings/?returnTo=/%5Cevil.example/&returnLabel=Dashboard or /settings/?returnTo=/%09/evil.example/",
+   "current": "export function safeReturnTo(returnTo) { if (!returnTo) return null; if (!returnTo.startsWith(\"/\")) return null; if (returnTo.startsWith(\"//\")) return null; return returnTo; } (lines 88-93). The returned string is used as the href of the back link, with the attacker-supplied returnLabel as its text.",
+   "problem": "The guard is meant to stop a link leaving the site ('Prevents open-redirect attacks', line 82) but passes two forms that browsers resolve to another host. For http(s) pages a backslash is treated as a slash and tabs/newlines are removed before parsing, so '/\\evil.example/' and '/<tab>/evil.example/' both resolve as '//evil.example/'. Reproduced with the same parser: node -e 'console.log(new URL(\"/\\\\evil.example/x\",\"https://antaeus.app/settings/\").href)' prints https://evil.example/x. A back link labelled 'Back to Dashboard' can therefore send a signed-in user to an outside site. continuity.test.ts:59-66 covers absolute and '//' forms only. Present since the continuity reader was added; not part of the language work.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 ('routing, IDs/URLs … cross-room handoffs'); src/lib/continuity.ts:80-87 (the function's own contract); deliverables/audit/continuity-params-2026-05.md Invariant 3 (returnTo stays in-app)",
+   "proposed": "Resolve the value against the current origin and keep it only when it stays there: export function safeReturnTo(returnTo) { if (!returnTo || !returnTo.startsWith(\"/\")) return null; if (/[\\\\\\u0000-\\u001f]/.test(returnTo)) return null; try { const base = typeof window !== \"undefined\" ? window.location.origin : \"https://antaeus.app\"; const u = new URL(returnTo, base); if (u.origin !== base) return null; return u.pathname + u.search + u.hash; } catch { return null; } }. Add to continuity.test.ts: safeReturnTo(\"/\\\\evil.example/\") and safeReturnTo(\"/\\t/evil.example/\") are null; safeReturnTo(\"/quota-workback/?a=1#x\") is unchanged.",
+   "testsAffected": [
+    "src/lib/continuity.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-025",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "supabase/functions/heartbeat/generators.ts",
+   "line": 332,
+   "generation": "backend",
+   "state": "Scheduled check 'discovery call frequency' (every 30 minutes); its sentence is shown in Briefing 'Your work', the Dashboard previous version's weekly list and the recent-activity panel",
+   "current": "discoveryRhythmGenerator counts every row of discovery_call_logs for the workspace whose call_date or created_at falls in the last 7 days (lines 331-335, no filter on log_type) and writes \"No discovery calls were logged in the last 7 days. Check whether calls are missing from the log or whether more discovery activity is needed for your pipeline plan.\" or \"Only 1 discovery call was logged in the last 7 days. …\" when the count is below 1 (lines 353-358).",
+   "problem": "The table does not hold discovery calls. It holds (a) one row per cold call, written by Cold Call Studio with log_type 'cold-call' (src/cold-call-studio/lib/coldcall-bridge.ts:28, 133-141), and (b) a single autosave row per workspace for the Discovery Studio screen, log_type 'discovery-studio-session', which is updated in place so its created_at stays at the first save (src/discovery-studio/lib/persistence.ts:84, 261-271). Neither writer sets call_date. The completed-call record Discovery Studio keeps (gtmos_discovery_call_log, src/discovery-studio/lib/call-log.ts:65) is stored in the browser only. Result: a seller who runs discovery calls every day and logs no cold call is told 'No discovery calls were logged in the last 7 days'; a seller who logs one cold call and runs no discovery call gets no notice. The sentence states a count the function cannot make. The source-side copy of the rule (src/lib/observations/generators/discovery-rhythm.ts) and its test feed hand-made rows with call_date, so the tests pass. Present since the check was added (2026-05-31); the #324 edit changed the sentence only.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md (generated output must distinguish what was observed from what is inferred; do not state what the data does not show); COPY_STANDARD.md §21; AUDIT_BRIEF.md §5 Function ('copy that now claims something the code does not do')",
+   "proposed": "Make the check say only what the stored data supports. In discoveryRhythmGenerator select the workspace's row with log_type 'discovery-studio-session' (.eq(\"log_type\", \"discovery-studio-session\").order(\"updated_at\", { ascending: false }).limit(1)) and write a notice only when there is none or its updated_at is more than 7 days old: \"Nothing was saved in Discovery Studio in the last 7 days. If you ran discovery calls, record how each one ended there so the handoff shows what was asked.\" Drop the 'Only N discovery call was logged' branch. Mirror the change in src/lib/observations/generators/discovery-rhythm.ts and replace its test rows with the two real row types (one 'cold-call' row dated today must not count). OWNER DECISION: to keep a real weekly count, Discovery Studio would have to save each completed call to the cloud (one row with log_type 'discovery-call' holding the account, the result and the parts of the call covered) when a result is recorded in After the call; that is new stored data and would also let Readiness count discovery calls from the cloud.",
+   "testsAffected": [
+    "src/lib/observations/generators/discovery-rhythm.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-026",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "supabase/functions/heartbeat/index.ts",
+   "line": 339,
+   "generation": "backend",
+   "state": "Any scheduled-check notice after the condition it describes has ended: e.g. 'No new signals have been recorded for Nordstrom in 15 days.' after a new signal is added; 'Boeing has been at negotiation for 12 days with no dated next step.' after a next step is dated or the deal is closed",
+   "current": "runGenerator writes each candidate the check returns (lines 339-350). writeObservation replaces an earlier active notice for the same check and object only when a new candidate for that object arrives (lines 222-267). When a check stops returning a candidate for an object, nothing changes that object's last notice: its status stays 'active'. The reader lists every row with status 'active', newest first, with no age limit (src/lib/observations/reader.ts:45-52); the Dashboard filter only hides deal notices below the 7/14-day setting (src/dashboard/lib/week-reads-filter.ts).",
+   "problem": "A notice is a statement about the present ('has been at … for 12 days', 'No new signals … in 15 days'). Once the seller fixes the condition, the check goes quiet and the last notice stays on screen in Briefing, the Dashboard list and the recent-activity panel until the user dismisses it by hand, now stating something false, with a day count frozen at the last run. The only automatic removal is replacement by a newer notice for the same object, which by definition happens only while the problem continues. No test covers a condition that clears (src/lib/observations/writer.test.ts tests insert, dedupe and replacement).",
+   "governing": "CLAUDE.md Part II.5 §7 (observations 'feed back into the system's behavior'; append-with-dismissal); COPY_STANDARD.md §21 (never more certain than the data); AUDIT_BRIEF.md §5 Function",
+   "proposed": "Close notices whose condition ended, using the existing 'superseded' status (allowed by the check constraint in 20260519180001_observations_ledger.sql:56, so no migration). In runGenerator, after the candidate loop and only when the check ran without error: select id, related_object_type, related_object_id from observations where workspace_id, source_generator = generator.id and status = 'active'; update status to 'superseded' for every row whose (type, id) pair is not among this run's candidates. To make 'ran without error' reliable, the four checks in generators.ts must throw on a failed select instead of returning [] (lines 113-116, 181-187, 201-207, 274-277, 337-340), so a database error is not read as 'nothing to report'; runGenerator already catches a throw and skips the step. Add a test beside src/lib/observations/writer.test.ts: run 1 returns a notice for deal A, run 2 returns none -> the row for A is no longer active; a check that throws leaves it active.",
+   "testsAffected": [
+    "src/lib/observations/writer.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-027",
+   "category": "FUNC",
+   "severity": 1,
+   "file": "src/linkedin-playbook/v4/LinkedInPlaybookV4.tsx",
+   "line": 67,
+   "generation": "v4",
+   "state": "LinkedIn Playbook default screen, step row for an account whose step 4 was logged between 2026-07-01 and 2026-07-09 (stored in gtmos_linkedin_log and in the sequences row's data.cueLabel)",
+   "current": "LEGACY_CUE_NAMES lists 'Watch public signal', 'Watch the public signal', 'Comment with one operating read', 'Comment with one useful observation', 'Connect after recognition', 'Give proof before asking', 'Give something useful before asking', 'Ask only when earned', 'Ask only when it is warranted', 'Ask only when it's warranted' (lines 67-80). The name of step 4 between commit 4825d83 (#294, 2026-07-01) and d177359 (#297, 2026-07-09) was 'Give evidence before asking' (git show d177359^:src/linkedin-playbook/lib/cues.ts, line 48); it is not in the table.",
+   "problem": "The log stores the step's display name at the time of logging (src/linkedin-playbook/state.ts:181), and the screen finds the step by that name (cueIndexForEntry, lines 82-87). An action logged under the missing name resolves to no step, so step 4 is not shown as done for that account and is left out of the counts the recommendation is built from (statsWithLoggedSteps, src/linkedin-playbook/lib/motion.ts:43-64), which can change the recommended LinkedIn action. A renamed label breaking stored history; narrow (eight days of logs) but silent. No test lists the historical names.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/13_IMPLEMENTATION_ORDER_FOR_CODING_AGENT.md 'Enum/state rule'; AUDIT_BRIEF.md §5 ('a renamed label that breaks stored history')",
+   "proposed": "Add \"Give evidence before asking\": 3 to LEGACY_CUE_NAMES. Move the table and cueIndexForEntry into src/linkedin-playbook/lib/cues.ts as an exported cueIndexForLabel(label) so the other two versions can use it, and add a test that each historical name (the eleven above) maps to its step.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-028",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/linkedin-playbook/ds/components/ChannelBoard.tsx",
+   "line": 47,
+   "generation": "ds",
+   "state": "LinkedIn Playbook previous version (?v4=0) activity list, and the oldest version's log table (src/linkedin-playbook/components/CueLedger.tsx:228), for any action logged before 2026-11-05",
+   "current": "{a.cueLabel} · {a.motionLabel} (ChannelBoard.tsx:47) and {a.cueLabel || ACTION_LABELS[a.actionType]} (CueLedger.tsx:228) print the text stored with the action, e.g. 'Give proof before asking', 'Ask only when earned', 'Comment with one operating read', 'Connect after recognition'.",
+   "problem": "For a workspace with earlier activity, both fallback versions show the retired step names and recommendation labels exactly as they were stored, so the wording the remediation removed ('proof', 'earned', 'operating read') is still what an existing user reads. The default screen does not print the stored text.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/13_IMPLEMENTATION_ORDER_FOR_CODING_AGENT.md 'Enum/state rule' (change the display label, keep the stored value); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[112] (proof)",
+   "proposed": "Show the current name of the step the stored label maps to: const idx = cueIndexForLabel(a.cueLabel); const stepName = idx != null ? findCue(idx).name : ACTION_LABELS[a.actionType]; render {stepName} in both files and drop the stored motionLabel from the row (the step name and the outcome already identify the action). Stored data is unchanged. Depends on the helper proposed in BACKEND-CONTRACTS-027.",
+   "testsAffected": [
+    "src/linkedin-playbook/ds/ds-components.test.tsx"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-029",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/pilot-desk/v4/PilotDeskV4.tsx",
+   "line": 525,
+   "generation": "v4",
+   "state": "Pilot Desk default screen through all five steps, in a signed-in workspace; then the scheduled pilot check 7 or 14 days after the pilot was first saved",
+   "current": "The default screen has no control that records how the pilot ended: nothing in PilotDeskV4.tsx calls setOutcome (src/pilot-desk/state.ts:75); the last step only edits and copies a results summary (lines 525-550). A pilot saved here keeps outcome 'not_started' (EMPTY_DRAFT, src/pilot-desk/lib/types.ts:104), which is stored in the cloud as outcome_state 'open' (outcomeToState, src/pilot-desk/lib/poc-bridge.ts:67-72). The scheduled check selects every proofs row with outcome_state 'open' and, once created_at + duration_days has passed, writes \"The \\\"<first success criterion>\\\" proof passed its readout window N days ago with no recorded outcome. Readout owner is <name>.\" (supabase/functions/heartbeat/generators.ts:270-312).",
+   "problem": "Every pilot created on the default screen produces that notice a week or two after it is saved and again each day with a higher number, and the screen the user is on has nowhere to record the outcome the notice asks for. The outcome selector exists only in the previous and oldest versions (ds/components/ForgeForm.tsx:139, components/ForgePanel.tsx:219). The date is also not the pilot's: it is the day the row was first saved plus 7 or 14, not the pilot start the default screen records (gtmos_pilot_desk_v1 startedAt, browser only). Two smaller effects of the same mapping: a pilot marked 'Not started' in a fallback version comes back from the cloud as 'In progress' (stateToOutcome maps 'open' to in_progress, poc-bridge.ts:81-89), and results never reach Founding GTM or Readiness from the default screen because outcome never becomes converted or failed. Not introduced by the language work (the v4 screen shipped 2026-07-09); no test covers recording an outcome on the default screen.",
+   "governing": "CLAUDE.md Part I §4.15 (movement 5: write up what the pilot showed; pilot state flows to Deal Workspace, Future Autopsy and Handoff); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (persisted state, database columns, cross-room handoffs)",
+   "proposed": "Add the missing control to step 5 of the default screen, next to 'Copy results summary': a labelled choice 'How did the pilot end?' with 'Still running' (in_progress), 'The buyer moved forward' (converted) and 'The buyer did not move forward' (failed) that calls setOutcome and then saveDraft(), so outcome_state becomes passed or failed and the check stops. Set outcome to in_progress when step 1 is saved (the handler at line 442 already stamps startedAt). In poc-bridge.ts keep 'Not started' through a cloud round trip by writing data.outcome alongside outcome_state and preferring it in rowToProof. Add a state test (choosing 'The buyer moved forward' saves outcome converted) and a poc-bridge test (not_started survives proofToInsert -> rowToProof). OWNER DECISION: the exact wording of the three choices, and whether the scheduled check should count from the pilot's recorded start date, which would require saving that date to the cloud row.",
+   "testsAffected": [
+    "src/pilot-desk/lib/poc-bridge.test.ts",
+    "src/pilot-desk/state.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-030",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "supabase/functions/heartbeat/phase-f-writer.ts",
+   "line": 69,
+   "generation": "backend",
+   "state": "Every heartbeat run that detects a suggestion (a scheduled action fired five or more times in 30 days): the suggestion should be written to proposed_modifications and appear in Briefing; Settings 'Allow recommendations' controls the same feature",
+   "current": "gateThroughVoice: const v = validateObservation(text); if (!v.ok) { console.warn(…, formatViolations(v.violations)); return null; } (lines 68-74). validateObservation returns { valid, violations } (supabase/functions/heartbeat/voice-document.ts:96-99, 160); it has no 'ok' field. Every other caller reads v.valid (generators.ts:61, index.ts:455, phase-f-variant-runner.ts:139).",
+   "problem": "v.ok is always undefined, so every suggestion is treated as failing the wording check, including ones that pass. The warning line then calls formatViolations with the violations array instead of the result object; that function reads v.violations.map (voice-document.ts:163-165), which is undefined on an array, so it throws. The throw leaves writePhaseFCandidates and is caught and logged by the heartbeat (index.ts:509-535). Either way no row is ever inserted into proposed_modifications. The Briefing suggestion band (src/briefing/components/SuggestionsSection.tsx, BriefingV4.tsx:332) can therefore never show anything, accepting a suggestion can never happen, and the Settings switch 'Allow recommendations — Antaeus may surface patterns and recommendations. You can accept or dismiss them' (SettingsV4.tsx:461-462) turns on something that cannot produce output. Same code at f6416124 (line 69), so not introduced by the language work; there is no test that imports phase-f-writer.ts (grep for writePhaseFCandidates and gateThroughVoice under src finds nothing), and the Deno folder is outside the typecheck, which is why the wrong field name was not caught.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (adversarial functional review: output/API schemas, recommendation selection, fallbacks); AUDIT_BRIEF.md §5 Function ('copy that now claims something the code does not do')",
+   "proposed": "In supabase/functions/heartbeat/phase-f-writer.ts lines 69-73 use the validator's real shape: if (!v.valid) { console.warn(`[phase-f] ${generatorId} ${field} voice-failed:`, formatViolations(v)); return null; }. Add a test that runs the real function, in the style of src/outdoors-events/lib/discovery-function.test.ts (import ../../../supabase/functions/heartbeat/phase-f-writer.ts with a stub client): a candidate with plain wording is inserted once; a candidate containing a banned word is dropped without throwing; a second identical candidate is skipped while the first is unanswered.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-031",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/outbound-studio/ds/components/SendLinePanel.tsx",
+   "line": 45,
+   "generation": "ds",
+   "state": "Signed-in workspace on the previous screen version (?v4=0, or the room_<area>_v4_off switch) of Outbound Studio, Cold Call Studio or LinkedIn Playbook: log an outreach touch, a call or a LinkedIn action, or change its outcome, then reload",
+   "current": "Outbound: logTouch() calls logTouchFromRack() and shows 'Touch logged.' (SendLinePanel.tsx:44-47); saveAngle() calls saveAngleFromRack() (49-50); the outcome selector calls setTouchOutcome only (ds/components/TouchLogDS.tsx:64-69). Cold Call: onLog() calls logCall(outcome) and shows 'Call logged.' (src/cold-call-studio/ds/components/ThreadConsole.tsx:43-50). LinkedIn: onLog() calls logCue() and shows 'Cue logged.' (src/linkedin-playbook/ds/components/CueStage.tsx:31-34); the outcome selector calls updateOutcome only (ds/components/ChannelBoard.tsx:55). None of the three previous-version folders imports its area's cloud module. The default and oldest versions make the extra call: saveTouch (OutboundStudioV4.tsx:216, 280; components/OutputPanel.tsx:68; components/TouchLog.tsx:119), saveCallEntry (ColdCallStudioV4.tsx:89; components/TalkLoom.tsx:278, 291), saveAction (LinkedInPlaybookV4.tsx:156; components/CueLedger.tsx:111, 255).",
+   "problem": "On the previous version the entry is added to the list in memory and to the browser copy and never sent to the cloud table. On the next load each area reads the cloud rows and, when there is at least one, replaces the list with them (outbound-studio/lib/cloud-persistence.ts:80-82; cold-call-studio/lib/cloud-persistence.ts:39-42; linkedin-playbook/lib/cloud-persistence.ts:40-42), and the persistence effect then rewrites the browser copy. Everything logged on the previous version disappears, after the screen confirmed it was logged, and the areas that read those logs (Quota Workback's activity, Signal Console's outreach status, Readiness) lose it too. The previous version is the one-switch fallback for an incident on the default screen, so this is the path a user is put on when something else is already wrong. No test covers a save from these components (src/outbound-studio/ds/ds-components.test.tsx, src/cold-call-studio/ds/ds-components.test.tsx, src/linkedin-playbook/ds/ds-components.test.tsx render only). Present since these versions were added; not caused by the language work.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (persisted state, cross-room handoffs, fallbacks) and Required work 4 ('fallbacks, and reachable legacy interfaces'); AUDIT_BRIEF.md §5 Screen generations (all three in scope)",
+   "proposed": "Make the save part of the action so no screen version can skip it. In each area's state.ts, call the cloud save inside the action itself: logTouchFromRack / setTouchOutcome / saveAngleFromRack call saveTouch / saveAngle; logCall calls saveCallEntry; logCue / updateOutcome call saveAction (each save already returns the entry unchanged when no client is booted, and reports errors itself). Then remove the now-duplicate calls from the default and oldest components listed above. If the import direction makes that awkward (the cloud modules import state), add the calls to the three previous-version components instead: SendLinePanel.tsx:45 `if (touch) void saveTouch(touch)`, :50 `if (res.saved) void saveAngle(res.angle)`, TouchLogDS.tsx:67 save the updated touch, ThreadConsole.tsx:44 `if (entry) void saveCallEntry(entry)`, CueStage.tsx:32 `if (entry) void saveAction(entry)`, ChannelBoard.tsx:55 save the updated action. Add one test per area: with a stub client set through __setDataClientForTests, clicking the log control on the previous version calls insert once.",
+   "testsAffected": [
+    "src/outbound-studio/ds/ds-components.test.tsx",
+    "src/cold-call-studio/ds/ds-components.test.tsx",
+    "src/linkedin-playbook/ds/ds-components.test.tsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-032",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/quota-workback/lib/cloud-persistence.ts",
+   "line": 88,
+   "generation": "shared",
+   "state": "Quota Workback (all versions), signed-in workspace whose user already has a pipeline_settings row that was not written by this area: accounts that existed before the area was rebuilt, and any account that ran the 2026-04-24 data migration",
+   "current": "bootCloudPersistence looks for a row whose data.kind is the quota marker (line 78); when none matches and the plan is not the default it inserts a new row (lines 87-91). saveInputsToCloud also inserts whenever cloudRowId is unset (lines 119-124).",
+   "problem": "The table allows one row per user: src/lib/data-migration.ts:380-383 says 'Schema enforces 1 pipeline_settings row per user — upsert by user_id', and the 2026-04-24 migration notes in CLAUDE.md record the insert collision. For a user whose existing row has no quota marker (the migration row holds data.migrated_from_localstorage; rows from the old app hold only the old columns), the insert is rejected, boot falls to the catch block and returns 'local-only', and every later save tries the same insert and fails. The plan then lives only in that browser while the area behaves as if it were saved. The constraint is not in this repository's SQL (the table was created outside it), so this is read from the migration tool and notes rather than from the schema; confidence is medium for that reason. quota-bridge.test.ts and the area tests use a stub client that accepts every insert.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (database columns, dedupe/upsert behavior); CLAUDE.md Part V session log 2026-04-24 ('pipeline_settings had UNIQUE(user_id)')",
+   "proposed": "Reuse the user's existing row instead of inserting a second one. In bootCloudPersistence, when no row carries the quota marker but rows[0] exists, set cloudRowId = rows[0].id and, if the plan is not the default, update that row with data: { ...(rows[0].data as object), kind: KIND_QUOTA_INPUTS, inputs } (add an inputsToMergedUpdate(existingData, inputs) helper to quota-bridge.ts so the migration payload in data is kept). saveInputsToCloud then always updates. Add a test: a client whose pipelineSettings.insert throws and whose list returns one unmarked row ends with update called once and mode 'migrated'.",
+   "testsAffected": [
+    "src/quota-workback/lib/quota-bridge.test.ts"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-033",
+   "category": "FUNC",
+   "severity": 1,
+   "file": "src/outbound-studio/lib/outbound-bridge.ts",
+   "line": 186,
+   "generation": "shared",
+   "state": "An outreach email captured through the BCC address (Settings, Email BCC capture), opened later in Outbound Studio; then its outcome is changed",
+   "current": "The capture function stores data.capturedVia 'bcc' and data.messageId and uses data->>messageId to skip an email it has already stored (supabase/functions/inbound-email/_shared.ts:196-222; index.ts:128-141), with persona, temperature and trigger null. rowToTouch fills the nulls with defaults 'vp', 'cool' and 'funding' (outbound-bridge.ts:65, 78-81, 99, 164-167). extractDataBlob writes sixteen named fields and neither capturedVia nor messageId (lines 186-205); touchToUpdate replaces the whole data column with that blob (225-233).",
+   "problem": "(1) After the seller marks an outcome on a captured email, the row no longer carries messageId, so if the mail provider delivers the same message again the function stores it a second time and it is counted twice. (2) The oldest version's log shows 'VP · Cool' for a captured email (components/TouchLog.tsx:99-100) and the previous version shows 'Cool' (ds/components/TouchLogDS.tsx), values nobody chose. No test round-trips a captured row through touchToUpdate (outbound-bridge.test.ts uses rows written by the area itself).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (dedupe/upsert behavior, translators and fallbacks)",
+   "proposed": "Carry unknown fields through. Add an optional `extra?: Readonly<Record<string, unknown>>` to Touch, filled in rowToTouch with the data keys it does not map (capturedVia, messageId), and spread it first in extractDataBlob ({ ...touch.extra, account: … }). In the two log components show the stage and persona only when the touch was not captured: touch.extra?.capturedVia === 'bcc' ? 'Captured from email' : the existing labels. Add an outbound-bridge test: a row with data.messageId keeps it after rowToTouch -> touchToUpdate.",
+   "testsAffected": [
+    "src/outbound-studio/lib/outbound-bridge.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-034",
+   "category": "FUNC",
+   "severity": 1,
+   "file": "supabase/functions/briefing-pipeline/llm/synthesis.ts",
+   "line": 591,
+   "generation": "backend",
+   "state": "Every Briefing market read that failed one or more wording or evidence checks during a pipeline run: the quality record written to briefing_pattern_eval",
+   "current": "gate_failures: gate.failures.map((f) => f.name) (line 591). gate.failures is an array of strings — the detail sentence of each failed check (llm/synthesis-shared.ts:152, 346-347) — so f.name is undefined for every element.",
+   "problem": "The stored list of failed checks is an array of nulls. The client drops non-strings when it reads the column (src/briefing/lib/eval-client.ts:83), so the record says a read failed and was repaired but not which check failed. No screen prints the list today, so nothing wrong is shown; what is lost is the evidence the quality record exists to keep (which wording rule a repaired read broke). Same line at f6416124. The function folder is outside the type check, which reports this line as 'Property name does not exist on type string'.",
+   "governing": "CLAUDE.md Part I §4.21 (Defensibility: keep enough state to reconstruct what the system said and on what basis); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (output/API schemas)",
+   "proposed": "Store the names of the failed checks, which is what the column is for: gate_failures: gate.checks.filter((c) => !c.pass).map((c) => c.name). Add the Deno function folders to a type-check step (a tsconfig with a shim for the URL imports, as used in this audit) so a wrong field name fails CI.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-035",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/outbound-studio/ds/components/SendLinePanel.tsx",
+   "line": 91,
+   "generation": "ds",
+   "state": "Outbound Studio previous version (?v4=0), header of the generated message",
+   "current": "<StatusChip label={out.motionBand} tone={motionTone(out.motionBand)} /> followed by {out.qualityScore}/100 (lines 91-92). motionBand is the stored key 'thin' | 'workable' | 'ready' (src/outbound-studio/lib/generator.ts:44, 86-90).",
+   "problem": "The key is printed as the label, so the chip reads 'thin' or 'workable' — two of the state words COPY_STANDARD retired as labels — next to a bare score out of 100. The default screen maps the same key to 'Full account context / Partial account context / Missing account context' (OutboundStudioV4.tsx:85-89) and the oldest to 'Ready to send / Usable · needs more detail / Add a real trigger before sending' (components/OutputPanel.tsx:32-36). The number is a count of filled-in inputs (generator.ts:73-83), not a quality rating of the message.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/13_IMPLEMENTATION_ORDER_FOR_CODING_AGENT.md 'Enum/state rule'; COPY_STANDARD.md §17 (a state names an observable condition)",
+   "proposed": "Use the default screen's labels: move BAND_LABEL from OutboundStudioV4.tsx into src/outbound-studio/lib/types.ts as MOTION_BAND_LABEL and render <StatusChip label={MOTION_BAND_LABEL[out.motionBand]} … /> here; drop the '/100' readout from this header (the label already says what is missing).",
+   "testsAffected": [
+    "src/outbound-studio/ds/ds-components.test.tsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "BACKEND-CONTRACTS-036",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/cold-call-studio/ds/components/CallMemoryDS.tsx",
+   "line": 40,
+   "generation": "ds",
+   "state": "Cold Call Studio previous version (?v4=0) call log, and the oldest version's log (src/cold-call-studio/components/CallMemory.tsx:89), for calls logged before 2026-11-05",
+   "current": "{c.threadTitle} — the call log stores the title sentence of the step the call reached at the time it was logged (src/cold-call-studio/state.ts:172, threadTitle: t.title) and both fallback versions print the stored sentence. Earlier titles include 'Get permission in the first breath.', 'Trade one real example for one admission.', 'Ask for the smallest real next move.' and 'Leave the room cleanly.' (git diff f6416124..HEAD -- src/cold-call-studio/lib/threads.ts).",
+   "problem": "An existing user's call log on either fallback version still shows the wording the remediation replaced, because the text was saved with each call and the step id that would let the screen look up today's title (threadId, stored beside it) is not used for display. Same pattern as BACKEND-CONTRACTS-028. The default screen does not print the stored title.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/13_IMPLEMENTATION_ORDER_FOR_CODING_AGENT.md 'Enum/state rule' (keep the stored key, change the display text)",
+   "proposed": "Display the current step name from the stored id: {findThread(c.threadId).label} in both files (findThread is exported from src/cold-call-studio/lib/threads.ts and falls back to the first step for an unknown id). Stored rows are unchanged.",
+   "testsAffected": [
+    "src/cold-call-studio/ds/ds-components.test.tsx"
+   ],
+   "confidence": "medium"
   }
  ],
  "dispositions": [],
- "retained": [],
- "gaps": []
+ "retained": [
+  {
+   "file": "supabase/migrations/20260424170003_new_noun_tables.sql",
+   "line": 27,
+   "text": "create table if not exists public.proofs (",
+   "term": "proof",
+   "why": "Table name for pilot records; a stable technical identifier the user never sees (AUDIT_BRIEF §3 'proof' row: stable technical identifiers are not automatically wrong). Renaming it would need a data migration, which the Enum/state rule says to avoid."
+  },
+  {
+   "file": "src/lib/readiness/types.ts",
+   "line": 42,
+   "text": "export type DimensionId = \"icp\" | \"outreach\" | \"discovery\" | \"deals\" | \"proof\";",
+   "term": "proof",
+   "why": "Stored readiness key (also written to readiness_snapshots.dimension_scores). The label shown is DIMENSION_LABEL.proof = 'Pilots, reviews and handoff records'; key kept so stored history still loads."
+  },
+  {
+   "file": "supabase/functions/heartbeat/generators.ts",
+   "line": 262,
+   "text": "const PROOF_STALENESS_GENERATOR_ID = \"phase-b/proof-staleness\";",
+   "term": "proof",
+   "why": "Value stored in observations.source_generator and matched by the Dashboard and Briefing readers; an identifier, not copy. The sentence the same check writes does use 'proof' and is filed by other reviewers (TERMS-014, BRIEFING-UI-012)."
+  },
+  {
+   "file": "src/pilot-desk/lib/persistence.ts",
+   "line": 29,
+   "text": "export const STORAGE_KEY = \"gtmos_poc_data\";",
+   "term": "proof",
+   "why": "Browser storage key read by Founding GTM and Readiness; internal identifier. 'PoC' never reaches the screen through this key."
+  },
+  {
+   "file": "src/lib/continuity.ts",
+   "line": 25,
+   "text": "readonly focusRoom: string | null;",
+   "term": "room",
+   "why": "URL parameter name in the cross-area link contract (CLAUDE.md §2: do not break). Not rendered; the value it carries is an area's display name."
+  },
+  {
+   "file": "src/outbound-studio/main.tsx",
+   "line": 100,
+   "text": "room_outbound_studio_v4_off",
+   "term": "room",
+   "why": "Feature-flag key; renaming it would detach the live flags. Internal identifier (inventory class F)."
+  },
+  {
+   "file": "src/outbound-studio/lib/generator.ts",
+   "line": 44,
+   "text": "readonly motionBand: \"thin\" | \"workable\" | \"ready\";",
+   "term": "motion",
+   "why": "Field name and stored keys on each saved touch (sequences.data.motionBand). Kept as keys; the default and oldest screens map them to labels. The one place that prints the key is filed as BACKEND-CONTRACTS-035."
+  },
+  {
+   "file": "src/linkedin-playbook/state.ts",
+   "line": 180,
+   "text": "motionLabel: motion.label,",
+   "term": "motion",
+   "why": "Field name on a stored LinkedIn action. The field name is internal; printing its stored value on the fallback versions is filed as BACKEND-CONTRACTS-028."
+  },
+  {
+   "file": "src/deal-workspace/lib/recovery.ts",
+   "line": 29,
+   "text": "readonly nextMove: string;",
+   "term": "move",
+   "why": "Property name on the risk assessment object; the screens label its value 'Recommended action' / show the sentence itself. Identifier only."
+  },
+  {
+   "file": "supabase/migrations/20260529050000_deal_workspace_data_parity.sql",
+   "line": 9,
+   "text": "New column deals.recovery_rank integer (not null default 0).",
+   "term": "rank",
+   "why": "Column name; describes what the product computes for a deal and is never shown as a label. Nothing reads it today (the column was added ahead of use)."
+  }
+ ],
+ "gaps": [
+  "No function was called and no database was used: every statement about signed-in behavior (cloud load replacing the browser copy, check constraints, the delete function, CORS and missing-token responses) comes from reading the code and SQL. The demo walkthrough runs without a database, so none of it can be seen there.",
+  "pipeline_settings, deals, icps, sequences, signal_console_accounts and discovery_frameworks were created outside this repository; their constraints are known only from src/lib/database.types.ts, src/lib/data-migration.ts and the notes in CLAUDE.md. Finding 032 depends on a one-row-per-user constraint that those sources state and the repository's SQL does not contain.",
+  "Which version of each edge function is deployed cannot be determined from the repository (finding 021); findings about outdoors-events-discovery, seeding-enrichment, calendar-sync and inbound-email describe the code in the repository, not necessarily what is running.",
+  "briefing-pipeline was audited here for authentication, CORS, the browser action, deployment and by a type check of its entry file only. Its stages, prompts, cost limits and the Briefing clients' reads of its tables were left to the briefing-pipeline and briefing-ui reviewers.",
+  "The built redirect stubs for /sourcing-workbench/, /poc-framework/, /negotiation/, /advisor-deploy/ and /call-planner/ were read from the Vite plugin source, not from a build (builds were not allowed on this machine).",
+  "The legacy js/ files (js/supabase-config.js, js/workspace-guard.js, js/onboarding.js and the other pre-migration scripts) were searched for storage keys and route targets but not read in full; they are loaded only by the static sign-in pages and the demo seed.",
+  "Other reviewers working at the same time filed several of the same defects from their own areas (for example DW-028/DW-029/DW-030/DW-033, ONBOARDING-001/002, AE-001/AE-002, READINESS-001/003, SC-005, DASH-003). Findings 006, 011, 012, 013 in this file overlap with those and should be merged rather than counted twice."
+ ]
 }

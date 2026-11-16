@@ -86,7 +86,7 @@
     "tools/language-remediation/copy-allowlist.json",
     "tools/deploy/build-cloudflare-assets.js"
    ],
-   "note": "Read the scanner, its target list, tier lists and allowlist (181 entries, categories F and G only), and compared the target list with the files the deploy script serves. Did not run it (it writes under artifacts/); another reviewer's read-only reproduction reported 0 Tier-1 and 21 Tier-2 rows, all in the generated transcript."
+   "note": "Read the scanner, its target list, tier lists and allowlist (181 entries, categories F and G only), and compared the target list with the files the deploy script serves and with the scripts each entry page loads. Did not run it (it writes under artifacts/); another reviewer's read-only reproduction reported 0 Tier-1 and 21 Tier-2 rows, all in the generated transcript."
   },
   {
    "surface": "Entry pages, stored labels and cross-area handoff labels",
@@ -122,6 +122,72 @@
     "scratchpad final-audit/corpus-ds/*.txt"
    ],
    "note": "Every string in files reachable only from a previous-generation root was scanned for the 63 migration-map terms and the Batch 02/03 semantic-migration vocabulary (temperature, carrier/deploy, mold/forge/cast, switchboard, cue, front/line, kit, read, room); each hit was read with the file's other visible strings. A rendered walk of these screens with ?v4=0 exists (corpus-ds, 4,495 lines, produced by the orchestrator's tooling) and was scanned with the same term list. Findings here cover term-bearing strings; they are not a full copy review of each previous-generation screen."
+  },
+  {
+   "surface": "Oldest-generation screens (src/<area>/components/ and the root components), all areas — deprecated-term and semantic-migration vocabulary; plus the shared read-only link page",
+   "generation": "legacy",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/*/components/**",
+    "src/*/<Root>.tsx",
+    "src/founding-gtm-share/FoundingGtmShare.tsx",
+    "src/founding-gtm/components/SectionFrame.tsx"
+   ],
+   "note": "Listed all 2,002 visible strings in the 131 files that only an oldest-generation root reaches and read them in full; scanned them with the 63 migration-map terms and the Batch 02/03 semantic-migration vocabulary. Findings are filed for the 16 areas no other reviewer had reported on when I checked (Call in a Favor, Cold Call Studio, Deal Workspace, Discovery Studio, Founding GTM, Future Autopsy, ICP Studio, LinkedIn Playbook, Outbound Studio, Outdoors Events, Pilot Desk, Prospecting Desk, Quota Workback, Settings, Signal Console, Territory Architect). The oldest Briefing, Dashboard, Getting to Signed, Welcome and Onboarding screens are covered by their own reviewers' files and are cited in my dispositions, not repeated as findings. Every quoted line was checked against the file by script. Not rendered: no walk of ?v4=0&ds=0 exists, so these screens were read, not executed. The findings list term-bearing strings; they are not a full rewrite of the oldest screens. The shared read-only link page (/founding-gtm-share/) has one version and was reviewed in full from source; it needs a share token and a database row to render, so it was not executed."
+  },
+  {
+   "surface": "Live script files — Discovery scripts (11 files), demo seed data (enterprise and SMB), demo seed loader, legacy auth/onboarding scripts",
+   "generation": "seed",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "js/discovery-segment-runtime.js",
+    "js/discovery-segment-runtime-*.js",
+    "js/demo-seed-data-ent.js",
+    "js/demo-seed-data-smb.js",
+    "js/demo-seed-runtime.js",
+    "js/onboarding.js",
+    "js/supabase-config.js"
+   ],
+   "note": "Worked out which script files a served page actually loads (js/discovery-frameworks.js and the js/ae-*-engine files are loaded by no page). Extracted every string from the live files and read every hit for the 63 migration-map terms, deduplicated across the ten framework files (about 600 distinct rows; 'move', 'pressure', 'pull', 'kill', 'autopsy', 'building', 'landing', 'seed', 'ground' were the large groups). Almost all are ordinary verbs or lines spoken to or by a buyer. This is a term review of the scripts, not a line-by-line review of the Discovery content; the default-screen rendering of that content was read in the fresh walkthrough (313 KB for Discovery Studio)."
+  },
+  {
+   "surface": "Served static pages and the 17 published design mockups",
+   "generation": "static",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "start.html",
+    "why-antaeus/index.html",
+    "login.html",
+    "signup.html",
+    "forgot-password.html",
+    "reset-password.html",
+    "coming-soon.html",
+    "demo-seed.html",
+    "privacy.html",
+    "terms.html",
+    "index.html",
+    "preview.html",
+    "auth/callback/index.html",
+    "should-we-hire-an-ae/index.html",
+    "app/*/index.html",
+    "landing-*.html",
+    "demo-*.html",
+    "signup-*-*.html",
+    "seeding-flow*.html"
+   ],
+   "note": "Term scan of the text and attributes of every served HTML file. The live pages have 16 term hits, all read: two are findings (auth callback, privacy section 6), the rest are ordinary uses or the readiness state names the owner settled. The 17 mockup pages were counted and sampled, not rewritten line by line; they have their own reviewer. Not rendered in a browser by me."
+  },
+  {
+   "surface": "Internal reference material that writers and models copy from — canon, capability maps, component reference page",
+   "generation": "doctrine",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "CLAUDE.md",
+    "deliverables/room-capability-maps/*.html",
+    "src/design-system/ProofSheet.tsx",
+    "COPY_STANDARD.md"
+   ],
+   "note": "Checked only the four records that ask for an internal rewrite (seeding, heavy-seeding, wake-up, run-to-signed) and the instruction not to use deprecated copy as a style reference. A full review of internal doctrine against the 169 original doctrine lines belongs to the doctrine reviewer and was not done here."
   }
  ],
  "findings": [
@@ -473,10 +539,10 @@
    "line": 12,
    "generation": "tooling",
    "state": "npm run copy:audit — the deprecated-term scan the original manifest requires after implementation",
-   "current": "TARGETS covers src, supabase/functions, the capability maps, the transcript, the Discovery scripts, the two demo seed files and nine public pages. It does not scan these served files: privacy.html, terms.html, index.html, preview.html, auth/callback/index.html, js/demo-seed-runtime.js, js/onboarding.js, js/supabase-config.js, or any of the 17 served design-variant pages (demo-a-time.html … seeding-flow.html, listed in tools/deploy/build-cloudflare-assets.js). TIER2 (line 10) matches exact word forms only, so 'motions', 'threads', 'fronts' pass.",
-   "problem": "The scan reports a clean Tier 1 while served pages still contain Tier-1 phrases — 'You are the system' appears 15 times and 'the machine' 7 times across the variant pages — and while plural forms of Tier-2 words render on fallback screens (src/settings/ds/components/SettingsCardsDS.tsx:430 'motions', src/cold-call-studio/ds/components/ThreadRail.tsx:17 'THE THREADS'). The scan is a regression gate, not the standard, but its green result currently says less than it appears to.",
+   "current": "TARGETS covers src, supabase/functions, the capability maps, the transcript, the two demo seed files, nine public pages and js/discovery-frameworks.js — a Discovery file that no page loads. It does not scan the eleven Discovery script files the app does load (js/discovery-segment-runtime.js and js/discovery-segment-runtime-<framework>.js, listed in src/discovery-studio/index.html), nor these served files: privacy.html, terms.html, index.html, preview.html, auth/callback/index.html, js/demo-seed-runtime.js, js/onboarding.js, js/supabase-config.js, or any of the 17 served design-variant pages (demo-a-time.html … seeding-flow.html, listed in tools/deploy/build-cloudflare-assets.js). TIER2 (line 10) matches exact word forms only, so 'motions', 'threads', 'fronts' pass.",
+   "problem": "The scan reports a clean Tier 1 while served pages still contain Tier-1 phrases — 'You are the system' appears 15 times and 'the machine' 7 times across the variant pages — and while plural forms of Tier-2 words render on fallback screens (src/settings/ds/components/SettingsCardsDS.tsx:430 'motions', src/cold-call-studio/ds/components/ThreadRail.tsx:17 'THE THREADS'). The live Discovery scripts (about 15,000 strings: every question, buyer response and coaching note Discovery Studio shows) reach the scan only through the states the transcript walker happens to open. The scan is a regression gate, not the standard, but its green result currently says less than it appears to.",
    "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json instructions[5] (record B1-INSTR-5: regenerate the preview transcript and run the deprecated-term scan); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/12_COPY_LINTER_AND_CI_SPEC.md",
-   "proposed": "Add to TARGETS: \"privacy.html\", \"terms.html\", \"index.html\", \"preview.html\", \"auth/callback/index.html\", \"js/demo-seed-runtime.js\", \"js/onboarding.js\". Build each TIER2 pattern with an optional plural (`${esc(phrase)}s?`). OWNER DECISION: the 17 variant pages are served but were left as design mockups. Adding them to TARGETS will fail Tier 1 until they are rewritten or removed from the deploy list; the owner decides whether they are rewritten, unpublished, or recorded as excluded mockups.",
+   "proposed": "Add to TARGETS: \"js/discovery-segment-runtime.js\" and the ten \"js/discovery-segment-runtime-<framework>.js\" files (the ordinary-English Tier-2 rows this adds — buyer-side 'pressure', 'pulling' as a verb, the jump-target key \"pressure\" — go in copy-allowlist.json as categories G and F), \"privacy.html\", \"terms.html\", \"index.html\", \"preview.html\", \"auth/callback/index.html\", \"js/demo-seed-runtime.js\", \"js/onboarding.js\"; remove \"js/discovery-frameworks.js\" or delete that unused file. Build each TIER2 pattern with an optional plural (`${esc(phrase)}s?`). OWNER DECISION: the 17 variant pages are served but were left as design mockups. Adding them to TARGETS will fail Tier 1 until they are rewritten or removed from the deploy list; the owner decides whether they are rewritten, unpublished, or recorded as excluded mockups.",
    "testsAffected": [
     "tools/language-remediation/copy-audit.test.js"
    ],
@@ -1031,7 +1097,7 @@
    "file": "src/outbound-studio/lib/types.ts",
    "line": 36,
    "generation": "shared",
-   "state": "Outbound Studio previous screen (?v4=0, or the room's *_v4_off flag) → 'Temperature' select (src/outbound-studio/ds/components/OperatorRack.tsx:35) and message-log rows (src/outbound-studio/ds/components/TouchLogDS.tsx); oldest screen src/outbound-studio/components/Switchboard.tsx and TouchLog.tsx. Labels at lines 36-41.",
+   "state": "Outbound Studio previous screen (?v4=0, or the room's *_v4_off flag) → 'Temperature' select (src/outbound-studio/ds/components/OperatorRack.tsx:35) and message-log rows (src/outbound-studio/ds/components/TouchLogDS.tsx); oldest screen src/outbound-studio/components/Switchboard.tsx and TouchLog.tsx. Labels at lines 36-42.",
    "current": "L36: \"TEMPERATURE_LABELS: Ice cold / Cool / Warm / Hot / Closing, under a field labelled \"Temperature\"\"",
    "problem": "Temperature words stand in for the outreach stage (dimension 3). The default screen already shows plain stage labels for the same stored keys, so the two generations disagree about what 'warm' means.",
    "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md Outbound Studio rows ('WHERE ARE YOU WITH THEM?' → 'CURRENT OUTREACH STAGE', 'THE MESSAGE · FOLLOWING UP' → 'FOLLOW-UP MESSAGE'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'your line' (record B1-TERM-47); COPY_STANDARD.md §3 'line', 'hot / warm / cold'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json implementation_rules[1] (record B2-RULE-1)",
@@ -1167,9 +1233,869 @@
     "src/welcome/ds/ds-components.test.tsx"
    ],
    "confidence": "high"
+  },
+  {
+   "id": "TERMS-066",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/founding-gtm-share/FoundingGtmShare.tsx",
+   "line": 68,
+   "generation": "v4",
+   "state": "The read-only page a recipient opens from a Founding GTM share link (/founding-gtm-share/?t=…). It has one version and no sign-in; the reader is a new hire who has never seen Antaeus. Kickers at lines 26, 36, 55, 68; bodies at 28, 38, 46, 57; title at 70; lede at 74; meta line at 81. Each of the seven sections is drawn by src/founding-gtm/components/SectionFrame.tsx (called at line 92), which adds the callout kicker at its line 88 and the empty-section text at its lines 69-70.",
+   "current": "L26/36/55: \"SHARED KIT\" · L28: \"This link is missing the token that points at a shared kit. If someone sent you this URL, ask them to resend the full link.\" · L38: \"Either the link has been revoked, the URL is mistyped, or the kit has been removed. Ask the sender to issue a fresh link.\" · L46: \"Loading the shared kit…\" · L57: \"Something went wrong loading this kit. Refresh the page or ask the sender to issue a fresh link.\" · L68: \"SHARED GTM KIT · READ-ONLY\" · L70: \"{workspace} shared their Founding GTM kit\" · L74: \"Seven authored sections — what the operator built up about who their sales process serves, what worked, what didn't, and what the first hire should run on day one.\" · L81: \" · workspace was at \\\"{state}\\\" when shared\" · SectionFrame.tsx:88 \"SURPRISE\" · SectionFrame.tsx:69 \"Not yet authored. This section fills in once there is real evidence recorded elsewhere in the app.\"",
+   "problem": "The one page written for a reader outside the product names the document 'kit' / 'GTM kit' nine times (dimension 2), although the sender's screen calls it the handoff document, and describes its author as 'the operator' and its content as 'authored sections' (dimension 6). The meta line quotes a readiness state name ('Partially documented') with no statement of what the state measures. Each section's callout is headed 'SURPRISE' — the internal name of the per-section observation, which the sender's screen shows as 'Key observation' — and an empty section says 'Not yet authored', pointing at 'the app' the recipient cannot see. The recipient cannot ask what a kit is.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'handoff kit' → 'sales handoff documentation' (record B1-TERM-39); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.founding_gtm (record B2-SEM-5); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Founding GTM'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md row 'ONE THING TO NOTICE' → 'KEY OBSERVATION'",
+   "proposed": "L26/36/55: \"SHARED SALES HANDOFF\" · L28: \"This link is missing the code that identifies the shared document. If someone sent you this URL, ask them to resend the full link.\" · L38: \"The link has been revoked, the URL is mistyped, or the document has been removed. Ask the sender for a new link.\" · L46: \"Loading the shared sales handoff…\" · L57: \"The document could not be loaded. Refresh the page or ask the sender for a new link.\" · L68: \"SALES HANDOFF · READ-ONLY\" · L70: \"{workspace} shared their sales handoff document\" · L74: \"Seven sections that document the sales process for a new seller: who the company sells to, which outreach and discovery questions were used, where deals advanced or stalled, and a first-week schedule.\" · L81: \" · readiness when shared: {state} (how far the sales process is documented for another seller)\" · SectionFrame.tsx:88 t(\"KEY OBSERVATION\") · SectionFrame.tsx:69 \"This section has no content yet.\"",
+   "testsAffected": [
+    "src/founding-gtm-share/FoundingGtmShare.test.tsx (if it asserts the kicker or title)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-067",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/call-in-a-favor/components/DeskBoard.tsx",
+   "line": 128,
+   "generation": "legacy",
+   "state": "Call in a Favor oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "DeskBoard.tsx:128 \"PRIVATE INFLUENCE DESK\" · AdvisorDeploy.tsx:33 \"ADVISOR DEPLOY\" · Topbar.tsx:20 \"ADVISOR DEPLOY ·\" · Topbar.tsx:22 \"Influence is an asset. Spend it precisely.\" · DeskBoard.tsx:92 \"Prepare one backchannel ask before you make it.\" · DeskBoard.tsx:94 \"The desk is pointed at ${stageLabel(deal.stage)}, ${fmtMoney(deal.value)}. ${dealPressure(deal)}\" · DeskBoard.tsx:95 \"Add a live deal and at least one advisor to start routing asks.\" · DeskBoard.tsx:137 \"IS THE ASK READY\" · DeskBoard.tsx:177 \"Carrier\" · DeskBoard.tsx:199 \"Ask moment\" · DeskBoard.tsx:221 \"EVIDENCE BLOTTER\" · DeskBoard.tsx:235 \"Advisor rolodex\" · DeskBoard.tsx:271 \"Don't use this carrier yet\" · DeskBoard.tsx:286 \"Carrier:\" · DeskBoard.tsx:290 \". Return: {generated.outcome}\" · DeskBoard.tsx:304 \"Deployment outcome stamps\" · DeskBoard.tsx:338 \"${deal.accountName} evidence line\" · SecondaryStack.tsx:81 \"Register the people whose trust you can deploy.\" · SecondaryStack.tsx:176 \"What kind of ask should this person carry?\" · SecondaryStack.tsx:248 \"Every ask should return as a deal update.\" · SecondaryStack.tsx:255 \"No asks logged yet. Send, Hold, or Reroute on the desk above and the loop appears here.\" · SecondaryStack.tsx:306 \"DESK READ\" · SecondaryStack.tsx:308 \"How outside leverage is paying off.\" · SecondaryStack.tsx:336 \"CARRY THE ASK FORWARD\" · SecondaryStack.tsx:356 \"Pre-mortem the deal\" · SecondaryStack.tsx:366 \"Forge the evidence\"",
+   "problem": "The oldest screen is still headed with the retired area name and runs on the relay vocabulary the original rewrite replaced — carrier, ask moment, blotter, rolodex, deploy, spend, the loop, desk read — plus 'pre-mortem' and 'forge' on its links (dimensions 2, 3, 5). A user sent here from 'Call in a favor' lands on a page called something else and has to learn a second vocabulary for contacts, requests and outcomes.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.favor (record B2-SEM-6); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Call in a Favor' and rows 'the guided backchannel' → 'network-assisted deal support', 'PASSES IT ON' → 'FORWARDABLE NOTE'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json navigation[] (current area names and descriptions); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md 'Navigation rewrite' table; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'Pre-mortem a deal' → 'Review deal risk' and 'Pre-mortem' → 'Review loss risk'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[112]",
+   "proposed": "DeskBoard.tsx:128 \"NETWORK-ASSISTED DEAL SUPPORT\" · AdvisorDeploy.tsx:33 \"CALL IN A FAVOR\" · Topbar.tsx:20 \"CALL IN A FAVOR ·\" · Topbar.tsx:22 \"Use your network to help move a deal.\" · DeskBoard.tsx:92 \"Prepare one specific request before you send it.\" · DeskBoard.tsx:94 `Selected deal: ${stageLabel(deal.stage)}, ${fmtMoney(deal.value)}. ${dealPressure(deal)}` · DeskBoard.tsx:95 \"Add an open deal and at least one contact who can help to prepare a request.\" · DeskBoard.tsx:137 \"IS THE REQUEST READY TO SEND?\" (and the aria-label at line 134) · DeskBoard.tsx:177 \"Who can help\" (line 342: \"Contact\") · DeskBoard.tsx:199 \"What you need\" · DeskBoard.tsx:221 \"EVIDENCE TO MENTION\" (and the aria-label at line 220) · DeskBoard.tsx:235 \"Contacts who can help\" · DeskBoard.tsx:271 \"Not the right contact for this request yet\" (line 274 \"DON'T USE YET\" → \"NOT YET\") · DeskBoard.tsx:286 \"Contact:\" · DeskBoard.tsx:290 \". {generated.outcome}\" — the text already begins \"Aim: …\"; and the label at line 350 \"Return\" → \"Expected result\" · DeskBoard.tsx:304 \"Request outcome\" (aria-label); line 330 \"Reroute\" → \"Ask someone else\" · DeskBoard.tsx:338 `${deal.accountName} evidence to mention` · SecondaryStack.tsx:81 \"Add the people you could ask for help.\" · SecondaryStack.tsx:176 \"What could you ask this person for?\" · SecondaryStack.tsx:248 \"Record what came of each request on the deal.\" · SecondaryStack.tsx:255 \"No requests logged yet. Use Send, Hold or Ask someone else above and the request appears here.\" · SecondaryStack.tsx:306 \"REQUEST RESULTS\" · SecondaryStack.tsx:308 \"What your requests have led to.\" · SecondaryStack.tsx:336 \"CONTINUE WORKING THIS DEAL\" · SecondaryStack.tsx:356 \"Review deal risk\" · SecondaryStack.tsx:366 \"Run a pilot\" OWNER DECISION: every area still ships its oldest screen behind two switches, and those screens were never rewritten as a whole (about 2,000 visible strings in 131 files). The replacements above cover the strings that carry the retired vocabulary. The larger option is to delete the oldest generation (src/<area>/components/, the root components and the room_*_legacy flags) and keep the previous-generation screen as the only fallback; the wire-to-production plan already leaves that retirement to the owner.",
+   "testsAffected": [
+    "src/call-in-a-favor/components/*.test.tsx (labels asserted by text)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-068",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/cold-call-studio/components/TalkLoom.tsx",
+   "line": 123,
+   "generation": "legacy",
+   "state": "Cold Call Studio oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "TalkLoom.tsx:123 \"LIVE CALL THREADS\" · TalkLoom.tsx:157 \"Current pull\" · TalkLoom.tsx:258 \"Capture the real objection, signal, or next move.\" · Topbar.tsx:36 \"Weave opener, objection, evidence, and ask into one live route.\" · Topbar.tsx:40 \"On line:\" · AccountRow.tsx:54 \"Name or role on the line\" · CallMemory.tsx:34 \"CALL MEMORY\"",
+   "problem": "'Threads', 'pull', 'weave … into one live route' and 'on line' are the loom metaphor for a call's steps (dimensions 2, 3). The same six steps are also named 'steps' two lines away ('Weakest step', 'Go to the next step'), so one panel uses two words for one thing. The default screen says call plan and steps.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'thread' (record B1-TERM-23) and row 'pulling' (record B1-TERM-26); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'Your game plan' → 'Call plan' and 'walk in ready · log it after' → 'prepare before the call · log the outcome after'",
+   "proposed": "TalkLoom.tsx:123 \"CALL STEPS\" (aria-label at line 114: \"Call steps\"; rail label at line 130 \"Threads\" → \"Call steps\") · TalkLoom.tsx:157 \"Current step\" · TalkLoom.tsx:258 \"Record the objection, the signal, or the next step you agreed.\" · Topbar.tsx:36 \"Prepare the opener, likely objections, a relevant example and the meeting request for one call.\" · Topbar.tsx:40 \"Calling:\" · AccountRow.tsx:54 \"Name or role of the person you are calling\" · CallMemory.tsx:34 \"CALL LOG\" (and the aria-label at line 31)",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-069",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/deal-workspace/components/Hero.tsx",
+   "line": 24,
+   "generation": "legacy",
+   "state": "Deal Workspace oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "Hero.tsx:24 \"Make the board confess where it is weak.\" · Hero.tsx:36 \"Find weakest\" · HandoffStrip.tsx:48 \"CARRY THE RECOVERY FORWARD\" · HandoffStrip.tsx:51 \"Push ${focal.accountName} into intervention.\" · HandoffStrip.tsx:56 \"Carries the focal deal into the destination.\" · HandoffStrip.tsx:69 \"Pre-mortem this deal\" · HandoffStrip.tsx:76 \"Forge the evidence\" · HandoffStrip.tsx:90 \"Deploy an advisor\" · DealHealthForm.tsx:175 \"Next move\" · DealHealthForm.tsx:368 \"Back to folio\" · InterventionRail.tsx:77 \"Recover now\" · InterventionRail.tsx:119 \"Intervention rail\" · InterventionRail.tsx:110 \"No deals on the board yet. Add a deal — the workspace will rank intervention urgency here.\" · InterventionRail.tsx:141 \"Fix these today. If you leave them, they're going to drag the rest of the board down.\" · InterventionRail.tsx:171 \"The reserve shows up here as signals, not as full deal cards — so this page doesn't repeat itself.\" · InterventionRail.tsx:209 \"Search intervention docket\" · InterventionRail.tsx:258 \"Run intervention\" · InterventionRail.tsx:302 \"Sorted by what needs your attention next, not by pipeline stage.\" · TargetFolio.tsx:34 \"Active drags\" · TargetFolio.tsx:71 \"Commissioned case\" · TargetFolio.tsx:80 \"The deal to work on first. If this one is lost, the rest of the board matters less.\" · TargetFolio.tsx:209 \"Weighted truth = stage probability × value. Stage isn't truth unless next-step truth backs it up.\" · MicroGrid.tsx:31 \"Workspace truth\"",
+   "problem": "The oldest board speaks in the retired intervention vocabulary — the board confesses, drags, folio, commissioned case, intervention rail and docket, weighted truth, recover now / keep honest — and its links still say pre-mortem, forge and deploy (dimensions 2, 3, 5, 8). Two lines claim more than the ranking supports ('they're going to drag the rest of the board down', 'if this one is lost, the rest of the board matters less'; dimension 4). 'Next move' heads the section whose first field is 'Next step'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md Deal Workspace rows ('TAKE A DEAL SOMEWHERE IT GETS RESOLVED' → 'CONTINUE WORKING THIS DEAL', 'THE REST, RANKED' → 'OTHER OPEN DEALS · RANKED BY RISK', 'WHY IT'S SLIPPING' → 'WHY RISK IS HIGH'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json rules[3] (record B3-RULE-3: deal-risk language must expose the evidence); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'one move' (record B1-TERM-14); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'Pre-mortem a deal' → 'Review deal risk' and 'Pre-mortem' → 'Review loss risk'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[112]; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.favor (record B2-SEM-6)",
+   "proposed": "Hero.tsx:24 \"See which open deals are at risk and why.\" · Hero.tsx:36 \"Show highest-risk deal\" · HandoffStrip.tsx:48 \"CONTINUE WORKING THIS DEAL\" (aria-label at line 46 \"Push the recovery forward\" → \"Continue working this deal\") · HandoffStrip.tsx:51 `Continue working ${focal.accountName}.` · HandoffStrip.tsx:56 \"The selected deal opens on the page you choose.\" · HandoffStrip.tsx:69 \"Review deal risk\" · HandoffStrip.tsx:76 \"Run a pilot\" · HandoffStrip.tsx:90 \"Call in a favor\" · DealHealthForm.tsx:175 \"Next step\" (the section holds the Next step and Next step date fields) · DealHealthForm.tsx:368 \"Back to the deal\" · InterventionRail.tsx:77 \"High risk\" (line 78 \"Tighten path\" → \"At risk\"; line 79 and 169 \"Keep honest\" → \"On track\") · InterventionRail.tsx:119 \"Open deals ranked by risk\" (aria-labels at 106, 119, 300) · InterventionRail.tsx:110 \"No deals yet. Add a deal and Deal Workspace ranks your open deals by risk here.\" · InterventionRail.tsx:141 \"These deals have the highest risk scores. Work them first.\" · InterventionRail.tsx:171 \"On-track deals are listed here in short form.\" · InterventionRail.tsx:209 \"Search deals\" · InterventionRail.tsx:258 \"Open the highest-risk deal\" · InterventionRail.tsx:302 \"Ranked by risk, not by pipeline stage.\" · TargetFolio.tsx:34 \"Deals at risk\" (line 35 \"One-session win\" → \"Fix first\"; line 36 \"Weighted truth\" → \"Weighted pipeline\"; line 37 \"Recovery queue\" → \"Ranked by risk\") · TargetFolio.tsx:71 \"Highest-risk deal\" (line 68: `Highest-risk deal: ${deal.accountName}`) · TargetFolio.tsx:80 \"The open deal with the highest risk score.\" · TargetFolio.tsx:209 \"Weighted pipeline = stage probability × deal value. A stage is only reliable when the deal has a dated next step.\" · MicroGrid.tsx:31 \"Pipeline totals\"",
+   "testsAffected": [
+    "src/deal-workspace/components/*.test.tsx (labels asserted by text)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-070",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/discovery-studio/DiscoveryStudio.tsx",
+   "line": 90,
+   "generation": "legacy",
+   "state": "Discovery Studio oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "DiscoveryStudio.tsx:90 \"Ledger spine.\" · DiscoveryStudio.tsx:87 \"Discovery Studio · Canonical Control Face\" · DiscoveryStudio.tsx:135 \"Switch the lens only when the conversation actually changes.\" · DiscoveryStudio.tsx:140 \"Open one segment. Run the call from there.\" · DiscoveryStudio.tsx:145 \"On-call rails\" · HandoffStrip.tsx:40 \"CARRY THE CALL FORWARD\" · HandoffStrip.tsx:42 \"Push the deal, or set up what's next.\" · HandoffStrip.tsx:52 \"Push to the deal\" · CompressionToggle.tsx:30 \"All nodes visible\"",
+   "problem": "The masthead of the oldest screen is two pieces of internal design vocabulary — 'Canonical Control Face' and the headline 'Ledger spine.' — which tell a seller nothing about what the page does (dimensions 2, 5, 6). 'Lens', 'rails', 'nodes' and 'push the deal' name the framework, side panels, questions and the deal update in builder terms.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json navigation[] 'Discovery Studio: Prepare and run discovery'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md row 'Off the list? Pick the closest fit — the call path and the recover moves hold either way.' → '… The question flow and recovery prompts remain available.'; comprehension principle (COPY_STANDARD.md §11 headline standard)",
+   "proposed": "DiscoveryStudio.tsx:90 \"Discovery call guide\" · DiscoveryStudio.tsx:87 \"Discovery Studio · prepare and run discovery\" · DiscoveryStudio.tsx:135 \"Change the framework only if the conversation moves to a different kind of buyer.\" · DiscoveryStudio.tsx:140 \"Open one section and use its questions during the call.\" · DiscoveryStudio.tsx:145 \"Call tools\" (aria-label) · HandoffStrip.tsx:40 \"AFTER THE CALL\" (aria-label at line 38 likewise) · HandoffStrip.tsx:42 \"Update the deal, or prepare the next step.\" · HandoffStrip.tsx:52 \"Update the deal\" · CompressionToggle.tsx:30 \"All questions shown\" (line 31 \"Only essential nodes\" → \"Only the essential questions\"; line 32 \"Reduce to fundamentals\" → \"Only the current section and recovery prompts\")",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-071",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/founding-gtm/components/HandoffStrip.tsx",
+   "line": 30,
+   "generation": "legacy",
+   "state": "Founding GTM oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on) → handoff strip and top bar",
+   "current": "HandoffStrip.tsx:30 \"CARRY THE KIT FORWARD\" · HandoffStrip.tsx:32 \"Run the daily schedule. Check the math.\" · HandoffStrip.tsx:35 \"The kit is read-mode here. Real updates come from the work you record elsewhere in the app.\" · Topbar.tsx:37 \"Authored opinion drawn from everything you record across the app. The sections fill in as that evidence builds up.\"",
+   "problem": "'Kit' is the retired name for the sales handoff document and 'read-mode' is jargon for read-only (dimensions 2, 6). 'Authored opinion' describes the document by how it was made rather than what it contains.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'handoff kit' → 'sales handoff documentation' (record B1-TERM-39); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.founding_gtm (record B2-SEM-5); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Founding GTM'",
+   "proposed": "HandoffStrip.tsx:30 \"UPDATE THE HANDOFF\" (aria-label at line 28 → \"Where the handoff gets its content\") · HandoffStrip.tsx:32 \"Keep the handoff current\" · HandoffStrip.tsx:35 \"This document is read-only. It updates from the deals, outreach and calls you record elsewhere in the app.\" · Topbar.tsx:37 \"Written from the deals, outreach and calls you record across the app. Sections fill in as that record grows.\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-072",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/future-autopsy/components/PinnedCase.tsx",
+   "line": 111,
+   "generation": "legacy",
+   "state": "Future Autopsy oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "PinnedCase.tsx:111 \"KILL SWITCH\" · PinnedCase.tsx:34 \"No case pinned. Pick a deal from the ledger below to start the autopsy.\" · PinnedCase.tsx:69 \"COUNTERMEASURES\" · Topbar.tsx:24 \"The deal is pinned as evidence.\" · Topbar.tsx:26 \"Bring one deal into focus. Decide what kills it — or what wins it — in the next {DEFAULT_HORIZON_DAYS} days.\" · VerdictToggle.tsx:15 \"what kills this in 45 days\" · Ledger.tsx:32 \"No deals pinned yet. Open Deal Workspace and push one here to start the autopsy.\" · Ledger.tsx:42 \"PINNED CASES\" · ForensicSheets.tsx:32 \"No diagnosis to render. Pin a deal to light up the evidence stack.\" · RouteRack.tsx:24 \"INTERVENE\" · action-plan.ts:131 \"Tighten qualification before the next move.\"",
+   "problem": "States loss as a certainty and as an act ('what kills this in 45 days', 'Decide what kills it', 'KILL SWITCH'; dimensions 3, 4), which the original Future Autopsy rule forbids, and frames the page with the forensic metaphor — pinned as evidence, the autopsy, the ledger, countermeasures (dimension 3) — with no plain statement that it reviews open deals for loss risk. The fixed '45 days' in the toggle is also no longer what the engine uses: the horizon is projected per deal (src/future-autopsy/lib/autopsy.ts projectHorizonDays).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'dies' and 'dying' (records B1-TERM-28, B1-TERM-29); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md 'Structural rules · Future Autopsy' (do not say a deal dies or will definitely be lost; add the literal subtitle); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md rows 'WHAT KILLS IT — THE EVIDENCE' → 'WHY RISK IS HIGH · EVIDENCE', 'THE CUTS' → 'RECOMMENDED CORRECTIVE ACTIONS' and 'WHEN TO WALK AWAY' → 'WHEN TO CONSIDER CLOSING THE DEAL'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'Future Autopsy' (record B1-TERM-30)",
+   "proposed": "PinnedCase.tsx:111 \"WHEN TO CONSIDER CLOSING THE DEAL\" (and the aria-label at line 110) · PinnedCase.tsx:34 \"No deal selected. Choose a deal from the list below to review its loss risk.\" · PinnedCase.tsx:69 \"RECOMMENDED CORRECTIVE ACTIONS\" (aria-label at line 67 \"Countermeasure docket\" likewise) · Topbar.tsx:24 \"Identify deals with high loss risk and the specific factors driving that risk.\" · Topbar.tsx:26 \"Choose one deal. Review what could stall or lose it, and what would help it advance, in the next {DEFAULT_HORIZON_DAYS} days.\" · VerdictToggle.tsx:15 \"what could stall or lose this deal\" (line 16 \"what wins this in 45 days\" → \"what would help this deal advance\") · Ledger.tsx:32 \"No open deals to review. Add a deal in Deal Workspace and it appears here.\" · Ledger.tsx:42 \"OPEN DEALS · HIGHEST RISK FIRST\" (aria-labels at lines 30 and 40 \"Pinned-case ledger\" → \"Open deals ranked by risk\") · ForensicSheets.tsx:32 \"No deal selected. Choose a deal to see its risk factors.\" · RouteRack.tsx:24 \"NEXT STEP\" · action-plan.ts:131 \"Tighten qualification before the next step.\" (line 130 \"Write the autopsy findings back into the deal record.\" → \"Record the findings of this risk review on the deal.\"; both are shown only by the oldest screen's route list, RouteRack.tsx:34)",
+   "testsAffected": [
+    "src/future-autopsy/components/*.test.tsx (labels asserted by text)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-073",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/icp-studio/components/AnalyticsPanel.tsx",
+   "line": 61,
+   "generation": "legacy",
+   "state": "ICP Studio oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "AnalyticsPanel.tsx:61 \"Your saved wedges, sharpest first.\" · AnalyticsPanel.tsx:24 \"Workable\" · RunDocket.tsx:115 \"RUN READ\" · RunDocket.tsx:152 \"No ICP saved yet. The score becomes the read once you save.\" · RunDocket.tsx:74 \"Pain reads as a category.\" · WedgeLedger.tsx:181 \"ICP LEDGER\" · WedgeLedger.tsx:130 \"Pick a size band. Lower bound + upper bound = list density.\" · WorkArea.tsx:451 \"Saved ICPs power the Match score on every account, deal, and outreach line.\" · CommercialProfileBanner.tsx:55 \"The category you compete in and the value you carry into every deal. The briefing reads this to tell you what's moving in your space — and who you compete with. Below, you define who you sell it to.\"",
+   "problem": "The oldest ICP screen still names saved ICPs 'wedges', grades them 'sharpest first' with the old state names 'Workable / Forming / Broad', and calls its review panel the 'run read' and the field list a 'ledger' (dimensions 2, 3). 'Lower bound + upper bound = list density' leaves the reader to work out the relation (dimension 7).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'sharp' (record B1-TERM-06); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md 'Structural rules · ICP Studio' and rows 'FORMING' → 'PARTIALLY DEFINED', 'WORKABLE' → 'WELL DEFINED'",
+   "proposed": "AnalyticsPanel.tsx:61 \"Your saved ICPs, most specific first.\" · AnalyticsPanel.tsx:24 \"Well defined\" (line 25 \"Forming\" → \"Partially defined\"; line 26 \"Broad\" → \"Too broad\") · RunDocket.tsx:115 \"ICP REVIEW\" (aria-label at line 112 \"Run docket\" → \"ICP review\") · RunDocket.tsx:152 \"No ICP saved yet. The quality score is recorded when you save.\" · RunDocket.tsx:74 \"The pain is written as a category.\" · WedgeLedger.tsx:181 \"ICP FIELDS\" (and the aria-label at line 179) · WedgeLedger.tsx:130 \"Choose a company-size range. The range sets how many companies are on the list.\" · WorkArea.tsx:451 \"Saved ICPs are used for the match score on every account, deal and outreach message.\" · CommercialProfileBanner.tsx:55 \"The category you compete in and what you offer buyers. Briefing uses this to choose market updates and to identify competitors. Below, you define who you sell to.\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-074",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/linkedin-playbook/components/CueBooth.tsx",
+   "line": 146,
+   "generation": "legacy",
+   "state": "LinkedIn Playbook oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "CueBooth.tsx:146 \"BOOTH READ\" · CueBooth.tsx:77 \"CUE BOOTH · {motion.label}\" · CueBooth.tsx:116 \"Live cue / {focusLabel}\" · CueBooth.tsx:138 \"Do not chase. Let Outbound carry the next move while LinkedIn stays visible.\" · CueBooth.tsx:152 \"Channel posture score ${score}\" · CueBooth.tsx:155 \"Current cue\" · CueBooth.tsx:170 \"One-session win\" · CueLedger.tsx:97 \"CUE LEDGER\" · CueLedger.tsx:99 \"Log the touch while the cue is still fresh.\" · CueLedger.tsx:102 \"Signal Console points the account, Outbound reinforces the angle, and this ledger proves whether LinkedIn is compounding or stalling.\" · CueLedger.tsx:132 \"Human\" · CueLedger.tsx:149 \"Cue taken\" · CueLedger.tsx:173 \"Log cue\" · CueLedger.tsx:178 \"CHANNEL MEMORY\" · CueLedger.tsx:204 \"No cues logged yet. Submit the form on the left to start the trail — accept rate, reply rate, and account-by-account memory live here.\" · MethodSheets.tsx:80 \"SECONDARY METHOD SHEETS\" · MethodSheets.tsx:82 \"Reference stays below the booth.\" · MethodSheets.tsx:86 \"These support the cue. They do not organize the page.\" · MethodSheets.tsx:64 \"Copy line\" · Topbar.tsx:38 \"Reach out only when the account gives you a cue.\" · Topbar.tsx:30 \"${s.total} ${s.total === 1 ? \"cue\" : \"cues\"} logged\" · Topbar.tsx:42 \"On the radar:\"",
+   "problem": "The oldest screen calls the five LinkedIn steps 'cues' and stages them in a theatre metaphor — cue booth, live cue stage, booth read, channel memory, channel posture (dimensions 2, 3). Two lines are notes to the page's designer rather than to the seller ('Reference stays below the booth.', 'These support the cue. They do not organize the page.'). 'Let Outbound carry the next move' uses the private recommendation noun. The default screen says steps, recommended action and message templates.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md LinkedIn Playbook rows ('air cover · never the opening scene' → 'supporting outreach · not the primary channel', 'One account at a time. Here's your move on the one that's hottest right now.' → 'Current recommended LinkedIn action for the highest-priority account.'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'air cover' (record B1-TERM-50) and 'one move' (record B1-TERM-14)",
+   "proposed": "CueBooth.tsx:146 \"CURRENT RECOMMENDATION\" (and the aria-label at line 145) · CueBooth.tsx:77 \"LINKEDIN STEPS · {motion.label}\" (aria-labels: line 67 \"LinkedIn cue booth\" → \"LinkedIn steps\"; line 82 \"Cue ladder\" → \"LinkedIn steps\"; line 113 \"Live cue stage\" → \"Current step\") · CueBooth.tsx:116 \"Current step / {focusLabel}\" · CueBooth.tsx:138 \"Do not send another LinkedIn message. Follow up through Outbound Studio.\" · CueBooth.tsx:152 `LinkedIn acceptance indicator ${score}` (aria-label) · CueBooth.tsx:155 \"Current step\" · CueBooth.tsx:170 \"What to finish today\" · CueLedger.tsx:97 \"LINKEDIN ACTION LOG\" (and the aria-label at line 95) · CueLedger.tsx:99 \"Log each action soon after you take it.\" · CueLedger.tsx:102 \"This log shows whether your LinkedIn actions are being accepted and answered.\" · CueLedger.tsx:132 \"Contact\" (form label; column header at line 215 likewise) · CueLedger.tsx:149 \"Action taken\" (column header at line 216 \"Cue\" → \"Action\") · CueLedger.tsx:173 \"Log action\" · CueLedger.tsx:178 \"LINKEDIN RESULTS\" · CueLedger.tsx:204 \"No actions logged yet. Log one with the form on the left; acceptance rate, reply rate and per-account history appear here.\" · MethodSheets.tsx:80 \"MESSAGE TEMPLATES\" · MethodSheets.tsx:82 \"Templates for each step\" · MethodSheets.tsx:86 \"Copy a template, fill in the blanks and send it.\" · MethodSheets.tsx:64 \"Copy text\" · Topbar.tsx:38 \"Use LinkedIn to build familiarity with a contact before or alongside calls and email.\" · Topbar.tsx:30 `${s.total} ${s.total === 1 ? \"action\" : \"actions\"} logged` (line 35 \"no cues yet\" → \"no actions logged yet\") · Topbar.tsx:42 \"Account:\"",
+   "testsAffected": [
+    "src/linkedin-playbook/components/*.test.tsx (labels asserted by text)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-075",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/outbound-studio/components/SwitchReads.tsx",
+   "line": 31,
+   "generation": "legacy",
+   "state": "Outbound Studio oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "SwitchReads.tsx:31 \"WHERE THE LINE STANDS\" · SwitchReads.tsx:36 \"NEXT MOVE\" · SwitchReads.tsx:71 \"Ready to ship.\" · SwitchReads.tsx:72 \"Every jack is patched. The generated line is honest.\" · SwitchReads.tsx:81 \"The account is patched. The buyer is still loose.\" · SwitchReads.tsx:88 \"Two cables are loose.\" · SwitchReads.tsx:117 \"The contact is the first human cable. Without it the line is a category.\" · SwitchReads.tsx:123 \"Ship the line.\" · Switchboard.tsx:44 \"SWITCHBOARD\" · Switchboard.tsx:100 \"Temperature\" · Switchboard.tsx:64 \"priority ${a.heat} · ${a.band}\" · Switchboard.tsx:140 \"When on, the generated line gives something useful without asking for anything in return — no meeting request, no demo ask.\" · OutputPanel.tsx:93 \"SEND LINE\" · OutputPanel.tsx:103 \"Which surface to send through — email, LinkedIn, or another channel — given the temperature + persona.\" · OutputPanel.tsx:144 \"Set account + buyer in the switchboard to generate the line.\" · SwitchLaws.tsx:31 \"No send path without a named strain.\" · SwitchLaws.tsx:34 \"The operator cannot route generic category language into a live outbound channel.\" · SwitchLaws.tsx:41 \"Every route keeps a recovery cable on the same board.\" · Topbar.tsx:31 \"Route one live line — to one named buyer, with one specific angle.\" · TouchLog.tsx:59 \"No touches yet for this account. Click \"Log touch\" on the send line to start the trail.\" · TouchLog.tsx:87 \"Persona · Temp\"",
+   "problem": "The switchboard metaphor — the line, jacks, patching, cables, strain, routing, shipping — is the only explanation of how a message is drafted and what is missing (dimensions 2, 3), and the 'laws' panel states rules about 'the operator' in the third person (dimension 6). 'Temperature' labels the outreach stage. The default screen says message, current outreach stage and reason for outreach; the shared stage labels are finding TERMS-057.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md Outbound Studio rows ('one real message · not a blast' → 'one account-specific message', 'WHERE ARE YOU WITH THEM?' → 'CURRENT OUTREACH STAGE', 'Name the account and the person above, and the message writes itself here…' → 'Enter the account and contact above. Antaeus drafts a message…'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'your line' (record B1-TERM-47); COPY_STANDARD.md §3 'line', 'hot / warm / cold'",
+   "proposed": "SwitchReads.tsx:31 \"MESSAGE STATUS\" (and the aria-label at line 29) · SwitchReads.tsx:36 \"NEXT STEP\" · SwitchReads.tsx:71 \"Ready to send.\" · SwitchReads.tsx:72 \"Every input is filled in. The message is specific to this account.\" · SwitchReads.tsx:81 \"The account is set. No contact is named.\" (line 80 \"Tighten the contact.\" → \"Add the contact.\") · SwitchReads.tsx:88 \"Two inputs are missing.\" (line 89 \"Patch the account first, then the contact carries the line.\" → \"Enter the account first, then the contact.\") · SwitchReads.tsx:117 \"Name the contact. Without one, the message is written for a category of buyer, not a person.\" · SwitchReads.tsx:123 \"Send the message.\" (line 124 \"Hit Copy or Log touch — every input is patched.\" → \"Use Copy or Log touch. Every input is filled in.\") · Switchboard.tsx:44 \"MESSAGE INPUTS\" (aria-label at line 42 \"Operator switchboard\" → \"Message inputs\"; line 45 \"Pick the angle.\" → \"Choose the account, contact and trigger.\") · Switchboard.tsx:100 \"Current outreach stage\" · Switchboard.tsx:64 `priority ${a.heat} of 99 · ${BAND_WORD[a.band]}` — the account picker prints the stored band key (\"priority 92 · Hot\"); use the display map proposed in finding TERMS-064 · Switchboard.tsx:140 \"When on, the message offers something useful and asks for nothing: no meeting request and no demo request.\" · OutputPanel.tsx:93 \"MESSAGE\" (aria-label at line 91 \"Generated send line\" → \"Drafted message\"; line 95 \"Send line · for\" → \"Message for\") · OutputPanel.tsx:103 \"Which channel to use — email, LinkedIn or another — given the outreach stage and the contact's role.\" · OutputPanel.tsx:144 \"Enter the account and contact to draft the message.\" · SwitchLaws.tsx:31 \"Name the account, the contact and the trigger before sending.\" (line 29 \"INPUT LAW\" → \"BEFORE YOU SEND\") · SwitchLaws.tsx:34 \"A message without a specific trigger reads as generic category language.\" · SwitchLaws.tsx:41 \"Each message comes with a suggested reply to the likely objection.\" (line 39 \"RECOVERY LAW\" → \"IF THE BUYER OBJECTS\") · Topbar.tsx:31 \"Draft one account-specific message for one named buyer.\" · TouchLog.tsx:59 \"No outreach logged for this account yet. Click \\\"Log touch\\\" under the message to record one.\" · TouchLog.tsx:87 \"Role · Stage\"",
+   "testsAffected": [
+    "src/outbound-studio/components/*.test.tsx (labels asserted by text)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-076",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/outdoors-events/components/Topbar.tsx",
+   "line": 12,
+   "generation": "legacy",
+   "state": "Outdoors Events oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "Topbar.tsx:12 \"The system reads your product category and finds offline gatherings worth knowing about — direct to your space, adjacent to it, and indirect-but-buyer-relevant. Conferences, mixers, trade shows, meetups. You decide which ones matter.\" · Topbar.tsx:9 \"Where people are gathering, found for you.\" · DiscoveryConsole.tsx:53 \"Searching the world… / Run discovery now\" · DiscoveryConsole.tsx:56 \"Reads your product category and finds gatherings — direct, adjacent, and indirect — with real source links.\" · EventList.tsx:30 \"DISCOVERY HASN'T RUN YET\" · EventList.tsx:32 \"The system will find events worth knowing about.\" · EventList.tsx:35 \"Press \"Run discovery now\" above. The system reads your product category and surfaces conferences, mixers, and meetups that are direct, adjacent, or indirect to your space — each with a real link and a one-line reason it matters.\" · EventList.tsx:75 \"Events you added before discovery, or that the system hasn't classified.\" · EventComposer.tsx:37 \"+ Add one by hand\" · EventComposer.tsx:40 \"Discovery does the finding. But if you already know about a gathering the system hasn't surfaced — a private invite, a local hang — add it here.\"",
+   "problem": "Narrates what 'the system reads … finds … surfaces … hasn't classified' and calls events 'gatherings' sorted as 'direct, adjacent, indirect' — the wording the original rewrite replaced on the default screen (dimensions 3, 6, 8). 'Run discovery now' names the internal job rather than what the button finds.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'The system finds the gatherings — you decide which matter.' → 'Antaeus identifies relevant events; you decide which ones are worth pursuing.', 'where your buyers gather · found for you' → 'events relevant to your target buyers', 'Run discovery now' → 'Find relevant events', '+ Add one by hand — a private invite the system can't see' → '+ Add event manually'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'system saw' (record B1-TERM-53)",
+   "proposed": "Topbar.tsx:12 \"Antaeus uses your product category to find in-person events: ones about your market, ones your buyers attend, and broader related events. You decide which are worth pursuing.\" · Topbar.tsx:9 \"Events relevant to your target buyers\" · DiscoveryConsole.tsx:53 \"Searching for events…\" / \"Find relevant events\" · DiscoveryConsole.tsx:56 \"Uses your product category to find events, each with a link to its source.\" · EventList.tsx:30 \"NO EVENT SEARCH HAS BEEN RUN YET\" · EventList.tsx:32 \"Antaeus identifies relevant events; you decide which ones are worth pursuing.\" · EventList.tsx:35 \"Select \\\"Find relevant events\\\" above. Antaeus searches for conferences, mixers and meetups relevant to your category, each with a source link and a one-line reason.\" · EventList.tsx:75 \"Events you added yourself, or that have no relevance group.\" · EventComposer.tsx:37 \"+ Add event manually\" · EventComposer.tsx:40 \"Add an event the search did not find, such as a private invitation or a local meetup.\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-077",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/pilot-desk/components/ForgePanel.tsx",
+   "line": 148,
+   "generation": "legacy",
+   "state": "Pilot Desk oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "ForgePanel.tsx:148 \"Cast the evidence\" · PocFramework.tsx:28 \"POC FRAMEWORK\" · Topbar.tsx:24 \"Raw interest isn't enough. Pin the claim, the owner, the metric, and the kill rule before the pilot starts.\" · ForgePanel.tsx:41 \"FORGE\" · ForgePanel.tsx:72 \"Readout owner\" · ForgePanel.tsx:121 \"Kill rules (one per line)\" · CastPanel.tsx:73 \"WEAKEST MOLD · NEXT MOVE\" · CastPanel.tsx:59 \"The five molds\" · CastPanel.tsx:13 \"Readout agenda\" · HeatLedger.tsx:12 \"Kill\" · StageStrip.tsx:35 \"Shape the claim, owner, metric, and kill rule.\" · StageStrip.tsx:40 \"Freeze the evidence. The pilot starts on a clock.\" · StageStrip.tsx:45 \"Carry the evidence into the decision meeting.\" · RouteRack.tsx:37 \"CARRY THE EVIDENCE\" · RouteRack.tsx:62 \"Pre-mortem this deal\" · RouteRack.tsx:76 \"Portable evidence for backchannel asks.\"",
+   "problem": "The oldest Pilot Desk is still headed 'POC FRAMEWORK' and still runs on the foundry model the original patch replaced: forge, molds, cast, kill rules, readout owner, 'freeze the evidence' (dimension 3). An earlier pass swapped the word 'proof' for 'evidence' and left the metaphor in place, so the save button now reads 'Cast the evidence'. The default screen says pilot setup, success criteria, who approves the result and pilot end date.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.pilot (record B2-SEM-4); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[112]; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Pilot Desk' and rows 'WHAT IT HAS TO SHOW' → 'SUCCESS CRITERIA', 'WHO SIGNS OFF' → 'WHO APPROVES THE RESULT', 'WHEN YOU'LL STOP' → 'PILOT END DATE'; final-audit AUDIT_BRIEF.md §3 disputed terms row 'proof'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json navigation[] (current area names and descriptions); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md 'Navigation rewrite' table; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'Pre-mortem a deal' → 'Review deal risk' and 'Pre-mortem' → 'Review loss risk'",
+   "proposed": "ForgePanel.tsx:148 \"Save pilot setup\" · PocFramework.tsx:28 \"PILOT DESK\" (and src/pilot-desk/components/Topbar.tsx:17 \"POC FRAMEWORK ·\" → \"PILOT DESK ·\") · Topbar.tsx:24 \"Define the pilot's success criteria, who approves the result and when the pilot stops before it begins.\" · ForgePanel.tsx:41 \"PILOT SETUP\" (aria-label at line 39 \"Evidence forge\" → \"Pilot setup\"; line 42 \"Shape the molds.\" → \"Set up the pilot.\") · ForgePanel.tsx:72 \"Who approves the result\" · ForgePanel.tsx:121 \"Stop conditions (one per line)\" · CastPanel.tsx:73 \"LEAST COMPLETE PART · NEXT STEP\" (and the aria-label at line 72) · CastPanel.tsx:59 \"The five parts of the pilot\" · CastPanel.tsx:13 \"Results meeting agenda\" · HeatLedger.tsx:12 \"Stop conditions\" · StageStrip.tsx:35 \"Define the success criteria, the approver and the stop conditions.\" (line 34 \"Forge\" → \"Set up\") · StageStrip.tsx:40 \"Save the setup. The pilot runs for the agreed number of days.\" (line 39 \"Cast\" → \"Run\") · StageStrip.tsx:45 \"Present the results at the decision meeting.\" (line 44 \"Readout\" → \"Results meeting\") · RouteRack.tsx:37 \"CONTINUE WORKING THIS DEAL\" (aria-label at line 36 \"Route rack\" likewise) · RouteRack.tsx:62 \"Review deal risk\" (line 64 \"Stress-test what would kill this evidence.\" → \"Review what could stall or lose this deal.\") · RouteRack.tsx:76 \"Use the pilot results when you ask a contact for help.\"",
+   "testsAffected": [
+    "src/pilot-desk/components/*.test.tsx (labels asserted by text)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-078",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/prospecting-desk/components/Topbar.tsx",
+   "line": 29,
+   "generation": "legacy",
+   "state": "Prospecting Desk oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "Topbar.tsx:29 \"Push only the names the territory will respect.\" · SourcingWorkbench.tsx:40 \"SOURCING WORKBENCH\" · Topbar.tsx:34 \"Ready to push\" · HandoffStrip.tsx:32 \"${ready} ${ready === 1 ? \"name is\" : \"names are\"} ready to leave the workbench.\" · HandoffStrip.tsx:28 \"Hand the names off.\" · LoomRead.tsx:49 \"Next move\" · ProspectComposer.tsx:46 \"The stronger the entry — contact, leverage, entry point, approach — the further along the board it lands.\" · ProspectKanban.tsx:51 \"Walk names across the board.\" · ProspectKanban.tsx:53 \"Each column hardens the name a step further. Push only when the entry can carry the meeting.\" · QueryStudio.tsx:41 \"QUERY CARDS\" · QueryStudio.tsx:147 \"No query cards yet. Save one above to source the prospects you push next.\"",
+   "problem": "The oldest screen is headed with the retired area name and speaks of 'names' that are 'pushed', 'hardened' and 'walked across the board' out of 'the workbench' (dimensions 2, 3); an account is never called an account. 'Next move' is the private recommendation label. The default screen says find, confirm and send accounts.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json navigation[] (current area names and descriptions); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md 'Navigation rewrite' table; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'One funnel, top to bottom — find, confirm, send.' → 'Find accounts, confirm they fit, then send qualified accounts to Signal Console.' and 'Ready to send' → 'Confirmed accounts'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'one move' → 'highest-priority recommended action' (record B1-TERM-14); final-audit AUDIT_BRIEF.md §3 disputed terms row 'move'",
+   "proposed": "Topbar.tsx:29 \"Find accounts, confirm they fit, then send qualified accounts to Signal Console.\" · SourcingWorkbench.tsx:40 \"PROSPECTING DESK\" (and src/prospecting-desk/components/Topbar.tsx:20-21; aria-label at Topbar.tsx:31 \"Workbench stats\" → \"Prospecting totals\") · Topbar.tsx:34 \"Ready to send\" (line 35 \"Pushed\" → \"Sent\") · HandoffStrip.tsx:32 `${ready} ${ready === 1 ? \"account is\" : \"accounts are\"} ready to send to Signal Console.` · HandoffStrip.tsx:28 \"Send confirmed accounts.\" (line 31 \"Nothing is push-ready yet. Bring an account to ready before sending it.\" → \"No account is ready to send yet. Complete an account's research first.\") · LoomRead.tsx:49 \"Next step\" (aria-label at line 35 \"Sourcing week read\" → \"Prospecting this week\") · ProspectComposer.tsx:46 \"The more you record — contact, entry point, approach, research notes — the further along the account starts.\" · ProspectKanban.tsx:51 \"Move accounts from captured to sent.\" · ProspectKanban.tsx:53 \"Each column is one step of qualification. Send an account only when its contact, entry point and approach are recorded.\" · QueryStudio.tsx:41 \"SAVED SEARCHES\" (line 140 \"Save query card\" → \"Save search\"; line 151 \"Saved query cards\" → \"Saved searches\") · QueryStudio.tsx:147 \"No saved searches yet. Save one above, then add the accounts it finds.\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-079",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/quota-workback/components/HandoffStrip.tsx",
+   "line": 84,
+   "generation": "legacy",
+   "state": "Quota Workback oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "HandoffStrip.tsx:84 \"Open the kit\" · HandoffStrip.tsx:82 \"The cadence a first hire opens on day one is the thing the kit promises them.\" · HandoffStrip.tsx:81 \"The quota math feeds Section 7 — the weekly cadence your first AE inherits.\" · HandoffStrip.tsx:73 \"Open weak deals and decide which corrective move serves the plan.\" · HandoffStrip.tsx:53 \"Calls when the plan needs faster conversation density.\" · Topbar.tsx:39 \"Make the math feel daily.\" · Topbar.tsx:29 \"QUOTA WORKBACK · $${m.monthlyTarget.toLocaleString()}/mo · ${b.label} posture\" · SystemHealth.tsx:108 \"Plan posture\" · PlanReadout.tsx:67 \"Close rate the weekly work is trying to make inevitable.\" · PlanReadout.tsx:73 \"Planning read\"",
+   "problem": "'The kit' is the retired name for the sales handoff, 'corrective move' is the private recommendation noun, and 'posture', 'planning read' and 'conversation density' are shorthand for the benchmark band, the plan summary and the number of conversations (dimensions 2, 6). 'Make the math feel daily.' and 'trying to make inevitable' are slogans where the default screen states what is calculated (dimension 5).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'handoff kit' → 'sales handoff documentation' (record B1-TERM-39); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.founding_gtm (record B2-SEM-5); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Founding GTM'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'one move' → 'highest-priority recommended action' (record B1-TERM-14); final-audit AUDIT_BRIEF.md §3 disputed terms row 'move'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md Quota Workback rows ('WHAT YOUR NUMBER NEEDS' → 'ACTIVITY AND PIPELINE REQUIRED', 'Is the plan real?' → 'ASSUMPTION CHECK'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json rules[4] (record B3-RULE-4); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json navigation[] 'Quota Workback: Calculate activity and pipeline required to hit quota'",
+   "proposed": "HandoffStrip.tsx:84 \"Open the sales handoff\" · HandoffStrip.tsx:82 \"A first hire sees this weekly cadence in the sales handoff on day one.\" · HandoffStrip.tsx:81 \"The quota math feeds section 7 of the sales handoff: the weekly cadence for your first AE.\" · HandoffStrip.tsx:73 \"Open at-risk deals and choose the corrective action that supports the plan.\" · HandoffStrip.tsx:53 \"Use calls when the plan needs more conversations sooner.\" · Topbar.tsx:39 \"Calculate the activity and pipeline required to hit quota.\" · Topbar.tsx:29 `QUOTA WORKBACK · $${m.monthlyTarget.toLocaleString()}/mo · ${b.label} benchmark` · SystemHealth.tsx:108 \"Plan quality\" · PlanReadout.tsx:67 \"The closed deals this weekly activity is meant to produce.\" · PlanReadout.tsx:73 \"Plan summary\" (aria-label)",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-080",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/settings/components/SettingsCards.tsx",
+   "line": 495,
+   "generation": "legacy",
+   "state": "Settings oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "SettingsCards.tsx:495 \"The system will sometimes notice a pattern in how you work — a skill you keep running with the same setup, a page you open before any other most weeks — and suggest a small change. You always accept or dismiss. Nothing changes without you.\" · SettingsCards.tsx:529 \"When off, the system stops watching for patterns and never proposes a change. Existing suggestions stay where they are — they just won't grow.\" · SettingsCards.tsx:677 \"How the system shows up\" · SettingsCards.tsx:680 \"Show me how — the system walks you through every surface, with explanations and tips. Step back — the system trusts you to know your way around and gets dense and immediate. You can switch any time.\" · SettingsCards.tsx:266 \"Advisor deployments\" · SettingsCards.tsx:283 \"Studio artifacts (territory + sourcing + autopsy + advisor profiles)\" · SettingsCards.tsx:433 \"Download every row from your workspace as a JSON file — ICPs, deals, pilot evidence, signals, advisor deployments, discovery call logs, the works. This is the portable copy of what's actually durable. The local \"Backup and restore\" card below only captures the browser cache.\" · SettingsCards.tsx:469 \"Reads happen workspace-scoped via RLS — only your rows are included. The file is JSON with a per-table layout so a future import path can be added cleanly. No data leaves the browser except the download itself.\" · SettingsCards.tsx:251 \"Per-noun breakdown\" · SettingsCards.tsx:108 \"Workspace-level\" · SettingsCards.tsx:601 \"Seeded\"",
+   "problem": "The oldest Settings narrates the software in the third person ('the system will sometimes notice', 'the system trusts you', 'how the system shows up'; dimension 8), lists data under retired or internal names ('advisor deployments', 'proofs', 'planner', 'studio artifacts', 'per-noun breakdown', 'cloud rows', 'RLS'; dimensions 2, 6), and stamps each card with an architecture kicker. For three of these strings the original rewrite approved exact replacements that the default screen already uses. Lines 112, 645 and 659 are in finding TERMS-063.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'Let the system suggest things' → 'Allow recommendations', 'It'll flag a pattern now and then. You always accept or dismiss — nothing changes on its own.' → 'Antaeus may surface patterns and recommendations. You can accept or dismiss them; no data changes automatically.', 'How much the app explains' → 'Explanation level', 'Show me how walks you through everything. Step back trusts you and gets dense.' → 'Show me how includes more explanation. Step back uses a more compact interface.'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json rules[5] (record B3-RULE-5: Settings language must describe actual storage/integration behavior directly); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'system saw' and 'what the system saw' (records B1-TERM-53, B1-TERM-55); COPY_STANDARD.md §9; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.favor (record B2-SEM-6)",
+   "proposed": "SettingsCards.tsx:495 \"Antaeus may surface patterns and recommendations. You can accept or dismiss them; no data changes automatically.\" · SettingsCards.tsx:529 \"When off, Antaeus stops checking for patterns and makes no new suggestions. Existing suggestions stay.\" · SettingsCards.tsx:677 \"Explanation level\" · SettingsCards.tsx:680 \"Show me how includes more explanation. Step back uses a more compact interface.\" · SettingsCards.tsx:266 \"Favor requests\" (line 262 \"Proofs\" → \"Pilots\"; line 278 \"Call logs (cold call + planner)\" → \"Call logs (cold calls and discovery calls)\") · SettingsCards.tsx:283 \"Saved documents (territory, prospecting, deal-risk reviews, contact profiles)\" · SettingsCards.tsx:433 \"Download your workspace as a JSON file: ICPs, deals, pilots, signals, favor requests and discovery call logs. The \\\"Backup and restore\\\" card below saves only what is stored in this browser.\" · SettingsCards.tsx:469 \"Only your workspace's data is included. The file is JSON, with one section per kind of record.\" · SettingsCards.tsx:251 \"By type of record\" (line 237 \"Total cloud rows\" → \"Total records saved\"; lines 120 and 441 \"Cloud rows in scope\" → \"Records included\") · SettingsCards.tsx:108 remove the scope kicker (also at lines 216, 341, 429, 491, 546, 676; \"Browser-only\" at 578; \"Account-level\" at 641) · SettingsCards.tsx:601 \"Loaded\"",
+   "testsAffected": [
+    "src/settings/components/SettingsCards.test.tsx (labels asserted by text)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-081",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/signal-console/components/HeatBandBanner.tsx",
+   "line": 58,
+   "generation": "legacy",
+   "state": "Signal Console oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "HeatBandBanner.tsx:58 \"91+ Hot\" · HeatBandBanner.tsx:60 \"— act this week, the window is now\" · HeatBandBanner.tsx:78 \"— quiet, but staying on the board doesn't cost anything\" · WorkspaceHealth.tsx:39 \"Hot ≥ 75\" · HeatBadge.tsx:22 \"Priority ${score} (${band})\" · AccountGrid.tsx:51 \"Anything you've been watching that matches the ICP. Once one account is in, Signal Console starts ranking accounts by how hot their signals are.\" · AccountGrid.tsx:39 \"NO ACCOUNTS ON THE RADAR YET\" · EnrichAllButton.tsx:61 \"Run the enrichment service against every account on the radar.\" · AccountCard.tsx:211 \"% fresh · … % conf\"",
+   "problem": "The oldest screen keeps the temperature model the original rewrite retired: the score bands are 'Hot / Active / Watch / Low', the summary counts accounts as 'Hot ≥ 75' although the band function calls only 91+ 'Hot' (the same mismatch as finding TERMS-064), and one band claims 'the window is now', which a score built from signal count, recency and confidence cannot establish (dimensions 3, 4). 'On the radar' and 'enrich' are shorthand for the watchlist and the account-data refresh.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'heat' and 'hottest' (records B1-TERM-04, B1-TERM-05); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.signal_console (record B2-SEM-1) and implementation_rules[3] (record B2-RULE-3); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Signal Console' (do not use hot / warm / cool / cold to carry functional meaning); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md rows 'Enrich all ↻' → 'Refresh account data ↻' and '+ Watch a company' → '+ Add company to watchlist'",
+   "proposed": "HeatBandBanner.tsx:58 \"91+ Very high\" (line 64 \"75+ Active\" → \"75+ High\"; line 70 \"50+ Watch\" → \"50+ Medium\"; line 76 \"<50 Low\" stays) · HeatBandBanner.tsx:60 \"— recent, high-confidence signals; consider outreach this week\" · HeatBandBanner.tsx:78 \"— few or old signals; no action needed\" · WorkspaceHealth.tsx:39 t(\"Priority 75+\") · HeatBadge.tsx:22 `Priority ${score} of 99 (${BAND_WORD[band]})` with the display map proposed in finding TERMS-064 (Hot → very high, Active → high, Watch → medium, Low → low); heatBand() keeps returning the stored keys · AccountGrid.tsx:51 \"Any account you have been watching that matches the ICP. Once one account is in, Signal Console ranks accounts by the strength and recency of their signals.\" · AccountGrid.tsx:39 \"NO WATCHED ACCOUNTS YET\" (src/signal-console/components/Topbar.tsx:30 \"on the radar\" → \"watched\"; AddAccountForm.tsx:206 \"Why this account's on the radar\" → \"Why you are watching this account\") · EnrichAllButton.tsx:61 \"Refresh account data for every watched account.\" (lines 64-65 \"Enrich all (…)\" → \"Refresh account data (…)\") · AccountCard.tsx:211 \"% recency · … % confidence\"",
+   "testsAffected": [
+    "src/signal-console/components/*.test.tsx (labels asserted by text)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-082",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/territory-architect/TerritoryArchitect.tsx",
+   "line": 200,
+   "generation": "legacy",
+   "state": "Territory Architect oldest screen (reached only with ?v4=0&ds=0, or with both the area's *_v4_off and *_legacy flags on)",
+   "current": "TerritoryArchitect.tsx:200 \"THESES\" · TerritoryArchitect.tsx:181 \"Next move\" · TerritoryArchitect.tsx:113 \"One territory. One ceiling. Real bets.\" · TerritoryArchitect.tsx:116 \"The territory is a map of strategic bets, not a list. Hold the 300-account ceiling; every row should be worth it.\" · TerritoryArchitect.tsx:169 \"What's loose right now\" · TerritoryArchitect.tsx:202 \"Each focus is one strategic bet on a segment.\" · TerritoryArchitect.tsx:304 \"No focuses yet. Save one above to start building the territory.\" · TerritoryArchitect.tsx:427 \"The send-line / opening line skeleton\" · TerritoryArchitect.tsx:521 \"Each row is a strategic bet — kept under the 300 ceiling.\" · TerritoryArchitect.tsx:750 \"CARRY THE TERRITORY FORWARD\"",
+   "problem": "The segment list is headed 'THESES', a name that appears nowhere else on the screen, which calls the same things 'focuses' (dimension 6); the default screen and the original rewrite call them territory segments. 'Next move' is the private recommendation label; 'strategic bets', 'what's loose' and 'backfill' stand in for segments, the main gap and accounts to add (dimension 3); 'One territory. One ceiling. Real bets.' is a slogan where the default screen says what the page does (dimension 5).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.territory (record B2-SEM-0); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room · Territory Architect'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'one move' (record B1-TERM-14); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md rows 'EMPTY' → 'NO SEGMENTS YET' and 'You haven't carved a division yet…' → 'No territory segments have been created yet.'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json navigation[] 'Territory Architect: Create and prioritize territory segments'",
+   "proposed": "TerritoryArchitect.tsx:200 \"SEGMENTS\" · TerritoryArchitect.tsx:181 \"Next step\" · TerritoryArchitect.tsx:113 \"Create and prioritize territory segments.\" · TerritoryArchitect.tsx:116 \"Group your target accounts into segments and keep the total at 300 accounts or fewer.\" · TerritoryArchitect.tsx:169 \"Main gap\" (line 174 \"What to backfill\" → \"Accounts to add\") · TerritoryArchitect.tsx:202 \"Each segment is a group of accounts you have chosen to cover.\" · TerritoryArchitect.tsx:304 \"No territory segments have been created yet.\" · TerritoryArchitect.tsx:427 \"An outline of the opening message\" · TerritoryArchitect.tsx:521 \"Each row is an account assigned to a segment. The territory holds up to 300 accounts.\" · TerritoryArchitect.tsx:750 \"CONTINUE WITH THESE SEGMENTS\" (and the aria-label at line 749)",
+   "testsAffected": [
+    "src/territory-architect/TerritoryArchitect.test.tsx (labels asserted by text)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-083",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "auth/callback/index.html",
+   "line": 34,
+   "generation": "static",
+   "state": "Sign-in callback page (/auth/callback/), shown to every user for a moment after an email-link or provider sign-in, and for as long as the session check takes: kicker (line 31), body (line 34), status line (line 37)",
+   "current": "L31: \"Auth callback\" · L34: \"One last handoff. If the session resolves, you land in the right post-auth surface. If anything fails, this page tells you plainly and routes you back to sign in.\" · L37: \"Verifying the current session and resolving where to land you next.\"",
+   "problem": "The page describes itself in builder vocabulary — 'auth callback', 'the session resolves', 'post-auth surface', 'resolving where to land you' (dimensions 2, 6). A person who has just clicked a sign-in link needs to know that sign-in is being checked and what happens next. 'Land' is also the arrival metaphor the migration map replaces with the exact event.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'landing' → 'arrival / overview / completion · use exact event' (record B1-TERM-21); comprehension principle (COPY_STANDARD.md §14 interface microcopy)",
+   "proposed": "L31: \"Signing in\" · L34: \"Checking your sign-in. If it succeeds, you go to your workspace. If it fails, this page says why and takes you back to sign in.\" · L37: \"Checking your sign-in…\"",
+   "testsAffected": [
+    "tests/e2e (any assertion on the callback page text)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-084",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/founding-gtm-share/index.html",
+   "line": 7,
+   "generation": "static",
+   "state": "Browser tab title of the read-only page a recipient opens from a Founding GTM share link",
+   "current": "<title>Shared GTM Kit | Antaeus</title>",
+   "problem": "The tab and bookmark name use the retired 'kit' noun for the sales handoff document (dimension 2); the reader is an outside recipient. See the finding on src/founding-gtm-share/FoundingGtmShare.tsx for the page body.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'handoff kit' → 'sales handoff documentation' (record B1-TERM-39)",
+   "proposed": "<title>Shared sales handoff | Antaeus</title>",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-085",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "privacy.html",
+   "line": 320,
+   "generation": "static",
+   "state": "Privacy page, section 6 heading (line 320) and paragraph (line 321)",
+   "current": "L320: \"6. Demo mode and seeded data\" · L321: \"Antaeus includes demo and seed flows that can write sample workspace data into the browser so you can explore the app with populated modules. Demo data is intended for product exploration and may be stored differently from real account data. If you do not want sample data in your browser, do not launch the seeded demo flow.\"",
+   "problem": "'Seeded data', 'seed flows' and 'the seeded demo flow' are the internal name for loading sample data, and 'populated modules' is builder vocabulary (dimensions 2, 6). The sentence already says 'sample workspace data' once; the rest can use the same words. The entry page for this feature calls it the interactive demo.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'seed' → 'initialize / enter setup data · retire from user-facing onboarding language' (record B1-TERM-40); COPY_STANDARD.md §16 (the most literal writing on the site)",
+   "proposed": "L320: \"6. Demo mode and sample data\" · L321: \"Antaeus includes a demo that writes sample workspace data into your browser so you can explore the app with example accounts and deals. Demo data is intended for product exploration and may be stored differently from real account data. If you do not want sample data in your browser, do not launch the demo.\" OWNER DECISION: the legal pages were kept word for word in the earlier re-skin. This change keeps the meaning; whether legal text may be reworded at all is the owner's call.",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "TERMS-086",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "js/discovery-segment-runtime-data-intelligence.js",
+   "line": 400,
+   "generation": "shared",
+   "state": "Discovery Studio (all three screen versions) → Data / Intelligence Infrastructure framework → 'What they need to see' → buyer response 'QUALITY MIX' → the 'still missing' note under the suggested response; the same note at js/discovery-segment-runtime-manufacturing.js:428",
+   "current": "You still need the primary kill switch.",
+   "problem": "A coaching note in the product's own voice uses 'kill switch' for the one quality problem that would stop the purchase (dimension 3). The seller's question beside it is conversational and fine; the note is the instruction to the seller and should say what to find out.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'dies' → 'is lost / becomes unlikely to close · not diagnosis' (record B1-TERM-29); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md 'Generated message rule' (conversational content may stay; private ontology and obscuring metaphor may not)",
+   "proposed": "data-intelligence.js:400 and manufacturing.js:428: \"You still need the one quality problem that would stop this purchase.\"",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "TERMS-087",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "js/demo-seed-runtime.js",
+   "line": 328,
+   "generation": "static",
+   "state": "Interactive demo page (/demo-seed.html) → 'Clear the sample from this browser' → status line under the two sample choices. Seen in the rendered public-page walk: \"1 demo keys cleared. You can seed a fresh workspace.\"",
+   "current": "cleared+' demo keys cleared. You can seed a fresh workspace.' — renders e.g. \"1 demo keys cleared. You can seed a fresh workspace.\"",
+   "problem": "'Demo keys' and 'seed a fresh workspace' are the builder's words for the stored sample data and for loading it (dimensions 2, 6); the button the visitor just pressed says 'Clear the sample from this browser'. The count also reads '1 demo keys'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'seed' → 'initialize / enter setup data · retire from user-facing onboarding language' (record B1-TERM-40)",
+   "proposed": "document.getElementById('status').textContent='The sample was cleared from this browser. You can load a sample again.';",
+   "testsAffected": [
+    "tools/preview/walk-public-pages.js output only (no unit assertion found)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-088",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "landing-a-system.html",
+   "line": 154,
+   "generation": "static",
+   "state": "The 17 design-mockup pages that the deploy script still publishes (tools/deploy/build-cloudflare-assets.js:77-117): demo-a-time, demo-b-space, demo-c-story, demo-reveal, demo-90, landing-a-system, landing-b-monday, landing-c-inherit, landing-a-alive, landing-b-alive, landing-c-alive, signup-a-momentum, signup-b-promise, signup-c-read, seeding-flow-front, seeding-flow-deals, seeding-flow. Each is reachable by URL behind the invitation gate, is marked noindex, and is not linked from any live page.",
+   "current": "Examples: landing-a-system.html:154 \"Right now, you are the system.\" · landing-c-inherit.html:128 \"Build the machine. Not the memory.\" · landing-b-alive.html:245 \"Run your first morning →\" · signup-c-read.html:119 \"Right now the whole motion lives in your head. If you stepped away, it would stall — and a hire would inherit confusion, not a system.\" · landing-b-monday.html:155 \"Antaeus ranks every deal, signal, and proof under pressure — and names the one move that clears the most weight today.\" · seeding-flow.html:359 \"Ten in. The board just woke up.\" · demo-b-space.html:86 \"The system sees\". Counts across the 17 pages (visible strings): motion 44, inherit / inheritable 43, read as a noun 30, move 37, the machine / machine 27, awake / wake-up 24, pressure 18, you are the system 15, kit 12, seed / seeding 20, sharp 14, heat / hot 19, first morning 6.",
+   "problem": "These pages are the old dialect in full: every Tier-1 phrase the remediation retired is on a page the product serves (dimensions 2, 3, 5, 8). The earlier pass left them on purpose as design mockups to be rewritten when one is promoted; they are also outside the copy scan (finding on tools/language-remediation/copy-audit.js). Anyone given a mockup URL reads Antaeus in the vocabulary the rest of the app no longer uses, and a writer or model looking for example landing or onboarding copy finds these files first.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'You are the system', 'the machine', 'first morning', 'whole motion', 'motion', 'awake', 'wake-up', 'one move', 'inheritable', 'seed' (records B1-TERM-34, -12, -19, -02, -03, -17, -18, -14, -33, -40); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json instructions[3] (record B1-INSTR-3: do not use nearby deprecated copy as a style reference); CLAUDE.md Part V §6 session log 2026-11-09 ('Left on purpose: the 17 unlinked design-variant pages … rewrite whichever one is promoted to a live page')",
+   "proposed": "Without an owner decision: add a visible line at the top of each of the 17 pages — \"Design mockup, not current product copy.\" — and add the 17 files to the copy scan under a separate 'mockup' section so their counts are reported instead of invisible. OWNER DECISION: (a) stop publishing the 17 pages (remove lines 77-117 of tools/deploy/build-cloudflare-assets.js; the files stay in the repository under deliverables/), or (b) rewrite them to the current standard. Either removes or changes pages the owner chose to keep.",
+   "testsAffected": [
+    "tests/e2e/* (any test that loads a mockup page)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-089",
+   "category": "LANG-D",
+   "severity": 1,
+   "file": "src/design-system/ProofSheet.tsx",
+   "line": 613,
+   "generation": "doctrine",
+   "state": "Internal component reference page (/design-system/, built and served, not linked): the example strings shown inside each component. This page is where new screens copy component usage from.",
+   "current": "L141: \"— Today's most pressured\" · L145 and L425: \"Pre-mortem it\" · L300: \"The system noticed three reads since yesterday.\" · L449: \"GONE QUIET\" · L540: \"Handoff kit\" · L544: \"The rails that worked\" · L545: \"Questions that won meetings\" · L547: \"The losses we paid for\" · L568: \"Fairly sure — two independent reads agree.\" · L589: \"A hire could run this if you're around for sanity-checks.\" · L612: \"Pre-mortem this deal\" · L613: \"Forge a proof\" · L614: \"Deploy an advisor\"",
+   "problem": "The component reference still demonstrates every component with retired copy — 'Forge a proof', 'Deploy an advisor', 'Pre-mortem', 'Handoff kit', 'the system noticed three reads', 'most pressured', the old Founding GTM section titles. Sample strings on a reference page are copied into new work, which is how the old dialect comes back; the original instruction is not to use deprecated copy as a style reference.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json instructions[3] (record B1-INSTR-3); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md 'Why this file exists' (coding models and future copy passes imitate nearby language); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[112]; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md Founding GTM section-title rows",
+   "proposed": "L141: \"— Highest priority today\" · L145 and L425: \"Review deal risk\" · L300: \"Three new observations since yesterday.\" · L449: \"NO RECENT ACTIVITY\" · L540: \"Sales handoff\" · L544: \"Outreach patterns\" · L545: \"Discovery questions\" · L547: \"Loss patterns\" · L568: \"Fairly sure — two independent sources agree.\" · L589: \"Another seller could run the process with you available to answer questions.\" · L612: \"Review deal risk\" · L613: \"Run a pilot\" · L614: \"Call in a favor\"",
+   "testsAffected": [
+    "tests/e2e smoke test for /design-system/ (asserts the page boots, not these strings)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-090",
+   "category": "LANG-D",
+   "severity": 1,
+   "file": "deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html",
+   "line": 41,
+   "generation": "doctrine",
+   "state": "Capability maps (internal reference, also embedded in the tester walkthrough). Getting to Signed map: line 40 ('the run-to-signed reconceive + rename') and line 41 ('plan-to-signed', four times). Onboarding map: line 40 ('the heavy-seeding doctrine (Part III §12)') and line 41 ('Heavy-seeding doctrine #6', 'Heavy-seeding — never re-soften…'). Welcome map: line 40 ('the heavy-seeding doctrine (§12) + the seeding flow (§4.3)').",
+   "current": "getting-to-signed map L40: \"the run-to-signed reconceive + rename\" · L41: \"a papers-ready strip + a plan-to-signed so nobody goes quiet\", \"the plan-to-signed\", \"The plan-to-signed — the mutual dated signature process\" · onboarding map L40: \"the heavy-seeding doctrine (Part III §12)\" · L41: \"Heavy-seeding doctrine #6.\", \"Heavy-seeding — never re-soften into a low-friction form that apologizes for the work\" · welcome map L40: \"the heavy-seeding doctrine (§12) + the seeding flow (§4.3)\"",
+   "problem": "The maps a tester reads beside each area still name things with the internal terms the original map says to retire internally as well: 'run-to-signed' / 'plan-to-signed' for the signature process and plan, and 'heavy-seeding' / 'the seeding flow' for onboarding. The default screens say 'signature plan' and 'workspace setup', so the reference and the product disagree.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'run-to-signed' → 'signature process · retire internally' (record B1-TERM-52), 'seeding' → 'onboarding data collection / workspace initialization · rewrite internal doctrine too' (record B1-TERM-41), 'heavy-seeding' → 'comprehensive onboarding · rewrite internal doctrine' (record B1-TERM-42); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md replacement table",
+   "proposed": "getting-to-signed map: \"the run-to-signed reconceive + rename\" → \"the signature-process redesign and rename\"; \"a plan-to-signed so nobody goes quiet\" → \"a signature plan so every stakeholder stays engaged\"; \"the plan-to-signed\" → \"the signature plan\" (three more places). onboarding map: \"the heavy-seeding doctrine\" → \"the comprehensive-onboarding doctrine\" (three places). welcome map: \"the heavy-seeding doctrine (§12) + the seeding flow (§4.3)\" → \"the comprehensive-onboarding doctrine (§12) + onboarding data collection (§4.3)\".",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-091",
+   "category": "LANG-D",
+   "severity": 1,
+   "file": "CLAUDE.md",
+   "line": 1052,
+   "generation": "doctrine",
+   "state": "Project canon read at the start of every working session: Part III §12 title (line 1052), §4.3 Onboarding (lines 190, 193-195, 201: 'the Earned Depth seeding flow', 'wake-up' as a step name), §4.16b Getting to Signed (line 353: 'the run-to-signed mind')",
+   "current": "L1052: \"## 12. Earned Depth — the doctrine of heavy seeding\" · L190: \"the Earned Depth seeding flow\" · L194: \"doorway → ICP → accounts → wake-up → live deals → quota → landing\" · L353: \"the run-to-signed mind\"",
+   "problem": "The original map asks for these four internal names to be rewritten in internal doctrine too (seeding, heavy-seeding, wake-up, run-to-signed). Canon instead keeps them as working names and adds notes that they are never copy (the Authority-order paragraph, the per-area 'Language' bullets, and the note at the top of §12). That guard has held on the default screens, so this is recorded as a residual risk, not a failure: a session that reads the room entry and skips the Language bullet still meets the old names first.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows 'seeding' (record B1-TERM-41), 'heavy-seeding' (record B1-TERM-42), 'wake-up' (record B1-TERM-18: internal and external), 'run-to-signed' (record B1-TERM-52: retire internally); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md replacement table (heavy-seeding → comprehensive onboarding; seeding flow → onboarding data collection; wake-up → enrichment completion); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md ('active instructions must not regenerate private customer ontology')",
+   "proposed": "No change is needed for the screens. To meet the original records literally: L1052 \"## 12. Comprehensive onboarding — asking for the judgment only the seller holds\"; in §4.3 use \"onboarding data collection\" for \"seeding flow\" and \"enrichment completion\" for \"wake-up\"; in §4.16b use \"the signature-process mind\" for \"the run-to-signed mind\". OWNER DECISION: canon is the founder's working contract and changes to it are founder-approved; the founder decides whether the internal names are renamed or stay with their 'never copy' notes.",
+   "testsAffected": [],
+   "confidence": "medium"
   }
  ],
- "dispositions": [],
+ "dispositions": [
+  {
+   "recordId": "B1-TERM-00",
+   "status": "IMPLEMENTED",
+   "currentText": "\"OPEN WORKSPACE MAP · G\" / \"WORKSPACE MAP\" / \"Where do you want to go?\". Remaining uses of the word: \"You still need a safe proving ground.\" (Discovery coaching note); \"Antaeus is strongest on the ground.\" (invitation-gate headline)",
+   "where": "src/lib/ground/GroundLine.tsx:142-143,173-176; fresh walkthrough of the default screens (SMB book, generated 2026-11-16), every area; js/discovery-segment-runtime-ai-native.js:131; coming-soon.html:328",
+   "note": "The navigation is named Workspace map wherever it renders; 'ground' survives in file, class and component names. The remaining visible uses are the idiom 'proving ground' and the gate headline's reference to the myth, both recorded under retained. One mockup caption ('Lifted off the ground = at risk') is in TERMS-088."
+  },
+  {
+   "recordId": "B1-TERM-01",
+   "status": "IMPLEMENTED",
+   "currentText": "title \"Open workspace map (G)\", aria-label \"Open workspace map\", rendered \"OPEN WORKSPACE MAP · G\"",
+   "where": "src/lib/ground/GroundLine.tsx:142-143; fresh walkthrough of the default screens (SMB book, generated 2026-11-16), every area",
+   "note": "The control says what opens. 'Touch the Ground' does not occur in any served file (43,800 extracted strings searched)."
+  },
+  {
+   "recordId": "B1-TERM-02",
+   "status": "STILL MISSING",
+   "currentText": "\"Right now the whole motion lives in your head. If you stepped away, it would stall — and a hire would inherit confusion, not a system.\"",
+   "where": "signup-c-read.html:119",
+   "note": "No product screen, generator or live page uses it; the Dashboard states scope literally ('Current readiness: Partially documented.', 'OPEN DEAL RISK 4 at elevated risk open pipeline: $803k'). The only remaining uses are on the 17 published design mockups (TERMS-088), which the owner has to decide to unpublish or rewrite."
+  },
+  {
+   "recordId": "B1-TERM-03",
+   "status": "STILL MISSING",
+   "currentText": "\"Existing ICPs, deals, signals, and motions stay safe — onboarding only retunes the activation path.\"",
+   "where": "src/settings/ds/components/SettingsCardsDS.tsx:430 (previous Settings); src/settings/components/SettingsCards.tsx:645,659 (oldest Settings); 44 uses across the mockups",
+   "note": "Default screens have no visible 'motion' (the only matches are the CSS media query 'prefers-reduced-motion' and identifiers). It is still a catch-all on the two fallback Settings screens (TERMS-063) and throughout the mockups (TERMS-088)."
+  },
+  {
+   "recordId": "B1-TERM-04",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"Ranked first. Reasons: account priority score 26 out of 99 and multiple recent signals are recorded.\"; \"Account priority score\". Remaining: the account picker option `${a.name} · ${a.heat}` (a bare number after the name); the meter caption `${m.band} · ${m.heat} — ${signalPhrase}${recentPhrase}` (for a 92-score account: Hot · 92 — 3 signals, 2 recent); \"91+ Hot\" \"— act this week, the window is now\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) welcome and dashboard at rest, signal-console at rest (hover text); src/cold-call-studio/ds/components/AccountBar.tsx:29; src/signal-console/ds/lib/adapters.ts:58; src/signal-console/components/HeatBandBanner.tsx:58-60",
+   "note": "Default screens name the metric (account priority score, out of 99) and give its inputs. The previous and oldest screens still show the bare number or the temperature word: TERMS-037, TERMS-064, TERMS-081, TERMS-075; mockups TERMS-088. 'heat' in supabase/functions/seeding-enrichment/index.ts:56-57 is a JSON field the prompt defines literally (retained)."
+  },
+  {
+   "recordId": "B1-TERM-05",
+   "status": "STILL MISSING",
+   "currentText": "Generated suggestion title `Make \"${human}\" default to your scheduled setup?`, where ${human} is the recipe id with hyphens removed and words capitalised — for the bundled recipe cast-proof-for-hottest-deal it reads: Make “Cast Proof For Hottest Deal” default to your scheduled setup?; outreach-stage label \"Hot\"; \"91+ Hot\"",
+   "where": "supabase/functions/heartbeat/phase-f-generators.ts:86,98 with humanizeSkillId at line 129; src/outbound-studio/lib/types.ts:40; src/signal-console/ds/components/HealthStrip.tsx:28; src/signal-console/components/HeatBandBanner.tsx:58; src/signal-console/components/WorkspaceHealth.tsx:39",
+   "note": "Default screens say 'highest-priority account' (\"Current recommended LinkedIn action for the highest-priority available account.\"). 'Hottest / hot' still reaches users through a generated suggestion on the default Briefing (TERMS-016), the shared outreach-stage labels (TERMS-057), and the fallback Signal Console screens (TERMS-064, TERMS-081); mockups TERMS-088. The oldest Dashboard's Hot / Warm / Cold tone labels (src/dashboard/components/SignalLine.tsx:33-40) are in the Dashboard reviewer's file."
+  },
+  {
+   "recordId": "B1-TERM-06",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"Too broad\" / \"Partially defined\" / \"Well defined\" / \"Highly specific\". Remaining: \"Your saved wedges, sharpest first.\"; \"None of these block finishing — they make the Dashboard land sharper.\"",
+   "where": "src/icp-studio/v4/IcpStudioV4.tsx:27-30; src/icp-studio/components/AnalyticsPanel.tsx:61 (oldest ICP Studio); src/onboarding/ds/components/StepsDS.tsx:328 (previous Onboarding)",
+   "note": "The default ICP quality scale is the approved one. 'Sharp' remains on fallback screens: TERMS-073, TERMS-054; mockups TERMS-088. The oldest Welcome ('Sharper signals + cleaner outbound.', src/welcome/components/LaunchFolio.tsx:165-188) is in the Welcome reviewer's file."
+  },
+  {
+   "recordId": "B1-TERM-07",
+   "status": "IMPLEMENTED",
+   "currentText": "\"ICP quality: highly specific\" / \"WHY THIS ICP IS SPECIFIC · 7 OF 8 CRITERIA\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) icp-studio at rest; src/icp-studio/v4/IcpStudioV4.tsx:27-30",
+   "note": "The quality being assessed is named (specificity). 'Sharpness' does not occur in any served file."
+  },
+  {
+   "recordId": "B1-TERM-08",
+   "status": "IMPLEMENTED",
+   "currentText": "\"HOW YOUR 29 WATCHED ACCOUNTS MATCH THE ICP\" / \"0 strong matches\" / \"3 partial matches\" / \"26 do not match\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) icp-studio at rest",
+   "note": "The account-match area uses match language. No form of 'bite' occurs in any served file."
+  },
+  {
+   "recordId": "B1-TERM-09",
+   "status": "IMPLEMENTED",
+   "currentText": "\"STRONG ICP MATCHES\" / \"No strong matches yet. Refine the ICP or add accounts.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) icp-studio at rest",
+   "note": "'Where it bites' does not occur in any served file."
+  },
+  {
+   "recordId": "B1-TERM-10",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Create company size / stage segment Name the segment, assign a priority tier, and record why it fits. + Create segment\"; \"No territory segments have been created yet…\". Remaining uses of the word: \"We need indemnification carve-outs.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) territory-architect at rest; src/getting-to-signed/lib/seed-scripts.ts:103,105; src/getting-to-signed/lib/types.ts:68",
+   "note": "Territory Architect uses the literal action (create a segment). The only visible 'carve' is the standard contract term 'carve-out', in a buyer's request and its coaching note (retained); 'ta4-carve' is a CSS class."
+  },
+  {
+   "recordId": "B1-TERM-11",
+   "status": "IMPLEMENTED",
+   "currentText": "\"RECENT ACTIVITY\" (panel heading); \"Show recent activity\" (Settings); \"Hide recent activity\" (tooltip)",
+   "where": "src/lib/edge/LiveEdge.tsx:254,257,262; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) every area and settings at rest",
+   "note": "One functional name, used consistently. 'Live Edge' survives only as the component and file name. (The one script match is 'the edge case owner', ordinary English.)"
+  },
+  {
+   "recordId": "B1-TERM-12",
+   "status": "STILL MISSING",
+   "currentText": "\"Build the machine. Not the memory.\" / \"You run the motion. It becomes the machine.\"",
+   "where": "landing-c-inherit.html:128,143; landing-c-alive.html (same lines of copy)",
+   "note": "No product screen, generator or live page uses it; the recent-activity panel labels its sources 'automated updates' and 'buyer activity' (src/lib/edge/LiveEdge.tsx:226-227). The only remaining uses are on the 17 published design mockups (TERMS-088), which the owner has to decide to unpublish or rewrite."
+  },
+  {
+   "recordId": "B1-TERM-13",
+   "status": "STILL MISSING",
+   "currentText": "\"What you build in here becomes a machine someone can inherit — not a memory only you can run.\"",
+   "where": "demo-c-story.html:106; demo-90.html:170; 27 uses across the mockups",
+   "note": "No product screen, generator or live page uses it; in product code 'machine' is only the internal source key for automated updates (src/lib/edge/LiveEdge.tsx:67,226), shown as 'automated updates'. The only remaining uses are on the 17 published design mockups (TERMS-088), which the owner has to decide to unpublish or rewrite."
+  },
+  {
+   "recordId": "B1-TERM-14",
+   "status": "STILL MISSING",
+   "currentText": "Default screens: \"Recommended moves\" (Briefing market card); \"NEXT MOVE\" (deal edit drawer); \"5. Name the next move.\" (pilot results-meeting document). Welcome and Dashboard say \"HIGHEST-PRIORITY ACTION … Ranked first. Reasons: account priority score 26 out of 99 and multiple recent signals are recorded.\"",
+   "where": "src/briefing/components/PatternCard.tsx:117; src/deal-workspace/ds/components/DealHealthFormDS.tsx:113; src/pilot-desk/lib/docs.ts:138; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) welcome and dashboard at rest",
+   "note": "Welcome and the Dashboard state the action and why it ranks first, as the rule asks. The recommendation noun 'move' is still on three default surfaces (TERMS-001, TERMS-002, TERMS-018), in generated sentences and labels on previous screens (TERMS-041, TERMS-042, TERMS-044, TERMS-054, TERMS-061, TERMS-065), on oldest screens (TERMS-068, TERMS-069, TERMS-072, TERMS-074, TERMS-075, TERMS-077, TERMS-078, TERMS-079, TERMS-082), in a model prompt (TERMS-021) and across the mockups (TERMS-088). The 94 uses in the Discovery and seed scripts and the others on default screens are the ordinary verb (retained)."
+  },
+  {
+   "recordId": "B1-TERM-15",
+   "status": "IMPLEMENTED",
+   "currentText": "\"HIGHEST-PRIORITY ACTION\" / \"Outbound to Chomps\" / \"Ranked first. Reasons: account priority score 26 out of 99 and multiple recent signals are recorded.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) welcome at rest and dashboard at rest",
+   "note": "The recommendation is named with its evidence. 'System's pick' does not occur in any served file; every 'pick' in the app is the ordinary verb (\"Pick the deal\", \"Pick one workflow to review\")."
+  },
+  {
+   "recordId": "B1-TERM-16",
+   "status": "IMPLEMENTED",
+   "currentText": "\"workspace setup complete\" / \"SETUP COMPLETE\" / \"Antaeus analyzed the active deals and watched accounts in this workspace.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) welcome at rest",
+   "note": "'Workspace is awake' does not occur in any served file."
+  },
+  {
+   "recordId": "B1-TERM-17",
+   "status": "STILL MISSING",
+   "currentText": "\"The dashboard wakes up live.\"",
+   "where": "src/onboarding/ds/components/StepsDS.tsx:69 (previous Onboarding); src/onboarding/components/Steps.tsx:43 (oldest Onboarding); 24 uses across the mockups (\"Your dashboard, awake\", \"Half awake\", \"Awake · your workspace\")",
+   "note": "Default screens use the actual state ('workspace setup complete'); 'wake' in src/onboarding/seeding/state.ts:25 and 'waking' in src/lib/edge/LiveEdge.tsx:140 are identifiers. Still personified on the two fallback Onboarding screens (TERMS-054) and in the mockups (TERMS-088)."
+  },
+  {
+   "recordId": "B1-TERM-18",
+   "status": "STILL MISSING",
+   "currentText": "External: \"The dashboard wakes up live.\"; \"Ten in. The board just woke up.\" Internal: \"doorway → ICP → accounts → wake-up → live deals → quota → landing\"",
+   "where": "src/onboarding/ds/components/StepsDS.tsx:69; src/onboarding/components/Steps.tsx:43; seeding-flow.html:359; CLAUDE.md:194",
+   "note": "The rule covers internal and external use. External: fallback Onboarding screens (TERMS-054) and mockups (TERMS-088). Internal: canon still names the onboarding step 'wake-up', with a note that it is never copy (TERMS-091). The default onboarding flow shows no form of it (rendered onboarding walk, 642 lines, searched)."
+  },
+  {
+   "recordId": "B1-TERM-19",
+   "status": "STILL MISSING",
+   "currentText": "\"Run your first morning →\" / \"You're one step from your first morning.\"",
+   "where": "landing-b-alive.html:236,245,384; signup-a-momentum.html:71,87",
+   "note": "No product screen, generator or live page uses it; Welcome uses the literal state ('SETUP COMPLETE'). The only remaining uses are on the 17 published design mockups (TERMS-088), which the owner has to decide to unpublish or rewrite."
+  },
+  {
+   "recordId": "B1-TERM-20",
+   "status": "IMPLEMENTED",
+   "currentText": "\"WELCOME\" / \"Your accounts, active deals, and pipeline are available on the Dashboard.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) welcome at rest",
+   "note": "Neither 'morning landing' nor 'morning door' occurs in any served file."
+  },
+  {
+   "recordId": "B1-TERM-21",
+   "status": "STILL MISSING",
+   "currentText": "\"One last handoff. If the session resolves, you land in the right post-auth surface.\" / \"Verifying the current session and resolving where to land you next.\"; generated: \"Manual runs land on the same configuration.\"; `A short read about ${humanizeRoom(room)} lands at the top of your weekly brief, so you do not have to think to start.` (for the area id poc-framework: A short read about Poc Framework lands at the top of your weekly brief…)",
+   "where": "auth/callback/index.html:34,37; supabase/functions/heartbeat/phase-f-generators.ts:103,119",
+   "note": "The arrival metaphor still stands in for the exact event on the sign-in callback page (TERMS-083), in two generated suggestions (TERMS-016, TERMS-017) and on fallback screens (TERMS-052, TERMS-054, TERMS-078). Other uses are ordinary verbs and are kept: \"Deals tend to move when a real result lands early…\" (src/future-autopsy/lib/autopsy-data.ts:159), \"A new GTM leader landed\" (src/onboarding/seeding/lib/icp.ts:51)."
+  },
+  {
+   "recordId": "B1-TERM-22",
+   "status": "IMPLEMENTED",
+   "currentText": "\"dividend\" appears once, as an entry in a banned-vocabulary list",
+   "where": "supabase/functions/prospecting-research/_shared.ts:99",
+   "note": "A negative example the output gate rejects, not copy. No product explanation uses the word; onboarding states the result literally."
+  },
+  {
+   "recordId": "B1-TERM-23",
+   "status": "STILL MISSING",
+   "currentText": "\"THE THREADS\" (step list heading); `{w.id.replace(/_/g, \" \")}` prints the internal ids thread_reactivated and multi_threaded as the labels thread reactivated / multi threaded; \"LIVE CALL THREADS\"",
+   "where": "src/cold-call-studio/ds/components/ThreadRail.tsx:17; src/future-autopsy/ds/components/PinnedCaseDS.tsx:142; src/cold-call-studio/components/TalkLoom.tsx:123",
+   "note": "Default screens: none visible (src/future-autopsy/lib/causes.ts:115 prints 'stakeholder-coverage count'; 'threading' is a variable). Still used for call steps and stakeholder coverage on fallback screens: TERMS-036, TERMS-049, TERMS-068; mockups ('single-threaded heat 57') TERMS-088. \"Slack threads\" in a Discovery question is the literal thing."
+  },
+  {
+   "recordId": "B1-TERM-24",
+   "status": "IMPLEMENTED",
+   "currentText": "\"SEE RELATED ACTIVITY ACROSS THE WORKSPACE\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) dashboard, after clicking the account name in the highest-priority action",
+   "note": "The literal title is used. 'Whole thread' does not occur in any served file."
+  },
+  {
+   "recordId": "B1-TERM-25",
+   "status": "STILL MISSING",
+   "currentText": "\"— Most pressured\" (tag on the first row of the previous Dashboard's queue)",
+   "where": "src/dashboard/today/components/QueueRead.tsx:41",
+   "note": "Default screens use 'pressure' only for a real pressure on the buyer (\"Audit / compliance pressure\", src/icp-studio/lib/data.ts:188; \"spend pressure, diligence load, hiring pressure\" in a Discovery question) and as the '[pressure]' template token that is replaced before display (src/cold-call-studio/lib/threads.ts:58). The private construct remains in TERMS-040, in the component reference page (TERMS-089) and in the mockups (TERMS-088)."
+  },
+  {
+   "recordId": "B1-TERM-26",
+   "status": "STILL MISSING",
+   "currentText": "\"Why now? One signal that pulled them up (optional)\"; \"Current pull\"",
+   "where": "src/onboarding/ds/components/StepsDS.tsx:264; src/cold-call-studio/components/TalkLoom.tsx:157",
+   "note": "Default screens use only the ordinary verb (\"Pull in the next person from their side\", src/pilot-desk/v4/PilotDeskV4.tsx:251; \"senior review still gets pulled in too often\"). The metaphor remains on fallback screens: TERMS-054, TERMS-068; one mockup label ('Pulling hardest', landing-b-monday.html:235) is in TERMS-088."
+  },
+  {
+   "recordId": "B1-TERM-27",
+   "status": "STILL MISSING",
+   "currentText": "\"It catches what's decaying\" / \"The system can see it, rank it, and catch what's decaying…\"",
+   "where": "demo-90.html:287; seeding-flow.html:201",
+   "note": "No product screen, generator or live page uses it; deal staleness is stated as an observation ('14 days since last recorded activity'); 'deal_decay' and 'signal_decay' are generator ids. The only remaining uses are on the 17 published design mockups (TERMS-088), which the owner has to decide to unpublish or rewrite."
+  },
+  {
+   "recordId": "B1-TERM-28",
+   "status": "IMPLEMENTED",
+   "currentText": "\"OPEN DEAL RISK 4 at elevated risk open pipeline: $803k\" / \"HIGHEST DEAL RISK Liquid Death · 14d highest-risk open deal\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) dashboard at rest and readiness at rest",
+   "note": "State labels use risk language. 'Dying' does not occur in any served file."
+  },
+  {
+   "recordId": "B1-TERM-29",
+   "status": "STILL MISSING",
+   "currentText": "\"What kills this in {days} days.\" / \"Kill switch.\" / \"KILL SWITCH\" / \"Kill rules\" / \"Boundaries / kill rules:\" / \"You still need the primary kill switch.\"",
+   "where": "src/future-autopsy/ds/components/PinnedCaseDS.tsx:83,201; src/future-autopsy/components/PinnedCase.tsx:111; src/pilot-desk/ds/components/ForgeForm.tsx:113; src/pilot-desk/lib/docs.ts:94; js/discovery-segment-runtime-data-intelligence.js:400",
+   "note": "The default Future Autopsy says '…is at high risk of stalling or being lost within the next N days' and never 'dies'. Diagnosis-as-death remains in generated pilot documents (TERMS-018), a Discovery coaching note (TERMS-086), previous screens (TERMS-048, TERMS-060, TERMS-061), oldest screens (TERMS-072, TERMS-077) and mockups (TERMS-088). Kept: the loss-reason label \"Budget Killed\" (a recorded historical outcome) and spoken lines such as \"Nothing formal kills it. It just loses oxygen.\""
+  },
+  {
+   "recordId": "B1-TERM-30",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"FUTURE AUTOPSY\" · \"6 deals reviewed · highest risk first\" · \"If nothing changes, Grammarly is at high risk of stalling or being lost within the next 17 days.\"; workspace map: \"Future Autopsy identify deals with high loss risk and why\". Remaining: \"Future Autopsy pins a deal as evidence, then shows what kills it in 45 days\"; \"The deal is pinned as evidence.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) future-autopsy at rest and the workspace map; src/future-autopsy/ds/components/PinnedCaseDS.tsx:60; src/future-autopsy/components/Topbar.tsx:22-26",
+   "note": "On the default screen the name is kept (owner decision) and the surrounding copy says it reviews open deals for loss risk, so the rule is met there without the literal subtitle sentence. The previous and oldest screens carry the name with forensic copy and no plain statement of function: TERMS-048, TERMS-072. The related verb 'pre-mortem' is still a link label on eight fallback surfaces (TERMS-034, TERMS-043, TERMS-045, TERMS-052, TERMS-061, TERMS-067, TERMS-069, TERMS-077)."
+  },
+  {
+   "recordId": "B1-TERM-31",
+   "status": "STILL MISSING",
+   "currentText": "\"…a hire couldn't run it yet. That climbs as you keep going.\"",
+   "where": "seeding-flow.html:201; 9 uses across the mockups",
+   "note": "No product screen, generator or live page uses it; the readiness drawer is headed 'READINESS PROGRESSION' (walkthrough, readiness at rest); 'ClimbDrawer' is a component name. Seed-data sentences such as 'as 737 output climbs' are literal. The only remaining uses are on the 17 published design mockups (TERMS-088), which the owner has to decide to unpublish or rewrite."
+  },
+  {
+   "recordId": "B1-TERM-32",
+   "status": "IMPLEMENTED",
+   "currentText": "\"READINESS PROGRESSION\" · \"PREVIOUS STATE\" · \"CURRENT STATE\"; remaining uses of the word: \"…conferences, trade shows, summits, meetups…\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) readiness at rest; src/lib/operator-help/registry.ts:188; supabase/functions/outdoors-events-discovery/index.ts:91",
+   "note": "No readiness level is called the summit. The visible uses mean an event type, and 'Summit Data Group' is a sample company name."
+  },
+  {
+   "recordId": "B1-TERM-33",
+   "status": "STILL MISSING",
+   "currentText": "\"Right now the system only lives in your head. A new hire would have nothing to inherit on day one.\"; \"Next step locked — the deal inherits it.\"; \"the weekly cadence your first AE inherits\"",
+   "where": "src/dashboard/today/components/ReadinessPanel.tsx:24; src/discovery-studio/ds/components/HandoffStripDS.tsx:27; src/quota-workback/components/HandoffStrip.tsx:81",
+   "note": "The state name 'Inheritable' is gone (see B1-TERM-36). The inheritance framing remains on fallback screens (TERMS-038, TERMS-045, TERMS-079) and 43 times in the mockups (TERMS-088). Kept as ordinary English on the default Founding GTM: \"…so the new hire inherits a real comparison of what gets responses instead of a guess.\" (src/founding-gtm/lib/sections.ts:309) — a person receiving something, with the thing named."
+  },
+  {
+   "recordId": "B1-TERM-34",
+   "status": "STILL MISSING",
+   "currentText": "Product: \"Founder-dependent\". Mockups: \"Right now, you are the system.\" / \"You are the system Nothing's transferable yet. It's all you.\"",
+   "where": "src/lib/readiness/types.ts:31; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) dashboard at rest; landing-a-system.html:154,163,228; demo-a-time.html:123; demo-reveal.html:139",
+   "note": "No product screen, generator or live page uses it; the readiness state is named Founder-dependent everywhere it renders (the engine id you_are_the_system is unchanged). The only remaining uses are on the 17 published design mockups (TERMS-088), which the owner has to decide to unpublish or rewrite."
+  },
+  {
+   "recordId": "B1-TERM-35",
+   "status": "STILL MISSING",
+   "currentText": "Product: \"Partially documented\" / \"Current readiness: Partially documented.\" Mockups: \"Building There's activity, but a hire would still be guessing.\"",
+   "where": "src/lib/readiness/types.ts:32; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) dashboard at rest; landing-a-system.html:164,229; landing-a-alive.html:176,224; landing-b-alive.html:359",
+   "note": "No product screen, generator or live page uses it; as a readiness state the word is replaced everywhere in the product; other uses are the ordinary verb (\"How are you thinking about building this yourselves versus buying a tool?\"). The only remaining uses are on the 17 published design mockups (TERMS-088), which the owner has to decide to unpublish or rewrite."
+  },
+  {
+   "recordId": "B1-TERM-36",
+   "status": "SUPERSEDED BY APPROVED PRODUCT EVOLUTION",
+   "currentText": "\"Usable with founder support\"",
+   "where": "src/lib/readiness/types.ts:33; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) dashboard at rest (\"To become Usable with founder support\")",
+   "note": "The state was renamed, but to the owner's later choice rather than the map's 'Runnable with founder support': COPY_STANDARD.md §17, owner-directed 2026-11-05/06 (AUDIT_BRIEF §4). 'Inheritable with guardrails' does not occur in any live file; the engine id inheritable_with_guardrails is unchanged. The mockups still show 'Inheritable' as a state (landing-a-alive.html:176)."
+  },
+  {
+   "recordId": "B1-TERM-37",
+   "status": "SUPERSEDED BY APPROVED PRODUCT EVOLUTION",
+   "currentText": "\"Hire-ready\"",
+   "where": "src/lib/readiness/types.ts:34; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) dashboard at rest; start.html:363",
+   "note": "The map's replacement ('Runnable independently') was superseded: the owner kept 'Hire-ready' as the fourth readiness state (COPY_STANDARD.md §17, 2026-11-05/06; AUDIT_BRIEF §4). The landing page defines it where it appears (\"It keeps running if you take two weeks off.\")."
+  },
+  {
+   "recordId": "B1-TERM-38",
+   "status": "SUPERSEDED BY APPROVED PRODUCT EVOLUTION",
+   "currentText": "\"Hire-ready and repeatable\"",
+   "where": "src/lib/readiness/types.ts:35; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) dashboard at rest; start.html:364",
+   "note": "The map's replacement ('Documented and repeatable') was superseded by the owner's 'Hire-ready and repeatable' (COPY_STANDARD.md §17, 2026-11-05/06; AUDIT_BRIEF §4). The comma form 'Hire-ready, repeatable' remains only on mockups (landing-a-system.html:232)."
+  },
+  {
+   "recordId": "B1-TERM-39",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"SHARE THIS KIT\" / \"Send the kit to a hire as a read-only link\". Shared page: \"SHARED GTM KIT · READ-ONLY\" / \"{workspace} shared their Founding GTM kit\". Default elsewhere: \"SALES HANDOFF\" / \"Sign in to share the handoff document with a new hire\"",
+   "where": "src/founding-gtm/components/SharePanel.tsx:175,213; src/founding-gtm-share/FoundingGtmShare.tsx:68,70; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) founding-gtm at rest and after 'Share read-only with a seller'",
+   "note": "The document is 'the handoff document' on the default Founding GTM screen, but its share panel and the page the recipient opens still call it a kit: TERMS-003, TERMS-004, TERMS-066, TERMS-084. Also on fallback screens (TERMS-047, TERMS-038, TERMS-071, TERMS-079), the component reference page (TERMS-089) and mockups (TERMS-088). Kept: \"Champion kit\" (src/pilot-desk/v4/PilotDeskV4.tsx:148), ordinary English for a set of materials, with its contents listed."
+  },
+  {
+   "recordId": "B1-TERM-40",
+   "status": "STILL MISSING",
+   "currentText": "\"1 demo keys cleared. You can seed a fresh workspace.\"; \"6. Demo mode and seeded data\"; \"Your answers seeded an ICP, an account, and a quota plan.\"; \"it swaps the seed pushbacks\"; \"Seeded\"",
+   "where": "js/demo-seed-runtime.js:328 (interactive demo page); privacy.html:320-321; src/onboarding/ds/components/StepsDS.tsx:343; src/getting-to-signed/ds/components/RouteControls.tsx:132; src/settings/components/SettingsCards.tsx:601",
+   "note": "The default onboarding flow has no 'seed' (rendered onboarding walk searched). It is still user-facing on the demo page (TERMS-087), the privacy page (TERMS-085), fallback screens (TERMS-054, TERMS-051, TERMS-080) and mockups (TERMS-088). 'Seed to Series E' on start.html:374 is the funding stage. The /cloud-seed/ page is internal tooling (retained)."
+  },
+  {
+   "recordId": "B1-TERM-41",
+   "status": "STILL MISSING",
+   "currentText": "User-facing: none in the product. Internal: \"the Earned Depth seeding flow\"; \"the heavy-seeding doctrine (§12) + the seeding flow (§4.3)\"",
+   "where": "CLAUDE.md:190,194; deliverables/room-capability-maps/welcome-capability-map-2026-07-07.html:40; mockup page titles (seeding-flow.html:7)",
+   "note": "The rule asks for internal doctrine to be rewritten too. The product no longer shows the word ('seeding' in src/onboarding/main.tsx:59 is a URL parameter). Canon and two capability maps still use it as the working name, with notes that it is never copy: TERMS-091, TERMS-090; the three seeding-flow mockups are in TERMS-088."
+  },
+  {
+   "recordId": "B1-TERM-42",
+   "status": "STILL MISSING",
+   "currentText": "\"## 12. Earned Depth — the doctrine of heavy seeding\"; \"Heavy-seeding doctrine #6.\"",
+   "where": "CLAUDE.md:1052 and 1160; deliverables/room-capability-maps/onboarding-capability-map-2026-07-07.html:40-41",
+   "note": "No user-facing use. The internal rewrite the rule asks for ('comprehensive onboarding') has not been made in canon or the capability maps: TERMS-091, TERMS-090. Renaming canon is the founder's decision."
+  },
+  {
+   "recordId": "B1-TERM-43",
+   "status": "IMPLEMENTED",
+   "currentText": "Remaining uses of the word: \"The Green Apron investment puts more people on the floor — screening decides whether they are the right ones.\"",
+   "where": "js/demo-seed-data-ent.js:616 (a sample outreach email)",
+   "note": "The threshold sense is gone from the product (default onboarding states the number of deals). The one live use means the shop floor. One mockup caption ('the rest are off the floor', landing-b-alive.html:273) is in TERMS-088."
+  },
+  {
+   "recordId": "B1-TERM-44",
+   "status": "STILL MISSING",
+   "currentText": "\"Try 7d for thinner signals.\"",
+   "where": "src/dashboard/today/components/WeekReads.tsx:133 (previous Dashboard); src/dashboard/components/WeekReadsCard.tsx:141 (oldest Dashboard)",
+   "note": "Default screens name what is incomplete ('Use case not recorded', 'Mostly complete / Partly complete / Incomplete'); the only default match, \"…before the new hire learns the thinner version\" (src/founding-gtm/lib/sections.ts:385), is an ordinary comparative about a named list of questions. 'Thinner signals' remains on the two fallback Dashboards: TERMS-039. 'thin' elsewhere is an enum key or CSS class."
+  },
+  {
+   "recordId": "B1-TERM-45",
+   "status": "IMPLEMENTED",
+   "currentText": "\"ALL FOUR WORKSTREAMS · CUSTOMER REQUEST → YOUR PROPOSED POSITION\" / \"BUSINESS APPROVAL stakeholder engagement and the signature plan AT RISK open ▾\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) getting-to-signed at rest",
+   "note": "Getting to Signed uses the four workstreams. Remaining uses are ordinary English: \"Get one concrete result in front of the decision owner soon.\" (src/future-autopsy/lib/autopsy-data.ts:115), \"billing annually instead of up front\" (src/getting-to-signed/lib/seed-scripts.ts:42). No 'front' label exists on the previous or oldest Getting to Signed screens either."
+  },
+  {
+   "recordId": "B1-TERM-46",
+   "status": "IMPLEMENTED",
+   "currentText": "\"CURRENT BLOCKING ISSUE\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) getting-to-signed at rest",
+   "note": "'Face-off' does not occur in any served file."
+  },
+  {
+   "recordId": "B1-TERM-47",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"YOUR PROPOSED POSITION\". Remaining: \"The line you won't cross. Below this, you walk.\" / \"The line we won't cross. Below this we walk.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) getting-to-signed at rest; src/getting-to-signed/ds/components/RouteControls.tsx:163; src/getting-to-signed/components/PositionRack.tsx:44",
+   "note": "Retired on the default screen. The negotiation-position sense remains on the previous screen (TERMS-051) and the oldest (PositionRack.tsx:44, in the Getting to Signed reviewer's file). The separate 'line' = outbound message metaphor is in TERMS-056, TERMS-075. Kept: \"Suggested line\" (src/cold-call-studio/v4/ColdCallStudioV4.tsx:180), a line to say on a call."
+  },
+  {
+   "recordId": "B1-TERM-48",
+   "status": "IMPLEMENTED",
+   "currentText": "\"network-assisted deal support\" / \"MESSAGE TO YOUR CONTACT\" / \"FORWARDABLE\" / \"OPEN REQUESTS · TRACK OUTCOMES\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) call-in-a-favor at rest",
+   "note": "The request is described as an introduction and a forwardable note. 'Relay' does not occur in any served file. (The related carrier / deploy vocabulary on fallback screens is recorded under B2-SEM-6.)"
+  },
+  {
+   "recordId": "B1-TERM-49",
+   "status": "IMPLEMENTED",
+   "currentText": "\"An introduction from someone the buyer already trusts could help move this deal forward.\"",
+   "where": "src/call-in-a-favor/lib/ask-builder.ts:65; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) call-in-a-favor at rest",
+   "note": "Influence is stated literally. 'Carries weight' does not occur in any served file; the mockups use a different idiom ('the one move that clears the most weight', landing-b-monday.html:155), covered by TERMS-088."
+  },
+  {
+   "recordId": "B1-TERM-50",
+   "status": "IMPLEMENTED",
+   "currentText": "\"supporting outreach · not the primary channel\" / \"Use LinkedIn to build familiarity with a contact before or alongside calls and email.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) linkedin-playbook at rest",
+   "note": "'Air cover' does not occur in any served file."
+  },
+  {
+   "recordId": "B1-TERM-51",
+   "status": "IMPLEMENTED",
+   "currentText": "\"What did this signature process teach you?\" / \"target signature date\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) getting-to-signed at rest",
+   "note": "The literal process name is used. No form of 'run to signature' occurs in any served file."
+  },
+  {
+   "recordId": "B1-TERM-52",
+   "status": "STILL MISSING",
+   "currentText": "User-facing: none. Internal: \"the run-to-signed mind\"; \"the run-to-signed reconceive + rename\"; \"a papers-ready strip + a plan-to-signed so nobody goes quiet\"",
+   "where": "CLAUDE.md:353; deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html:40-41",
+   "note": "The rule is 'retire internally'. The screens say 'signature plan' and 'signature process'; canon and the capability map a tester reads still use the internal name: TERMS-090, TERMS-091."
+  },
+  {
+   "recordId": "B1-TERM-53",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"Things the system noticed — observations about your work\" (Settings data list). Remaining: \"What the system noticed about your work\"; \"The system has nothing to flag in your work right now.\"; \"What I noticed:\"; \"The system reads your product category and finds offline gatherings…\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) settings at rest; src/settings/lib/workspace-tables.ts:97; src/dashboard/today/components/WeekReads.tsx:105; src/briefing/components/WorkspaceReads.tsx:155; src/briefing/components/SuggestionsSection.tsx:56; src/outdoors-events/components/Topbar.tsx:12",
+   "note": "Narration of system perception remains on one default screen (TERMS-005) and its one-word form 'NOTICED' (TERMS-020), on previous screens (TERMS-039, TERMS-030, TERMS-031, TERMS-032, TERMS-058), oldest screens (TERMS-076, TERMS-080) and mockups (TERMS-088). 'The app knows enough to rank what to work on.' (src/welcome/components/LaunchFolio.tsx:182) is in the Welcome reviewer's file."
+  },
+  {
+   "recordId": "B1-TERM-54",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Review accounts by current priority. Open an account to see the signals and activity driving its ranking.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) signal-console at rest",
+   "note": "'System's read' does not occur in any served file."
+  },
+  {
+   "recordId": "B1-TERM-55",
+   "status": "STILL MISSING",
+   "currentText": "\"What the system noticed about your work\" (section heading); \"Things the system noticed\" (data-section name)",
+   "where": "src/dashboard/today/components/WeekReads.tsx:105; src/dashboard/components/WeekReadsCard.tsx:102; src/settings/lib/workspace-tables.ts:97",
+   "note": "The exact phrase is gone and Welcome uses 'CHANGES SINCE YOUR LAST VISIT'. The same construction with 'noticed' is still a heading on the two fallback Dashboards (TERMS-039) and a section name on the default Settings (TERMS-005)."
+  },
+  {
+   "recordId": "B1-TERM-56",
+   "status": "STILL MISSING",
+   "currentText": "Default Briefing: \"The read this week\"; \"There are no market reads for this week yet.\"; \"No source record is saved for this read. Reads created from now on will include one.\"; default Settings: \"Briefing reads\"",
+   "where": "src/briefing/components/BriefingLead.tsx:29; src/briefing/components/EmptyState.tsx:21; src/briefing/components/ShowYourWork.tsx:56; src/settings/lib/workspace-tables.ts:153; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) briefing after 'SHOW SOURCES AND REASONING'",
+   "note": "'Read' as a noun for an analysis is still on the default Briefing and Settings (TERMS-006, TERMS-007, TERMS-008, TERMS-009, TERMS-010, TERMS-011, TERMS-012), in a generated suggestion (TERMS-017), on previous screens (TERMS-028, TERMS-029, TERMS-030, TERMS-039, TERMS-035), oldest screens (TERMS-073, TERMS-074, TERMS-067, TERMS-078, TERMS-079) and mockups (TERMS-088). The verb is kept: \"Read the post and identify one specific point…\" (src/linkedin-playbook/lib/cues.ts:20), \"Share read-only with a seller\"."
+  },
+  {
+   "recordId": "B1-TERM-57",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Scheduled check: no new signals recorded in more than 14 days for OLIPOP.\" / \"This check refreshes every 30 minutes.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) briefing and signal-console at rest (recent-activity panel); src/briefing/v4/BriefingV4.tsx:399",
+   "note": "The monitoring job is described literally. 'Heartbeat' survives as the function name and in its server log prefixes ('[heartbeat] …', supabase/functions/heartbeat/index.ts), which no user sees, and on the internal /cloud-seed/ tooling page (retained)."
+  },
+  {
+   "recordId": "B1-TERM-58",
+   "status": "IMPLEMENTED",
+   "currentText": "\"SAVED MONITORING RULES\" / \"Add monitoring rule\" / \"NO MONITORING RULES YET\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) briefing at rest",
+   "note": "'Standing orders' does not occur in any served file."
+  },
+  {
+   "recordId": "B1-TERM-59",
+   "status": "STILL MISSING",
+   "currentText": "Generated suggestion `You scheduled \"${human}\" and it has fired ${fires} times in the last 30 days without a parameter override.`; prompt context \"TRIGGER FIRES THIS RUN:\"",
+   "where": "supabase/functions/heartbeat/phase-f-generators.ts:98; supabase/functions/briefing-pipeline/llm/compose-shared.ts:57,61,71",
+   "note": "The Briefing screen says 'Matching events appear here when new data meets a rule.' The metaphor remains in a generated suggestion shown on the default Briefing (TERMS-016) and in the vocabulary handed to the model (TERMS-021). 'fired' in supabase/functions/briefing-pipeline/triggers/runner.ts is a stored status value and a stage-log note, not displayed. Kept: \"every new country is a fire drill for legal and finance\" (a buyer's line)."
+  },
+  {
+   "recordId": "B1-TERM-60",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Evidence that conflicts with an assumption — cases where current data does not support an assumption recorded in your workspace.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) briefing at rest",
+   "note": "Evidence language is used. No form of 'the data disagrees' occurs in any served file."
+  },
+  {
+   "recordId": "B1-TERM-61",
+   "status": "IMPLEMENTED",
+   "currentText": "\"prepare before the call · log the outcome after\" / \"Call plan\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) cold-call-studio at rest",
+   "note": "'Walk in cold' does not occur in any served file. Related 'walk in' phrasing remains only on fallback Getting to Signed screens (\"What you're walking in to ask for\", TERMS-051; \"Walk in with a starting position, a walkaway, and a concession ladder…\", src/getting-to-signed/components/Topbar.tsx:37, in that area's reviewer file), where it is not the core explanation."
+  },
+  {
+   "recordId": "B1-TERM-62",
+   "status": "IMPLEMENTED",
+   "currentText": "\"TODAY · 26 MESSAGES & CALLS RECORDED\" / \"26\" \"/ 33 TODAY\" \"messages & calls — logged or captured\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) every area (recent-activity panel)",
+   "note": "The actual status is named. 'On the wire' does not occur in any served file."
+  }
+ ],
  "retained": [
   {
    "file": "src/call-in-a-favor/v4/CallInAFavorV4.tsx",
@@ -1324,6 +2250,83 @@
    "text": "Run cold calls",
    "term": "cold",
    "why": "'Cold call' is the standard sales term; Cold Call Studio is an approved area name."
+  },
+  {
+   "file": "js/discovery-segment-runtime.js",
+   "line": 137,
+   "text": "You still need to see whether the reason is urgent enough to move. / \"Before this could move, what would your team need to see to believe it is safe and worth it?\"",
+   "term": "move",
+   "why": "Ordinary verb for a purchase going forward, in coaching notes and in lines the seller says to a buyer. 94 'move' hits across the live Discovery and seed scripts were read; none is the recommendation noun. Covered by AUDIT_BRIEF §3 ('help move a deal forward') and the Batch 03 generated-message rule."
+  },
+  {
+   "file": "js/discovery-segment-runtime-ai-native.js",
+   "line": 181,
+   "text": "AUTOPSY READY / \"Open Future Autopsy and name the pattern while the signal is still fresh.\" / jump label \"Open Future Autopsy\"",
+   "term": "Future Autopsy",
+   "why": "The feature name is kept by owner decision. Each use in the Discovery scripts sits beside copy that says what it is for ('note now why this could stall'), so the name is explained where it appears."
+  },
+  {
+   "file": "js/discovery-segment-runtime-data-intelligence.js",
+   "line": 503,
+   "text": "\"Nothing formal kills it. It just loses oxygen.\" / \"What is your best guess on the first place it could die?\"",
+   "term": "dies",
+   "why": "Spoken lines — a buyer's answer and the seller's follow-up question — not a diagnosis by the product. The Batch 03 rule keeps conversational scripts conversational."
+  },
+  {
+   "file": "js/discovery-segment-runtime-govtech.js",
+   "line": 21,
+   "text": "Regulatory pressure / \"…spend pressure, diligence load, hiring pressure…\" / Find the hiring pressure",
+   "term": "pressure",
+   "why": "Ordinary English for a business pressure on the buyer. The 41 other hits in the Discovery scripts are the jump-target key \"pressure\", an identifier that is never displayed."
+  },
+  {
+   "file": "js/demo-seed-runtime.js",
+   "line": 62,
+   "text": "Choose one narrative, seed the workspace, and move straight into dashboard.",
+   "term": "seed",
+   "why": "Text of a toolbar the script only injects when the page has no [data-demo-lane=\"static\"] element (line 72). The only page that loads this script is demo-seed.html, which has that element (line 80), so this toolbar does not render. The status line the same script writes at line 328 does render and is a finding."
+  },
+  {
+   "file": "js/supabase-config.js",
+   "line": 1753,
+   "text": "Future Autopsy Log / Outbound Seed / Demo Seed Metadata",
+   "term": "seed",
+   "why": "Row titles in the legacy sync's key-to-document table; they label stored rows for the pre-migration sync path and no current screen renders them."
+  },
+  {
+   "file": "start.html",
+   "line": 275,
+   "text": "Raised off the line = at risk. One deal is on track. The rest are at risk, and you can't tell which one is about to stall.",
+   "term": "line",
+   "why": "A caption that defines the graphic beside it (marks drawn on or above a ground line). The sentence states what the picture means, so nothing has to be decoded."
+  },
+  {
+   "file": "coming-soon.html",
+   "line": 328,
+   "text": "Antaeus is strongest on the ground. / So is a sales process that is written down. The private build is open by invitation only.",
+   "term": "Ground",
+   "why": "The gate page's headline refers to the myth behind the company name, not to the navigation feature the migration map retires, and the next sentence says what the page is. Brand voice on a page with no task to perform; the static-pages reviewer owns the fuller judgment."
+  },
+  {
+   "file": "src/cloud-seed/CloudSeedPage.tsx",
+   "line": 49,
+   "text": "CLOUD SEED · INTERNAL TOOLING / Populate your workspace with realistic data / … Phase B observations fire, the Birdseye gets a ranked next move …",
+   "term": "seed",
+   "why": "A page labelled as internal tooling (/cloud-seed/, not linked from the app) used by the builder to load test data. Its vocabulary is the builder's; no customer workflow passes through it."
+  },
+  {
+   "file": "src/data-migration/DataMigrationPage.tsx",
+   "line": 89,
+   "text": "DATA MIGRATION · PHASE 2.3 / Move your local data to the server.",
+   "term": "move",
+   "why": "One-time internal migration tool behind the data_migration_live flag; 'move' is the literal verb for transferring data."
+  },
+  {
+   "file": "src/skills/recipes/cast-proof-for-hottest-deal.md",
+   "line": 2,
+   "text": "id: cast-proof-for-hottest-deal / sources: source=hottest-signal-console-account / id: triage-week-reads",
+   "term": "hottest",
+   "why": "Recipe ids and source keys — identifiers stored in schedules and dispatched by name. The label and description shown to the user are plain ('Plan a pilot for the highest-risk deal'). The one place an id is shown as a name is finding TERMS-016."
   }
  ],
  "gaps": []

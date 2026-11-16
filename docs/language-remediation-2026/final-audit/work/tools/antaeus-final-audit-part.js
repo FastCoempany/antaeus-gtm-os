@@ -126,7 +126,7 @@ Unverified leads: ${S}/audit-leads/${a.key}.json may exist. If it does, it holds
 
 SAVE AS YOU GO — this matters. An earlier run of this audit was cut off and every unsaved finding was lost.
 - If ${out} already exists when you start, it is a partial result from an interrupted reviewer of this same area. Read it first, keep everything valid in it, and continue with what its \`coverage\` array shows is not yet done. Do not start over.
-- Write ${out} as valid JSON (all five arrays present, even if empty) as soon as you have audited your first surface, and rewrite the whole file after each further surface or generator. Add a \`coverage\` row for a surface when you finish it. Never hold more than about ten unsaved findings.
+- Write ${out} as valid JSON (all five arrays present, even if empty) as soon as you have audited your first surface, and rewrite the whole file after each further surface or generator. Add a \`coverage\` row for a surface when you finish it. This machine has been restarting without warning about once an hour, and a restart ends your session: never hold more than FIVE unsaved findings or go more than about ten minutes without saving. When you resume from a partial file, your first save should come within your first few findings, not after you have re-read everything.
 - Work in this order so that the most important evidence is saved first: default screens → generators, prompts and fallbacks → data, backend and handoffs → the previous and oldest screen versions → dispositions for the \`judge\` records → gaps.
 Be economical: read a file once in full rather than through many small searches, and batch related checks into one command. Do not re-read documents you have already read.
 
@@ -169,7 +169,7 @@ Also:
 ${IGNORE}
 Machine note: other reviewers are working in this checkout at the same time and the machine is small. Do NOT start a browser, a dev server, a build, the whole test suite, or a copy of dist; at most one single-file vitest run at a time (--maxWorkers=1). Be economical: read a file once in full rather than through many small searches.
 
-SAVE AS YOU GO: if ${out} already exists it is a partial result from an interrupted verifier — read it, keep its verdicts, and continue with the findings that have none. Write ${out} as valid JSON after your first ten verdicts and rewrite it after every further ten.
+SAVE AS YOU GO: if ${out} already exists it is a partial result from an interrupted verifier — read it, keep its verdicts, and continue with the findings that have none. Write ${out} as valid JSON after your first five verdicts and rewrite it after every further five — this machine has been restarting without warning about once an hour, and a restart ends your session.
 
 Shape of ${out}:
 { "area": "${a.key}",
