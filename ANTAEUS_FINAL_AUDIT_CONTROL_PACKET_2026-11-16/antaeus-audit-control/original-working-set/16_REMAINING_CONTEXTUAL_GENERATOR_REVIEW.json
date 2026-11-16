@@ -1,0 +1,299 @@
+{
+  "count": 16,
+  "note": "These strings should not be blindly replaced from transcript text. They are generated/composite/contextual and must be fixed at the source generator using the AI/generator rewrite specification.",
+  "records": [
+    {
+      "text": "TOUCH THE GROUND · SEE THE WHOLE MOTION · G — middle of page, center · hover: “Touch the ground",
+      "occurrence_count": 21,
+      "rooms": [
+        "Briefing",
+        "Call in a Favor",
+        "Cold Call Studio",
+        "Dashboard",
+        "Deal Workspace",
+        "Discovery Studio",
+        "Founding GTM",
+        "Future Autopsy",
+        "Getting to Signed",
+        "ICP Studio",
+        "LinkedIn Playbook",
+        "Outbound Studio",
+        "Outdoors Events",
+        "Pilot Desk",
+        "Prospecting Desk",
+        "Quota Workback",
+        "Readiness Score",
+        "Settings",
+        "Signal Console",
+        "Territory Architect",
+        "Welcome"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 5,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "\"Good. What is missing most: user signal, product adoption read, internal alignment, or enablement readiness?\"",
+      "occurrence_count": 1,
+      "rooms": [
+        "Discovery Studio"
+      ],
+      "states": [
+        "After clicking “Product / UX / Enablement / Knowledge Workflow”, then clicking “Start from one live decision”, then clicking “\"We have a release decision moving without enough usable evidence.\"”"
+      ],
+      "classifications": [
+        "personification",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals AT RISK close ▴",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals BLOCKING close ▴",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”, then choosing “blocking” in “blocking clearing to do at risk settled”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals BLOCKING open ▾",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”, then choosing “blocking” in “blocking clearing to do at risk settled”, then clicking “BUSINESS keep the committee moving — this front is what actually kills deals BLOCKING clos”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals CLEARING close ▴",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”, then choosing “clearing” in “blocking clearing to do at risk settled”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals CLEARING open ▾",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”, then choosing “clearing” in “blocking clearing to do at risk settled”, then clicking “BUSINESS keep the committee moving — this front is what actually kills deals CLEARING clos”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals SETTLED close ▴",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”, then choosing “settled” in “blocking clearing to do at risk settled”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals SETTLED open ▾",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Mark it settled”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals TO DO close ▴",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”, then choosing “todo” in “blocking clearing to do at risk settled”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "BUSINESS keep the committee moving — this front is what actually kills deals TO DO open ▾",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After clicking “Work this front ▾”, then choosing “todo” in “blocking clearing to do at risk settled”, then clicking “BUSINESS keep the committee moving — this front is what actually kills deals TO DO close ▴”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "private_ontology"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "Later, you'll be able to connect your inbox read-only with one click, and sends and replies will count themselves with no BCC habit at all. It isn't on yet — Google has to security-review Antaeus itself (nothing about you) before your one-click approval can exist. When it lands, it will be exactly this: optional, read-only, matched only against accounts you're already watching — and the click-by-click will live right here. Until then, the BCC address above does the job.",
+      "occurrence_count": 1,
+      "rooms": [
+        "Settings"
+      ],
+      "states": [
+        "room_at_rest"
+      ],
+      "classifications": [
+        "declarative_certainty_review",
+        "semantic_compression"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "YOUR LINE — middle of page, center · filled with “Net-60 flat, or net-30 with 3% off annual prepay",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After choosing “deal_e_boeing” in “Which deal? Boeing Starbucks United Airlines OpenAI Nordstrom CoreWeave”, then clicking “FINANCE Net-90 payment terms Net-90 payment terms→Net-60 flat, or net-30 with 3% off annua”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "YOUR LINE — middle of page, center · filled with “Our papers answer 118 of the 150 today",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After choosing “deal_e_boeing” in “Which deal? Boeing Starbucks United Airlines OpenAI Nordstrom CoreWeave”, then clicking “SECURITY Full 150-question security review before any contract redlines move Full 150-ques”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "YOUR LINE — middle of page, center · filled with “Seasonal math says January start loses the spring class",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After choosing “deal_e_boeing” in “Which deal? Boeing Starbucks United Airlines OpenAI Nordstrom CoreWeave”, then clicking “BUSINESS Hold rollout until next fiscal year Hold rollout until next fiscal year→Seasonal ”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    },
+    {
+      "text": "YOUR LINE — top of page, center · filled with “Cap at 12 months of fees with a separate, higher breach cap",
+      "occurrence_count": 1,
+      "rooms": [
+        "Getting to Signed"
+      ],
+      "states": [
+        "After choosing “deal_e_boeing” in “Which deal? Boeing Starbucks United Airlines OpenAI Nordstrom CoreWeave”, then clicking “LEGAL Uncapped liability on data-related claims Uncapped liability on data-related claims→”"
+      ],
+      "classifications": [
+        "compressed_dash_cadence",
+        "metaphor"
+      ],
+      "severity_0_to_5": 4,
+      "status": "covered_by_structural_rule_or_requires_contextual_generator_rewrite",
+      "replacement": null
+    }
+  ]
+}
