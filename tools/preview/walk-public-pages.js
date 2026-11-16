@@ -23,7 +23,8 @@
  * records what the visitor is told. Only made-up values are typed
  * ("not-an-email", "x"); the walk never sends a well-formed email address, so
  * it cannot create an account or trigger mail. One row per form switches the
- * browser offline first, to record the lost-connection message.
+ * browser offline first, to record the lost-connection message. Calls to the
+ * analytics property are dropped so a walk is not counted as a visitor.
  * The invite and preview codes are checked by the production Worker, which a
  * static server does not run; their "wrong code" pages are opened directly.
  *
@@ -166,6 +167,10 @@ new MutationObserver(() => {
     }
 }).observe(document, { childList: true, subtree: true, characterData: true, attributes: true });`;
 
+// These pages report each visit to the live analytics property. A walk is not
+// a visitor, so those calls are dropped; no visible text depends on them.
+const ANALYTICS = /google-analytics\.com|googletagmanager\.com|google\.com\/g\/collect/;
+
 // ── the walk harness: one page, driven through a few small verbs ───────
 function startWalk(browser, name) {
     const rec = { lines: [], reached: [], notReached: [], links: {}, pageErrors: [], consoleErrors: [], failedRequests: [] };
@@ -199,14 +204,16 @@ function startWalk(browser, name) {
             if (ctx) await ctx.close();
             ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
             await ctx.addInitScript({ content: INIT });
+            await ctx.route(ANALYTICS, (route) => route.abort());
             page = await ctx.newPage();
             pending = 0;
             const data = (r) => r.resourceType() === "fetch" || r.resourceType() === "xhr";
+            const ours = (url) => !ANALYTICS.test(url);
             page.on("pageerror", (e) => rec.pageErrors.push(e.message));
-            page.on("console", (m) => m.type() === "error" && rec.consoleErrors.push(`${m.text().slice(0, 240)} @ ${m.location().url || "page"}`));
+            page.on("console", (m) => m.type() === "error" && ours(m.location().url) && rec.consoleErrors.push(`${m.text().slice(0, 240)} @ ${m.location().url || "page"}`));
             page.on("request", (r) => data(r) && pending++);
             page.on("requestfinished", (r) => data(r) && pending--);
-            page.on("requestfailed", (r) => (data(r) && pending--, rec.failedRequests.push(`${r.url().split("?")[0]} — ${(r.failure() || {}).errorText || "failed"}`)));
+            page.on("requestfailed", (r) => (data(r) && pending--, ours(r.url()) && rec.failedRequests.push(`${r.url().split("?")[0]} — ${(r.failure() || {}).errorText || "failed"}`)));
             page.on("response", (r) => r.status() >= 400 && rec.failedRequests.push(`${r.url().split("?")[0]} — HTTP ${r.status()}`));
             // A page that redirects at once interrupts its own load.
             await page.goto(BASE + url).catch(() => page.waitForLoadState("load"));
@@ -253,6 +260,7 @@ function startWalk(browser, name) {
             const mode = w.mode;
             w.mode = "";
             if (!mode) await settle();
+            if (mode === "now") await page.waitForTimeout(250); // let a fade-in start
             const at = new URL(page.url());
             const got = mode === "redirect" ? { lines: [{ kind: "redirect", text: at.pathname + at.search }], disabled: [], links: {} } : await grab();
             got.lines.push(...extra);
@@ -373,7 +381,7 @@ async function main() {
     const server = await serve();
     const exe = process.env.TRANSCRIPT_CHROMIUM || (fs.existsSync("/opt/pw-browsers/chromium") ? "/opt/pw-browsers/chromium" : "");
     const browser = await chromium.launch(exe ? { executablePath: exe } : {});
-    const report = { tool: "tools/preview/walk-public-pages.js", generatedAt: new Date().toISOString(), servedFrom: "dist/ (production build, served read-only)", viewport: { width: 1440, height: 900 }, pages: [] };
+    const report = { tool: "tools/preview/walk-public-pages.js", generatedAt: new Date().toISOString(), servedFrom: "dist/ (production build, served read-only)", viewport: { width: 1440, height: 900 }, analyticsCallsDropped: ANALYTICS.source, pages: [] };
     const all = [];
     let bad = false;
     for (const [name, rows, absent = []] of PAGES) {
