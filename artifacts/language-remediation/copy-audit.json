@@ -1,5 +1,5 @@
 {
-  "files": 1220,
+  "files": 1222,
   "renderedOccurrences": 5626,
   "uniqueRenderedStrings": 2641,
   "tier1Failures": 0,
@@ -27,14 +27,14 @@
     },
     "F": {
       "description": "internal identifier",
-      "hits": 727
+      "hits": 729
     },
     "G": {
       "description": "reviewed ordinary usage",
       "hits": 148
     }
   },
-  "allowlistedHits": 266,
+  "allowlistedHits": 268,
   "rows": [
     {
       "file": "coming-soon.html",
@@ -86,6 +86,17 @@
       "tier": 2,
       "category": "E",
       "context": "messages & calls a day · real opportunities · first meetings</td></tr><tr><td>“the meeting-creation floor”</td><td>name the plain thing</td></tr><tr><td>“quality score 71/100”</td><td>a plain judgment — “this plan is a stretch”</td></tr></table></div><div class=\"sec\"><div class=\"sn\">7"
+    },
+    {
+      "file": "js/ae-hire-landing.js",
+      "line": 27,
+      "phrase": "motion",
+      "tier": 2,
+      "category": "F",
+      "context": "ion scrollBehavior() { try { if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 'auto'; } catch (error) { /* fall through */ } return 'smooth'; } function showNotice(message) { if (!notice) return; notice.textCo",
+      "review": "CSS media-query name (prefers-reduced-motion), not copy.",
+      "owner": "copy-standard",
+      "reviewBy": "2027-05-06"
     },
     {
       "file": "js/demo-seed-data-ent.js",
@@ -1905,6 +1916,17 @@
       "tier": 2,
       "category": "A",
       "context": "\"kind\">[text]</span> High competition for AI talent with Meta and other labs, with unusually strong pressure on recruiting and retention — News coverage <span class=\"cue\">— top of page, center</span></div> <div class=\"line\"><span class=\"kind\">[text]</span> New Chief People Officer arrive"
+    },
+    {
+      "file": "should-we-hire-an-ae/index.html",
+      "line": 62,
+      "phrase": "thin",
+      "tier": 2,
+      "category": "F",
+      "context": "v> <div class=\"decision-lane\"><dt>Pipeline supply</dt><dd class=\"decision-tag decision-tag--thin\">SHORT</dd></div> <div class=\"decision-lane\"><dt>Repeatable without the founder</dt><dd class=\"decision-tag decision-tag--supported\">SUPPORTED</dd></div> <div clas",
+      "review": "CSS class name for the amber state tag; the visible label is SHORT.",
+      "owner": "copy-standard",
+      "reviewBy": "2027-05-06"
     },
     {
       "file": "src/birdseye/BirdseyeFloat.tsx",
@@ -15724,8 +15746,8 @@
     }
   ],
   "changedRiskAgainstMain": {
-    "previous": 261,
-    "current": 21,
-    "delta": -240
+    "previous": 0,
+    "current": 0,
+    "delta": 0
   }
 }
