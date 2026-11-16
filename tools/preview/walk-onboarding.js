@@ -13,23 +13,20 @@
  *
  * Run — dist/ must already hold a production build; this tool never builds:
  *   node tools/preview/walk-onboarding.js [--out <dir>]
- *   TRANSCRIPT_CHROMIUM=<path>  browser to use (default /opt/pw-browsers/chromium)
- *   WALK_PORT=<port>            local port for serving dist/ read-only (default 4331)
- *   WALK_ONLY=default,ds        walk only these variants (coverage.json says partial)
+ *   TRANSCRIPT_CHROMIUM=<path>  browser (default /opt/pw-browsers/chromium)
+ *   WALK_PORT=<port>            port for serving dist/ read-only (default 4331)
  *
  * Every page load uses a new browser context: empty storage, no demo seed, no
- * preview cookie. Cloud calls are not mocked. Where account research or the
+ * preview cookie. Cloud calls are not mocked: where account research or the
  * cloud save cannot be reached, the walk records what the user is told.
  *
  * Output (never preview-transcript/ or artifacts/):
- *   onboarding-default.txt, onboarding-ds.txt, onboarding-legacy.txt
- *       every string on screen in each state, in reading order, one per line:
- *       [onboarding | <step and state> | <kind>] <text>
- *       kinds: heading N, button, link, field, text, option (a dropdown choice),
- *       placeholder, title (hover text), aria-label, alt
- *   coverage.json — per variant: each state reached (with the actions that led
- *       to it), each state not reached with the reason, page errors, console
- *       errors, failed requests, link targets
+ *   onboarding-default.txt, onboarding-ds.txt, onboarding-legacy.txt — every
+ *     string on screen in each state, in reading order, one per line:
+ *     [onboarding | <step and state> | <kind>] <text>   (kinds: heading N,
+ *     button, link, field, text, option, placeholder, title, aria-label, alt)
+ *   coverage.json — per variant: states reached and the actions that led to
+ *     each, states not reached with the reason, page and console errors
  * Exit code 1 if a page error occurred or a variant produced no text.
  */
 "use strict";
@@ -78,14 +75,8 @@ function extractInPage(includeFaded) {
     const disabled = [];
     const links = {};
     const seen = new Set();
-    const shown = (el) => {
-        const s = getComputedStyle(el);
-        return !(s.display === "none" || s.visibility === "hidden" || (!includeFaded && Number(s.opacity) === 0));
-    };
-    const sized = (el) => {
-        const r = el.getBoundingClientRect();
-        return r.width > 0 && r.height > 0;
-    };
+    const shown = (el, s = getComputedStyle(el)) => !(s.display === "none" || s.visibility === "hidden" || (!includeFaded && Number(s.opacity) === 0));
+    const sized = (el, r = el.getBoundingClientRect()) => r.width > 0 && r.height > 0;
     const squash = (t) => String(t || "").replace(/\s+/g, " ").trim();
     const text = (el) => squash(el.innerText || el.textContent);
     const push = (kind, t) => {
@@ -173,18 +164,16 @@ async function startWalk(browser, variant) {
         const q = JSON.stringify(name);
         return page.locator(`button:text-is(${q}), a:text-is(${q}), button:has(strong:text-is(${q})), button[aria-label=${q}]`).first();
     };
+    const did = (what, promise) => promise.then(() => void actions.push(what));
     const keep = (state, got, note) => {
-        const clean = state.replace(/\|/g, "/");
-        for (const l of got.lines) rec.lines.push(`[onboarding | ${clean} | ${l.kind}] ${l.text}`);
+        for (const l of got.lines) rec.lines.push(`[onboarding | ${state} | ${l.kind}] ${l.text}`);
         Object.assign(rec.links, got.links);
         const keys = got.lines.map((l) => l.kind + "|" + l.text);
-        const entry = { state: clean, lines: keys.length, newSincePreviousState: keys.filter((k) => !previous.has(k)).length, actions };
-        if (got.disabled && got.disabled.length) entry.disabledControls = got.disabled;
+        const entry = { state, lines: keys.length, newSincePreviousState: keys.filter((k) => !previous.has(k)).length, actions };
+        if ((got.disabled || []).length) entry.disabledControls = got.disabled;
         if (note || notes.length) entry.notes = notes.concat(note || []);
         rec.reached.push(entry);
-        previous = new Set(keys);
-        actions = [];
-        notes = [];
+        [previous, actions, notes] = [new Set(keys), [], []];
     };
     const w = {
         rec,
@@ -203,10 +192,7 @@ async function startWalk(browser, variant) {
             actions.push(`open ${variant.url} in a fresh browser context`);
         },
         close: () => ctx && ctx.close(),
-        async snap(state) {
-            await settle();
-            keep(state, await grab());
-        },
+        snap: async (state) => keep(state, (await settle(), await grab())),
         miss: (state, reason) => rec.notReached.push({ state, reason }),
         has: (selector) => page.locator(selector).count().then((n) => n > 0),
         // A button with a looping nudge animation never holds still, which a
@@ -216,25 +202,11 @@ async function startWalk(browser, variant) {
             const c = control(name);
             await c.waitFor({ state: "visible", timeout: 5000 });
             if (await c.isDisabled()) throw new Error(`“${name}” is disabled, so it could not be clicked`);
-            await c.click({ timeout: 1500 }).catch(() => c.click({ force: true, timeout: 3000 }));
-            actions.push(`click “${name}”`);
+            await did(`click “${name}”`, c.click({ timeout: 1500 }).catch(() => c.click({ force: true, timeout: 3000 })));
         },
-        async type(selector, value, nth = 0) {
-            await page.locator(selector).nth(nth).fill(value, { timeout: 5000 });
-            actions.push(`type “${value.replace(/\n/g, " / ")}”`);
-        },
-        async choose(selector, label) {
-            await page.locator(selector).first().selectOption({ label }, { timeout: 5000 });
-            actions.push(`choose “${label}”`);
-        },
-        async tick(selector) {
-            await page.locator(selector).first().check({ timeout: 5000 });
-            actions.push("tick the box");
-        },
-        async key(k) {
-            await page.keyboard.press(k);
-            actions.push(`press ${k}`);
-        },
+        type: (selector, value, nth = 0) => did(`type “${value.replace(/\n/g, " / ")}”`, page.locator(selector).nth(nth).fill(value, { timeout: 5000 })),
+        choose: (selector, label) => did(`choose “${label}”`, page.locator(selector).first().selectOption({ label }, { timeout: 5000 })),
+        key: (k) => did(`press ${k}`, page.keyboard.press(k)),
         // "Try to continue with required input missing": a disabled button is
         // clicked anyway and what happened goes into the state's notes.
         async blocked(name) {
@@ -358,12 +330,10 @@ const CLASSIC = [
     ["2 Company — at rest", click("Begin")],
     ["2 Company — name entered, after Continue with the name empty moved on and Back returned", click("Continue"), click("Back"), type(FIELD, "Luca Industries")],
     ["3 Role — at rest, nothing picked (validation)", click("Continue"), blocked("Continue")],
-    ["3 Role — Founder picked", click("Founder")],
-    ["4 Category — at rest, nothing picked (validation)", click("Continue"), blocked("Continue")],
+    ["4 Category — at rest, nothing picked (validation)", click("Founder"), click("Continue"), blocked("Continue")],
     ["4 Category — product category picked, no industry yet (validation)", click("Sales Tech / Revenue Intelligence"), blocked("Continue")],
     ["4 Category — one industry picked", click("Retail / E-commerce")],
     ["4 Category — two industries picked", click("Travel / Hospitality")],
-    ["4 Category — industry-agnostic ticked (industry list hidden)", act("tick", "#app input[type=checkbox]")],
     ["5 ICP — at rest, nothing typed (validation)", click("Continue"), blocked("Continue")],
     ["5 ICP — vague answer typed", type(FIELD, "Everyone who needs it")],
     ["5 ICP — specific answer and pain typed", type(FIELD, "VPs of Talent Acquisition at 10,000+ employee retail and travel companies in North America that hire seasonal staff."), type(FIELD, "Seasonal hiring outruns the recruiting team every year.", 1)],
@@ -396,10 +366,9 @@ async function main() {
     const server = await serve();
     const exe = process.env.TRANSCRIPT_CHROMIUM || (fs.existsSync("/opt/pw-browsers/chromium") ? "/opt/pw-browsers/chromium" : "");
     const browser = await chromium.launch(exe ? { executablePath: exe } : {});
-    const only = (process.env.WALK_ONLY || "").split(",").filter(Boolean);
-    const report = { tool: "tools/preview/walk-onboarding.js", generatedAt: new Date().toISOString(), servedFrom: "dist/ (production build, served read-only)", viewport: { width: 1440, height: 900 }, partial: only.length > 0, variants: [] };
+    const report = { tool: "tools/preview/walk-onboarding.js", generatedAt: new Date().toISOString(), servedFrom: "dist/ (production build, served read-only)", viewport: { width: 1440, height: 900 }, variants: [] };
     let bad = false;
-    for (const variant of VARIANTS.filter((v) => !only.length || only.includes(v.id))) {
+    for (const variant of VARIANTS) {
         const w = await startWalk(browser, variant);
         const r = w.rec;
         let stopped = null;
