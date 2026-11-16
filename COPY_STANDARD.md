@@ -35,7 +35,7 @@ Prefer:
 - stakeholder
 - activity
 - recommendation
-- order (as in "in order of risk" — describing what the product does; see §26)
+- ranking
 - evidence
 - blocker
 - risk
@@ -129,7 +129,7 @@ Do not rely on juxtaposition to imply causality.
 
 ### Prefer
 
-> Chomps announced two plants that will require several hundred hires. Because the company appears to have limited recruiting capacity, Antaeus marks the account as a high-priority outreach opportunity.
+> Chomps announced two plants that will require several hundred hires. Because the company appears to have limited recruiting capacity, Antaeus ranks the account as a high-priority outreach opportunity.
 
 Use words such as:
 
@@ -193,7 +193,7 @@ Keep the word only when its referent is unmistakable within the same sentence or
 
 ### Prefer
 
-> The highest-priority action, with the evidence for why it comes first.
+> The highest-priority action, with the evidence behind its ranking.
 
 ### Reject
 
@@ -227,7 +227,7 @@ Prefer:
 - analyzes
 - detects
 - compares
-- sorts / puts in order (never "ranks"; see §26)
+- ranks
 - records
 - surfaces
 - displays
@@ -315,7 +315,7 @@ Requirements:
 
 - use literal status labels;
 - name the event that changed;
-- name the reason something comes first;
+- name the reason for a ranking;
 - name the blocker;
 - state units and time frames;
 - use verbs that describe actual system behavior;
@@ -369,7 +369,7 @@ Comparison copy must identify the concrete capability being compared.
 
 Prefer:
 
-- “Puts next actions in order and shows the evidence for why each one is where it is.”
+- “Ranks next actions and shows the evidence behind each ranking.”
 - “Stores activity and pipeline data for reporting.”
 - “Manual tracking configured by the user.”
 
@@ -559,7 +559,7 @@ For every visible string, ask:
 11. Is UI microcopy shorter and more literal than marketing copy?
 12. Is the FAQ clearer than the page it explains?
 13. Does the wording preserve only claims the product actually supports?
-14. Does it pass every rule in §26 (no stand-in nouns, no describing by absence, no judgment words, no app-made threats, no no-exception rules, no "rank")?
+14. Does it pass every rule in §26 (no stand-in nouns, no describing by absence, no judgment words, no app-made threats, no no-exception rules, no ranking asked of the user)?
 
 If any answer fails, revise before shipping.
 
@@ -613,12 +613,17 @@ Sentences shaped "any X will…," "every Y is…," or "all Z…" read as maxims,
 
 Prefer a concrete prediction about the reader's own situation to a general truth. "Is going to be an email" beats "is an email": the first is about the reader, the second could go on a poster. Test every line by asking whether it would make sense on a poster; if it would, rewrite it.
 
-### "Rank" is out
+### "Rank" describes what the product does, never what the user does
 
-Do not use "rank," "ranks," "ranked," or "ranking" in visible copy. Ordering words ("in order of risk," "sorts," "comes first," "at the top") describe only what the product does to the user's data. They never describe something the user is asked to do or owns.
+The owner's instruction (2026-11-09): "I dont like it used when its not talking about what the tech is/does. I don't like it in language associated with inputs/things the user is doing."
 
-- Fine: "Your Dashboard lists your open deals in order of risk." On an input screen, a line saying the order those deals will appear in tomorrow is also fine.
-- Not fine: "Rank your top accounts," "Put your deals in order of priority," "your ranking."
+- **Allowed.** "Rank," "ranked," "ranking" and other ordering words ("in order of risk," "sorts," "comes first") when they describe what the product does to the user's data. The copy says what is ordered and by what: "Other open deals · ranked by risk." "Ranked first because Boeing has a priority score of 62 and recent account signals."
+- **Not allowed.** Ordering language for something the user is asked to do or owns: "Rank your top accounts," "Put your deals in order of priority," "your ranking."
+- **Not allowed.** A ranking label with no stated basis, or a ranking presented as an absolute value claim ("the most valuable move on your board").
+- **Preference.** Where either wording works in new copy, the owner favors "in order of risk."
+
+On an input screen, a line saying the order those deals will appear in tomorrow is fine, because it describes the output.
 
 Code identifiers (`rankByHeat`, `recovery_rank`) are not visible copy and stay.
 
+*Corrected 2026-11-16.* This subsection first said "rank" was out of all visible copy. That was broader than the instruction quoted above, and it contradicted rewrites the original remediation approved (`14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json` records[14] and records[20]; Batch 01 "Ranked first because…"; Batch 03 "OTHER OPEN DEALS · RANKED BY RISK"). The record of this correction is in `docs/language-remediation-2026/20_SCOPE_AND_CONFLICT_RECONCILIATION.md`.
