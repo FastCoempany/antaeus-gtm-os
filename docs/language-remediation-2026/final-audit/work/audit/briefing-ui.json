@@ -1,0 +1,1033 @@
+{
+  "area": "briefing-ui",
+  "coverage": [
+    {
+      "surface": "Briefing default screen (v4): bar, suggested-change band, watching-for strip, Your work list, saved-reminder chips, weather band, market ticker, events strip, section heads",
+      "generation": "v4",
+      "how": "executed-in-walkthrough",
+      "files": [
+        "src/briefing/v4/BriefingV4.tsx",
+        "src/briefing/v4/lib/reads.ts",
+        "src/briefing/v4/lib/world-events.ts",
+        "src/briefing/v4/lib/weather.ts",
+        "src/briefing/v4/briefing-v4.css",
+        "src/briefing/state.ts",
+        "src/briefing/main.tsx"
+      ],
+      "note": "Read every file in full. Rendered evidence: SMB walkthrough generated today (corpus-smb/briefing.txt) plus the 2026-11-06 enterprise walkthrough. Executed in the walkthrough: area at rest (empty Your work list, weather band, ticker with three demo patterns, events strip, market section, empty monitoring rules, cost footer), forecast button, Add monitoring rule, Show sources and reasoning (missing-record state), feedback button hover text. NOT executed in any walkthrough and reviewed from source only: a populated Your work list (rows, tags, collapsed-run lines, dismiss), the suggested-change band and bell, the watching-for strip, the saved-reminder chips, load-error and loading states, weather when browser location is granted. The walkthrough states recorded for the ticker's back/forward buttons and its Open analysis link show the workspace map instead (see BRIEFING-UI-041), so those three controls were not actually exercised."
+    },
+    {
+      "surface": "Briefing default screen (v4), market section: first-visit primer, out-of-date banner, weekly summary line, analysis cards (six rows, recommended actions, destination links), sources-and-reasoning panel, feedback buttons, empty and loading states",
+      "generation": "v4",
+      "how": "executed-in-walkthrough",
+      "files": [
+        "src/briefing/components/FirstVisitPrimer.tsx",
+        "src/briefing/components/StaleRunBanner.tsx",
+        "src/briefing/components/BriefingLead.tsx",
+        "src/briefing/components/PatternList.tsx",
+        "src/briefing/components/PatternCard.tsx",
+        "src/briefing/components/MarksBar.tsx",
+        "src/briefing/components/ShowYourWork.tsx",
+        "src/briefing/components/EmptyState.tsx",
+        "src/briefing/lib/patterns.ts",
+        "src/briefing/lib/demo-patterns.ts",
+        "src/briefing/lib/destinations.ts",
+        "src/briefing/lib/marks-client.ts",
+        "src/briefing/lib/audit-envelope-client.ts",
+        "src/briefing/lib/compose-client.ts"
+      ],
+      "note": "Read every file in full. Executed in the SMB walkthrough generated today and the 2026-11-06 enterprise walkthrough: the primer, the three sample analysis cards per demo book with all six rows, the recommended-action block and its destination text, Show sources and reasoning (only the 'no source record' state), and the feedback buttons' hover text. Reviewed from source only (not reachable in the demo): the out-of-date banner, the weekly summary line, the populated sources panel (source list, model steps, checks, cost), the loading and empty states of the analysis list, clicking a feedback button, clicking a destination link and what the destination screen does with it."
+    },
+    {
+      "surface": "Briefing default screen (v4), remaining parts: saved monitoring rules and the add-rule form, conflicting-evidence cards, accounts to consider, cost footer, weather band and clock, market ticker controls, events strip, saved-action chips, destination banner",
+      "generation": "v4",
+      "how": "source-and-test-reviewed",
+      "files": [
+        "src/briefing/components/WatchList.tsx",
+        "src/briefing/components/AddTriggerFlow.tsx",
+        "src/briefing/components/ContrarianRail.tsx",
+        "src/briefing/components/PeripheryRail.tsx",
+        "src/briefing/components/BriefingFooter.tsx",
+        "src/briefing/lib/watchlist-client.ts",
+        "src/briefing/lib/periphery-client.ts",
+        "src/briefing/lib/cost-client.ts",
+        "src/briefing/lib/cost/tracker.ts",
+        "src/briefing/lib/suggestions.ts",
+        "src/briefing/lib/phase-f-apply.ts",
+        "src/lib/briefing-draft-banner.tsx",
+        "src/lib/briefing-drafts.ts",
+        "src/briefing/v4/BriefingV4.tsx",
+        "src/briefing/v4/lib/weather.ts",
+        "src/briefing/v4/lib/world-events.ts",
+        "tools/preview/build-transcript.js"
+      ],
+      "note": "Read every file in full. Executed in the walkthroughs: the empty monitoring-rules block, opening the add-rule form (label, placeholder, two buttons), the cost footer at $0.00, the weather band and forecast with the Chicago default, the events strip with three sample events. Reviewed from source only because the demo cannot produce them: a saved rule row and its Pause button, rule matches, the rule-review result (type, confidence, questions), conflicting-evidence cards, accounts-to-consider rows and their three buttons, cost states other than 'Within budget', weather when browser location is already granted, the saved-action chips, and the destination banner (it is not mounted on default destination screens — BRIEFING-UI-017). The ticker's back, forward and Open analysis controls were clicked by the walkthrough tool but the recorded result is the workspace map (BRIEFING-UI-041), so their real effect was reviewed from source."
+    },
+    {
+      "surface": "Briefing data modules with no screen text (hydration, seed derivation, contracts, evaluation sampling)",
+      "generation": "shared",
+      "how": "source-and-test-reviewed",
+      "files": [
+        "src/briefing/lib/hydrate.ts",
+        "src/briefing/lib/seed-derivation.ts",
+        "src/briefing/lib/contracts.ts",
+        "src/briefing/lib/eval-client.ts",
+        "src/briefing/lib/view-state.ts"
+      ],
+      "note": "Checked for strings that reach a screen and for importers. hydrate.ts, seed-derivation.ts and eval-client.ts are not imported by any Briefing screen (only by tests and by their Deno mirrors' documentation); contracts.ts holds types; view-state.ts stores the previous-version tab choice under gtmos_briefing_view_v1 with a safe default. No findings."
+    },
+    {
+      "surface": "Briefing previous-version screen (?v4=0): page head, Your work / Your market switch, deals-and-accounts list, suggestion card, saved-items tray, market view, events link, cost meter",
+      "generation": "ds",
+      "how": "executed-in-walkthrough",
+      "files": [
+        "src/briefing/ds/BriefingDS.tsx",
+        "src/briefing/ds/components/TopbarDS.tsx",
+        "src/briefing/ds/components/ViewToggleDS.tsx",
+        "src/briefing/ds/components/BriefingFooterDS.tsx",
+        "src/briefing/ds/briefing-ds.css",
+        "src/briefing/components/WorkspaceReads.tsx",
+        "src/briefing/components/SuggestionsSection.tsx",
+        "src/briefing/components/DraftsTray.tsx",
+        "src/briefing/components/OutdoorsEventsChip.tsx",
+        "src/briefing/main.tsx"
+      ],
+      "note": "Read every file in full. Executed in the previous-version walkthrough generated today (corpus-ds/briefing.txt, enterprise book): the page at rest on the Your work tab (head, primer, empty list, empty monitoring rules, cost meter), the help panel, Add monitoring rule, and the shared chrome. NOT executed there: the Your market tab was listed as a button but never opened, so the market view of this version (analysis cards, events link) was reviewed from source; it renders the same shared components the oldest version shows in its walkthrough. Also source-only: a populated list, the suggestion card, the saved-items tray, load-error and loading states."
+    },
+    {
+      "surface": "Briefing oldest screen (?v4=0&ds=0): page head, Workspace / World tabs, deals-and-accounts list, market view, events link, cost footer",
+      "generation": "legacy",
+      "how": "executed-in-walkthrough",
+      "files": [
+        "src/briefing/Briefing.tsx",
+        "src/briefing/components/Topbar.tsx",
+        "src/briefing/components/ViewToggle.tsx",
+        "src/briefing/components/WorkspaceReads.tsx",
+        "src/briefing/components/OutdoorsEventsChip.tsx",
+        "src/briefing/components/BriefingFooter.tsx",
+        "src/briefing/briefing.css"
+      ],
+      "note": "corpus-legacy/briefing.txt did not exist when this part was reviewed. The oldest-version walk had, however, already written its Briefing page (/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/variants-pre/legacy/transcript/briefing/index.html, generated today, enterprise book), and that page was used as rendered evidence: the area at rest on the Workspace tab, the World tab with the three sample analyses and the events link, Show sources and reasoning (missing-record state), Add monitoring rule. Source-only: a populated deals-and-accounts list, the suggestion card, the saved-items tray, error and loading states. briefing.css was searched for text set in CSS (content: rules) and for text-transform; no visible words are produced by CSS."
+    }
+  ],
+  "findings": [
+    {
+      "id": "BRIEFING-UI-001",
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 387,
+      "generation": "v4",
+      "state": "Default Briefing, header of the first section. SMB walkthrough, area at rest: \"Your work\" / \"inside your deals and accounts\" / \"0\".",
+      "current": "inside your deals and accounts",
+      "problem": "The approved replacement was never applied. The subtitle says where the list looks but not what it lists, so the number shown beside it (\"0\", or the row count) has no stated unit. The first-visit primer on the same screen names this section \"Changes in your deals and accounts\", so a new user cannot find the section the primer describes by its name. Dimensions: semantic compression, high-context dependence.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement \"inside your deals and accounts\" → \"changes in your deals and accounts\" (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json exact_replacements[43], record B2-X-043); same file, \"Structural requirements by room → Briefing\", item 1.",
+      "proposed": "changes in your deals and accounts",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-002",
+      "category": "LANG-A",
+      "severity": 1,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 563,
+      "generation": "v4",
+      "state": "Default Briefing, header of the market section. SMB walkthrough, area at rest: \"Your market, in full\" / \"every analysis includes supporting evidence\".",
+      "current": "Your market, in full",
+      "problem": "The approved replacement was never applied. \"in full\" only has meaning in contrast with the moving ticker above it and does not say what the section holds. The primer and the stale-run banner call the same content \"market analysis\" / \"market updates\", so this heading adds another name for one thing. Dimensions: high-context dependence, elliptical syntax.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement \"Your market, in full\" → \"Market analysis\" (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json exact_replacements[48], record B2-X-048).",
+      "proposed": "Market analysis",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-003",
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 177,
+      "generation": "v4",
+      "state": "Default Briefing, \"MARKET UPDATES\" ticker: the small tag before each item. SMB walkthrough shows \"pattern\". Lines 180 and 185 produce the other two tags when conflicting-evidence or accounts-to-consider rows exist (live workspaces only; not reachable in the demo).",
+      "current": "tag: \"pattern\" (line 177) / tag: \"challenge\" (line 180) / tag: \"blind spot\" (line 185). None is wrapped in t().",
+      "problem": "\"pattern\" is the unreplaced original. \"challenge\" and \"blind spot\" are the retired internal names for the other two sections: a newcomer cannot tell that \"blind spot · Acme\" means a company to consider adding to the watchlist, and neither tag matches the section it links to (\"Evidence that conflicts with an assumption\", \"Accounts to consider\"). Because the strings bypass t(), the voice gate never checks them. Dimensions: private ontology, metaphor, high-context dependence.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement \"pattern\" → \"market pattern\" (record B2-X-046) and \"Structural requirements by room → Briefing\" (sections 2–4); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md \"Briefing-specific rule\" (\"The data disagrees\" becomes \"Evidence that conflicts with an assumption\").",
+      "proposed": "Line 177: tag: t(\"market pattern\"). Line 180: tag: t(\"conflicting evidence\"). Line 185: tag: t(\"account to consider\").",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-004",
+      "category": "A11Y",
+      "severity": 2,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 323,
+      "generation": "v4",
+      "state": "Default Briefing, bell button in the top bar. It renders only when a suggested change is pending and toggles the suggested-change band (noticedHidden). Not reachable in the demo; reviewed from source.",
+      "current": "aria-label={t(\"Show current analysis\")} — the same name whether the band is shown or hidden; no aria-expanded.",
+      "problem": "The accessible name describes a different thing: the band holds a suggested settings change, not an analysis, and the Birdseye button on the same screen is already named \"Open current analysis\" (SMB walkthrough, area at rest, line 4), so a screen-reader user hears two near-identical names for two unrelated controls. The name also stays \"Show…\" when pressing the button hides the band.",
+      "governing": "comprehension principle (COPY_STANDARD.md §24 item 1; AUDIT_BRIEF §5 lists aria-label among the states to audit).",
+      "proposed": "aria-label={noticedHidden.value ? t(\"Show suggested change\") : t(\"Hide suggested change\")} and add aria-expanded={!noticedHidden.value}.",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-005",
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 335,
+      "generation": "v4",
+      "state": "Default Briefing, suggested-change band (a pending Phase F proposal). Not reachable in the demo; reviewed from source.",
+      "current": "Label \"NOTICED\" (line 335), then the two stored sentences run together with no connective: {noticed.whatNoticed} {noticed.whatChanges} (line 337), then buttons \"Yes, make the change\" / \"Later\" (line 354) / ✕.",
+      "problem": "\"NOTICED\" presents the software as an observer and does not say the band is a suggested change the user can accept. The second sentence is written in the present tense (\"Your scheduled parameters become the recipe default…\"), and with nothing between the two sentences it reads as something that has already happened; the relation \"this is what would change if you accept\" is left implicit. \"Later\" hides that the suggestion will not return for 30 days (COOLDOWN_DAYS = 30, src/briefing/lib/suggestions.ts:33). The proposal's own title is dropped in this version. Dimensions: personification, paratactic compression.",
+      "governing": "COPY_STANDARD.md §9 (personification), §6 (state the relationship); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows \"system saw\" / \"what the system saw\".",
+      "proposed": "Line 335: t(\"SUGGESTED CHANGE\"). Line 337: {noticed.whatNoticed} {t(\"If you accept:\")} {noticed.whatChanges}. Line 354: t(\"Ask again in 30 days\", { class: \"label\" }).",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-006",
+      "category": "FUNC",
+      "severity": 2,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 333,
+      "generation": "v4",
+      "state": "Default Briefing, suggested-change band: the user presses \"Yes, make the change\", \"Later\" or ✕ and the save fails, or the save succeeds but applying the accepted change fails.",
+      "current": "decidePendingProposal() records the failure in the decisionError signal (src/briefing/state.ts:116 and :127-129), but BriefingV4.tsx never reads decisionError (only src/briefing/components/SuggestionsSection.tsx:29 does). On a failed save the suggestion simply reappears after the re-fetch; on a failed apply the band disappears as if the change had been made.",
+      "problem": "No error state on the default screen. In the apply-failed case the user is left believing a settings change took effect when it did not. The previous screen version shows the error (SuggestionsSection.tsx:89-93).",
+      "governing": "AUDIT_BRIEF §5 (every surface: error state; functional regression between screen generations). CLAUDE.md Part II §6 (\"loading / error — never blank; never swallowed\").",
+      "proposed": "Import decisionError from \"../state\" and render, directly under the band (and when the band has closed after a failed apply): <p class=\"bfv4d-quiet\" role=\"alert\">{decisionError.value}</p>. In src/briefing/state.ts set fixed messages instead of raw error text: line 116 → \"Couldn't save your choice. Try again.\"; lines 127-129 → \"Your choice was saved, but the change could not be applied. Try again later.\" and send result.error / apply.error to reportError().",
+      "testsAffected": [
+        "src/briefing/components/SuggestionsSection.test.tsx:97-104 (seeds decisionError directly; unaffected by the state.ts message change)"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-007",
+      "category": "LANG-A",
+      "severity": 1,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 396,
+      "generation": "v4",
+      "state": "Default Briefing, first section while loading (line 396) and when the load throws (line 394).",
+      "current": "\"Reading your work…\" (loading) and \"Couldn't load workspace analysis.\" (error)",
+      "problem": "The loading line narrates the software with a stand-in noun (\"your work\") instead of naming what is loading. The error line uses a third name (\"workspace analysis\") for the list this section calls \"Your work\" and the primer calls \"Changes in your deals and accounts\", and gives no next step. Dimensions: personification (mild), high-context dependence.",
+      "governing": "COPY_STANDARD.md §26 \"Name the thing\" (casual stand-in nouns) and §9; CLAUDE.md Part III §10 (error language: specific, recoverable).",
+      "proposed": "Line 396: t(\"Loading changes in your deals and accounts…\", { class: \"body\" }). Line 394: t(\"Couldn't load changes in your deals and accounts. Reload the page to try again.\", { class: \"body\" }).",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-008",
+      "category": "FUNC",
+      "severity": 2,
+      "file": "src/lib/observations/reader.ts",
+      "line": 55,
+      "generation": "shared",
+      "state": "Any Briefing version when the observations query fails after the data client was created (network drop, expired session, RLS error).",
+      "current": "listObservations() catches every query error and returns [] (reader.ts:55-58). The callers' error branches (src/briefing/v4/lib/reads.ts:129-131; src/briefing/components/WorkspaceReads.tsx:47-51) therefore only run when createDataClient() itself throws. A failed query renders the empty state: v4 \"No material changes are currently detected in your active deals or watched accounts. This check refreshes every 30 minutes.\" with a count of 0; previous/oldest versions \"The system has nothing to flag in your work right now.\"",
+      "problem": "A load failure is shown as an all-clear. The user is told nothing has changed in their deals and accounts when the list was never read. The same pattern affects the other Briefing loaders, which also return an empty or zero result on failure: market patterns (src/briefing/lib/patterns.ts:191-202 → \"There are no market reads for this week yet.\"), suggestions (src/briefing/lib/suggestions.ts:82-85) and cost (src/briefing/lib/cost-client.ts:35-47 → \"$0.00 / $3.00 · 0% · Within budget\").",
+      "governing": "AUDIT_BRIEF §5 (error handling; copy that claims something the code did not establish); COPY_STANDARD.md §21 (claims discipline).",
+      "proposed": "Add `readonly throwOnError?: boolean` to ListObservationsOptions; in the catch block of listObservations add `if (opts.throwOnError) throw err;` before `return []`. Pass { limit: 60, throwOnError: true } from src/briefing/v4/lib/reads.ts:120 and src/briefing/components/WorkspaceReads.tsx:44 so their existing error branches render. Other callers keep today's behavior. (The pattern, suggestion and cost loaders need the same treatment before their empty/zero states can be trusted; listed here so the fix can be routed.)",
+      "testsAffected": [
+        "none exist for reader.ts today (src/lib/observations/ has no reader.test.ts); add one covering throwOnError"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-009",
+      "category": "CLAIM",
+      "severity": 2,
+      "file": "src/briefing/v4/lib/reads.ts",
+      "line": 120,
+      "generation": "v4",
+      "state": "Interactive demo, both books (enterprise walkthrough 2026-11-06 and SMB walkthrough today, area at rest): \"Your work … 0 … No material changes are currently detected in your active deals or watched accounts. This check refreshes every 30 minutes.\"",
+      "current": "In the demo the first and largest section of Briefing is always empty and states that a check found no material changes and refreshes every 30 minutes.",
+      "problem": "No check runs in the demo: the demo data client is localStorage-only, nothing seeds observation rows (no observations in js/demo-seed-data-ent.js / js/demo-seed-data-smb.js), and the scheduled check runs only against cloud workspaces. The same screen's recent-activity panel shows the scripted line \"Scheduled check: no new signals recorded in more than 14 days for OLIPOP.\" and both demo books contain stalled deals, so the statement contradicts what the tester sees beside it and on the Dashboard. The market section solves the same problem with sample content (src/briefing/lib/patterns.ts:180); this section does not.",
+      "governing": "COPY_STANDARD.md §21 (do not claim more than the product evidence supports); 01_OWNER_REQUIREMENTS.md item 8 (regenerate and inspect the demo-seeded tester pathway).",
+      "proposed": "In refreshReads(), when isDemoEnv() (src/briefing/lib/demo-patterns.ts:13) is true, set a new exported signal readsAreSample = true. In src/briefing/v4/BriefingV4.tsx:399, when it is set, render: t(\"This sample workspace does not run the 30-minute check on deals and watched accounts, so no changes are listed here.\", { class: \"body\" }). OWNER DECISION: instead of the notice, add sample rows for each demo book (for example the stalled deals and the watched accounts with no recent signals already in the book, in the sentence forms the scheduled check writes) so the section shows what a working workspace shows, as the market section does.",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-010",
+      "category": "LANG-B",
+      "severity": 2,
+      "file": "src/briefing/v4/lib/reads.ts",
+      "line": 77,
+      "generation": "v4",
+      "state": "Default Briefing, Your work list, when one check has more than three rows: the remaining rows collapse into one line rendered as \"+ {count} {label}\" (BriefingV4.tsx:429). Live workspaces only; reviewed from source.",
+      "current": "\"+ N more accounts gone quiet\" / \"+ N more deals sitting still\" / \"+ N more pilots past their readout\" / \"+ N more reads on your call rhythm\" (lines 78-81); fallback \"+ N more reads like these\" (line 112).",
+      "problem": "Idiom and retired vocabulary carry the state: \"gone quiet\" (COPY_STANDARD §13 rejects \"champion went quiet\" in favor of the measured condition), \"sitting still\", \"readout\" (the retired pilot term), \"reads\" and \"call rhythm\". The line is also plain text: the collapsed rows cannot be opened, dismissed or reached from this screen, so the count names items the user cannot see. Dimensions: metaphor, private ontology, semantic compression.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement for the old \"Your work\" primer line (\"deals going stale, accounts going quiet, evidence past its readout\" → \"material changes in active deals, watched accounts, and pilot evidence\"; records B2-X-038 / HS-134) and \"Structural requirements → Briefing\" (\"Remove read as the generic noun for analysis\"); COPY_STANDARD.md §13, §17.",
+      "proposed": "RUN_LABELS: signal_decay → \"more watched accounts with no new signals\"; deal_decay → \"more deals with no stage change and no upcoming next step\"; proof_staleness → \"more pilots past their end date with no result recorded\"; discovery_rhythm → \"more notes on discovery-call activity\"; fallback (line 112) → \"more similar items\". Render the line as a link to the area that owns the rows (Signal Console, Deal Workspace, Pilot Desk) so the hidden rows are reachable. OWNER DECISION: whether the collapsed rows should instead expand in place.",
+      "testsAffected": [],
+      "confidence": "medium"
+    },
+    {
+      "id": "BRIEFING-UI-011",
+      "category": "LANG-B",
+      "severity": 2,
+      "file": "src/briefing/v4/lib/reads.ts",
+      "line": 68,
+      "generation": "v4",
+      "state": "Default Briefing, Your work list: the small tag before each row (BriefingV4.tsx:406). Live workspaces only; reviewed from source against the sentence templates in supabase/functions/heartbeat/generators.ts.",
+      "current": "tagFor(): `${days}d` when the sentence contains a number followed by \"day\" (e.g. \"21d\"), otherwise \"due\" (pilot rows), \"0 logged\" (discovery-call rows) or \"new\".",
+      "problem": "(a) \"21d\" does not say days of what. (b) Every discovery-call sentence contains \"in the last 7 days\" (generators.ts:357-358), so those rows are tagged \"7d\" — the look-back window, shown in the same form as an age — and the \"0 logged\" branch can never run. (c) \"due\" does not say what is due. (d) A watched account with no signals on record (generators.ts:237) is tagged \"new\", which is not what the row says. Dimensions: semantic compression, elliptical syntax; (b) and (d) are inaccurate labels.",
+      "governing": "COPY_STANDARD.md §14 (microcopy: number + unit, event + time) and §20 (name the measure the product knows).",
+      "proposed": "Replace tagFor with: discovery_rhythm → \"last 7 days\"; deal_decay → days !== null ? `${days} days in stage` : \"no stage change\"; signal_decay → days !== null ? `no signals · ${days} days` : \"no signals\"; proof_staleness → days !== null ? `${days} days past end date` : \"ends today\"; any other check → days !== null ? `${days} days` : \"new\".",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-012",
+      "category": "LANG-B",
+      "severity": 2,
+      "file": "supabase/functions/heartbeat/generators.ts",
+      "line": 300,
+      "generation": "backend",
+      "state": "Text of the pilot row written by the 30-minute check and shown in Briefing's Your work list (all three screen versions) and on the Dashboard. A mirror of the same template is at src/lib/observations/generators/proof-staleness.ts:63-68.",
+      "current": "`The \"${claim}\" proof passed its readout window ${daysOverdue} days ago with no recorded outcome. Readout owner is ${owner}.` / \"A pilot proof is at its readout window today with no recorded outcome.\"",
+      "problem": "The product's own voice calls the pilot a \"proof\" and its end date a \"readout window\" with a \"Readout owner\" — the retired pilot vocabulary. A first-time user has no way to know that a \"proof\" is a pilot or that the \"readout window\" is the pilot's planned end date (created_at + duration_days). `${daysOverdue} days ago` also prints \"1 days ago\". Dimension: private ontology.",
+      "governing": "AUDIT_BRIEF §3 disputed term \"proof\" (\"the pilot artifact and its results are 'the pilot', 'the pilot's results' … not 'proof'\"); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md Pilot Desk rows (\"WHO SIGNS OFF\" → \"WHO APPROVES THE RESULT\", \"WHEN YOU'LL STOP\" → \"PILOT END DATE\") and \"Structural requirements → Pilot Desk\"; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rules 9–10.",
+      "proposed": "In both files: subject = claim ? `The pilot \"${claim}\"` : \"A pilot\"; ownerClause = owner ? ` ${owner} approves the result.` : \"\"; overdueClause = daysOverdue === 0 ? \"reaches its end date today\" : `passed its end date ${daysOverdue} day${daysOverdue === 1 ? \"\" : \"s\"} ago`; text = `${subject} ${overdueClause} with no result recorded.${ownerClause}`. (The `(\\d+)\\s+day` match in src/briefing/v4/lib/reads.ts:56 still finds the number.)",
+      "testsAffected": [
+        "src/lib/observations/generators/proof-staleness.test.ts:98-119 (asserts \"readout window today\", \"pilot proof\", \"Readout owner\")"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-013",
+      "category": "LANG-B",
+      "severity": 2,
+      "file": "supabase/functions/heartbeat/phase-f-generators.ts",
+      "line": 98,
+      "generation": "backend",
+      "state": "Text of a suggested change, written by the scheduled check and shown in Briefing's suggested-change band (v4 BriefingV4.tsx:337; previous/oldest versions SuggestionsSection.tsx:53-61). Not reachable in the demo; reviewed from source.",
+      "current": "Line 86: `Make \"${human}\" default to your scheduled setup?` · line 98: `You scheduled \"${human}\" and it has fired ${fires} times in the last 30 days without a parameter override.` · line 103: `Your scheduled parameters become the recipe default for \"${human}\". Manual runs land on the same configuration.` · line 107: `Surface ${Room} in your weekly brief?` · line 119: `A short read about ${Room} lands at the top of your weekly brief, so you do not have to think to start.`",
+      "problem": "Internal vocabulary reaches the user: \"fired\" (migration map: fires → matches / triggers), \"parameter override\", \"recipe default\", \"Surface\", \"a short read\", \"lands\", \"weekly brief\" (the area is called Briefing). \"without a parameter override\" is not something the code checks — detection only counts runs in 30 days (lines 276-288). \"so you do not have to think to start\" is aimed at the reader. humanizeRoom() (lines 122-127) title-cases stored ids, so the sentence can name \"Poc Framework\", \"Advisor Deploy\", \"Sourcing Workbench\", \"Call Planner\" or \"Icp Studio\" — retired or mis-capitalized names. Line 119 also promises a placement (\"at the top\") that nothing implements; an accepted suggestion re-runs an existing check under a variant name (phase-f-variant-runner.ts). Dimensions: private ontology, metaphor, unsupported claim.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows \"fires\", \"read\"; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rules 9–12; COPY_STANDARD.md §21 and §26 (judgment words about the reader).",
+      "proposed": "Line 86: `Use your scheduled settings as the default for \"${human}\"?` Line 98: `You scheduled \"${human}\", and it has run ${fires} times in the last 30 days.` Line 103: `When you run \"${human}\" yourself, it will use the same settings as the scheduled run.` Line 107: `Add more ${roomName} checks to Briefing?` Line 119: `Briefing will run an additional check related to ${roomName} and list the results under Your work.` Replace humanizeRoom with a lookup of current area names (poc-framework → Pilot Desk, advisor-deploy → Call in a Favor, sourcing-workbench → Prospecting Desk, negotiation → Getting to Signed, call-planner → Discovery Studio, icp-studio → ICP Studio). OWNER DECISION: what an accepted \"recurring focus\" suggestion should actually change; today no screen records the focus events this suggestion is built from (no caller of pushRecentAction / setFocusedObject in src/), so it cannot be produced.",
+      "testsAffected": [
+        "src/briefing/components/SuggestionsSection.test.tsx:72-77 (fixture text contains \"fired 6 times\" and \"recipe default\"; fixtures only)",
+        "tests for supabase/functions/heartbeat/phase-f-generators.ts message builders, if they assert these sentences"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "BRIEFING-UI-014",
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/PatternCard.tsx",
+      "line": 117,
+      "generation": "shared",
+      "state": "Every analysis card in the market section, all three screen versions. SMB walkthrough, area at rest: \"RECOMMENDED MOVES\" above \"Draft outreach for the four expansion accounts\".",
+      "current": "Recommended moves",
+      "problem": "\"Moves\" is the retired private label for a recommendation. The card for conflicting evidence on the same screen already says \"Recommended actions\" (src/briefing/components/ContrarianRail.tsx:68), so one screen uses two names for the same block. Dimension: private ontology.",
+      "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §3 disputed term \"move\" (names \"Recommended moves\" as a label that becomes \"recommended action\"); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row \"one move\"; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md \"Briefing-specific rule\" (every item exposes a recommended action); COPY_STANDARD.md §3 (move → action, recommendation).",
+      "proposed": "t(\"Recommended actions\")",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-015",
+      "category": "LANG-B",
+      "severity": 2,
+      "file": "src/briefing/components/PatternCard.tsx",
+      "line": 64,
+      "generation": "shared",
+      "state": "Destination shown under each recommended action, all three screen versions. SMB walkthrough, area at rest: link \"Outbound Studio · hooks · draft →\" and link \"Deal Workspace · pipeline · review →\". Enterprise walkthrough (2026-11-06), area at rest: plain text \"Territory Architect · tiers · review\".",
+      "current": "destLabel is the area name followed by the rest of the stored routing string: \"Outbound Studio · hooks · draft\", \"Deal Workspace · pipeline · review\", \"Territory Architect · tiers · review\" (PatternCard.tsx:63-67; the sample strings are in src/briefing/lib/demo-patterns.ts:87, 111, 135, 163, 187, 211).",
+      "problem": "The visible label is the internal routing string (area · object · action). \"hooks · draft\" and \"pipeline · review\" are not names of anything the user can find on the destination screen, and the label does not say that the link opens another area. The approved replacement for this element ends with the area name only. Dimensions: private ontology, semantic compression.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement \"Review the tier map against the close record A deliberate bet beats an inherited one. Territory Architect · tiers · review\" → \"Review territory tiers against closed-deal performance · Territory Architect\" (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json exact_replacements[62], record B2-X-062); COPY_STANDARD.md §14 (verb + object).",
+      "proposed": "In MoveRow: when the destination parses, destLabel = `${t(\"Open\")} ${DESTINATION_ROOM_LABEL[token.room]}` (for example \"Open Outbound Studio →\"); when it does not parse, show only the text before the first \" · \" (the area name). Keep the full string in the link's query parameters as today.",
+      "testsAffected": [
+        "src/briefing/components/PatternCard.test.tsx:45 (expects text matching /Asset Builder · Battlecard/)"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-016",
+      "category": "FUNC",
+      "severity": 2,
+      "file": "src/briefing/lib/destinations.ts",
+      "line": 47,
+      "generation": "shared",
+      "state": "Any recommended action whose destination is not Discovery Studio, Outbound Studio or Deal Workspace. Enterprise walkthrough (2026-11-06), area at rest, second analysis: \"Review territory tiers against closed-deal performance … Territory Architect · tiers · review\" is plain text, with no link.",
+      "current": "ROOM_MAP (lines 47-52) recognises four names: Discovery Studio (and the retired Call Planner), Outbound Studio, Deal Workspace, and Asset Builder, which is not an area in the app (roomPath returns null for it, line 171). The generator prompt tells the model to route to \"Deal Workspace · active deal · review\", \"Discovery Studio · question set · update\", \"Cold Call Studio · objection response · update\", \"Outbound Studio · hook · new\", \"Signal Console · watched account · review\" or \"Getting to Signed · security workstream · review\" (src/briefing/lib/synthesis/prompts.ts:126; supabase/functions/briefing-pipeline/llm/synthesis-shared.ts:428). parseAction (lines 62-68) recognises only \"new\", \"refresh\"/\"refresh existing\" and \"alert\".",
+      "problem": "The prompt and the screen disagree about which destinations exist. Three of the six destinations the model is told to use (Cold Call Studio, Signal Console, Getting to Signed) and the sample's Territory Architect do not parse, so the action is shown without a link to the area it names. The action words the prompt uses (\"review\", \"update\") and the sample's \"draft\" are not recognised either, so they are passed on as part of the section name (\"hooks · draft\") and appear in the destination banner and in the saved list. The primer tells the user they can \"continue into the relevant workspace\" from an analysis.",
+      "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (cross-area handoff links; API/prompt contracts; copy that claims something the code does not do); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md (generated output must be usable as specified); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md \"Structural requirements by room → Briefing\" (every analysis exposes a recommended action).",
+      "proposed": "In src/briefing/lib/destinations.ts: add \"cold-call-studio\", \"signal-console\", \"getting-to-signed\" and \"territory-architect\" to DestinationRoom, ROOM_MAP ([\"cold call studio\"], [\"signal console\"], [\"getting to signed\"], [\"territory architect\"]), roomPath (\"/cold-call-studio/\", \"/signal-console/\", \"/getting-to-signed/\", \"/territory-architect/\") and DESTINATION_ROOM_LABEL. In parseAction also accept \"review\", \"update\" and \"draft\" (extend the action union) so the action word is removed from `section`. Add a test that every destination example in src/briefing/lib/synthesis/prompts.ts:126 parses to a non-null href.",
+      "testsAffected": [
+        "src/briefing/lib/destinations.test.ts (add cases; existing cases keep passing)"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-017",
+      "category": "FUNC",
+      "severity": 2,
+      "file": "src/lib/room-chrome.tsx",
+      "line": 71,
+      "generation": "shared",
+      "state": "Default Briefing → click a recommended action's destination link (for example \"Outbound Studio · hooks · draft →\") → the default Outbound Studio, Deal Workspace or Discovery Studio screen. Not exercised in any walkthrough; traced in source.",
+      "current": "The link carries the recommended action (fromMode=briefing-draft, briefingDraftLabel, briefingDraftRationale, briefingDraftSection …; src/briefing/lib/destinations.ts:138-159). The banner that reads it, BriefingDraftBanner, is mounted only by RoomChrome (src/lib/room-chrome.tsx:71) and by the previous-version screens (for example src/outbound-studio/ds/OutboundStudioDS.tsx:95). The default destination screens mount neither: src/outbound-studio/v4/OutboundStudioV4.tsx, src/deal-workspace/v4/DealWorkspaceV4.tsx and src/discovery-studio/v4/DiscoveryStudioV4.tsx contain no reference to the banner or to RoomChrome.",
+      "problem": "On the default screens the handoff is dropped: the destination opens with no sign of the recommended action that sent the user there, no way to save it, and no \"Back to Briefing\" control. Because nothing can be saved, the \"DRAFTS\" row on the default Briefing (src/briefing/v4/BriefingV4.tsx:438-461) can only ever be filled from the previous-version screens (?v4=0). The primer's \"continue into the relevant workspace\" therefore opens a blank start.",
+      "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (trace downstream handoffs; continuity parameters; regression between screen generations); CLAUDE.md Part I §2 (continuity parameters \"do not break them\") and §4.21 (\"produces drafts the operator reviews and saves to the destination\").",
+      "proposed": "Render <BriefingDraftBanner /> as the first child of <main> in src/outbound-studio/v4/OutboundStudioV4.tsx, src/deal-workspace/v4/DealWorkspaceV4.tsx and src/discovery-studio/v4/DiscoveryStudioV4.tsx (and in the default screen of each area added under BRIEFING-UI-016). Add one Playwright check: open /outbound-studio/?fromMode=briefing-draft&briefingDraftLabel=Test and expect the banner.",
+      "testsAffected": [
+        "src/lib/briefing-draft-banner.test.tsx (unchanged; add a default-screen check)"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-018",
+      "category": "LANG-B",
+      "severity": 2,
+      "file": "src/briefing/components/PatternCard.tsx",
+      "line": 40,
+      "generation": "shared",
+      "state": "First line of every analysis card. SMB walkthrough, area at rest: \"RISING · Confidence 88% · 4 items · 4 sources\", \"STABLE · Confidence 81% · 4 items · 3 sources\".",
+      "current": "trajectoryLabel(): \"Rising\" / \"Declining\" / \"Stable\" / \"New\" (lines 39-44, not wrapped in t()); then \"{n} item(s) · {n} source(s)\" (line 94).",
+      "problem": "The approved replacement for \"RISING\" was not applied, and neither word says what is rising. In the code the value compares this week's weight of evidence on the subject with the previous weekly review (supabase/functions/briefing-pipeline/cluster/cluster.ts:10-14); \"New\" means the subject had no earlier review. A newcomer reading \"RISING\" beside \"Confidence 88%\" can take it for the confidence or for the company's fortunes. \"4 items\" does not say items of what; the conflicting-evidence card says \"evidence item(s)\". Dimensions: semantic compression, high-context dependence.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement \"RISING\" → \"INCREASING\" (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json exact_replacements[51], record B2-X-051); COPY_STANDARD.md §20 (if the product knows the measure, name it) and §14.",
+      "proposed": "trajectoryLabel: rising → t(\"Evidence increasing\"); declining → t(\"Evidence decreasing\"); stable → t(\"Evidence steady\"); null → t(\"New this week\"). Line 94: `${n} evidence item${s} · ${n} source${s}`.",
+      "testsAffected": [
+        "src/briefing/components/PatternCard.test.tsx:58 (expects \"Rising\") and :63 (expects \"New\")"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-019",
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/EmptyState.tsx",
+      "line": 21,
+      "generation": "shared",
+      "state": "Market section, all three screen versions: (a) the empty state when no analysis exists for the latest run (new live workspace, a run that produced nothing, or a failed load); (b) the line above the cards when the weekly run wrote a summary; (c) the loading line; (d) the sources panel. (d) is in the SMB walkthrough after clicking \"SHOW SOURCES AND REASONING\": \"No source record is saved for this read. Reads created from now on will include one.\" (a)–(c) are not reachable in the demo; reviewed from source.",
+      "current": "EmptyState.tsx:19-33: \"Nothing to read this week\" / \"There are no market reads for this week yet.\" / \"Market reads appear here after the weekly market review runs. Each one summarizes a change in your market: a company you aren't tracking yet that matches your targets, or evidence that disagrees with an assumption you've made.\" / \"Each read lists its sources. You can open it to see the articles it used, how it was written and checked, and what it cost to produce.\" BriefingLead.tsx:29: \"The read this week\". PatternList.tsx:18: \"Reading the week…\". ShowYourWork.tsx:56: \"No source record is saved for this read. Reads created from now on will include one.\"",
+      "problem": "\"Read\" is still the noun for an analysis in the default screen's own voice, which the Briefing rewrite removed everywhere else on this screen (\"every analysis includes supporting evidence\", \"Open analysis\"). The empty-state body also describes the wrong thing: it says each item is either an untracked company or conflicting evidence, which are the two other sections; the items in this list are recurring developments in the target market. \"evidence that disagrees\" gives the evidence agency. Dimensions: private ontology, personification; one inaccurate description.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md \"Structural requirements by room → Briefing\" (\"Remove read as the generic noun for analysis and remove system-personification language\") and exact replacement \"every read links to its evidence\" → \"every analysis includes supporting evidence\"; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows \"read\", \"the data disagrees\"; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md \"Briefing-specific rule\".",
+      "proposed": "EmptyState.tsx — label: \"No market analysis this week\"; headline: \"No market analysis is available for this week.\"; body 1: \"Market analysis appears here after the weekly market review, which runs on Monday mornings. Each analysis describes a recurring development in your target market, the evidence for it, and a recommended action.\"; body 2: \"Each analysis lists its sources. Open “Show sources and reasoning” to see the articles used, how the analysis was written and checked, and what it cost to produce.\" BriefingLead.tsx:28-29: \"This week's market summary\". PatternList.tsx:18: \"Loading market analysis…\". ShowYourWork.tsx:56: see BRIEFING-UI-020.",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-020",
+      "category": "CLAIM",
+      "severity": 2,
+      "file": "src/briefing/state.ts",
+      "line": 233,
+      "generation": "shared",
+      "state": "Any analysis card → \"Show sources and reasoning\". SMB walkthrough (after clicking \"SHOW SOURCES AND REASONING\") and the enterprise walkthrough both show, for the sample analyses: \"No source record is saved for this read. Reads created from now on will include one.\"",
+      "current": "toggleEnvelope() stores \"missing\" whenever loadAuditEnvelope() returns null (state.ts:229-233). loadAuditEnvelope returns null both when no row exists and when the query fails (src/briefing/lib/audit-envelope-client.ts:128-136). The \"error\" branch in the panel (\"Couldn't load the source record.\", ShowYourWork.tsx:45-51) can never be reached.",
+      "problem": "Two false statements. (1) After a failed load (network, expired session) the panel says no record was saved. (2) In the sample workspace every analysis is authored sample text (src/briefing/lib/demo-patterns.ts) with no record behind it, and no analysis is ever created there, so \"Reads created from now on will include one\" promises something that cannot happen; a tester sees this under every card.",
+      "governing": "COPY_STANDARD.md §21 (claims discipline); /tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (error state; copy that claims something the code does not do); owner requirement 8 in ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md (inspect the demo-seeded tester pathway).",
+      "proposed": "audit-envelope-client.ts: return a result object — { status: \"found\", envelope } | { status: \"missing\" } | { status: \"error\" } — setting \"error\" in the r.error branch and in the catch. state.ts toggleEnvelope: store \"error\" for status error, \"missing\" for status missing; when isDemoEnv() (src/briefing/lib/demo-patterns.ts:13) store a new entry \"sample\" without querying. ShowYourWork.tsx: \"missing\" → \"No source record was saved for this analysis.\"; \"sample\" → \"This is a sample analysis, so it has no source record. In a live workspace this panel lists the articles used, how the analysis was written and checked, and what it cost to produce.\"; keep the existing error line.",
+      "testsAffected": [
+        "src/briefing/lib/audit-envelope-client.test.ts (loadAuditEnvelope return shape)"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-021",
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/ShowYourWork.tsx",
+      "line": 106,
+      "generation": "shared",
+      "state": "Any analysis card in a live workspace → \"Show sources and reasoning\" → the populated panel. Not reachable in the demo (see BRIEFING-UI-020); reviewed from source.",
+      "current": "Headings and labels: \"The cluster\" (106), \"Anchor\" (110), \"Type\" (116), \"Weighted evidence\" (122), \"Items\" (126), \"What we challenged\" followed by a raw JSON dump (139-140), \"Evidence considered\" (143), per item \"[{source_id} · rel 0.82 · {companies}]\" (167, 175), \"+ N more items in the envelope\" (183), \"Stated positions at synthesis time\" followed by a raw JSON dump (196-197), \"LLM call chain\" (207) with \"Draft\" / \"Critique\" / \"Revise\", \"click to expand\" (236), \"prompt_version {v} · model_v_hash {hash}…\" (246), \"Quality gate\" (270) \"Passed\" / \"Failed (2 failures: a, b)\" (272-273), \"The LLM declined to challenge: {reason}\" (283), \"Total cost: $0.0123 · captured 2026-11-10\" (74-75). Lines 74, 183, 246, 272-273 and 283 are not wrapped in t().",
+      "problem": "The button promises \"sources and reasoning\"; the panel answers in the pipeline's internal vocabulary (cluster, anchor, weighted evidence, envelope, synthesis time, call chain, quality gate, snake_case field names, \"rel\"). A first-time user cannot tell that \"The cluster\" is the list of sources, that \"Anchor\" is the shared subject, or that \"Quality gate: Passed\" means the automatic checks on wording and evidence passed. \"What we challenged\" and \"The LLM declined to challenge\" give the software a voice. Dimensions: private ontology, high-context dependence, personification.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rules 8, 9 and 12 and \"Briefing-specific rule\" (expose evidence); COPY_STANDARD.md §2, §9; CLAUDE.md Part II §5 hard reject (\"internal architecture language as visible product copy\").",
+      "proposed": "\"The cluster\" → \"Sources grouped for this analysis\"; \"Anchor\" → \"Shared subject\"; \"Type\" → \"Grouped by\"; \"Weighted evidence\" → \"Evidence weight\"; \"Items\" → \"Evidence items\"; \"What we challenged\" → \"Workspace assumptions that were checked\"; \"Evidence considered\" stays; \"rel\" → \"relevance\"; \"+ N more items in the envelope\" → \"+ N more evidence items\"; \"Stated positions at synthesis time\" → \"Workspace settings used when this analysis was written\"; \"LLM call chain\" → \"How the analysis was written and checked\"; \"Critique\" → \"Review\"; \"Revise\" → \"Revision\"; \"click to expand\" → \"show full text\"; \"prompt_version … · model_v_hash …\" → \"Prompt version {v} · model version {hash}\"; \"Quality gate\" → \"Automatic checks\"; \"Passed\" / \"Failed (N failures: …)\" → \"Passed\" / \"Did not pass ({N} checks: …)\"; \"The LLM declined to challenge: {reason}\" → \"No conflicting evidence was reported: {reason}\"; \"Total cost: … · captured …\" → \"Cost to produce: … · recorded …\". OWNER DECISION: whether the two raw JSON blocks should be replaced by a formatted list of the assumptions (ICP, watchlist, value proposition, competitor set).",
+      "testsAffected": [],
+      "confidence": "medium"
+    },
+    {
+      "id": "BRIEFING-UI-022",
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/MarksBar.tsx",
+      "line": 31,
+      "generation": "shared",
+      "state": "Feedback buttons under every analysis card, all three screen versions. SMB walkthrough, hover text at rest: \"I acted on this — the system was right.\" / \"I already knew this — accurate but no new value.\" / \"This was wrong, useless, or off-target.\"",
+      "current": "BUTTON_HINTS (lines 30-34), used as the title and inside the aria-label: `${BUTTON_LABELS[mark]}: ${BUTTON_HINTS[mark]}` (line 66), which reads \"I acted on this: I acted on this — the system was right.\" Group aria-label: \"Rate this read\" (line 56). None of the label or hint strings is wrapped in t().",
+      "problem": "\"the system was right\" treats the software as an agent being judged, and the hints repeat the button text instead of telling the user what the click changes. In the code a mark is stored per analysis and read by later market reviews to weight the subject up or down for 90 days (supabase/functions/briefing-pipeline/cluster/cluster.ts:263-294; supabase/migrations/20260529000000_briefing_pattern_feedback.sql:18-20), which is what a user needs to know before clicking \"Not useful\". The accessible name says the label twice and still calls the analysis a \"read\". Dimensions: personification, semantic compression; A11Y duplicate name.",
+      "governing": "COPY_STANDARD.md §9 (personification) and §14; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md \"Structural requirements by room → Briefing\" (remove \"read\" and system-personification language); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row \"read\".",
+      "proposed": "BUTTON_HINTS — used: \"The analysis was accurate and you acted on it. Future market reviews give this subject more weight.\"; met: \"The analysis was accurate but not new to you.\"; noise: \"The analysis was wrong or not relevant. Future market reviews give this subject less weight.\" aria-label={BUTTON_LABELS[mark]} with aria-describedby (or title) carrying the hint once. Group aria-label: \"Rate this analysis\". Wrap the six strings in t().",
+      "testsAffected": [],
+      "confidence": "medium"
+    },
+    {
+      "id": "BRIEFING-UI-023",
+      "category": "FUNC",
+      "severity": 2,
+      "file": "src/briefing/components/MarksBar.tsx",
+      "line": 40,
+      "generation": "shared",
+      "state": "Clicking \"I acted on this\", \"I already knew this\" or \"Not useful\" when the save fails — always the case in the sample workspace, where the analyses have ids such as \"demo-smb-1\" and there is no signed-in session. Not clicked in any walkthrough (hover only); traced in source.",
+      "current": "handleClick (lines 40-46) awaits setMarkForPattern / clearMarkForPattern and discards the boolean result. On failure the state layer reverts the optimistic mark (src/briefing/state.ts:159-168), so the button looks selected for a moment and then clears, with no message.",
+      "problem": "No error or success state. For a tester in the sample workspace all three buttons under every analysis appear to do nothing. In a live workspace a failed save looks the same as an accidental double click.",
+      "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (every surface: error and success states; demo/sample content); CLAUDE.md Part II §6 (\"saved / unsaved — never let the user wonder if it saved\").",
+      "proposed": "In handleClick, when the call resolves false set a module-level signal keyed by pattern id and render under the buttons: <p class=\"bf-marks__error\" role=\"alert\">Couldn't save your feedback. Try again.</p> (cleared on the next click). In src/briefing/state.ts setMarkForPattern / clearMarkForPattern: when isDemoEnv() apply the mark locally and return true without calling the server, so the sample behaves like the product.",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-024",
+      "category": "CLAIM",
+      "severity": 2,
+      "file": "src/briefing/components/WatchList.tsx",
+      "line": 71,
+      "generation": "shared",
+      "state": "Saved monitoring rules → an active rule → \"Pause rule\" (all three screen versions; live workspaces only, reviewed from source).",
+      "current": "The button is labelled \"Pause rule\". It calls disableTrigger(), which sets status = \"disabled\" (src/briefing/lib/watchlist-client.ts:235). The list query excludes disabled rules (watchlist-client.ts:133), so the rule disappears, and no screen offers a way to turn it back on (the only writer of status \"armed\" is the insert in armTrigger, watchlist-client.ts:216).",
+      "problem": "\"Pause\" tells the user the rule can be resumed. In fact the rule is removed from the screen for good; to get it back the user has to write it again. The same is true of the v4 \"WATCHING FOR\" strip, which stops listing it.",
+      "governing": "COPY_STANDARD.md §21 (claims discipline) and §2 (literal verb); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/15_HIGH_SEVERITY_INTERACTION_PATCH.md row \"Snooze fires\" → \"Pause matches\" (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[113], record HS-113) — the approved wording assumed a pause the code does not implement; /tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (copy that claims something the code does not do).",
+      "proposed": "t(\"Remove rule\"). OWNER DECISION: keep \"Pause rule\" and implement the pause — list disabled rules under \"Paused rules\" with a \"Resume rule\" button that sets status back to \"armed\".",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-025",
+      "category": "LANG-B",
+      "severity": 2,
+      "file": "src/briefing/lib/watchlist-client.ts",
+      "line": 51,
+      "generation": "shared",
+      "state": "Saved monitoring rules → the type shown under each active rule (WatchList.tsx:49). Live workspaces only; reviewed from source.",
+      "current": "triggerTypeLabel(): \"Event\" / \"Aggregation\" / \"Threshold\" / \"Adjacency\" / \"Silence\" (lines 49-56).",
+      "problem": "These are the internal names of the five rule types. The form that creates the rule shows the same types as \"One-time event\" / \"Repeated events\" / \"Threshold\" / \"Related company\" / \"No activity\" (src/briefing/components/AddTriggerFlow.tsx:25-31), so a rule the user confirmed as \"Related company\" is listed afterwards as \"Adjacency\". Dimensions: private ontology, high-context dependence.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rule 9 (do not invent branded terminology); COPY_STANDARD.md §2; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md \"Structural requirements by room → Briefing\" item 5 (saved monitoring rules).",
+      "proposed": "Return the same labels as AddTriggerFlow: single_event → \"One-time event\"; aggregation → \"Repeated events\"; threshold → \"Threshold\"; adjacency → \"Related company\"; silence → \"No activity\". Export one map from watchlist-client.ts and import it in AddTriggerFlow.tsx so the two cannot drift.",
+      "testsAffected": [
+        "src/briefing/lib/watchlist-client.test.ts (triggerTypeLabel cases, if asserted)"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-026",
+      "category": "CLAIM",
+      "severity": 1,
+      "file": "src/briefing/components/WatchList.tsx",
+      "line": 106,
+      "generation": "shared",
+      "state": "Saved monitoring rules → the list of matches (live workspaces only; reviewed from source).",
+      "current": "Heading \"Matches this week\". The query behind it returns the ten most recent matches with no date limit (src/briefing/lib/watchlist-client.ts:152-156).",
+      "problem": "A match from a month ago is listed under \"this week\". Each row shows its own date, so the heading contradicts the rows.",
+      "governing": "COPY_STANDARD.md §21 (do not claim more than the data supports) and §13 (state units and time frames).",
+      "proposed": "t(\"Recent matches\")",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-027",
+      "category": "LANG-B",
+      "severity": 2,
+      "file": "supabase/functions/briefing-pipeline/triggers/runner.ts",
+      "line": 167,
+      "generation": "backend",
+      "state": "Text of each rule match, written by the weekly market review and shown in \"Matches this week\" (WatchList.tsx:22). Live workspaces only; reviewed from source.",
+      "current": "Line 167: `${targetLabel(q)} — ${q.event.category}` → for example \"Deel — product_launch: <article title> (+2 more)\". Line 184: `${targetLabel(q)} — activity`. Lines 210-213: `${count} ${q.event.category} events across the set in ${windowDays}d`. targetLabel() returns \"Anything\", \"company\", \"category\" or \"target\" when no name is stored (lines 218-225).",
+      "problem": "The stored event type is printed as is — product_launch, exec_move, m_a_event, narrative_shift_mention (src/briefing/lib/triggers/types.ts:21-37) — and the repeated-events sentence ends \"across the set in 30d\". A first-time user reads \"3 m_a_event events across the set in 30d\". Dimensions: private ontology, elliptical syntax.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rules 1-2 and 9 (state observed facts in ordinary business nouns); COPY_STANDARD.md §13 (literal labels, units and time frames) and §14.",
+      "proposed": "Add categoryLabel(): exec_move → \"executive change\"; pricing_change → \"pricing change\"; product_launch → \"product launch\"; funding_round → \"funding round\"; m_a_event → \"merger or acquisition\"; regulatory_action → \"regulatory action\"; security_incident → \"security incident\"; partnership_announcement → \"partnership\"; integration_added → \"integration added\"; integration_removed → \"integration removed\"; leadership_departure → \"leadership departure\"; layoff_event → \"layoffs\"; geographic_expansion → \"expansion into a new region\"; vertical_expansion → \"expansion into a new industry\"; narrative_shift_mention → \"change in messaging\"; press_coverage → \"press coverage\"; any other value → the value with underscores replaced by spaces. Line 167: `${targetLabel(q)} · ${categoryLabel(q.event.category)}`. Line 184: `${targetLabel(q)} · related activity`. Lines 210-213: `${count} ${categoryLabel(q.event.category)} events in the last ${windowDays} days`. targetLabel: \"Anything\" → \"Any company\".",
+      "testsAffected": [],
+      "confidence": "medium"
+    },
+    {
+      "id": "BRIEFING-UI-028",
+      "category": "FUNC",
+      "severity": 2,
+      "file": "src/briefing/components/AddTriggerFlow.tsx",
+      "line": 61,
+      "generation": "shared",
+      "state": "Saved monitoring rules → \"Add monitoring rule\" → type a request → \"Review monitoring rule\". The walkthrough opened the form but did not type, so the button stayed disabled; traced in source.",
+      "current": "handleParse() first looks up the workspace (resolveWorkspaceId, src/briefing/lib/watchlist-client.ts:115-125). In the sample workspace there is no signed-in workspace row, so it always shows \"Couldn't find your workspace. Reload and try again.\" (line 61). When the interpreting call fails it shows the raw error text: setError(r.error ?? \"The parser couldn't read that. Try rephrasing.\") (line 67), where r.error is the function-call error message or the server's error string (watchlist-client.ts:180-186, for example \"parse failed\").",
+      "problem": "(1) In the sample workspace the only action this section offers can never succeed, and the message sends the tester to reload, which changes nothing. (2) In a live workspace a failure prints transport or server text, and the fallback names an internal component (\"The parser\").",
+      "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (error states; demo/sample content; fallbacks when AI/network is unavailable); CLAUDE.md Part III §10 (error language: honest, specific, recoverable); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md item 8.",
+      "proposed": "Line 67: reportError(r.error) and setError(\"Antaeus couldn't interpret that request. Reword it and try again.\"). Line 61 stays for live workspaces. When isDemoEnv() (src/briefing/lib/demo-patterns.ts:13): disable \"Review monitoring rule\" and show under the field: \"Monitoring rules cannot be created in the sample workspace. In a live workspace, Antaeus restates the rule for you to confirm before it is saved.\" OWNER DECISION: instead, return a sample interpreted rule in the demo so the confirm step can be seen.",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-029",
+      "category": "LANG-A",
+      "severity": 1,
+      "file": "src/briefing/components/AddTriggerFlow.tsx",
+      "line": 97,
+      "generation": "shared",
+      "state": "Saved monitoring rules → \"Add monitoring rule\". SMB walkthrough, after clicking \"Add monitoring rule\": field text \"e.g. Tell me when two or more EOR competitors launch a new product within 30 days\"; after a review, the result line \"Related company · 87% confident\" (line 128, source only).",
+      "current": "Placeholder: \"e.g. Tell me when two or more EOR competitors launch a new product within 30 days\". Result line: `{type} · {n}% confident`.",
+      "problem": "\"EOR\" (employer of record) is one product category's abbreviation, shown to every user whatever they sell; the sample workspaces sell hiring software. \"87% confident\" does not say who is confident of what — it is how sure the interpretation of the request is. Dimension: high-context dependence.",
+      "governing": "COPY_STANDARD.md §8 (referents) and §14; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement for the empty state (\"…such as a competitor launch, simultaneous competitor activity, or a partner becoming inactive\") — the example should be category-neutral in the same way.",
+      "proposed": "Placeholder: \"e.g. Tell me when two or more competitors launch a new product within 30 days\". Result line: `{type} · interpretation confidence {n}%`.",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-030",
+      "category": "CLAIM",
+      "severity": 2,
+      "file": "src/briefing/components/PeripheryRail.tsx",
+      "line": 80,
+      "generation": "shared",
+      "state": "Accounts to consider → \"Add to watchlist\" (all three screen versions; live workspaces only, reviewed from source).",
+      "current": "The button inserts a row into briefing_watchlist_entities and marks the candidate added (src/briefing/lib/periphery-client.ts:117-151). The row then disappears from the list with no confirmation. No screen lists the companies added this way (the state comment at src/briefing/state.ts:301-303 says they show up in the monitoring-rules section; that section renders rules and matches only), and nothing is written to Signal Console's watched accounts.",
+      "problem": "Everywhere else in the app \"watchlist\" means the accounts watched in Signal Console (\"+ Add company to watchlist\"; the workspace map on this screen says \"…the highest-priority account in your watchlist\"). A user who clicks \"Add to watchlist\" here will look for the company in Signal Console and not find it. What the click does is add the company to the list the weekly market review tracks. There is also no way to see or undo the addition from any screen.",
+      "governing": "COPY_STANDARD.md §21 and §8; /tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (copy that claims something the code does not do; success state; persistence and downstream handoffs); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement \"+ Watch a company\" → \"+ Add company to watchlist\" (establishes what \"watchlist\" names).",
+      "proposed": "Button: t(\"Track in market review\"). After a successful add, render one line in place of the row for the rest of the visit: `${name} will be included in the weekly market review. It was not added to Signal Console.` Section description (line 114): \"…but are not currently tracked: they are not watched in Signal Console and not named in a monitoring rule.\" OWNER DECISION: whether this button should also create the account in Signal Console, and where the tracked-company list should be shown and edited.",
+      "testsAffected": [],
+      "confidence": "medium"
+    },
+    {
+      "id": "BRIEFING-UI-031",
+      "category": "LANG-B",
+      "severity": 2,
+      "file": "src/briefing/components/PeripheryRail.tsx",
+      "line": 61,
+      "generation": "shared",
+      "state": "Accounts to consider → each row's score line and reason (live workspaces only; reviewed from source).",
+      "current": "Score line (lines 61-63): \"co-occurrence {n} · topic overlap {n}\". Reason, stored by the weekly review (src/briefing/lib/periphery/scoring.ts:112-115; mirror supabase/functions/briefing-pipeline/periphery/_shared.ts:119-122): \"Appeared in {n} items alongside {n} watched entities. Shares {n} pain/topic tags with the watched set's items.\"",
+      "problem": "\"Co-occurrence\", \"watched entities\", \"the watched set\", \"items\" and \"pain/topic tags\" are the scoring code's vocabulary. The sentence also reads as if the company appeared next to all {n} watched companies; {n} is the size of the whole tracked list, not the number it appeared with. Dimensions: private ontology, semantic compression; one misleading number.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rules 1-2, 6 and 9; COPY_STANDARD.md §13 (name the reason for a ranking) and §20.",
+      "proposed": "Score line: `mentioned with tracked companies in ${n} article${s}` and, when vocab overlap > 0, ` · ${n} shared topic${s}`. Reason: `Mentioned in ${co} article${s} that also mention a company you track.` and, when the overlap threshold is met, ` Those articles share ${vocab} topic${s} with articles about your tracked companies.` (drop the watched-list size from the sentence).",
+      "testsAffected": [
+        "src/briefing/lib/periphery/scoring.test.ts (reasoning text, if asserted)"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "BRIEFING-UI-032",
+      "category": "FUNC",
+      "severity": 1,
+      "file": "src/briefing/lib/periphery/scoring.ts",
+      "line": 148,
+      "generation": "shared",
+      "state": "Accounts to consider → company name (PeripheryRail.tsx:59), and the v4 market ticker item for the same company (BriefingV4.tsx:186). Live workspaces only; reviewed from source and from src/briefing/lib/periphery/scoring.test.ts:158-161.",
+      "current": "The stored name is the lower-cased key (normalizeEntity, scoring.ts:26-28; mirror supabase/functions/briefing-pipeline/periphery/_shared.ts:146). The row re-capitalises it with CSS (text-transform: capitalize, src/briefing/briefing.css:845); the ticker prints it as stored.",
+      "problem": "Company names are shown wrongly: \"openai\" in the ticker, \"Openai\", \"Hp\", \"Coreweave\" in the list. The lower-cased name is also what \"Add to watchlist\" saves.",
+      "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (a stable key displayed where a label belongs).",
+      "proposed": "In rankCandidates (both files) keep the key for matching but set entity_name to the first spelling seen in the evidence: `entity_name: Array.from(coEntry.aliases)[0] ?? norm`, and build entity_aliases from the remaining spellings. Remove text-transform: capitalize from .bf-peri__name.",
+      "testsAffected": [
+        "src/briefing/lib/periphery/scoring.test.ts:158-161, 191, 208 (expect lower-cased entity_name)"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "BRIEFING-UI-033",
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/lib/cost/tracker.ts",
+      "line": 138,
+      "generation": "shared",
+      "state": "Cost footer at the bottom of Briefing, all three screen versions. SMB walkthrough, area at rest: \"COST THIS WEEK · $0.00 / $3.00 · 0% · Within budget\". The other three states need real spend; reviewed from source.",
+      "current": "Kicker \"Cost this week\" (src/briefing/components/BriefingFooter.tsx:53; src/briefing/ds/components/BriefingFooterDS.tsx:36). State labels (tracker.ts:136-139; mirror supabase/functions/briefing-pipeline/cost/_shared.ts:83-86): \"Within budget\" / \"Approaching weekly ceiling\" / \"Throttling — Sonnet substituting for Opus\" / \"Paused — runs skip until next week\".",
+      "problem": "The footer does not say what costs money or whose budget it is: a new user sees \"$0.00 / $3.00\" and can read it as a charge or a credit balance. It is the AI processing cost of the weekly market review over a rolling seven days, measured against a fixed limit. \"Sonnet substituting for Opus\" names two AI models as if the user knew them, and \"Throttling\" and \"runs skip\" are operations vocabulary. Dimensions: semantic compression, high-context dependence, private ontology.",
+      "governing": "COPY_STANDARD.md §13 (state units and time frames; literal status labels) and §8; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rule 9; CLAUDE.md Part II §5 hard reject (internal architecture language as visible copy).",
+      "proposed": "Kicker (both footers): \"Market review AI cost · last 7 days\". Labels: ok → \"Within the weekly limit\"; warn → \"Near the weekly limit\"; throttle → \"Over the weekly limit · the market review is using a lower-cost model\"; paused → \"Over the weekly limit · the market review is paused until the 7-day cost falls\". Apply the same four strings in the Deno mirror. OWNER DECISION: whether to add that this cost is not billed to the user.",
+      "testsAffected": [
+        "src/briefing/lib/cost/tracker.test.ts (stateLabel strings, if asserted)",
+        "src/briefing/ds/ds-components.test.tsx (footer text, if asserted)"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "BRIEFING-UI-034",
+      "category": "FUNC",
+      "severity": 1,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 472,
+      "generation": "v4",
+      "state": "Default Briefing, greeting band, for a user whose browser has already granted location access. Not reachable in the walkthrough (it shows the Chicago default: \"12:47 PM · Chicago\", \"51°Clear\"); traced in source.",
+      "current": "`{clock.value} · {w?.current.place ?? t(\"Chicago\")}`. When browser coordinates are used, weather.ts sets place to an empty string (src/briefing/v4/lib/weather.ts:90), which `??` does not replace, so the line renders \"12:47 PM · \" with nothing after the dot. The clock and the greeting are always Central time (fmtClock / greetingWord use America/Chicago, lines 67-108), while the temperature and forecast are for the user's own location.",
+      "problem": "The band shows a Chicago time with no place name next to weather for somewhere else, and a dangling separator. A user in another time zone reads the time as wrong.",
+      "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (a number that no longer matches what it is labelled as); COPY_STANDARD.md §13 (state units and time frames).",
+      "proposed": "Line 472: `{clock.value} · {t(\"Chicago time\")}` (the clock is always Central). Lines 478-479: after the condition add ` · ${w.current.place || t(\"your location\")}` so the weather names its own place.",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-035",
+      "category": "FUNC",
+      "severity": 1,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 530,
+      "generation": "v4",
+      "state": "Default Briefing, \"MARKET UPDATES\" ticker → \"Open analysis ↓\" on an item. The walkthrough's recorded click shows the workspace map instead (BRIEFING-UI-041); traced in source.",
+      "current": "Every market-pattern item links to \"#bf-patterns\", every conflicting-evidence item to \"#bf-contrarian\", every account item to \"#bf-periphery\" (lines 177-187) — the top of the section, not the item.",
+      "problem": "\"Open analysis\" sits beside one headline but scrolls to the first card of the list, so for any item except the first the user lands on a different analysis from the one they chose.",
+      "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (copy that claims something the code does not do; in-page handoff links).",
+      "proposed": "Give each card an id — PatternCard: <article id={`bf-pattern-${pattern.id}`}>, the conflicting-evidence card and the accounts-to-consider row likewise — and set anchor to `#bf-pattern-${p.id}` / `#bf-contra-${c.id}` / `#bf-peri-${pc.id}` in buildTickerItems().",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-036",
+      "category": "A11Y",
+      "severity": 2,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 523,
+      "generation": "v4",
+      "state": "Default Briefing, \"MARKET UPDATES\" ticker, for keyboard and screen-reader users.",
+      "current": "Button names \"Scrub the ticker back\" (line 523) and \"Scrub the ticker forward\" (line 537). The item list is rendered twice for the loop (`[...tickerItems, ...tickerItems]`, line 526) with no aria-hidden on the copy. The strip scrolls continuously; it pauses only on mouse hover (lines 246-247), the two buttons are visible only on hover (src/briefing/v4/briefing-v4.css:627-629), and the scrolling is script-driven so the reduced-motion rule in the stylesheet (briefing-v4.css:716-721) does not stop it.",
+      "problem": "\"Scrub\" and \"ticker\" are not words the screen uses (the visible label is \"MARKET UPDATES\"), so the names do not say what the buttons act on. A screen reader announces every headline and \"Open analysis\" link twice. A keyboard user cannot pause the movement and tabs to buttons they cannot see.",
+      "governing": "COPY_STANDARD.md §14 (verb + object) and §24 item 1; /tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (aria-label among the states to audit).",
+      "proposed": "aria-labels: \"Show earlier market updates\" / \"Show later market updates\". Add aria-hidden=\"true\" and tabIndex={-1} (on the links) to the second copy of the items. Pause on focus as well as hover (focusin / focusout on the strip), show the two buttons on :focus-within, and do not start the loop when window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches.",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-037",
+      "category": "FUNC",
+      "severity": 1,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 389,
+      "generation": "v4",
+      "state": "Default Briefing, the number beside \"Your work\", when one check has more than three rows (live workspaces only; reviewed from source).",
+      "current": "The number is reads.length — the rows displayed. Rows beyond three per check are counted separately in the collapsed lines (\"+ 7 more …\", src/briefing/v4/lib/reads.ts:94-96) and are not included.",
+      "problem": "With ten watched accounts that have no new signals the header says 3 and the list ends \"+ 7 more…\". The header number understates how many changes were detected.",
+      "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (a number that does not match its formula).",
+      "proposed": "`{reads.length + runs.reduce((n, r) => n + r.count, 0)}`.",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-038",
+      "category": "FUNC",
+      "severity": 1,
+      "file": "src/briefing/v4/lib/reads.ts",
+      "line": 140,
+      "generation": "v4",
+      "state": "Default Briefing, Your work list → ✕ on a row, when the dismissal is not saved (live workspaces only; reviewed from source). The previous-version list has the same gap (src/briefing/components/WorkspaceReads.tsx:57-65).",
+      "current": "dismissRead() ignores the boolean returned by dismissObservation() (false on failure, src/lib/observations/reader.ts:133-139), reloads the list, and the row is still there.",
+      "problem": "A failed dismissal looks like a click that did nothing; there is no message and no retry hint.",
+      "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (error state); CLAUDE.md Part II §6 (errors never swallowed).",
+      "proposed": "If dismissObservation resolves false, set readsError-style signal dismissError = id and render under that row: \"Couldn't dismiss this item. Try again.\" (role=\"alert\"); clear it on the next attempt.",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-039",
+      "category": "LANG-A",
+      "severity": 1,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 543,
+      "generation": "v4",
+      "state": "Default Briefing, events strip, when no upcoming event is saved or the read fails (a new live workspace before the first event search). In the demo three sample events render; the empty case was reviewed from source.",
+      "current": "With no events the strip is the label followed directly by the link: \"UPCOMING EVENTS FOR YOUR TARGET MARKET   Outdoors Events →\" (lines 543-556; bootWorldEvents() returns an empty list on any failure, src/briefing/v4/lib/world-events.ts:74-77).",
+      "problem": "The label announces events and nothing follows, with no statement that none were found or how to get some. \"Outdoors Events\" is a branded name with no description at this point. Dimension: high-context dependence (missing empty state).",
+      "governing": "CLAUDE.md Part II §6 (empty state: why it matters, what unlocks it, one next action); COPY_STANDARD.md §4 (branded name needs a literal description).",
+      "proposed": "When worldEvents is empty render, between the label and the link: t(\"No upcoming events are saved.\", { class: \"body\" }) and change the link text to t(\"Find events in Outdoors Events\", { class: \"label\" }) + \" →\".",
+      "testsAffected": [],
+      "confidence": "medium"
+    },
+    {
+      "id": "BRIEFING-UI-040",
+      "category": "CLAIM",
+      "severity": 2,
+      "file": "src/lib/briefing-draft-banner.tsx",
+      "line": 166,
+      "generation": "shared",
+      "state": "Arriving in Discovery Studio, Outbound Studio or Deal Workspace from a Briefing recommended action (previous-version and oldest screens today; the default screens do not mount the banner — BRIEFING-UI-017), then the saved items back in Briefing: the \"DRAFTS\" chips on the default screen (src/briefing/v4/BriefingV4.tsx:440-446) and the \"PENDING DRAFTS\" tray on the previous-version and oldest screens (src/briefing/components/DraftsTray.tsx:84-90). Not exercised in any walkthrough; reviewed from source and tests.",
+      "current": "Banner: kicker \"FROM BRIEFING · DRAFT NEW\" / \"· REFRESH\" / \"· ALERT\" / \"· DRAFT\" (lines 70-75, 148), the section text from the routing string (for example \"hooks · draft\"), the action's label and reason, buttons \"Save to draft new list\" / \"Save to refresh list\" / \"Save to alert list\" / \"Save to draft list\" (line 166) and \"Dismiss\"; aria-label \"Drafted from the Briefing\" (line 144). None is wrapped in t(). Saving writes a note to localStorage (gtmos_briefing_drafts_pending). Briefing lists it as \"DRAFTS · ✎ {label} · Open · {area}\" (v4) or \"PENDING DRAFTS · 1 draft acknowledged\" (DraftsTray). roomLabelForPath() still maps to \"PoC Framework\" and \"Advisor Deploy\" (src/lib/briefing-drafts.ts:127-128) and returns an unknown path lower-cased with its trailing slash (\"getting to signed/\", line 133).",
+      "problem": "Nothing is drafted and the destination has no \"refresh list\" or \"draft list\": the button stores a reminder that is shown back in Briefing. \"Draft\", \"Save to refresh list\" and \"1 draft acknowledged\" each describe an object or an event that does not exist, and the button never says where the saved item goes. The two retired area names would be shown for any saved path that starts with them. Dimensions: unsupported claim, private ontology.",
+      "governing": "COPY_STANDARD.md §21 and §2; /tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (copy that claims something the code does not do; persisted-state labels; cross-area handoff labels); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement for the old primer line (\"Click any destination chip to draft a move in the destination room\" → \"…continue into the relevant workspace\").",
+      "proposed": "Banner: kicker \"RECOMMENDED ACTION FROM BRIEFING\" (no action word, no section text); aria-label \"Recommended action from Briefing\"; primary button \"Save as a reminder in Briefing\"; keep \"Dismiss\". v4 chips: label \"SAVED ACTIONS\"; remove-button name \"Remove this saved action\". DraftsTray: kicker \"SAVED ACTIONS\"; count `${n} saved from recommended actions`; aria-label \"Recommended actions saved from Briefing\". roomLabelForPath: remove the two retired names; add \"/pilot-desk\" → \"Pilot Desk\", \"/call-in-a-favor\" → \"Call in a Favor\", \"/getting-to-signed\" → \"Getting to Signed\", \"/cold-call-studio\" → \"Cold Call Studio\", \"/prospecting-desk\" → \"Prospecting Desk\"; strip the trailing slash in the fallback. OWNER DECISION: whether a recommended action should create a real draft in the destination area, as CLAUDE.md §4.21 describes.",
+      "testsAffected": [
+        "src/lib/briefing-draft-banner.test.tsx:51 (expects the banner text to contain \"REFRESH\")",
+        "src/briefing/components/DraftsTray.test.tsx:35 (expects \"1 draft acknowledged\")",
+        "src/lib/briefing-drafts.test.ts:116 (expects \"some other room/\")"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-041",
+      "category": "TOOLING",
+      "severity": 1,
+      "file": "tools/preview/build-transcript.js",
+      "line": 408,
+      "generation": "tooling",
+      "state": "Tester walkthrough for Briefing. SMB walkthrough, states \"After clicking “‹”\" and \"After clicking “Open analysis ↓”\" (and the same two states in the 2026-11-06 enterprise walkthrough) list the workspace map (\"WORKSPACE MAP · Where do you want to go?\" and every area link) instead of the ticker's result.",
+      "current": "replay() scrolls the control into view only if needed, then clicks with force: true (lines 389, 408). A forced click skips the check that the control is the element under the pointer.",
+      "problem": "The recorded states suggest the click landed on the fixed workspace-map bar at the bottom of the window rather than on the ticker control (cause inferred from the source; not reproduced, because this audit stage may not start a browser). Either way the walkthrough attributes workspace-map text to two Briefing controls and never records what the ticker's back, forward and Open analysis controls do, so those three controls are unverified in the tester corpus and the mis-filed text enters the corpus that is scored.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md item 8 (regenerate the tester pathway and inspect it; exit 0 alone is not acceptance); /tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (do not claim a path was executed when it was not).",
+      "proposed": "Before the forced click, scroll the control to the middle of the window (el.scrollIntoView({ block: \"center\" })) and compare document.elementFromPoint at its centre with the control; if they differ, call el.click() instead of a forced pointer click. Then regenerate the Briefing walkthrough and confirm the three states.",
+      "testsAffected": [],
+      "confidence": "medium"
+    },
+    {
+      "id": "BRIEFING-UI-042",
+      "category": "LANG-B",
+      "severity": 2,
+      "file": "supabase/functions/heartbeat/generators.ts",
+      "line": 157,
+      "generation": "backend",
+      "state": "Text of a stalled-deal row written by the 30-minute check and shown in Briefing's Your work list (all three screen versions) and on the Dashboard. Mirror: src/lib/observations/generators/deal-decay.ts:154. Live workspaces only; reviewed from source.",
+      "current": "`${account} has been at ${stage} for ${daysAtStage} days with ${nextStepClause}.` where stage is the stored stage id.",
+      "problem": "The stage ids are \"evaluation\", \"poc\" and \"verbal\" for the stages Deal Workspace shows as \"Solution Fit\", \"PoC / Pilot\" and \"Verbal Commit\" (src/deal-workspace/lib/deal-shape.ts:18-39). The row therefore reads \"Acme has been at poc for 21 days…\" or \"…at evaluation…\", naming a stage the user has never seen on a deal. Dimension: private ontology (stored key shown as a label).",
+      "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (a stable key displayed where a label belongs); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rules 1 and 9; COPY_STANDARD.md §2.",
+      "proposed": "In both files map the id before building the sentence — prospect → \"Prospect\", discovery → \"Discovery\", evaluation → \"Solution Fit\", poc → \"Pilot\", negotiation → \"Negotiation\", verbal → \"Verbal Commit\", any other value unchanged — and write `${account} has been in the ${stageLabel} stage for ${daysAtStage} days with ${nextStepClause}.` (keeps \"for N days\", which src/dashboard/lib/week-reads-filter.ts:29 and src/briefing/v4/lib/reads.ts:56 parse).",
+      "testsAffected": [
+        "src/lib/observations/generators/deal-decay.test.ts (sentence text)",
+        "src/dashboard/lib/week-reads-filter.test.ts (fixture sentences; the day-count pattern still matches)"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-043",
+      "category": "FUNC",
+      "severity": 2,
+      "file": "src/briefing/components/WorkspaceReads.tsx",
+      "line": 81,
+      "generation": "ds",
+      "state": "Previous-version and oldest screens, Your work / Workspace tab, populated list in a live workspace: the heading above each group of rows. Not reachable in the demo; traced in source.",
+      "current": "Rows are grouped by row.sourceGenerator (lines 84-98). The scheduled check stores that value as \"phase-b/deal-decay\", \"phase-b/signal-decay\", \"phase-b/proof-staleness\", \"phase-b/discovery-rhythm\" (supabase/functions/heartbeat/generators.ts:76, 168, 265, 316; written unchanged at supabase/functions/heartbeat/index.ts:276; the Dashboard matches the same string at src/dashboard/lib/week-reads-filter.ts:23). GENERATOR_LABELS is keyed \"deal_decay\", \"signal_decay\", … (lines 73-78), so the lookup misses and the fallback prints the key.",
+      "problem": "The group headings a live user sees are the internal ids — \"phase-b/deal-decay\", \"phase-b/signal-decay\" — not the labels. The unit test passes because its fixtures use the short keys (src/briefing/components/WorkspaceReads.test.tsx:24, 50-53), which the product never stores. The default screen avoids this with bareGenerator() (src/briefing/v4/lib/reads.ts:50-53).",
+      "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (a stable key displayed where a label belongs; reachable previous and oldest screens are in scope).",
+      "proposed": "Export bareGenerator from src/briefing/v4/lib/reads.ts (also strip a \":variant\" suffix: `tail.split(\":\")[0]`) and group by bareGenerator(row.sourceGenerator) in WorkspaceReads.tsx. Change the test fixtures to the stored form (\"phase-b/deal-decay\" …) so the test covers the real value.",
+      "testsAffected": [
+        "src/briefing/components/WorkspaceReads.test.tsx:24, 50-53, 82, 94, 115 (fixtures use short keys)"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-044",
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/WorkspaceReads.tsx",
+      "line": 155,
+      "generation": "ds",
+      "state": "Previous-version and oldest screens, Your work / Workspace tab. Previous-version walkthrough (corpus-ds/briefing.txt), area at rest, and the oldest-version walkthrough page: \"WORKSPACE · NOTHING TO SURFACE\" / \"The system has nothing to flag in your work right now.\" / \"A scheduled check reviews your deals, signals, pilot evidence, and discovery calls every 30 minutes. When a deal or account goes without activity, it will show up here.\" The populated list and the loading line were reviewed from source.",
+      "current": "Empty state: kicker \"WORKSPACE · NOTHING TO SURFACE\" (line 153), headline \"The system has nothing to flag in your work right now.\" (155), body as quoted (158-161). Loading: \"Reading your work…\" (145). Populated: kicker \"YOUR WORK · THIS WEEK\" (170), count \"{n} reads surfaced\" (172-173), group labels \"Deals going stale\" / \"Accounts going quiet\" / \"Evidence past its readout\" / \"Discovery rhythm\" (74-77), aria-labels \"Workspace reads\" (127, 142, 152, 168) and \"Dismiss this read\" (220).",
+      "problem": "This component kept the wording the default screen replaced. \"The system has nothing to flag\" narrates the software; \"surface\" and \"reads\" are the retired nouns; \"going stale\", \"going quiet\" and \"past its readout\" are the exact phrases the Batch 02 rewrite removed; \"THIS WEEK\" is not true of the list (it shows the 60 newest active items of any age). Dimensions: personification, private ontology, metaphor; one inaccurate time frame.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacements \"Nothing to flag in your work right now. The system checks every half hour — when something starts slipping, it shows up here.\" → \"No material changes are currently detected in your active deals or watched accounts. This check refreshes every 30 minutes.\" (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json exact_replacements[44]) and \"Your work — heartbeat-fresh reads about your deals going stale, accounts going quiet, evidence past its readout…\" → \"Your work shows material changes in active deals, watched accounts, and pilot evidence…\" (exact_replacements[38], record B2-X-038; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[134], record HS-134); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows \"system saw\", \"read\"; /tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (all three screen generations are in scope).",
+      "proposed": "Empty: kicker \"YOUR DEALS AND ACCOUNTS\"; headline \"No material changes are currently detected in your active deals or watched accounts.\"; body \"A scheduled check reviews your deals, account signals, pilots, and discovery-call log every 30 minutes and lists material changes here.\" Loading: \"Loading changes in your deals and accounts…\". Populated: kicker \"CHANGES IN YOUR DEALS AND ACCOUNTS\"; count `${n} change${s} detected`; group labels \"Deals with no stage change\" / \"Watched accounts with no new signals\" / \"Pilots past their end date\" / \"Discovery-call activity\"; aria-labels \"Changes in your deals and accounts\" and \"Dismiss this item\".",
+      "testsAffected": [
+        "src/briefing/components/WorkspaceReads.test.tsx:43, 58-60, 75, 123 (assert the current empty-state text, the three group labels and \"2 reads surfaced\")"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-045",
+      "category": "FUNC",
+      "severity": 2,
+      "file": "src/briefing/components/WorkspaceReads.tsx",
+      "line": 131,
+      "generation": "ds",
+      "state": "Previous-version and oldest screens, Your work / Workspace tab, when loading the list throws (for example when the data client cannot be created). Reviewed from source.",
+      "current": "The caught error's own message is stored (lines 47-51) and printed (line 131) under the kicker \"WORKSPACE\".",
+      "problem": "The user is shown raw technical text (for example the missing-configuration message from the data client). The Dashboard's copy of this list was fixed for exactly this leak on 2026-06-17 (CLAUDE.md session log, \"calm 'Couldn't load this week's reads.'\"); this component was not. A failed query, by contrast, shows the all-clear empty state (BRIEFING-UI-008).",
+      "governing": "/tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (error state); CLAUDE.md Part III §10 (error language: not technical by default) and Part II §5 hard reject (internal architecture language as visible copy).",
+      "proposed": "In the catch block call reportError(err, { op: \"briefing.workspaceReads\" }) and set errorSignal.value = \"Couldn't load changes in your deals and accounts. Reload the page to try again.\"",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-046",
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/ds/components/TopbarDS.tsx",
+      "line": 19,
+      "generation": "ds",
+      "state": "Previous-version screen, page head. Previous-version walkthrough, area at rest: \"BRIEFING · THE DAILY READ\" / \"What changed this week.\" / \"Your stated preferences are a hypothesis. The pipeline tests them against what's actually moving — and tells you when the evidence and the hypothesis stop agreeing.\"",
+      "current": "Kicker \"BRIEFING · THE DAILY READ\" (line 15); heading \"What changed this week.\" (16); sub-line as quoted (19).",
+      "problem": "The sub-line needs translating phrase by phrase: \"stated preferences\" are the ICP, value proposition, watchlist and competitor list recorded in the workspace; \"the pipeline\" is the weekly market review; \"what's actually moving\" names no event and carries the judgment word \"actually\"; \"tells you when the evidence and the hypothesis stop agreeing\" personifies both the software and the evidence. \"THE DAILY READ\" keeps the retired noun, and \"this week\" heads a tab that refreshes every 30 minutes. Dimensions: private ontology, personification, high-context dependence, aphoristic cadence.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement \"This room is what the system saw — in your work, and in your market.\" → \"Briefing summarizes changes in your deals and accounts, along with relevant developments in your market.\"; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/15_HIGH_SEVERITY_INTERACTION_PATCH.md row \"BRIEFING Briefing Weekly read of what's moving — and where your assumptions stop agreeing with the data.\" → \"BRIEFING · Weekly analysis of market changes and evidence that conflicts with current assumptions.\" (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[76], record HS-076); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows \"read\", \"the data disagrees\"; COPY_STANDARD.md §9, §20, §26 (judgment words).",
+      "proposed": "Kicker: \"BRIEFING\". Heading: \"Changes in your deals, accounts, and market.\" Sub-line: \"The weekly market review compares the ICP, value proposition, watchlist, and competitors recorded in your workspace with current evidence, and reports any evidence that conflicts with them.\"",
+      "testsAffected": [
+        "src/briefing/ds/ds-components.test.tsx (head text, if asserted)"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-047",
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/Topbar.tsx",
+      "line": 25,
+      "generation": "legacy",
+      "state": "Oldest screen, page head. Oldest-version walkthrough page, area at rest: \"BRIEFING · WEEKLY READ\" / \"What changed this week.\" / \"The operator's stated preferences are a hypothesis. The pipeline tests them against what's actually moving in the world. This page tells you when the evidence and the hypothesis stop agreeing.\"",
+      "current": "Kicker \"Briefing · weekly read\" (line 20); heading (22) and sub-line (25-28) as quoted; the heading and sub-line are not wrapped in t().",
+      "problem": "Same problems as the previous-version head (BRIEFING-UI-046), and here the user is referred to in the third person as \"the operator\", which is the internal design documents' word for them. Dimensions: private ontology, personification, high-context dependence.",
+      "governing": "Same records as BRIEFING-UI-046 (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md Briefing description row; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[76], record HS-076); CLAUDE.md Part I authority note (\"operator\" is internal vocabulary).",
+      "proposed": "Kicker: t(\"Briefing\"). Heading: t(\"Changes in your deals, accounts, and market.\"). Sub-line: t(\"The weekly market review compares the ICP, value proposition, watchlist, and competitors recorded in your workspace with current evidence, and reports any evidence that conflicts with them.\", { class: \"body\" }).",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-048",
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/OutdoorsEventsChip.tsx",
+      "line": 19,
+      "generation": "legacy",
+      "state": "Previous-version and oldest screens, market view, link under the analysis cards. Oldest-version walkthrough page, after clicking \"YOUR MARKET World\": link \"ALSO OUT THERE Outdoors Events — gatherings the system found for your category →\".",
+      "current": "Kicker \"ALSO OUT THERE\" (line 17); label \"Outdoors Events — gatherings the system found for your category\" (line 19, not wrapped in t()).",
+      "problem": "\"Also out there\" does not say what is there; \"gatherings the system found\" narrates the software and uses the retired word for events; \"your category\" is the product-category setting, which the screen has not mentioned. The default screen already says \"UPCOMING EVENTS FOR YOUR TARGET MARKET\". Dimensions: metaphor, personification, high-context dependence.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement \"WHERE YOUR WORLD IS GATHERING\" → \"UPCOMING EVENTS RELEVANT TO YOUR TARGET MARKET\" (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json exact_replacements[47], record B2-X-047); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row \"system saw\"; navigation row \"Outdoors Events | Find events where target buyers may be present\".",
+      "proposed": "Kicker: t(\"UPCOMING EVENTS\"). Label: t(\"Outdoors Events — events where your target buyers may be present\", { class: \"body\" }).",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "BRIEFING-UI-049",
+      "category": "LANG-A",
+      "severity": 1,
+      "file": "src/briefing/components/SuggestionsSection.tsx",
+      "line": 56,
+      "generation": "ds",
+      "state": "Previous-version and oldest screens, suggestion card (a pending suggested change; live workspaces only, reviewed from source and src/briefing/components/SuggestionsSection.test.tsx).",
+      "current": "\"A SUGGESTION\" (line 51) · title · \"What I noticed:\" (56) · \"What would change:\" (60) · buttons \"Yes, make that change\" (70), \"Ask me again in a month\" (78), \"Not now\" (86) · the error line prints decisionError as is (89-93), which can be the raw text from src/briefing/lib/phase-f-apply.ts:51-204 (\"Proposal payload missing skill_id.\", \"Unknown proposal kind: …\").",
+      "problem": "\"What I noticed\" makes the software a first-person narrator. \"Ask me again in a month\" and \"Not now\" do the same thing: both hide the suggestion for 30 days, after which it can be offered again (src/briefing/lib/suggestions.ts:126-127; supabase/functions/heartbeat/phase-f-writer.ts:100-104), so the user is offered a choice that does not exist. A failed apply can print internal error text. Dimensions: personification; one misleading pair of controls.",
+      "governing": "COPY_STANDARD.md §9 (personification) and §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows \"system saw\" / \"system's read\"; /tmp/claude-0/-home-user-antaeus-gtm-os/c1076100-1640-537d-8f08-c3ca52bdf503/scratchpad/final-audit/AUDIT_BRIEF.md §5 (error state).",
+      "proposed": "Line 56: t(\"What was observed:\"). Line 60: t(\"If you accept:\"). Line 78: \"Ask again in 30 days\". Remove the \"Not now\" button (same effect), or keep it only if dismissal is made permanent. Error text: use the fixed messages proposed in BRIEFING-UI-006. OWNER DECISION: whether dismissing a suggestion should stop it from returning.",
+      "testsAffected": [
+        "src/briefing/components/SuggestionsSection.test.tsx (button labels and the two field labels, where asserted)"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "BRIEFING-UI-050",
+      "category": "LANG-A",
+      "severity": 1,
+      "file": "src/briefing/components/ViewToggle.tsx",
+      "line": 66,
+      "generation": "legacy",
+      "state": "Oldest screen, the two tabs above the list. Oldest-version walkthrough page, area at rest: tabs \"YOUR WORK Workspace\" and \"YOUR MARKET World\". Also the skip links on both older screens (src/briefing/Briefing.tsx:50; src/briefing/ds/BriefingDS.tsx:53): \"Skip to this week's reads\".",
+      "current": "Tab labels \"Workspace\" (line 54) and \"World\" (line 66) under the kickers \"YOUR WORK\" and \"YOUR MARKET\". Skip link \"Skip to this week's reads\".",
+      "problem": "\"Workspace\" and \"World\" are the internal names of the two data streams. Elsewhere in the app \"workspace\" means the whole account, so a tab called \"Workspace\" inside Briefing does not say it lists changes in deals and accounts; \"World\" restates \"YOUR MARKET\" with a vaguer word. The skip link keeps \"reads\". Dimensions: private ontology, high-context dependence.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md \"Structural requirements by room → Briefing\" (sections named by content: changes in your deals and accounts; market patterns; remove \"read\"); COPY_STANDARD.md §12 (navigation labels name destinations).",
+      "proposed": "Tab labels: t(\"Deals and accounts\") and t(\"Market\") (kickers unchanged). Skip links: \"Skip to Briefing content\".",
+      "testsAffected": [
+        "src/briefing/components/ViewToggle.test.tsx (tab label text, if asserted)"
+      ],
+      "confidence": "medium"
+    }
+  ],
+  "dispositions": [],
+  "retained": [
+    {
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 399,
+      "text": "No material changes are currently detected in your active deals or watched accounts. This check refreshes every 30 minutes.",
+      "term": "approved replacement",
+      "why": "Verbatim the Batch 02 approved replacement for \"Nothing to flag in your work right now…\". Plain for a live workspace. (Its accuracy in the demo and on a failed load is covered by BRIEFING-UI-009 and BRIEFING-UI-008.)"
+    },
+    {
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 371,
+      "text": "WATCHING FOR … + watch for something new",
+      "term": "watch",
+      "why": "Strip of enabled monitoring rules shown in the user's own words; \"watching for\" is ordinary English for a monitoring rule and links to the \"Saved monitoring rules\" section. The retired \"standing orders / arm / fires\" wording is gone."
+    },
+    {
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 420,
+      "text": "Open in {Signal Console | Deal Workspace | Pilot Desk …} →",
+      "term": "room",
+      "why": "Names the destination area and the action. No \"room\" wording."
+    },
+    {
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 543,
+      "text": "UPCOMING EVENTS FOR YOUR TARGET MARKET",
+      "term": "world",
+      "why": "Replaces \"WHERE YOUR WORLD IS GATHERING\"; says what the strip lists."
+    },
+    {
+      "file": "src/briefing/components/FirstVisitPrimer.tsx",
+      "line": 58,
+      "text": "ABOUT BRIEFING · Briefing summarizes changes in your deals and accounts, along with relevant developments in your market. · Your account and deal activity is refreshed every 30 minutes. Market analysis is refreshed on Monday mornings. · five named sections",
+      "term": "approved replacement",
+      "why": "Headline and body are the Batch 02 approved replacements verbatim; the five list items carry the approved sentences with the section name moved into a bold lead-in. Plain on first read. (The names it uses for sections do not all appear on the default screen: BRIEFING-UI-001, -002, -003.)"
+    },
+    {
+      "file": "src/briefing/components/StaleRunBanner.tsx",
+      "line": 53,
+      "text": "MARKET UPDATES ARE OUT OF DATE · The market updates were last produced {days} days ago. They normally refresh once a week, so the weekly update may not have run. The updates below may be out of date.",
+      "term": "stale",
+      "why": "States the observed fact (age of the last run), the normal schedule, and a hedged inference (\"may not have run\"). No private vocabulary."
+    },
+    {
+      "file": "src/briefing/components/PatternCard.tsx",
+      "line": 29,
+      "text": "What changed · Evidence · Why this confidence · Why it matters · Who needs to know · What next",
+      "term": "six-row labels",
+      "why": "Short question labels that map one-to-one to the required Briefing structure (what changed, evidence, why it matters, confidence, recommended action). \"What next\" is ordinary English; the conflicting-evidence card labels the same row \"Recommended action\" (ContrarianRail.tsx:21), a small inconsistency that does not impair understanding."
+    },
+    {
+      "file": "src/briefing/components/ShowYourWork.tsx",
+      "line": 30,
+      "text": "Show sources and reasoning / Hide sources and reasoning",
+      "term": "show the work",
+      "why": "Replaces \"Show the work\"; names what opens."
+    },
+    {
+      "file": "src/briefing/lib/demo-patterns.ts",
+      "line": 174,
+      "text": "…This is a small sample, so treat it as a reason to review the tiers, not as a sign that the priority is definitely wrong.",
+      "term": "calibrated uncertainty",
+      "why": "Sample analyses state observation, evidence, interpretation and recommended action separately and mark the small sample and the limits of the inference. This is the approved Briefing calibration (AUDIT_BRIEF §4)."
+    },
+    {
+      "file": "src/briefing/components/WatchList.tsx",
+      "line": 124,
+      "text": "Saved monitoring rules · Add monitoring rule · No monitoring rules yet · Create a monitoring rule for an event you care about, such as a competitor launch, simultaneous competitor activity, or a partner becoming inactive. Matching events appear here when new data meets the rule.",
+      "term": "approved replacement",
+      "why": "Batch 02 approved replacements (\"WATCH LIST\" → \"SAVED MONITORING RULES\", \"Add a trigger\" → \"Add monitoring rule\", \"NO STANDING ORDERS YET\" → \"NO MONITORING RULES YET\", and the empty-state sentence with a slightly longer ending). Plain."
+    },
+    {
+      "file": "src/briefing/components/AddTriggerFlow.tsx",
+      "line": 91,
+      "text": "What should the system watch for?",
+      "term": "system",
+      "why": "A plain question naming the action (monitoring). The migration map lists \"system / automation\" as the preferred replacement for \"the machine\"; \"watch for\" here is the literal monitoring task, not a claim of perception. The primer says \"events you have asked Antaeus to watch for\" — consistent meaning."
+    },
+    {
+      "file": "src/briefing/components/ContrarianRail.tsx",
+      "line": 100,
+      "text": "Evidence that conflicts with an assumption · Conflicting evidence · Recorded assumption: ICP · \"…\" · Current evidence does not fully support a position recorded in the workspace. Review the evidence and decide whether the assumption should change. · Recommended action · Recommended actions",
+      "term": "the data disagrees",
+      "why": "Uses the required name (\"Evidence that conflicts with an assumption\") and states evidence and assessment without giving the data or the software agency."
+    },
+    {
+      "file": "src/briefing/components/PeripheryRail.tsx",
+      "line": 114,
+      "text": "Accounts to consider · These companies repeatedly appear in relevant evidence alongside watched accounts but are not currently on your watchlist. · Hide for now · Dismiss · Also seen as:",
+      "term": "approved replacement",
+      "why": "Section name and description follow the Batch 02 replacement for \"Consider watching\". (The meaning of \"watchlist\" for the Add button is BRIEFING-UI-030.)"
+    },
+    {
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 521,
+      "text": "MARKET UPDATES · Open analysis ↓",
+      "term": "approved replacement",
+      "why": "\"THE MARKET\" → \"MARKET UPDATES\" and \"Read it ↓\" → \"Open analysis ↓\" are the approved replacements verbatim."
+    },
+    {
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 105,
+      "text": "Good morning. / Good afternoon. / Good evening. · 7-day forecast ↗ · Close the forecast",
+      "term": "greeting",
+      "why": "Ordinary greeting and weather labels; occasional personality a newcomer understands."
+    },
+    {
+      "file": "src/briefing/ds/components/ViewToggleDS.tsx",
+      "line": 16,
+      "text": "Your work / Your market (label: Briefing view)",
+      "term": "your work",
+      "why": "As a two-way switch the pair is self-explanatory: one side is the user's own deals and accounts, the other the market. (As a section heading with a count beside it the same words need the approved subtitle — BRIEFING-UI-001.)"
+    },
+    {
+      "file": "src/briefing/ds/components/BriefingFooterDS.tsx",
+      "line": 28,
+      "text": "$0.00 of $3.00 this week · 0% · Within budget",
+      "term": "cost",
+      "why": "Number + unit + state. The label above it and the state names are covered by BRIEFING-UI-033; the sentence form itself is plain."
+    }
+  ],
+  "gaps": []
+}

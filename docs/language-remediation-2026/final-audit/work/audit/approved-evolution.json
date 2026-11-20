@@ -1,0 +1,639 @@
+{
+ "area": "approved-evolution",
+ "coverage": [
+  {
+   "surface": "Readiness engine: scoring, gates, blocker selection (evaluateReadiness, scoreAllDimensions)",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/lib/readiness/types.ts",
+    "src/lib/readiness/dimensions.ts",
+    "src/lib/readiness/verdict.ts",
+    "src/lib/readiness/index.ts",
+    "src/lib/readiness/verdict.test.ts",
+    "src/lib/readiness/dimensions.test.ts"
+   ],
+   "note": "Read every line. Diffed f641612..98c85e0 (what PR #324 changed) and 98c85e0..HEAD (only the three state names changed, per the owner's 2026-11-05/06 decision). Ran verdict.test.ts + dimensions.test.ts (pass). Ran my own probe of evaluateReadiness over 11 input sets to see which blocker lines each gate produces (duplicates, fallback lines, unreachable branch). Not in the walkthrough as a separate area; the lines it produces appear on the Dashboard masthead and readiness drawer."
+  },
+  {
+   "surface": "Readiness inputs: aggregateReadinessInput (localStorage readers for 14 keys)",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/dashboard/lib/readiness-aggregator.ts",
+    "src/dashboard/lib/readiness-aggregator.test.ts",
+    "src/pilot-desk/lib/persistence.ts",
+    "src/cold-call-studio/lib/persistence.ts",
+    "src/discovery-studio/lib/call-log.ts",
+    "js/demo-seed-data-ent.js",
+    "js/demo-seed-data-smb.js"
+   ],
+   "note": "Checked each reader against the module that writes the key (ICP, Territory, Prospecting, Signal Console, Outbound, Cold Call, LinkedIn, Discovery call log, Deal Workspace, Pilot Desk, Future Autopsy task log, Call in a Favor, Founding GTM). Ran the real writer (saveProofs) into a fake storage and read it back through the aggregator. Ran readiness-aggregator.test.ts (pass). The cloud path (readiness_snapshots insert) was read, not executed."
+  },
+  {
+   "surface": "Readiness drawer and Dashboard masthead that render the blockers (default screen)",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/dashboard/v4/ClimbDrawer.tsx",
+    "src/dashboard/v4/lib/cockpit.ts",
+    "src/dashboard/v4/lib/area-chip.ts"
+   ],
+   "note": "Read the three files and compared with the rendered walkthrough text for both demo books (final-audit/corpus/readiness.txt, corpus-smb/readiness.txt). Only the one demo state is in the walkthrough; other verdict states were derived from the engine probe, not rendered."
+  },
+  {
+   "surface": "Readiness drawer, previous version (?v4=0) and oldest version (room_dashboard_today_legacy)",
+   "generation": "ds",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/dashboard/today/components/ReadinessPanel.tsx",
+    "src/dashboard/components/ReadinessDrawer.tsx"
+   ],
+   "note": "Outside my assigned paths; read because they render the same engine output. Not rendered in a browser by me."
+  },
+  {
+   "surface": "Readiness history, export and snapshot publisher (stored keys vs labels)",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/dashboard/lib/readiness-history.ts",
+    "src/dashboard/lib/readiness-export.ts",
+    "src/dashboard/lib/readiness-snapshot-publisher.ts"
+   ],
+   "note": "Checked that stored history uses the stable verdict ids (gtmos_readiness_last_verdict stores the id; readiness_snapshots.data stores id plus label). The label rename does not break stored history."
+  },
+  {
+   "surface": "Future Autopsy generator: risk factors, story lead, corrected conditions, recommended actions, closing advice, review window (topCauses, generateAutopsy, chooseTasks, killSwitchFor, projectHorizonDays)",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/future-autopsy/lib/causes.ts",
+    "src/future-autopsy/lib/autopsy.ts",
+    "src/future-autopsy/lib/autopsy-data.ts",
+    "src/future-autopsy/lib/vitals.ts",
+    "src/future-autopsy/lib/types.ts",
+    "src/future-autopsy/lib/causes.test.ts",
+    "src/future-autopsy/lib/autopsy.test.ts"
+   ],
+   "note": "Read every line. Compared with the PR #324 head: git diff 98c85e0..HEAD -- src/future-autopsy/lib changes one sentence (autopsy-data.ts:28, 'can't move the room' -> 'can't win over the rest of the buying group'). Ran autopsy.test.ts + causes.test.ts + action-plan.test.ts in one vitest process (38 tests pass). Ran my own probe of computeVitals -> generateAutopsy -> buildActionPlan over 16 deal states (short champion / economic-buyer entries, a clean record, a dated next step with a short description, 30 days without an update with and without stage history, the stage ids verbal / verbal-yes / proposal, stakeholders listed but not marked engaged, pilot stage). This area has no walkthrough slice assigned; I compared the probe output with the freshly walked SMB demo text (final-audit/corpus-smb/future-autopsy.txt). The committed artifacts/language-remediation/rendered-corpus.txt predates PR #330 (it still has the headline '…risk of slipping inside the next N days'), so I did not rely on it."
+  },
+  {
+   "surface": "Future Autopsy action plan and cross-area links (buildActionPlan, handoff builders)",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/future-autopsy/lib/action-plan.ts",
+    "src/future-autopsy/lib/handoff.ts",
+    "src/future-autopsy/lib/action-plan.test.ts",
+    "src/future-autopsy/lib/handoff.test.ts"
+   ],
+   "note": "Read both files and their tests; probed which three links each deal state produces and whether their URLs differ. Continuity params (returnTo, returnLabel, focusObject, focusRoom, fromMode, fromSurface) are set on every link. Links were not clicked in a browser."
+  },
+  {
+   "surface": "Future Autopsy stored state: task log, per-deal snapshot, cloud row (gtmos_autopsy_log_v1, gtmos_autopsy_snapshots, studio_artifacts kind future-autopsy.taskLog) and the deal loader",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/future-autopsy/lib/task-log.ts",
+    "src/future-autopsy/lib/autopsy-snapshot.ts",
+    "src/future-autopsy/lib/autopsy-bridge.ts",
+    "src/future-autopsy/lib/cloud-persistence.ts",
+    "src/future-autopsy/lib/deal-loader.ts"
+   ],
+   "note": "Stored shapes use stable ids (task ids, cause ids, 'left'/'corrected'); the snapshot also stores the top factor's sentence and the closing advice as text next to the id, which is display history, not a key. The deal loader passes the stored stage through unchanged (see the stage-id finding). The Supabase write path was read, not executed (no session)."
+  },
+  {
+   "surface": "Future Autopsy default screen where the generated text is shown",
+   "generation": "v4",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/future-autopsy/v4/FutureAutopsyV4.tsx"
+   ],
+   "note": "Outside my assigned paths; read in full to see which generator fields are shown and under which headings (headline + review window, 'Risk factors · evidence' rows = chapters, 'Recommended corrective actions' = tasks with the screen's own rationale lines, 'What usually happens next' = loseStory + winStory, 'When to consider closing the deal' = killSwitch, three links, 'Copy risk summary'). Compared with the SMB walkthrough text. Not opened in a browser by me."
+  },
+  {
+   "surface": "Future Autopsy previous version (?v4=0) and oldest version (room_future_autopsy_legacy)",
+   "generation": "ds",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/future-autopsy/ds/components/PinnedCaseDS.tsx",
+    "src/future-autopsy/ds/lib/adapters.ts",
+    "src/future-autopsy/components/ForensicSheets.tsx",
+    "src/future-autopsy/components/VerdictToggle.tsx",
+    "src/future-autopsy/components/RouteRack.tsx"
+   ],
+   "note": "Outside my assigned paths; read only for how they frame the shared generator output (forecast wording, where the action-plan reasons and the corrected-condition ids are printed). Other strings on these screens belong to the Future Autopsy reviewer."
+  }
+ ],
+ "findings": [
+  {
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/dashboard/lib/readiness-aggregator.ts",
+   "line": 218,
+   "generation": "shared",
+   "state": "Dashboard masthead line under 'Current readiness', readiness drawer 'To become …' list and the 'Pilots, reviews and handoff records' chip — every workspace, both demo books, all three Dashboard versions",
+   "current": "readProofs() does `asArray(parseJson(storage.getItem(\"gtmos_poc_data\")))` and counts rows whose `outcome` is non-empty and not \"open\", or whose `heat.claim + heat.owner + heat.kill > 0`. Pilot Desk stores the key as an object, `{ pocs: Proof[] }` (src/pilot-desk/lib/persistence.ts:138), with outcomes not_started | in_progress | converted | failed and no `heat` field; both demo books seed the same object shape (js/demo-seed-data-ent.js:638, js/demo-seed-data-smb.js:449). asArray() of an object is [], so castProofs is always 0.",
+   "problem": "The readiness recommendation cannot be satisfied. Gate 3 (Usable with founder support) and every gate above it require castProofs >= 1, so no workspace can rise above 'Partially documented', and the blocker 'Run a pilot whose result the buyer's boss could act on without you in the room.' stays after the user records pilots. Observed three ways: (1) probe — saveProofs([a converted pilot]) then aggregateReadinessInput() gives castProofs 0; with every other input at its maximum evaluateReadiness() returns 'Partially documented' with that single blocker; (2) the rendered enterprise and SMB walkthroughs show 'Current readiness: Partially documented.' + that blocker + 'Pilots, reviews and handoff records — solid, but few pilot results are recorded' although the enterprise book seeds a converted Chipotle pilot and an in-progress OpenAI pilot; (3) the sibling reader in src/founding-gtm/lib/cross-room.ts:322-330 was already fixed for this exact shape problem (its comment: 'reading the bare array off the real { pocs: [...] } object is what silently returned zero proofs before') and the readiness reader was not. Pre-dates PR #324 (unchanged since #277), but it makes the approved blocker selection name an action that never clears.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Approved product evolution' (readiness recommendation/blocker selection must be intact) and 'Required work' item 7 (scoring/thresholds/recommendation selection, persisted-state/localStorage); COPY_STANDARD.md §21 (claims discipline).",
+   "proposed": "In readProofs(), read both shapes the way cross-room.ts does: `const parsed = parseJson(storage.getItem(\"gtmos_poc_data\")); const arr = Array.isArray(parsed) ? parsed : maybeArrayWithKey(asObject(parsed), \"pocs\");`. Count a pilot when its `outcome` is `converted` or `failed` (a recorded result — the thing 'Record results from 3+ pilots', '{n} pilot evidence records' and 'a pilot whose result the buyer's boss could act on' all describe). Keep the existing rule for legacy bare-array rows (a named outcome other than open / not_started / in_progress, or heat sum > 0) so the existing test still passes. Add a test that writes with saveProofs() and reads with aggregateReadinessInput(), and one with the demo-seed shape. OWNER DECISION: whether a pilot that is still running (`in_progress`, no result yet) or only planned (success criteria written) should also count toward readiness, as the original 'anything beyond an empty draft' rule intended.",
+   "testsAffected": [
+    "src/dashboard/lib/readiness-aggregator.test.ts > counts cast proofs (heat sum > 0 OR named outcome) — uses a bare-array fixture that nothing writes; keep it and add the { pocs: [...] } cases",
+    "preview-transcript and tools/preview walkthrough output will change (the demo readiness state and its first blocker) once pilots are counted — regenerate, do not hand-edit"
+   ],
+   "confidence": "high",
+   "id": "AE-001"
+  },
+  {
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/dashboard/lib/readiness-aggregator.ts",
+   "line": 177,
+   "generation": "shared",
+   "state": "Readiness 'Discovery' area: the evidence and gap lines in the previous/oldest readiness drawers, and the Discovery blocker on the Dashboard masthead and in the default drawer ('Discovery: Record 6+ discovery calls with outcome 'advanced'.')",
+   "current": "readDiscoveryStats() reads `gtmos_discovery_stats` and returns advancedCalls -> discoveryAdvancedCalls and totalCalls -> discoveryStudioSessions. In the current app the only writer of that key is Cold Call Studio (src/cold-call-studio/lib/persistence.ts:186-198 incrementDiscoveryStats: totalCalls +1 per cold call logged, advancedCalls +1 when a cold call's outcome is meeting_booked). Discovery Studio writes completed calls only to `gtmos_discovery_call_log` (src/discovery-studio/lib/call-log.ts) and never touches the stats key; the other writer, Call Planner, is retired. The scorer then shows these numbers as \"{n} discovery calls recorded with outcome 'advanced'\" / \"Record 6+ discovery calls with outcome 'advanced'\" (src/lib/readiness/dimensions.ts:181, 188) and \"{n} Discovery Studio sessions\" / \"Run 5+ Discovery Studio sessions\" (dimensions.ts:195, 201).",
+   "problem": "The recommendation names an action that does not move the number. A user who runs discovery calls in Discovery Studio and marks them 'advanced' gets no credit: 14 of the Discovery area's 20 points respond only to Cold Call Studio activity (meetings booked from cold calls, and the count of cold calls logged). Conversely 20 logged cold calls display as '20 Discovery Studio sessions'. The gap opened when Call Planner was retired (PR #324 re-pointed the 'prepared' count to the Discovery call log at readiness-aggregator.ts:166-175 but left these two inputs on the old aggregate). The demo hides it because the seed writes gtmos_discovery_stats directly.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Approved product evolution' (readiness recommendation/blocker selection) and 'Required work' item 10 (recommendation/logic mismatch); COPY_STANDARD.md §21; owner decision recorded in the brief §4: Call Planner is retired, its role is in Discovery Studio.",
+   "proposed": "Make the two inputs additive so nothing that counts today stops counting and the named action starts counting: in aggregateReadinessInput(), read the Discovery call log once (`gtmos_discovery_call_log.calls`) and set `discoveryAdvancedCalls = stats.advancedCalls + calls.filter(c => c.disposition === \"advanced\" || c.disposition === \"won\").length` and `discoveryStudioSessions = stats.totalCalls + calls.length`. Reword the four lines so they are true for both sources: \"{n} calls that led to a next meeting\" / \"Record 6+ calls that led to a next meeting (a discovery call marked 'advanced', or a cold call that booked a meeting)\" and \"{n} cold calls and discovery calls logged\" / \"Log 5+ cold calls or discovery calls\". Add an aggregator test with a call-log fixture. OWNER DECISION: whether the Discovery area should count Discovery Studio calls only (cold calls already count under Outreach), and whether 'prepared' and 'sessions' should stay two separate scored items now that both come from the same Discovery call log.",
+   "testsAffected": [
+    "src/dashboard/lib/readiness-aggregator.test.ts (the gtmos_discovery_stats case at lines 144-151 expects discoveryStudioSessions 9 / discoveryAdvancedCalls 4 from stats alone; still true when the call log is empty)",
+    "src/lib/readiness/dimensions.test.ts (no assertion on these four strings)"
+   ],
+   "confidence": "high",
+   "id": "AE-002"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 161,
+   "generation": "shared",
+   "state": "Readiness drawer 'To become Usable with founder support' list (default, previous and oldest Dashboard), when the workspace is 'Partially documented' and its highest-scoring area is also the first area under 10/20",
+   "current": "gateInheritable() pushes one blocker for the first area scoring under 10 (lines 146-159) and another for the highest-scoring area when no area reaches 16 (lines 161-174). Both are built with dimensionBlocker(area, …), which returns `${area.label}: ${area.gaps[0]}.`. When the same area is picked twice the list holds the same sentence twice. Probe: ICP defined with quality 50 plus 30 outbound touches to 6 accounts gives [\"ICP & targeting: Complete the missing ICP criteria; current quality is below 75/100.\", \"ICP & targeting: Complete the missing ICP criteria; current quality is below 75/100.\", \"Run a pilot whose result the buyer's boss could act on without you in the room.\"].",
+   "problem": "The same recommendation is printed twice in a three-item list, and the three drawers render the items with `key={b}`, so the two list items also share a key. It is a common early state: ICP is the first area and is usually the strongest right after setup. Before PR #324 the two conditions produced two different sentences, so the repeat came in with the approved blocker-selection change.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Approved product evolution' (readiness recommendation/blocker selection); 'Required work' item 10 (duplicate explanations).",
+   "proposed": "In gateInheritable(), build the second line and add it only if it is new: `const line = dimensionBlocker(strongest, …); if (!blockers.includes(line)) blockers.push(line);`. Better still, when `strongest` is the area already named, name its next gap: use `strongest.gaps[1]` when present. Add a test: evaluateReadiness({ ...EMPTY_READINESS_INPUT, icpCount: 1, bestIcpQualityScore: 50, outboundTouches: 30, distinctAccountsTouched: 6 }).gateBlockers has no repeated entry.",
+   "testsAffected": [
+    "src/lib/readiness/verdict.test.ts (no existing assertion covers this; add one)"
+   ],
+   "confidence": "high",
+   "id": "AE-003"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 25,
+   "generation": "shared",
+   "state": "Dashboard masthead line and readiness drawer list, when an area is below the gate but has no listed gap (each item in the area is above its 'counts as evidence' mark and below its target)",
+   "current": "dimensionBlocker() falls back to `${label}: ${fallback}` with no closing period. The three reachable fallbacks: \"Discovery: more evidence is required for another seller to run this with founder support\" (line 153), \"Outreach: additional evidence is required before another seller can run this independently\" (line 119), and \"Deal management: at least one part of the sales process needs stronger evidence of repeatability\" (line 169). Probe: Outreach with 15 touches, 9 cold calls, 6 LinkedIn actions and 8 accounts scores 11/20 with zero gaps and produces the second line.",
+   "problem": "High-context and compressed: the line says more evidence is needed but not which. The approved change was that a blocker names the action; here the action is missing exactly when the user has done part of the work. The third line puts an area name in front of a sentence about 'at least one part of the sales process', so the reader cannot tell whether Deal management is that part. The missing period makes these lines look different from the others in the same list.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md — 'New generated-language system prompt' items 5-6 (state recommendations as recommendations; give the evidence next to the assessment); COPY_STANDARD.md §7 and §20 (if the product knows the measure, name it).",
+   "proposed": "Give dimensionBlocker() a per-area sentence built from the targets already in dimensions.ts, used when the area has no listed gap, each ending with a period: \"Outreach: keep logging activity toward 30 outbound touches, 15 cold calls, 12 LinkedIn actions and 12 distinct accounts.\" · \"Discovery: keep logging calls toward 8 prepared discovery calls, 6 that led to a next meeting and 5 sessions.\" · \"Deal management: keep building toward 6 active deals, 5 with a recorded next step, 3 closed-won and 3 closed-lost with a loss reason.\" · \"Pilots, reviews and handoff records: keep building toward results from 3 pilots, 3 deal-risk reviews, 3 Call in a Favor requests and 5 handoff sections.\" · \"ICP & targeting: raise ICP quality, the territory (30 accounts) and confirmed prospects (10).\" (the ICP case cannot occur today: an ICP area with no gap scores at least 17). The numbers are the saturation thresholds in scoreOutreach/scoreDiscovery/scoreDeals/scoreProof/scoreIcp.",
+   "testsAffected": [
+    "none assert these strings"
+   ],
+   "confidence": "high",
+   "id": "AE-004"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 45,
+   "generation": "shared",
+   "state": "Not reachable through evaluateReadiness() today: the Hire-ready gate has the same 'every area at 14' check, so the top gate is only shown after that check has passed",
+   "current": "\"additional evidence is required for the documented-and-repeatable state\"",
+   "problem": "Names the top readiness state by a label the owner replaced on 2026-11-05/06 ('Documented and repeatable' is now 'Hire-ready and repeatable'). The 98c85e0..HEAD rename updated VERDICT_LABEL and the ladder but not this string. It is declared through t(), so it is part of the checked copy even though no state shows it.",
+   "governing": "COPY_STANDARD.md §17 (state names); owner decision 2026-11-05/06 recorded in CLAUDE.md session log and the audit brief §4.",
+   "proposed": "\"additional evidence is required before the sales process is hire-ready and repeatable\"",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "AE-005"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/lib/readiness/dimensions.ts",
+   "line": 239,
+   "generation": "shared",
+   "state": "Readiness 'Deal management' gap lines (previous/oldest drawers), and the Deal management blocker on the masthead/default drawer when this gap is the first one listed",
+   "current": "\"Record a next step on every active deal\" (line 239) is shown when fewer than 2 deals have a recorded next step (saturate(dealsWithNextStep, 5, 5) < 2). \"Record a loss reason on closed-lost deals\" (line 263) is shown when fewer than 2 closed-lost deals have a reason.",
+   "problem": "The sentence does not match the rule that triggers it. One active deal that already has a next step still produces 'Record a next step on every active deal'; ten active deals with two next steps produce no gap. The loss-reason line is shown to a workspace with no closed-lost deals at all (the engine receives only the count of closed-lost deals that have a reason, so it cannot know whether any lack one). The neighbouring lines state their target ('Build pipeline to 6+ active deals', 'Record 3+ closed-won deals').",
+   "governing": "COPY_STANDARD.md §21 (do not claim more than the data supports) and §20; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md 'Required work' item 10 (recommendation/logic mismatch).",
+   "proposed": "Line 239: \"Record a next step on 5+ active deals\". Line 263: \"Record a loss reason on each closed-lost deal (3 recorded reasons complete this item)\". Both state the scored target (the item is full at 5 and at 3).",
+   "testsAffected": [
+    "src/lib/readiness/dimensions.test.ts > flags missing next step as a gap (regex /next[ -]?step/ still matches)"
+   ],
+   "confidence": "medium",
+   "id": "AE-006"
+  },
+  {
+   "category": "TOOLING",
+   "severity": 2,
+   "file": "src/lib/readiness/verdict.test.ts",
+   "line": 57,
+   "generation": "tooling",
+   "state": "Unit tests for the approved readiness blocker selection",
+   "current": "verdict.test.ts asserts the verdict for six input sets, that some blocker matches /closed[ -]?won/, and the win/loss sentence ('at least as numerous', '1 won / 5 analyzed lost'). Nothing asserts the behavior PR #324 introduced: that a blocker names the area and its first gap (dimensionBlocker), that the Founder-dependent blocker lists two actions ('Complete two readiness actions: …'), or that the 'one area at 16' rule names the strongest area. readiness-aggregator.test.ts:188 checks pilots with a bare-array fixture and outcomes 'open'/'passed', a shape and vocabulary no writer produces.",
+   "problem": "The approved evolution is intact at HEAD but only partly protected: a later edit could put back a generic line such as 'Tighten X' or break the selection, and the suite would stay green. The pilot-count test passed for six months while the real shape returned 0.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Required work' item 11 (targeted regressions; do not weaken tests) and 'Approved product evolution'.",
+   "proposed": "Add to verdict.test.ts: (1) 'after onboarding' input (icpCount 1, quality 60, 10 active deals, 6 with next step) -> gateBlockers equals [\"Outreach: Record 30+ outbound touches.\", \"Deal management: Record 3+ closed-won deals.\", \"Run a pilot whose result the buyer's boss could act on without you in the room.\"]; (2) empty input -> one blocker starting 'Complete two readiness actions:' that contains the first ICP gap and the first Outreach gap; (3) no repeated blocker (see the duplicate finding); (4) every blocker ends with a period. Add to readiness-aggregator.test.ts a round trip through saveProofs() and a Discovery call-log fixture.",
+   "testsAffected": [
+    "src/lib/readiness/verdict.test.ts",
+    "src/dashboard/lib/readiness-aggregator.test.ts"
+   ],
+   "confidence": "high",
+   "id": "AE-007"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/dashboard/today/components/ReadinessPanel.tsx",
+   "line": 22,
+   "generation": "ds",
+   "state": "Previous Dashboard version (?v4=0 or room_dashboard_v4_off): readiness drawer subtitle under the state name, the per-area meter caption, the empty 'next' note and the export tooltip. Outside my assigned paths — route to the Dashboard reviewer.",
+   "current": "VERDICT_SUBTITLE (lines 22-42): \"Right now the system only lives in your head. A new hire would have nothing to inherit on day one.\" · \"Activity is real, but a hire would still be improvising the system on day one.\" · \"A hire could run this if you're around for sanity-checks.\" · \"The sales process would keep running through a 2-week founder vacation.\" · \"This system holds up to repetition — multiple wins on the board, multiple losses worth learning from, advisors lit up, and the handoff kit is composed.\" Line 90: `${d.label} — ${d.score}/20`. Line 118: \"Everything the next gate needs is in place. This will refresh the next time you save a change anywhere in the app.\" Line 139: \"Nothing ranked to export yet\".",
+   "problem": "The approved readiness wording reached the default drawer only. This fallback still shows the retired dialect next to the new state names: 'lives in your head' (the exact metaphor the original manifest replaced), 'the system' for the sales process, 'sanity-checks', 'advisors lit up', 'handoff kit', a bare '/20' score, 'gate', and 'ranked' with nothing said about what is ranked.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[34] ('It all lived in your head — nothing to inherit.' -> 'The sales process was not yet documented for another seller.') and [36]; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows `handoff kit`, `thin`; COPY_STANDARD.md §3 (in your head), §26 (rank).",
+   "proposed": "Reuse the sentences already approved in src/dashboard/v4/ClimbDrawer.tsx HERO_READ (lines 47-68): \"Another seller would still depend on you to understand and run the sales process.\" · \"Another seller could run parts of the process, but several routine decisions still depend on your judgment.\" · \"Another seller could run the process with you available to answer questions and resolve gaps.\" · \"Another seller can run the documented process independently for routine work.\" · \"The sales process, win and loss patterns, and handoff documentation are complete enough to repeat with another seller.\" Line 90: use the area word instead of the score: `${d.label} — ${chipFor(d).word}` (src/dashboard/v4/lib/area-chip.ts). Line 118: \"The evidence required for the next state is present. The readiness assessment will update after the next saved workspace change.\" Line 139: \"No recommendations to export yet\".",
+   "testsAffected": [
+    "src/dashboard/today/components/today-components.test.tsx (does not assert these strings)"
+   ],
+   "confidence": "high",
+   "id": "AE-008"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/dashboard/components/ReadinessDrawer.tsx",
+   "line": 25,
+   "generation": "legacy",
+   "state": "Oldest Dashboard version (room_dashboard_today_legacy, or ?v4=0&today=0): readiness drawer subtitle, per-area score, empty 'next' note, export tooltips. Outside my assigned paths — route to the Dashboard reviewer.",
+   "current": "VERDICT_SUBTITLE (lines 25-45) is the same five sentences as the previous version (\"Right now the system only lives in your head…\", \"…sanity-checks.\", \"…advisors lit up, and the handoff kit is composed.\"). Lines 137-142 print `{d.score}/20`. Line 185: \"Everything the next gate needs is in place. This will refresh the next time you save a change anywhere in the app.\" Line 212: \"No ranked objects to export yet\"; line 215: `Export ${rankedCount} ranked object(s) as JSON`; line 226: \"Download the readiness state, dimensions, and history as JSON\".",
+   "problem": "Same as the previous-version drawer, plus 'ranked objects' and 'dimensions', which are internal architecture words.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[34], [36]; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `handoff kit`; COPY_STANDARD.md §3, §26; audit brief §3 (\"ranked object\" is not plain language).",
+   "proposed": "Same five sentences as proposed for ReadinessPanel.tsx. Replace the `/20` score with the area word from chipFor(d). Line 185 as proposed for the previous version. Line 212: \"No recommendations to export yet\". Line 215: `Export ${rankedCount} recommendation${rankedCount === 1 ? \"\" : \"s\"} as JSON`. Line 226: \"Download the readiness state, the five areas and the history as JSON\".",
+   "testsAffected": [
+    "src/dashboard/components/ReadinessDrawer.test.tsx (does not assert these strings)"
+   ],
+   "confidence": "high",
+   "id": "AE-009"
+  },
+  {
+   "id": "AE-010",
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/future-autopsy/lib/autopsy-data.ts",
+   "line": 123,
+   "generation": "shared",
+   "state": "Future Autopsy default screen, 'What usually happens next' paragraph (src/future-autopsy/v4/FutureAutopsyV4.tsx:258) and the copied risk summary; the same paragraph in the previous version (PinnedCaseDS.tsx:77) and the oldest version (ForensicSheets.tsx:175). Shown when the highest-weighted risk factor is the champion, economic-buyer or stakeholder rule and the deal is in discovery, negotiation or pilot stage.",
+   "current": "CAUSE_LEADS opens with a fixed observation: \"No champion is recorded.\" (lines 123, 125), \"No economic buyer is recorded.\" (lines 129, 131), \"Fewer than three stakeholders are recorded.\" (lines 135, 137). The rules that pick these leads also fire when the field is filled in but shorter than 20 characters (gate() in src/future-autopsy/lib/vitals.ts:88-93; causes.ts:36, 48) and when stakeholders are listed but fewer than three are marked engaged (causes.ts:92).",
+   "problem": "The paragraph states as a recorded fact something the record contradicts. In the freshly walked SMB demo, Sweetgreen shows 'CHAMPION Rafael Ibanez' and 'ECONOMIC BUYER Whitney Cole' and, lower on the same screen, \"No champion is recorded. In negotiation, deals without someone inside defending the business case often stall in procurement when pushback comes. Find who will fight for this internally…\". Probe: champion 'Sarah Chen' -> \"No champion is recorded.\"; economic buyer 'Dana Wu, CFO' at negotiation -> \"No economic buyer is recorded.\"; four stakeholders listed, none marked engaged, champion and economic buyer complete -> \"Fewer than three stakeholders are recorded.\" A name on its own is almost always under 20 characters, so this is the usual case, not an edge. PR #324 fixed exactly this for the factor label (causes.test.ts 'describes short populated fields accurately without changing rule weights') but wrote the story lead with the fixed sentence; unchanged since.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Approved product evolution' (Future Autopsy generation that avoids false causation; evidence / inference distinctions) and 'Required work' item 5; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md — 'New generated-language system prompt' item 1 (state observed facts as facts) and item 6; COPY_STANDARD.md §21.",
+   "proposed": "Take the first sentence from the evidence the engine already computes instead of a fixed string. (1) autopsy-data.ts: delete the first sentence of each of the six CAUSE_LEADS entries (keep the pattern and the advice) and word the two champion patterns so they are true for a champion who is named but not confirmed — discovery: \"Early deals often fade from \\\"interesting\\\" to \\\"low priority\\\" to silence when nobody inside is confirmed as carrying them. Confirm who owns this internally, and what they will do, before the next step.\"; negotiation: \"In negotiation, deals often stall in procurement when pushback comes and nobody inside is confirmed as defending the business case. Confirm who will argue for this internally before the next approval round.\" (2) autopsy.ts:81: when stageLead() returns a cause-specific lead, put the top factor's label in front of it: `${causes[0].label} ${lead}`. (3) causes.ts evidenceFor(): when gates.champion is 'weak' return \"A champion is recorded, but the entry is brief. Add their role and what they have agreed to do.\"; when gates.eb is 'weak' return \"An economic buyer is recorded, but the entry is brief. Add their role and how they approve the budget.\" Which rules fire and their weights stay as they are. Sweetgreen would then read: \"A champion is recorded, but the entry is brief. Add their role and what they have agreed to do. In negotiation, deals often stall in procurement when pushback comes and nobody inside is confirmed as defending the business case. …\" Add tests: champion 'Sarah Chen' -> loseStory does not contain 'No champion is recorded'; stakeholders listed but not engaged -> loseStory does not contain 'Fewer than three stakeholders are recorded'.",
+   "testsAffected": [
+    "src/future-autopsy/lib/autopsy.test.ts > chapters pair the observed condition with the common pattern and corrective advice (asserts /^No champion is recorded\\./ for an empty champion — still true)",
+    "src/future-autopsy/lib/causes.test.ts > describes short populated fields accurately without changing rule weights (still passes: the labels still do not contain 'No champion' / 'No economic buyer')"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "AE-011",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/autopsy.ts",
+   "line": 81,
+   "generation": "shared",
+   "state": "Same 'What usually happens next' paragraph, whenever the highest-weighted factor has no lead written for the deal's stage: the next-step, decision-process, use-case, business-impact, competition, time-in-stage and overdue-step rules at every stage, and the champion / economic-buyer / stakeholder rules at stages without an entry.",
+   "current": "riskLead = STAGE_LEADS[stage] (autopsy-data.ts:103-116), for example \"Deals at this stage often stall when the use case and impact never get concrete enough to create real urgency — people stay polite, but nobody owns the timing. Pin down the use case, a number, and who owns the decision now, before interest fades.\", followed by riskTail (autopsy.ts:89) \" These are conditions in the deal record; they don't tell you for certain what would cause a loss.\"",
+   "problem": "The stage pattern names no condition from this deal, yet the closing sentence calls what came before it 'conditions in the deal record'. The reader concludes that this deal's record shows a vague use case and no impact number. Probe: a discovery deal whose only factor is 'The recorded next step has no date.' (use case and impact fully written) gets this paragraph and the advice 'Pin down the use case, a number, and who owns the decision now'; the first recommended action on the same screen is 'Set a dated next step'. Rendered in the SMB walkthrough for Portillo's and Liquid Death, and with the default lead ('Deals often lose momentum when a result worth acting on doesn't land early enough…') for Grammarly. The relation between this deal's evidence and the general pattern is left for the reader to work out, and the one stated relation is wrong.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — 'Structural requirements by room' > Future Autopsy (every case: observed facts, risk level, why risk is high, recommended corrective actions); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md — items 3, 6 and 13; COPY_STANDARD.md §6 and §7 (evidence -> interpretation -> action).",
+   "proposed": "When no cause-specific lead exists, start with the top factor and say which sentence is which. autopsy.ts: `riskLead = `${causes[0].label} ${stagePattern}`` and, for this branch only, riskTail = \" The first sentence is from this deal's record. The rest is a pattern that is common at this stage, not a finding about this deal, and neither tells you for certain what would cause a loss.\" Example result: \"The recorded next step has no date. Deals at this stage often stall when the use case and impact never get concrete enough to create real urgency — people stay polite, but nobody owns the timing. Pin down the use case, a number, and who owns the decision now, before interest fades. The first sentence is from this deal's record. The rest is a pattern that is common at this stage, not a finding about this deal, and neither tells you for certain what would cause a loss.\" The longest combination is about 640 characters, inside the 700-character clip (which cuts mid-sentence and should not be reached). Keep the existing caveat for the cause-specific branch.",
+   "testsAffected": [
+    "src/future-autopsy/lib/autopsy.test.ts > lose story carries the pattern lead and states the caveat once (expects /often/ and exactly one 'for certain' — both still hold)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "AE-012",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/causes.ts",
+   "line": 35,
+   "generation": "shared",
+   "state": "Future Autopsy 'Risk factors · evidence' rows (default screen), the 'Observed risk factors' line of the copied risk summary, and the factor rows of the previous and oldest versions — for a deal whose champion, economic-buyer, decision-process, business-impact, use-case or competition entry is filled in but under 20 characters.",
+   "current": "\"Champion details are missing or brief.\" (line 35), \"Economic-buyer details are missing or brief.\" (47), \"Decision-process details are missing or brief.\" (53), \"Business-impact details are missing or brief.\" (59), \"Use-case details are missing or brief.\" (65), \"Competitor or status-quo details are missing or brief.\" (71). For a short champion entry two rules fire (no_champion at line 36 and champion_weak at line 42), so the screen shows two rows titled 'Champion'. The first row continues with the pattern for a missing champion: \"Deals without someone inside carrying them often stall in committee. Find who will own this internally before the next step.\"",
+   "problem": "The engine knows whether the entry is empty or short (gates.* is 'missing' or 'weak') and says 'missing or brief'. The reader has to compare with the field shown above to learn which, and the advice attached is the advice for an empty field. SMB walkthrough, Sweetgreen: the screen shows the champion and the economic buyer by name, then 'Champion details are missing or brief. … Find who will own this internally before the next step.', 'Economic-buyer details are missing or brief. When the budget owner stays out of view…' and a second champion row 'Champion details are brief; confirm their role and agreed actions. …'. A complete short answer is treated the same way: competition 'Clari' produces 'Competitor or status-quo details are missing or brief. If you don't know what they'd do instead… Ask directly what else they're considering.'",
+   "governing": "COPY_STANDARD.md §20 (if Antaeus knows the underlying fact, name it) and §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md — item 1; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Required work' item 10 (duplicate explanations, recommendation/logic mismatch).",
+   "proposed": "In evidenceFor() return one sentence per case. Empty field: \"No champion is recorded.\" / \"No economic buyer is recorded.\" (both exist) / \"No decision process is recorded.\" / \"No business impact is recorded.\" / \"No use case is recorded.\" / \"No competitor or current approach is recorded.\" Short entry: \"A champion is recorded, but the entry is brief. Add their role and what they have agreed to do.\" / \"An economic buyer is recorded, but the entry is brief. Add their role and how they approve the budget.\" / \"The decision-process entry is brief. List the approval steps and who owns each one.\" / \"The business-impact entry is brief. Add the number the buyer uses to measure the problem.\" / \"The use-case entry is brief. Describe what the buyer will use the product for.\" / \"The competition entry is brief. Say whether the alternative is a competitor or the current approach.\" In generateAutopsy(), leave `causes` as it is (weights and task selection unchanged) but build `chapters` without the no_champion entry when gates.champion is 'weak', so the champion appears once, with the champion_weak pattern. For a short economic-buyer entry use a conditional pattern: \"If the budget owner has not been part of the conversation, deals often stall late, when they finally show up with questions. Confirm that they are involved now, not at contract time.\" OWNER DECISION: whether a filled-in entry under 20 characters should count as a risk factor at all (it adds to the risk score and lowers the qualification score today).",
+   "testsAffected": [
+    "src/future-autopsy/lib/causes.test.ts > describes short populated fields accurately without changing rule weights (still passes)",
+    "src/future-autopsy/lib/autopsy.test.ts > chapters pair the observed condition… (empty champion; unchanged)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "AE-013",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/autopsy-data.ts",
+   "line": 197,
+   "generation": "shared",
+   "state": "Future Autopsy 'What usually happens next' second paragraph (default screen, FutureAutopsyV4.tsx:259) and the 'if corrected' story of the older versions, for a deal with fewer than three risk factors.",
+   "current": "winConditionsFor() pads the list to five entries with the same sentence (lines 197-204), and generateAutopsy() joins the first three (autopsy.ts:92-98). Probe, one factor: \"…For this deal, that means: The economic buyer is identified and the budget path is confirmed. A named owner, recent activity, and a dated next step are recorded. A named owner, recent activity, and a dated next step are recorded. Fixing these lowers the risk; it doesn't guarantee a close.\" No factors: the sentence appears three times, followed by 'Fixing these lowers the risk' although the first paragraph says \"Nothing in the deal record matches a known risk pattern right now.\"",
+   "problem": "The same sentence is printed two or three times in one paragraph, and for a deal with no risk factor the paragraph tells the user to fix things that the paragraph above says are not there.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Required work' item 10 (repetition, duplicate explanations, contradictions); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md — item 14.",
+   "proposed": "Keep winConditions as it is (five entries, stable ids; autopsy.test.ts expects length >= 5) and change only the sentence built from it. autopsy.ts: `const stories = [...new Set(winConditions.slice(0, 3).map((w) => w.story))];` and join those. When causes.length is 0 use correctedTail = \" No risk factor is recorded for this deal, so there is nothing to correct right now.\" Add a test that no sentence repeats in winStory for 0, 1 and 2 factors.",
+   "testsAffected": [
+    "src/future-autopsy/lib/autopsy.test.ts > emits AutopsyDoc with all required slots populated (winConditions.length >= 5 — unchanged)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "AE-014",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/causes.ts",
+   "line": 110,
+   "generation": "shared",
+   "state": "Future Autopsy 'Next step' risk-factor row and the first recommended action, for a deal whose next step has a date and a description under 20 characters (for example 'Send pricing').",
+   "current": "Row text (probe): \"A dated next step is recorded, but its description is brief. Confirm the action and owner. When no date is on the calendar, every follow-up tends to become a maybe. Get a dated next step agreed before you end the next conversation.\" First recommended action: 'Set a dated next step' with the suggested message \"If this is still a priority, can we schedule Tue, Nov 17 or Wed, Nov 18 for the next step?\" Corrected condition: \"A dated next step is set and accepted by both sides.\"",
+   "problem": "The row says a dated next step is recorded and then explains what happens when there is no date and tells the user to get one. The observation was made accurate in PR #324 (causes.ts:110); the pattern and the action attached to it still describe a missing date.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Required work' item 10 (recommendation/logic mismatch, contradictions); COPY_STANDARD.md §7.",
+   "proposed": "In generateAutopsy(), when the factor is no_nextstep and vitals.hasNextStep && vitals.nextStepHasDate, use this pattern in place of CHAPTERS.no_nextstep: \"A step described in two or three words can mean something different to each side. Write down what will happen, who owns it, and what it should produce.\" and use the corrected condition \"The next step names the action, its owner and the expected result.\" OWNER DECISION: whether the 'Set a dated next step' action (and its scheduling message) should be left out when a dated step already exists; that changes which actions are recommended.",
+   "testsAffected": [
+    "src/future-autopsy/lib/causes.test.ts > describes short populated fields accurately… (label assertion unchanged)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "AE-015",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/causes.ts",
+   "line": 77,
+   "generation": "shared",
+   "state": "Future Autopsy 'Time in stage' risk-factor row (all versions) and the copied risk summary.",
+   "current": "\"The deal has remained in the current stage longer than the configured stage-age threshold.\"",
+   "problem": "The engine knows the stage, the number of days and the threshold (21 days, DEFAULT_PREFS.stageStuckDays) and prints none of them; 'configured stage-age threshold' is an internal term, and nothing in the app lets the user configure it. When no stage history exists (no part of the current app writes gtmos_deal_stage_history; only the demo seed does) the day count is the time since the record was last updated, so the same 22 days of no updates is reported twice, as 'Recent updates' and as 'Time in stage'.",
+   "governing": "COPY_STANDARD.md §20 and §14; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md — items 2 and 6 (state calculations as calculations; give the evidence).",
+   "proposed": "Pass prefs into evidenceFor() and return: `The deal has been in the ${vitals.stage} stage for at least ${vitals.stageAgeDays} days. Deals are flagged after ${prefs.stageStuckDays} days in one stage.` ('at least' is accurate in both cases: with stage history the figure is exact; without it, a stage change would have updated the record, so the time in stage is at least the time since the last update.)",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "AE-016",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/future-autopsy/v4/FutureAutopsyV4.tsx",
+   "line": 79,
+   "generation": "v4",
+   "state": "Future Autopsy default screen, 'Recommended corrective actions' list: the line under 'Identify and engage the economic buyer' and under 'Confirm champion'. Outside my assigned paths; the selection that makes it wrong is in src/future-autopsy/lib/autopsy-data.ts:397-403.",
+   "current": "\"The record does not yet show a confirmed economic buyer who is engaged in the decision.\" (line 79) and \"The record does not yet show a confirmed internal owner driving the purchase.\" (line 80). chooseTasks() keeps every task whose score is above 0, and the score includes a stage boost and a +2 for deals of $75k or more, so actions are listed that no risk factor asked for.",
+   "problem": "The sentence makes a claim about the record that the engine did not check. Probe: a negotiation deal with a complete record and no risk factor lists 'Identify and engage the economic buyer' with this line although the economic buyer is fully recorded; a $120k discovery deal with a complete record lists 'Confirm champion' with its line, and also 'Set a dated next step' although a dated step exists. PR #324 replaced the generic reasons with these record-specific sentences.",
+   "governing": "COPY_STANDARD.md §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Required work' item 10 (recommendation/logic mismatch); audit brief §5 (copy that now claims something the code does not do).",
+   "proposed": "Use reasons that are true whether or not the factor fired (the lib already carries them at autopsy-data.ts:256 and 266). Line 79: \"The economic buyer owns the budget and the final approval; involving them confirms both.\" Line 80: \"A confirmed champion gives the purchase a named owner inside the buyer's company.\" OWNER DECISION: whether an action with no matching risk factor (chosen only because of the stage or the deal size) should be listed under 'Recommended corrective actions' at all; if not, require the cause part of the score to be above 0 in chooseTasks().",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "AE-017",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/action-plan.ts",
+   "line": 139,
+   "generation": "shared",
+   "state": "Future Autopsy link row under the case (default screen: one button plus two text links, FutureAutopsyV4.tsx:268-278; previous version 'Intervene' strip; oldest version RouteRack). Every deal outside the negotiation and pilot stages.",
+   "current": "Both the 'discovery' target ('Run discovery again') and the 'call' target ('Prepare the next call') build the same URL with hrefToDiscoveryStudio(accountName) (lines 63 and 79). The third link is always 'call' unless a pilot concern exists (line 139). Probe: when the first link is 'Open the deal', the second and third links are 'Run discovery again' and 'Prepare the next call' with identical URLs; when the first link is 'Prepare the next call' (economic buyer, decision process or stakeholders on top) the third link is 'Prepare the next call' again; when the first is 'Run discovery again' the third opens the same page under another label. All three screens key the list on route.href, so two items share a key.",
+   "problem": "Two of the three choices open the same page with the same parameters, in one case under the same label twice. The two targets were different pages until Call Planner was retired into Discovery Studio (owner decision, completed in PR #324); the plan was re-pointed but not reduced. SMB walkthrough, Grammarly: 'Open the deal · Copy risk summary · Run discovery again · Prepare the next call'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Required work' item 7 (routing, cross-room handoffs) and item 10 (duplicate explanations); owner decision in audit brief §4: Call Planner is retired, its routes redirect to Discovery Studio.",
+   "proposed": "In buildActionPlan(), after the three routes are built, drop a later route whose href equals an earlier one: return `tertiary: null` when tertiary.href === primary.href || tertiary.href === secondary.href (ActionPlan allows null and all three screens already filter nulls). Replace the test 'returns three populated routes' with one that expects primary and secondary to be populated and no two returned routes to share an href (its fixture produces the duplicate today). OWNER DECISION: what the third link should be now that Call Planner is gone — for example Call in a Favor when the champion or economic buyer is the top factor — or whether two links are enough.",
+   "testsAffected": [
+    "src/future-autopsy/lib/action-plan.test.ts > returns three populated routes (asserts tertiary is not null for a fixture whose second and third links are the same URL)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "AE-018",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/action-plan.ts",
+   "line": 120,
+   "generation": "shared",
+   "state": "Reason line printed with each link in the oldest version (src/future-autopsy/components/RouteRack.tsx:34) and, for the first link, in the previous version's page-header recommendation (src/future-autopsy/ds/lib/adapters.ts:44). Not printed on the default screen.",
+   "current": "Line 120: `Top cause: ${causeLabel.toLowerCase()}.` — probe output \"Top cause: a dated next step is recorded, but its description is brief. confirm the action and owner..\" and \"Top cause: the deal record was last updated 30 days ago; this is not a measure of buyer activity..\". Line 107: \"The most direct way to act on what's hurting this deal.\" (also used when no risk factor exists). Line 112: \"Verbal-yes stage — terms are the live conversation now.\" Line 116: \"PoC stage — write down what you're proving before going further.\" Line 130: \"Write the autopsy findings back into the deal record.\" Line 131: \"Tighten qualification before the next move.\" Line 140: \"Worst case, get the next conversation on the calendar.\" Line 143: \"There's still an open question about what you're proving — write it down.\"",
+   "problem": "'Top cause' calls a recorded condition the cause of a loss, which the generator otherwise avoids; lower-casing the whole label breaks the second sentence and the added period doubles the label's own. 'what you're proving' is the product's old word for the pilot's success criteria; 'the next move', 'the live conversation' and 'autopsy findings' are shorthand the reader has to decode; 'what's hurting this deal' is printed for a deal with no factor.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — Future Autopsy structural requirement (do not present a recorded condition as the cause of a loss); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Approved product evolution' (avoid false causation); audit brief §3 disputed terms `proof` and `move`; COPY_STANDARD.md §3.",
+   "proposed": "Line 120: `Highest-weighted risk factor: ${causeLabel}` (the label is a full sentence with its own period; do not change its case). Line 107: \"Start with the deal record: add or correct the missing details there.\" Line 112: \"The buyer has said yes; the open work is terms, legal, security and finance.\" Line 113: \"Negotiation stage: prepare your positions before pricing or terms are discussed.\" Line 116: \"Pilot stage: write down what the pilot has to show before going further.\" Line 130: \"Record these risk factors on the deal.\" Line 131: \"Fill the gaps in qualification before the next call.\" Line 140: \"If nothing else, get the next conversation on the calendar.\" Line 143: \"What the pilot has to show is still undecided. Write it down in Pilot Desk.\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "AE-019",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/action-plan.ts",
+   "line": 108,
+   "generation": "shared",
+   "state": "Future Autopsy for a deal at the Deal Workspace stage 'verbal' (Verbal Commit), and for deals whose stored stage is 'proposal' or 'verbal-yes' (written by onboarding and by both demo seeds). Related findings from other reviewers: BACKEND-CONTRACTS-006/-009, ONBOARDING-001, WELCOME-037.",
+   "current": "buildActionPlan() sends the first link to Getting to Signed when stageRaw is 'negotiation' or 'verbal-yes' (line 108). Deal Workspace's id is 'verbal' (src/deal-workspace/lib/deal-shape.ts:24), and the rest of this library uses 'verbal' (autopsy.ts:143, autopsy-data.ts:112, 156, 377; vitals.ts:59). The deal loader passes the stored stage through unchanged (deal-loader.ts:56-63). Probe: stage 'verbal' -> first link 'Open the deal' (not Getting to Signed) and the verbal-stage lead and action boost apply; stage 'verbal-yes' -> first link Getting to Signed, but the stage prints as 'verbal-yes', the default lead is used and no stage boost applies; stage 'proposal' -> prints as 'proposal' with the default lead. SMB walkthrough, Warby Parker: '$78k · proposal' in Future Autopsy while Deal Workspace shows the same deal as 'Prospect'.",
+   "problem": "Two stage vocabularies reach this library and each branch recognises only one. A deal the seller moved to Verbal Commit in Deal Workspace is not sent to Getting to Signed; a deal entered as 'Verbal yes' or 'Proposal' in onboarding shows a raw id as its stage and loses the stage-specific pattern and actions. Present before PR #324; it decides which approved Future Autopsy text a deal gets.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Required work' item 7 (routing, ids, persisted state, cross-room handoffs, translators).",
+   "proposed": "Translate once where deals enter the library. deal-loader.ts parseDeal(): map the stored stage through `{ 'verbal-yes': 'verbal' }` before building the Deal, and in action-plan.ts line 108 test `stageRaw === 'negotiation' || stageRaw === 'verbal'` (keep the 'Verbal-yes stage' reason keyed on 'verbal'). Add a test for a 'verbal' deal -> Getting to Signed. For 'proposal', add a label only (`proposal: 'Proposal'` in vitals.ts STAGE_LABELS) so the screen stops printing the raw id. OWNER DECISION: which Deal Workspace stage an onboarding or seeded 'Proposal' deal belongs to (Solution Fit, PoC / Pilot or Negotiation); that choice changes its stage pattern, its risk score and its place in pipeline coverage, and is the subject of ONBOARDING-001 / BACKEND-CONTRACTS-006.",
+   "testsAffected": [
+    "src/future-autopsy/lib/action-plan.test.ts (no test covers the verbal stage today)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "AE-020",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/causes.ts",
+   "line": 83,
+   "generation": "shared",
+   "state": "Future Autopsy risk-factor row titled 'Pilot criteria' (title at src/future-autopsy/v4/FutureAutopsyV4.tsx:71) for a deal in the PoC / Pilot stage. Not shown in either demo book (no seeded deal is in that stage).",
+   "current": "Label: \"Pilot impact or decision-process details are missing or brief.\" Pattern (autopsy-data.ts:42): \"A pilot without agreed success criteria often produces activity but no decision. Lock the criteria and who signs off on the result before the pilot starts, not at the end.\" The rule (lines 84-86) tests the deal's Pain and Decision process fields; it does not read the pilot's success criteria, which live in Pilot Desk (gtmos_poc_data / gtmos_pilot_desk_v1).",
+   "problem": "The title and the pattern say the pilot has no agreed criteria; the engine never looked at them. A pilot with written success criteria and a named approver in Pilot Desk still gets 'Pilot criteria … Lock the criteria and who signs off', if the deal's Pain entry is short. 'Pilot impact' is also not a field the user has seen.",
+   "governing": "COPY_STANDARD.md §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md — items 1 and 3; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Required work' item 5.",
+   "proposed": "Label: \"The deal is in the pilot stage and its business-impact or decision-process entry is missing or brief.\" Title: 'Pilot stage'. Pattern: \"A pilot without agreed success criteria often produces activity but no decision. Check in Pilot Desk that the success criteria and the person who signs off are written down before the pilot runs.\" OWNER DECISION: read the linked pilot's success criteria and approver from Pilot Desk and fire this factor only when they are missing.",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "AE-021",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/future-autopsy/lib/autopsy.ts",
+   "line": 129,
+   "generation": "shared",
+   "state": "Future Autopsy 'When to consider closing the deal' (all versions), for a deal worth $25k or less, not updated for 30 days or more, with a low qualification score and a risk score of 70 or more.",
+   "current": "\"Consider closing this opportunity: low value, prolonged inactivity, weak qualification, and high modeled risk are all present.\"",
+   "problem": "'Prolonged inactivity' is the age of the deal record (staleDays), which the factor row on the same screen says 'is not a measure of buyer activity'. The four conditions are thresholds the engine knows and does not state.",
+   "governing": "COPY_STANDARD.md §20 and §21.",
+   "proposed": "\"Consider closing this opportunity. Four conditions are all present: the deal is worth $25k or less, the record has not been updated for 30 days or more, most qualification details are missing, and the risk score is 70 or higher.\"",
+   "testsAffected": [
+    "src/future-autopsy/lib/autopsy.test.ts > recommends considering close when low value + critically stale + weak qual + high risk (check its regex against the new wording)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "AE-022",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/future-autopsy/ds/components/PinnedCaseDS.tsx",
+   "line": 83,
+   "generation": "ds",
+   "state": "Previous Future Autopsy version (?v4=0 or room_future_autopsy_v4_off): line under the 'If left alone / If corrected' switch, the empty-state sentence, the chips beside the deal name, and the corrected-condition list. Outside my assigned paths — route to the Future Autopsy reviewer; recorded here because it frames the approved generator output.",
+   "current": "Line 83 \"What kills this in {days} days.\" / line 82 \"What wins this in {days} days.\"; line 60 \"Future Autopsy pins a deal as evidence, then shows what kills it in 45 days — and the smallest step that turns it around.\"; chips `${v.staleDays}d quiet` and `${horizon}d horizon` (lines 96-97); line 142 prints each corrected condition's id as its label (`w.id.replace(/_/g, \" \")` -> 'eb engaged', 'thread reactivated', 'poc success criteria locked', 'momentum 1').",
+   "problem": "The generator was changed so that the review window is not presented as the date of a loss and a recorded condition is not presented as its cause; this screen puts the same output under 'What kills this in N days', which states both. 'Nd quiet' reads the record's age as buyer silence. Internal ids are printed as labels.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — Future Autopsy structural requirement (\"Do not say a deal dies, is dying, or will definitely be lost unless a historical outcome is already known\"); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Approved product evolution'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows `dies`, `dying`.",
+   "proposed": "Line 83: \"Risk factors recorded on this deal. Review window: {days} days.\" Line 82: \"What would lower the risk. Review window: {days} days.\" Line 60: \"Future Autopsy reviews an open deal for loss risk, shows the recorded conditions behind that risk, and recommends corrective actions.\" Chips: `No deal update for ${v.staleDays} days` and `Review window: ${horizon} days`. Line 142: print the condition sentence only (w.story) and drop the id label.",
+   "testsAffected": [
+    "src/future-autopsy/ds/ds-components.test.tsx (check for assertions on these strings)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "AE-023",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/future-autopsy/components/VerdictToggle.tsx",
+   "line": 15,
+   "generation": "legacy",
+   "state": "Oldest Future Autopsy version (room_future_autopsy_legacy): the two-option switch above the case, and the corrected-condition list in the middle sheet. Outside my assigned paths — route to the Future Autopsy reviewer.",
+   "current": "Line 15: sub-label \"what kills this in 45 days\"; line 16: \"what wins this in 45 days\". The number is fixed at 45 although the review window is computed per deal (doc.horizonDays, 7 to 90). src/future-autopsy/components/ForensicSheets.tsx:184 prints each corrected condition's id as its label ('eb engaged', 'momentum 1').",
+   "problem": "States a loss in a fixed number of days and a cause for it, with a number that does not match the deal's computed review window; prints internal ids as labels.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — Future Autopsy structural requirement; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Approved product evolution' (avoid forecast certainty) and 'Required work' item 10.",
+   "proposed": "Line 15: sub \"risk factors recorded on this deal\"; line 16: sub \"what would lower the risk\". ForensicSheets.tsx:184: print w.story only.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "AE-024",
+   "category": "TOOLING",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/autopsy.test.ts",
+   "line": 60,
+   "generation": "tooling",
+   "state": "Unit tests for the approved Future Autopsy generation",
+   "current": "The tests assert the caveat ('for certain' exactly once, 'doesn't guarantee a close'), that the story does not start with '<n> days later' or contain 'inevitable' / 'you won because', the review-window arithmetic, and the corrected labels for short fields and record age. 'varies the risk assessment by stage + top cause' (line 60) only checks that two stories differ. No test reads the story lead for a short champion or economic-buyer entry, checks that the lead refers to the top factor, checks for repeated sentences, or covers the verbal stage or duplicate links in the action plan.",
+   "problem": "Every defect listed above for this generator passes the current suite. The label fix for short fields is protected; the same statement in the story lead is not.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md — 'Required work' item 11 (targeted regressions for discovered defects; do not weaken tests).",
+   "proposed": "Add: (1) champion 'Sarah Chen' at discovery and economic buyer 'Dana Wu, CFO' at negotiation -> loseStory does not contain 'No champion is recorded' / 'No economic buyer is recorded'; (2) four stakeholders listed, none engaged -> loseStory does not contain 'Fewer than three stakeholders are recorded'; (3) for every stage, a deal whose only factor is the undated next step -> loseStory starts with that factor's label; (4) winStory has no repeated sentence for 0, 1 and 2 factors; (5) a dated next step with a short description -> its chapter does not contain 'When no date is on the calendar'; (6) action plan: no two routes share an href; a 'verbal' deal routes to Getting to Signed.",
+   "testsAffected": [
+    "src/future-autopsy/lib/autopsy.test.ts",
+    "src/future-autopsy/lib/action-plan.test.ts"
+   ],
+   "confidence": "high"
+  }
+ ],
+ "dispositions": [],
+ "retained": [
+  {
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 25,
+   "text": "function dimensionBlocker(dimension, fallback) -> `${dimension.label}: ${next}.`",
+   "term": "approved-evolution",
+   "why": "Evolution 1 (readiness blocker selection) is intact: the helper PR #324 introduced is unchanged at HEAD (git diff 98c85e0..HEAD -- src/lib/readiness/verdict.ts is empty). Probe output for a workspace just after setup: [\"Outreach: Record 30+ outbound touches.\", \"Deal management: Record 3+ closed-won deals.\", \"Run a pilot whose result the buyer's boss could act on without you in the room.\"]. Not asserted by any test (see the TOOLING finding)."
+  },
+  {
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 183,
+   "text": "gateBuilding(): \"Complete two readiness actions: {actions}\"",
+   "term": "approved-evolution",
+   "why": "Intact. Probe on empty input: \"Complete two readiness actions: Define your first ICP in ICP Studio; Record 30+ outbound touches\". Names the first gap of the two highest-scoring areas, as PR #324 introduced. Covered only by 'gateBlockers.length > 0' in verdict.test.ts > returns 'you_are_the_system' on empty input."
+  },
+  {
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 84,
+   "text": "\"For this readiness state, recorded closed-won deals must be at least as numerous as analyzed closed-lost deals. Current: {won} won / {lost} analyzed lost.\"",
+   "term": "approved-evolution",
+   "why": "Intact and tested: verdict.test.ts > blocks 'hire_ready_repeatable' on the actual 1:1 win/loss gate asserts /at least as numerous/ and /1 won \\/ 5 analyzed lost/. States the rule and the current counts instead of the earlier 'Bring win/loss balance to 1:1 or better.'"
+  },
+  {
+   "file": "src/lib/readiness/types.ts",
+   "line": 30,
+   "text": "VERDICT_LABEL: Founder-dependent · Partially documented · Usable with founder support · Hire-ready · Hire-ready and repeatable",
+   "term": "approved-evolution",
+   "why": "The only change to the readiness engine since the PR #324 head (98c85e0..HEAD) is these three labels, which is the owner's 2026-11-05/06 decision (COPY_STANDARD.md §17). Engine ids, VERDICT_RANK and gate thresholds are unchanged; stored history uses the ids (src/dashboard/lib/readiness-history.ts:100, 112)."
+  },
+  {
+   "file": "src/lib/readiness/dimensions.ts",
+   "line": 14,
+   "text": "saturate()/clampScore() and the per-item thresholds (30/15/12/12, 8/6/5, 6/5/3/3, 3/3/3/5)",
+   "term": "approved-evolution",
+   "why": "Scoring math is unchanged from before PR #324 through HEAD (only strings changed in the f641612..98c85e0 diff; no change after). dimensions.test.ts passes (13 tests): 'awards full 20 on full inputs', 'sums to <= 100 always', 'returns 5 dimensions in canonical order'."
+  },
+  {
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 134,
+   "text": "\"Run a pilot whose result the buyer's boss could act on without you in the room.\"",
+   "term": "room",
+   "why": "Meeting-presence idiom ('without you in the room'), which the brief's disputed-terms table keeps as ordinary English. The sentence states the action and the test of success."
+  },
+  {
+   "file": "src/dashboard/lib/readiness-aggregator.ts",
+   "line": 256,
+   "text": "readHandoffSectionsReady(): computeHandoffSectionsReady({ storage }).ready",
+   "term": "approved-evolution",
+   "why": "The handoff count the readiness gate uses is computed live with Founding GTM's own function, so the '(currently {n}/7)' blocker and the Dashboard's 'N / 7 sections' agree (owner rule: a number shown in more than one area comes from the area that owns it). Unchanged since the PR head."
+  },
+  {
+   "file": "src/future-autopsy/lib/causes.ts",
+   "line": 105,
+   "text": "`The deal record was last updated ${vitals.staleDays} days ago; this is not a measure of buyer activity.`",
+   "term": "approved-evolution",
+   "why": "Evolution 2 (no false causation): record age is stated as record age. Tested: causes.test.ts > 'does not confuse record age with buyer inactivity or two contacts with one' (expects 'record was last updated 14 days ago' and 'count is 2'). Unchanged since the PR #324 head."
+  },
+  {
+   "file": "src/future-autopsy/lib/autopsy.ts",
+   "line": 89,
+   "text": "\" These are conditions in the deal record; they don't tell you for certain what would cause a loss.\" … \" Fixing these lowers the risk; it doesn't guarantee a close.\" (line 98)",
+   "term": "approved-evolution",
+   "why": "The caveat that separates a recorded condition from a cause, and a corrective action from a promised result, is in place and tested: autopsy.test.ts > 'lose story carries the pattern lead and states the caveat once' and 'keeps the modeled horizon separate from narrative certainty' (story must not match /^\\d+ days later/, /inevitable/, /you won because/). The caveat is accurate when the lead starts with this deal's condition; see the finding for the branch where it is not."
+  },
+  {
+   "file": "src/future-autopsy/lib/autopsy.ts",
+   "line": 44,
+   "text": "projectHorizonDays(): review window = 90 − risk score, clamped 7–90, shortened by a recorded close date",
+   "term": "approved-evolution",
+   "why": "Evolution 2 (no forecast certainty): the number is described in code as a review window, not a loss date, and five tests cover it (autopsy.test.ts > projectHorizonDays: 'scales the review window off the risk score, clamped 7-90', 'a real close date caps the review window', and three more). On the default screen it is labelled 'risk review window · Nd' (FutureAutopsyV4.tsx:200) and the headline is a risk statement, not a prediction of fact: 'If nothing changes, {name} is at {risk} risk of stalling or being lost within the next {days} days.' (line 187; owner-recorded wording, CLAUDE.md session log 2026-11-06)."
+  },
+  {
+   "file": "src/future-autopsy/lib/autopsy-data.ts",
+   "line": 20,
+   "text": "CHAPTERS: each pattern is conditional ('often', 'tend to', 'usually', 'rarely') and ends with a concrete corrective step",
+   "term": "approved-evolution",
+   "why": "General sales patterns are stated as patterns, not as findings about the deal, and the judgment restored by the 2026-11-05 semantic-damage pass is intact (git diff 98c85e0..HEAD shows one wording change, line 28). 'Long silence often means the deal has slipped down the buyer's priority list' is phrased as a likelihood, which is what the Batch 01 Future Autopsy requirement asks for ('Do not infer internal buyer priority as fact')."
+  },
+  {
+   "file": "src/future-autopsy/lib/autopsy-data.ts",
+   "line": 28,
+   "text": "\"A contact who likes you but can't win over the rest of the buying group usually can't get a deal through approval.\"",
+   "term": "room",
+   "why": "The only change to this library since the PR #324 head: 'can't move the room' became 'can't win over the rest of the buying group' (PR #332). Plain, and keeps the judgment."
+  },
+  {
+   "file": "src/future-autopsy/lib/autopsy-data.ts",
+   "line": 129,
+   "text": "\"Contracts often come back with questions nobody can answer when the budget owner was never in the room.\"",
+   "term": "room",
+   "why": "Meeting-presence idiom inside a general pattern; ordinary English per the brief's disputed-terms table. (The sentence in front of it is the subject of the first Future Autopsy finding.)"
+  },
+  {
+   "file": "src/future-autopsy/lib/autopsy-data.ts",
+   "line": 232,
+   "text": "TASKS: 11 corrective actions with a reason, the evidence that completes them, and a message the seller can send",
+   "term": "approved-evolution",
+   "why": "Recommendations are stated as recommendations; the suggested messages are things a seller says to a buyer and carry no Antaeus vocabulary. Selection and weights unchanged since before PR #324 (chooseTasks). Tested: autopsy.test.ts > 'countermeasures includes Engage 3+ stakeholders when single_threaded'."
+  }
+ ],
+ "gaps": [
+  "Readiness drawer states other than the demo's ('Partially documented'): not rendered in a browser. The blocker lines for the other four states come from my engine probe, not from a walkthrough.",
+  "readiness_snapshots cloud insert (src/dashboard/lib/readiness-history.ts): read only; no Supabase session was available to execute it.",
+  "Future Autopsy screens were not opened in a browser by me. Text for the default screen comes from source plus the freshly walked SMB demo (final-audit/corpus-smb/future-autopsy.txt); text for deal states the demo does not contain (pilot stage, verbal stage, a deal with no risk factor, a dated next step with a short description) comes from my probe of the library, not from a rendered screen.",
+  "Future Autopsy cloud task-log write (studio_artifacts) and realtime update: read only, not executed."
+ ]
+}

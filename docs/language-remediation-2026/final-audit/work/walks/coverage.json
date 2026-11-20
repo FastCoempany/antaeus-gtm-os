@@ -1,0 +1,866 @@
+{
+  "tool": "tools/preview/walk-onboarding.js",
+  "generatedAt": "2026-11-16T22:11:49.734Z",
+  "servedFrom": "dist/ (production build, served read-only)",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "variants": [
+    {
+      "id": "default",
+      "url": "/onboarding/?qa=1",
+      "file": "onboarding-default.txt",
+      "lines": 642,
+      "statesReached": 25,
+      "walkStopped": null,
+      "reached": [
+        {
+          "state": "1 Doorway — at rest",
+          "lines": 12,
+          "newSincePreviousState": 12,
+          "actions": [
+            "open /onboarding/?qa=1 in a fresh browser context"
+          ]
+        },
+        {
+          "state": "2 ICP — question 1 of 3, at rest",
+          "lines": 17,
+          "newSincePreviousState": 11,
+          "actions": [
+            "click “Start →”"
+          ]
+        },
+        {
+          "state": "2 ICP — “Something else…” opened, nothing typed (validation)",
+          "lines": 20,
+          "newSincePreviousState": 3,
+          "actions": [
+            "click “Something else…”"
+          ],
+          "disabledControls": [
+            "Use this →"
+          ],
+          "notes": [
+            "“Use this →” is disabled; clicking it changes nothing and shows no message."
+          ]
+        },
+        {
+          "state": "2 ICP — result after three vague written-in answers",
+          "lines": 17,
+          "newSincePreviousState": 6,
+          "actions": [
+            "type “Anyone”",
+            "click “Use this →”",
+            "click “Something else…”",
+            "type “Any size”",
+            "click “Use this →”",
+            "click “Something else…”",
+            "type “they need it”",
+            "click “Use this →”"
+          ]
+        },
+        {
+          "state": "2 ICP — question 2 of 3, at rest",
+          "lines": 18,
+          "newSincePreviousState": 7,
+          "actions": [
+            "open /onboarding/?qa=1 in a fresh browser context",
+            "click “Start →”",
+            "click “Revenue Operations”"
+          ]
+        },
+        {
+          "state": "2 ICP — question 3 of 3, at rest",
+          "lines": 19,
+          "newSincePreviousState": 6,
+          "actions": [
+            "click “200–800 people”"
+          ]
+        },
+        {
+          "state": "2 ICP — result after three specific answers",
+          "lines": 17,
+          "newSincePreviousState": 4,
+          "actions": [
+            "click “Just raised, scaling fast”"
+          ]
+        },
+        {
+          "state": "3 Accounts — at rest, nothing entered (validation)",
+          "lines": 15,
+          "newSincePreviousState": 8,
+          "actions": [
+            "click “Looks right →”"
+          ],
+          "disabledControls": [
+            "Research these accounts →"
+          ],
+          "notes": [
+            "“Research these accounts →” is disabled; clicking it changes nothing and shows no message."
+          ]
+        },
+        {
+          "state": "3 Accounts — entries that are not companies (validation)",
+          "lines": 30,
+          "newSincePreviousState": 16,
+          "actions": [
+            "type “ceo@boeing.com, 12345, B, a note to myself about who to call next week, bad_domain..com”"
+          ],
+          "disabledControls": [
+            "Research these accounts →"
+          ]
+        },
+        {
+          "state": "3 Accounts — three company names entered (Boeing, Starbucks, Chipotle)",
+          "lines": 18,
+          "newSincePreviousState": 4,
+          "actions": [
+            "type “Boeing / Starbucks / Chipotle”"
+          ],
+          "disabledControls": [
+            "Research these accounts →"
+          ],
+          "notes": [
+            "“Research these accounts →” is disabled; clicking it changes nothing and shows no message."
+          ]
+        },
+        {
+          "state": "3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue",
+          "lines": 21,
+          "newSincePreviousState": 4,
+          "actions": [
+            "type “Boeing / Starbucks / Chipotle / delta.com / Nordstrom”"
+          ]
+        },
+        {
+          "state": "4 Research — loading",
+          "lines": 14,
+          "newSincePreviousState": 7,
+          "actions": [
+            "click “Research these accounts →”"
+          ],
+          "notes": [
+            "Loading text was placed in the page and replaced before the browser drew a frame (the call it waits on failed at once), so a person does not see it in this run. Captured by a DOM observer."
+          ]
+        },
+        {
+          "state": "4 Research — failed: research unavailable",
+          "lines": 20,
+          "newSincePreviousState": 9,
+          "actions": []
+        },
+        {
+          "state": "4 Research — loading again after “Try again”",
+          "lines": 14,
+          "newSincePreviousState": 3,
+          "actions": [
+            "click “Try again”"
+          ],
+          "notes": [
+            "Loading text was placed in the page and replaced before the browser drew a frame (the call it waits on failed at once), so a person does not see it in this run. Captured by a DOM observer."
+          ]
+        },
+        {
+          "state": "4 Research — after “Try again”",
+          "lines": 20,
+          "newSincePreviousState": 9,
+          "actions": []
+        },
+        {
+          "state": "5 Deals — at rest, no deal added (validation)",
+          "lines": 38,
+          "newSincePreviousState": 31,
+          "actions": [
+            "click “Continue setup →”"
+          ],
+          "disabledControls": [
+            "Add this deal →",
+            "Add at least one open deal to continue"
+          ],
+          "notes": [
+            "“Add this deal →” is disabled; clicking it changes nothing and shows no message.",
+            "“Add at least one open deal to continue” is disabled; clicking it changes nothing and shows no message."
+          ]
+        },
+        {
+          "state": "5 Deals — one deal added (fewer than the ten suggested)",
+          "lines": 42,
+          "newSincePreviousState": 7,
+          "actions": [
+            "type “Boeing”",
+            "type “280000”",
+            "type “VP Talent Acquisition”",
+            "type “”",
+            "type “Security review”",
+            "choose “Proposal”",
+            "click “Add this deal →”"
+          ],
+          "disabledControls": [
+            "Add this deal →"
+          ]
+        },
+        {
+          "state": "6 Sales target — at rest, reached with one deal (validation)",
+          "lines": 24,
+          "newSincePreviousState": 17,
+          "actions": [
+            "click “I've added them all — even if it's under ten”"
+          ],
+          "disabledControls": [
+            "Finish setup →"
+          ],
+          "notes": [
+            "“Finish setup →” is disabled; clicking it changes nothing and shows no message."
+          ]
+        },
+        {
+          "state": "6 Sales target — target and deal size entered; the estimate says one deal falls short",
+          "lines": 25,
+          "newSincePreviousState": 1,
+          "actions": [
+            "type “2000000”",
+            "type “50000”"
+          ]
+        },
+        {
+          "state": "5 Deals — four deals added",
+          "lines": 53,
+          "newSincePreviousState": 46,
+          "actions": [
+            "click “← Back”",
+            "type “Starbucks”",
+            "type “310000”",
+            "type “Director of Recruiting”",
+            "type “CHRO”",
+            "type “No reply since the pricing call”",
+            "choose “Negotiation”",
+            "click “Add this deal →”",
+            "type “Chipotle”",
+            "type “190000”",
+            "type “Head of People Operations”",
+            "type “CFO”",
+            "type “Only talking to one person”",
+            "choose “Verbal yes”",
+            "click “Add this deal →”",
+            "type “delta.com”",
+            "type “240000”",
+            "type “”",
+            "type “CFO”",
+            "type “”",
+            "choose “Discovery”",
+            "click “Add this deal →”"
+          ],
+          "disabledControls": [
+            "Add this deal →"
+          ]
+        },
+        {
+          "state": "5 Deals — seven deals added",
+          "lines": 54,
+          "newSincePreviousState": 13,
+          "actions": [
+            "type “Nordstrom”",
+            "type “150000”",
+            "type “VP Stores”",
+            "type “”",
+            "type “”",
+            "choose “Discovery”",
+            "click “Add this deal →”",
+            "type “United Airlines”",
+            "type “220000”",
+            "type “Talent lead”",
+            "type “COO”",
+            "type “”",
+            "choose “Prospecting”",
+            "click “Add this deal →”",
+            "type “Walmart”",
+            "type “120000”",
+            "type “”",
+            "type “”",
+            "type “”",
+            "choose “Not sure yet”",
+            "click “Add this deal →”"
+          ],
+          "disabledControls": [
+            "Add this deal →"
+          ]
+        },
+        {
+          "state": "5 Deals — ten deals added (the suggested number)",
+          "lines": 47,
+          "newSincePreviousState": 5,
+          "actions": [
+            "type “Costco”",
+            "type “175000”",
+            "type “Recruiting manager”",
+            "type “CFO”",
+            "type “”",
+            "choose “Discovery”",
+            "click “Add this deal →”",
+            "type “Marriott”",
+            "type “205000”",
+            "type “VP People”",
+            "type “CHRO”",
+            "type “”",
+            "choose “Discovery”",
+            "click “Add this deal →”",
+            "type “FedEx”",
+            "type “260000”",
+            "type “Head of Talent”",
+            "type “COO”",
+            "type “”",
+            "choose “Prospecting”",
+            "click “Add this deal →”"
+          ],
+          "disabledControls": [
+            "Add this deal →"
+          ]
+        },
+        {
+          "state": "6 Sales target — larger deal size entered; the estimate says ten deals are enough",
+          "lines": 25,
+          "newSincePreviousState": 18,
+          "actions": [
+            "click “Next: your sales target →”",
+            "type “280000”"
+          ]
+        },
+        {
+          "state": "7 Landing — setup complete",
+          "lines": 16,
+          "newSincePreviousState": 10,
+          "actions": [
+            "click “Finish setup →”"
+          ]
+        },
+        {
+          "state": "1 Doorway — workspace map opened (G key)",
+          "lines": 46,
+          "newSincePreviousState": 40,
+          "actions": [
+            "open /onboarding/?qa=1 in a fresh browser context",
+            "press g"
+          ]
+        }
+      ],
+      "notReached": [],
+      "pageErrors": [],
+      "consoleErrors": [
+        "[observability] reportError (sentry disabled): Error: Supabase client requested but VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY is not set. Set both in your .env.local (dev) or in Cloudflare Workers Builds env vars (prod). See .env.example. @ http://127.0.0.1:4331/assets/data-client-CXv8yhOv.js"
+      ],
+      "failedRequests": [],
+      "links": {
+        "Open the Dashboard →": "/dashboard/",
+        "Welcome today's recommended starting point": "/welcome/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Onboarding set up the workspace": "/onboarding/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Dashboard pipeline, priorities, activity, and deal risk": "/dashboard/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "ICP Studio define the companies and buyers you sell to": "/icp-studio/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Territory Architect create and prioritize territory segments": "/territory-architect/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Prospecting Desk find accounts that match your ICP": "/prospecting-desk/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Signal Console monitor account signals and priority": "/signal-console/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Briefing review changes in your accounts, deals, and market": "/briefing/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Outdoors Events find events where target buyers may be present": "/outdoors-events/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Outbound Studio create and manage outbound messages": "/outbound-studio/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Cold Call Studio prepare and run cold calls": "/cold-call-studio/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "LinkedIn Playbook plan LinkedIn outreach": "/linkedin-playbook/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Discovery Studio prepare and run discovery": "/discovery-studio/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Deal Workspace review open deals, next steps, and risk": "/deal-workspace/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Pilot Desk plan and evaluate pilots": "/pilot-desk/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Getting to Signed manage legal, security, finance, and final approval": "/getting-to-signed/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Call in a Favor use your network to help move a deal": "/call-in-a-favor/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Future Autopsy identify deals with high loss risk and why": "/future-autopsy/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Quota Workback calculate activity and pipeline required to hit quota": "/quota-workback/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Readiness Score can another seller run the sales process?": "/dashboard/?readiness=1&returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Founding GTM document the sales process for another seller": "/founding-gtm/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground",
+        "Settings manage workspace data and account settings": "/settings/?returnTo=%2Fonboarding%2F&returnLabel=Onboarding&fromMode=room&fromSurface=ground"
+      }
+    },
+    {
+      "id": "ds",
+      "url": "/onboarding/?qa=1&seeding=0",
+      "file": "onboarding-ds.txt",
+      "lines": 688,
+      "statesReached": 18,
+      "walkStopped": null,
+      "reached": [
+        {
+          "state": "1 Intro — at rest",
+          "lines": 23,
+          "newSincePreviousState": 23,
+          "actions": [
+            "open /onboarding/?qa=1&seeding=0 in a fresh browser context"
+          ]
+        },
+        {
+          "state": "2 Company — at rest",
+          "lines": 25,
+          "newSincePreviousState": 12,
+          "actions": [
+            "click “Begin”"
+          ]
+        },
+        {
+          "state": "2 Company — name entered, after Continue with the name empty moved on and Back returned",
+          "lines": 25,
+          "newSincePreviousState": 0,
+          "actions": [
+            "click “Continue”",
+            "click “Back”",
+            "type “Luca Industries”"
+          ]
+        },
+        {
+          "state": "3 Role — at rest, nothing picked (validation)",
+          "lines": 29,
+          "newSincePreviousState": 14,
+          "actions": [
+            "click “Continue”"
+          ],
+          "disabledControls": [
+            "Continue"
+          ],
+          "notes": [
+            "“Continue” is disabled; clicking it changes nothing and shows no message."
+          ]
+        },
+        {
+          "state": "4 Category — at rest, nothing picked (validation)",
+          "lines": 68,
+          "newSincePreviousState": 53,
+          "actions": [
+            "click “Founder”",
+            "click “Continue”"
+          ],
+          "disabledControls": [
+            "Continue"
+          ],
+          "notes": [
+            "“Continue” is disabled; clicking it changes nothing and shows no message."
+          ]
+        },
+        {
+          "state": "4 Category — product category picked, no industry yet (validation)",
+          "lines": 68,
+          "newSincePreviousState": 0,
+          "actions": [
+            "click “Sales Tech / Revenue Intelligence”"
+          ],
+          "disabledControls": [
+            "Continue"
+          ],
+          "notes": [
+            "“Continue” is disabled; clicking it changes nothing and shows no message."
+          ]
+        },
+        {
+          "state": "4 Category — one industry picked",
+          "lines": 67,
+          "newSincePreviousState": 0,
+          "actions": [
+            "click “Retail / E-commerce”"
+          ]
+        },
+        {
+          "state": "4 Category — two industries picked",
+          "lines": 67,
+          "newSincePreviousState": 0,
+          "actions": [
+            "click “Travel / Hospitality”"
+          ]
+        },
+        {
+          "state": "5 ICP — at rest, nothing typed (validation)",
+          "lines": 28,
+          "newSincePreviousState": 13,
+          "actions": [
+            "click “Continue”"
+          ],
+          "disabledControls": [
+            "Continue"
+          ],
+          "notes": [
+            "“Continue” is disabled; clicking it changes nothing and shows no message."
+          ]
+        },
+        {
+          "state": "5 ICP — vague answer typed",
+          "lines": 27,
+          "newSincePreviousState": 0,
+          "actions": [
+            "type “Everyone who needs it”"
+          ]
+        },
+        {
+          "state": "5 ICP — specific answer and pain typed",
+          "lines": 27,
+          "newSincePreviousState": 0,
+          "actions": [
+            "type “VPs of Talent Acquisition at 10,000+ employee retail and travel companies in North America that hire seasonal staff.”",
+            "type “Seasonal hiring outruns the recruiting team every year.”"
+          ]
+        },
+        {
+          "state": "6 First account — at rest",
+          "lines": 27,
+          "newSincePreviousState": 12,
+          "actions": [
+            "click “Continue”"
+          ]
+        },
+        {
+          "state": "6 First account — Boeing and a reason entered",
+          "lines": 27,
+          "newSincePreviousState": 0,
+          "actions": [
+            "type “Boeing”",
+            "type “Opened 400 seasonal maintenance roles this month.”"
+          ]
+        },
+        {
+          "state": "7 Quota — at rest",
+          "lines": 27,
+          "newSincePreviousState": 13,
+          "actions": [
+            "click “Continue”"
+          ]
+        },
+        {
+          "state": "7 Quota — annual quota entered",
+          "lines": 27,
+          "newSincePreviousState": 0,
+          "actions": [
+            "type “1200000”"
+          ]
+        },
+        {
+          "state": "8 Complete — after finishing",
+          "lines": 24,
+          "newSincePreviousState": 11,
+          "actions": [
+            "click “Finish onboarding”"
+          ]
+        },
+        {
+          "state": "1 Intro — page help opened (“?”)",
+          "lines": 32,
+          "newSincePreviousState": 25,
+          "actions": [
+            "open /onboarding/?qa=1&seeding=0 in a fresh browser context",
+            "click “?”"
+          ]
+        },
+        {
+          "state": "1 Intro — jump list opened (Ctrl+K)",
+          "lines": 70,
+          "newSincePreviousState": 47,
+          "actions": [
+            "open /onboarding/?qa=1&seeding=0 in a fresh browser context",
+            "press Control+k"
+          ]
+        }
+      ],
+      "notReached": [
+        {
+          "state": "Accounts — three company names (Boeing, Starbucks, Chipotle)",
+          "reason": "this version asks for one company; Boeing was entered on its First account step"
+        },
+        {
+          "state": "Research step (loading, failure, retry)",
+          "reason": "this version has no account-research step"
+        },
+        {
+          "state": "Deals step (one deal, fewer-than-recommended message)",
+          "reason": "this version has no deals step"
+        },
+        {
+          "state": "7 Quota — “Fill in at least one field to finish.” and “Worth filling: …”",
+          "reason": "not reachable by walking forward: the Role and ICP steps do not let you continue without an answer, and those answers remove both messages"
+        },
+        {
+          "state": "8 Complete — “Nothing was seeded” version",
+          "reason": "shown only when the browser has no local storage; the walk always has it"
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "links": {
+        "ANTAEUS": "/dashboard/",
+        "Start the first move": "/welcome/?returnTo=%2Fonboarding%2F&returnLabel=Back%20to%20setup&fromMode=threshold&fromSurface=onboarding-complete",
+        "the Dashboard": "/dashboard/",
+        "Quota Workback": "/quota-workback/",
+        "Settings": "/settings/",
+        "Still stuck? Email us": "mailto:support@antaeus.app?subject=Help%20with%20ONBOARDING&body=What%20I%20was%20trying%20to%20do%3A%0A%0A%0AWhat%20happened%20instead%3A%0A%0A%0A(Page%3A%20ONBOARDING)",
+        "WELCOME Welcome Today's recommended starting point.": "/welcome/",
+        "ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.": "/onboarding/",
+        "DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.": "/dashboard/",
+        "SIGNAL CONSOLE Signal Console Monitor account signals and priority.": "/signal-console/",
+        "OUTBOUND STUDIO Outbound Studio Create and manage account-specific outbound messages.": "/outbound-studio/",
+        "COLD CALL STUDIO Cold Call Studio Prepare for cold calls and record the outcomes.": "/cold-call-studio/",
+        "LINKEDIN PLAYBOOK LinkedIn Playbook Plan LinkedIn outreach alongside calls and email.": "/linkedin-playbook/",
+        "DISCOVERY STUDIO Discovery Studio Prepare and run a discovery call, with buyer-specific questions and next-step capture.": "/discovery-studio/",
+        "CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.": "/call-in-a-favor/",
+        "GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.": "/getting-to-signed/",
+        "OUTDOORS EVENTS Outdoors Events Find events relevant to your target buyers and accounts.": "/outdoors-events/",
+        "ICP STUDIO ICP Studio Define the companies and buyers you sell to.": "/icp-studio/",
+        "TERRITORY ARCHITECT Territory Architect Create and prioritize territory segments.": "/territory-architect/",
+        "PROSPECTING DESK Prospecting Desk Save target criteria, add companies, and qualify accounts.": "/prospecting-desk/",
+        "PILOT DESK Pilot Desk Plan pilots, measure results, and agree on the next decision.": "/pilot-desk/",
+        "DEAL WORKSPACE Deal Workspace Review open deals, next steps, and risk factors.": "/deal-workspace/",
+        "FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective actions.": "/future-autopsy/",
+        "QUOTA WORKBACK Quota Workback Calculate the activity and pipeline required to hit quota.": "/quota-workback/",
+        "FOUNDING GTM Founding GTM Document sales patterns and processes for another seller.": "/founding-gtm/",
+        "BRIEFING Briefing Review account and market changes, evidence, and recommendations.": "/briefing/",
+        "SETTINGS Settings Backup, restore, demo mode, category, cloud sync.": "/settings/"
+      }
+    },
+    {
+      "id": "legacy",
+      "url": "/onboarding/?qa=1&seeding=0&ds=0",
+      "file": "onboarding-legacy.txt",
+      "lines": 887,
+      "statesReached": 19,
+      "walkStopped": null,
+      "reached": [
+        {
+          "state": "1 Intro — at rest",
+          "lines": 32,
+          "newSincePreviousState": 32,
+          "actions": [
+            "open /onboarding/?qa=1&seeding=0&ds=0 in a fresh browser context"
+          ]
+        },
+        {
+          "state": "2 Company — at rest",
+          "lines": 34,
+          "newSincePreviousState": 11,
+          "actions": [
+            "click “Begin”"
+          ]
+        },
+        {
+          "state": "2 Company — name entered, after Continue with the name empty moved on and Back returned",
+          "lines": 34,
+          "newSincePreviousState": 0,
+          "actions": [
+            "click “Continue”",
+            "click “Back”",
+            "type “Luca Industries”"
+          ]
+        },
+        {
+          "state": "3 Role — at rest, nothing picked (validation)",
+          "lines": 37,
+          "newSincePreviousState": 12,
+          "actions": [
+            "click “Continue”"
+          ],
+          "disabledControls": [
+            "Continue"
+          ],
+          "notes": [
+            "“Continue” is disabled; clicking it changes nothing and shows no message."
+          ]
+        },
+        {
+          "state": "4 Category — at rest, nothing picked (validation)",
+          "lines": 76,
+          "newSincePreviousState": 51,
+          "actions": [
+            "click “Founder”",
+            "click “Continue”"
+          ],
+          "disabledControls": [
+            "Continue"
+          ],
+          "notes": [
+            "“Continue” is disabled; clicking it changes nothing and shows no message."
+          ]
+        },
+        {
+          "state": "4 Category — product category picked, no industry yet (validation)",
+          "lines": 76,
+          "newSincePreviousState": 0,
+          "actions": [
+            "click “Sales Tech / Revenue Intelligence”"
+          ],
+          "disabledControls": [
+            "Continue"
+          ],
+          "notes": [
+            "“Continue” is disabled; clicking it changes nothing and shows no message."
+          ]
+        },
+        {
+          "state": "4 Category — one industry picked",
+          "lines": 77,
+          "newSincePreviousState": 1,
+          "actions": [
+            "click “Retail / E-commerce”"
+          ]
+        },
+        {
+          "state": "4 Category — two industries picked",
+          "lines": 77,
+          "newSincePreviousState": 1,
+          "actions": [
+            "click “Travel / Hospitality”"
+          ]
+        },
+        {
+          "state": "5 ICP — at rest, nothing typed (validation)",
+          "lines": 36,
+          "newSincePreviousState": 11,
+          "actions": [
+            "click “Continue”"
+          ],
+          "disabledControls": [
+            "Continue"
+          ],
+          "notes": [
+            "“Continue” is disabled; clicking it changes nothing and shows no message."
+          ]
+        },
+        {
+          "state": "5 ICP — vague answer typed",
+          "lines": 36,
+          "newSincePreviousState": 0,
+          "actions": [
+            "type “Everyone who needs it”"
+          ]
+        },
+        {
+          "state": "5 ICP — specific answer and pain typed",
+          "lines": 36,
+          "newSincePreviousState": 0,
+          "actions": [
+            "type “VPs of Talent Acquisition at 10,000+ employee retail and travel companies in North America that hire seasonal staff.”",
+            "type “Seasonal hiring outruns the recruiting team every year.”"
+          ]
+        },
+        {
+          "state": "6 First account — at rest",
+          "lines": 36,
+          "newSincePreviousState": 11,
+          "actions": [
+            "click “Continue”"
+          ]
+        },
+        {
+          "state": "6 First account — Boeing and a reason entered",
+          "lines": 36,
+          "newSincePreviousState": 0,
+          "actions": [
+            "type “Boeing”",
+            "type “Opened 400 seasonal maintenance roles this month.”"
+          ]
+        },
+        {
+          "state": "7 Quota — at rest",
+          "lines": 36,
+          "newSincePreviousState": 12,
+          "actions": [
+            "click “Continue”"
+          ]
+        },
+        {
+          "state": "7 Quota — annual quota entered",
+          "lines": 36,
+          "newSincePreviousState": 0,
+          "actions": [
+            "type “1200000”"
+          ]
+        },
+        {
+          "state": "8 Complete — after finishing",
+          "lines": 33,
+          "newSincePreviousState": 8,
+          "actions": [
+            "click “Finish onboarding”"
+          ]
+        },
+        {
+          "state": "1 Intro — jump list opened (“⌘K JUMP”)",
+          "lines": 79,
+          "newSincePreviousState": 56,
+          "actions": [
+            "open /onboarding/?qa=1&seeding=0&ds=0 in a fresh browser context",
+            "click “Jump to a page (press cmd+K)”"
+          ]
+        },
+        {
+          "state": "1 Intro — “Open current analysis” opened",
+          "lines": 37,
+          "newSincePreviousState": 6,
+          "actions": [
+            "open /onboarding/?qa=1&seeding=0&ds=0 in a fresh browser context",
+            "click “Open current analysis”"
+          ]
+        },
+        {
+          "state": "1 Intro — scheduled-actions settings opened (“⚙”)",
+          "lines": 43,
+          "newSincePreviousState": 13,
+          "actions": [
+            "open /onboarding/?qa=1&seeding=0&ds=0 in a fresh browser context",
+            "click “Open settings”"
+          ]
+        }
+      ],
+      "notReached": [
+        {
+          "state": "Accounts — three company names (Boeing, Starbucks, Chipotle)",
+          "reason": "this version asks for one company; Boeing was entered on its First account step"
+        },
+        {
+          "state": "Research step (loading, failure, retry)",
+          "reason": "this version has no account-research step"
+        },
+        {
+          "state": "Deals step (one deal, fewer-than-recommended message)",
+          "reason": "this version has no deals step"
+        },
+        {
+          "state": "7 Quota — “Fill in at least one field to finish.” and “Worth filling: …”",
+          "reason": "not reachable by walking forward: the Role and ICP steps do not let you continue without an answer, and those answers remove both messages"
+        },
+        {
+          "state": "8 Complete — “Nothing was seeded” version",
+          "reason": "shown only when the browser has no local storage; the walk always has it"
+        }
+      ],
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "links": {
+        "ANTAEUS · ONBOARDING": "/",
+        "Start the first move": "/welcome/?returnTo=%2Fonboarding%2F&returnLabel=Back%20to%20setup&fromMode=threshold&fromSurface=onboarding-complete",
+        "the Dashboard": "/dashboard/",
+        "Quota Workback": "/quota-workback/",
+        "Settings": "/settings/",
+        "WELCOME Welcome Today's recommended starting point.": "/welcome/",
+        "ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.": "/onboarding/",
+        "DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.": "/dashboard/",
+        "SIGNAL CONSOLE Signal Console Monitor account signals and priority.": "/signal-console/",
+        "OUTBOUND STUDIO Outbound Studio Create and manage account-specific outbound messages.": "/outbound-studio/",
+        "COLD CALL STUDIO Cold Call Studio Prepare for cold calls and record the outcomes.": "/cold-call-studio/",
+        "LINKEDIN PLAYBOOK LinkedIn Playbook Plan LinkedIn outreach alongside calls and email.": "/linkedin-playbook/",
+        "DISCOVERY STUDIO Discovery Studio Prepare and run a discovery call, with buyer-specific questions and next-step capture.": "/discovery-studio/",
+        "CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.": "/call-in-a-favor/",
+        "GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.": "/getting-to-signed/",
+        "OUTDOORS EVENTS Outdoors Events Find events relevant to your target buyers and accounts.": "/outdoors-events/",
+        "ICP STUDIO ICP Studio Define the companies and buyers you sell to.": "/icp-studio/",
+        "TERRITORY ARCHITECT Territory Architect Create and prioritize territory segments.": "/territory-architect/",
+        "PROSPECTING DESK Prospecting Desk Save target criteria, add companies, and qualify accounts.": "/prospecting-desk/",
+        "PILOT DESK Pilot Desk Plan pilots, measure results, and agree on the next decision.": "/pilot-desk/",
+        "DEAL WORKSPACE Deal Workspace Review open deals, next steps, and risk factors.": "/deal-workspace/",
+        "FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective actions.": "/future-autopsy/",
+        "QUOTA WORKBACK Quota Workback Calculate the activity and pipeline required to hit quota.": "/quota-workback/",
+        "FOUNDING GTM Founding GTM Document sales patterns and processes for another seller.": "/founding-gtm/",
+        "BRIEFING Briefing Review account and market changes, evidence, and recommendations.": "/briefing/",
+        "SETTINGS Settings Backup, restore, demo mode, category, cloud sync.": "/settings/"
+      }
+    }
+  ]
+}

@@ -1,0 +1,887 @@
+[onboarding | 1 Intro — at rest | link] ANTAEUS · ONBOARDING
+[onboarding | 1 Intro — at rest | aria-label] Antaeus — home
+[onboarding | 1 Intro — at rest | button] ⌘K JUMP
+[onboarding | 1 Intro — at rest | aria-label] Jump to a page (press cmd+K)
+[onboarding | 1 Intro — at rest | button] Open current analysis
+[onboarding | 1 Intro — at rest | aria-label] Scheduled actions
+[onboarding | 1 Intro — at rest | text] SCHEDULED ACTIONS
+[onboarding | 1 Intro — at rest | button] ⚙
+[onboarding | 1 Intro — at rest | title] Settings
+[onboarding | 1 Intro — at rest | aria-label] Open settings
+[onboarding | 1 Intro — at rest | button] −
+[onboarding | 1 Intro — at rest | title] Minimize
+[onboarding | 1 Intro — at rest | aria-label] Minimize
+[onboarding | 1 Intro — at rest | text] UPCOMING
+[onboarding | 1 Intro — at rest | text] Nothing scheduled yet.
+[onboarding | 1 Intro — at rest | aria-label] Onboarding progress
+[onboarding | 1 Intro — at rest | text] STEP 1 OF 7
+[onboarding | 1 Intro — at rest | text] 14%
+[onboarding | 1 Intro — at rest | text] INTRO
+[onboarding | 1 Intro — at rest | text] COMPANY
+[onboarding | 1 Intro — at rest | text] ROLE
+[onboarding | 1 Intro — at rest | text] CATEGORY
+[onboarding | 1 Intro — at rest | text] ICP
+[onboarding | 1 Intro — at rest | text] FIRST ACCOUNT
+[onboarding | 1 Intro — at rest | text] QUOTA
+[onboarding | 1 Intro — at rest | text] STEP 1 OF 7 — WELCOME
+[onboarding | 1 Intro — at rest | heading 2] Antaeus turns the revenue work a founder is doing into a clear picture of what's actually happening.
+[onboarding | 1 Intro — at rest | text] It's not a CRM and it's not an enablement library. Six quick answers and the workspace will already be live.
+[onboarding | 1 Intro — at rest | text] The dashboard wakes up live. Every answer here turns into a real Brief item before you leave Onboarding.
+[onboarding | 1 Intro — at rest | text] You can skip any step except the first. The first ask is a one-line ICP — everything else the system does compounds off of it.
+[onboarding | 1 Intro — at rest | text] Nothing is sent anywhere. Everything below stays on this device until you decide to wire cloud sync from Settings.
+[onboarding | 1 Intro — at rest | button] Begin
+[onboarding | 2 Company — at rest | link] ANTAEUS · ONBOARDING
+[onboarding | 2 Company — at rest | aria-label] Antaeus — home
+[onboarding | 2 Company — at rest | button] ⌘K JUMP
+[onboarding | 2 Company — at rest | aria-label] Jump to a page (press cmd+K)
+[onboarding | 2 Company — at rest | button] Open current analysis
+[onboarding | 2 Company — at rest | aria-label] Scheduled actions
+[onboarding | 2 Company — at rest | text] SCHEDULED ACTIONS
+[onboarding | 2 Company — at rest | button] ⚙
+[onboarding | 2 Company — at rest | title] Settings
+[onboarding | 2 Company — at rest | aria-label] Open settings
+[onboarding | 2 Company — at rest | button] −
+[onboarding | 2 Company — at rest | title] Minimize
+[onboarding | 2 Company — at rest | aria-label] Minimize
+[onboarding | 2 Company — at rest | text] UPCOMING
+[onboarding | 2 Company — at rest | text] Nothing scheduled yet.
+[onboarding | 2 Company — at rest | aria-label] Onboarding progress
+[onboarding | 2 Company — at rest | text] STEP 2 OF 7
+[onboarding | 2 Company — at rest | text] 29%
+[onboarding | 2 Company — at rest | text] INTRO
+[onboarding | 2 Company — at rest | text] COMPANY
+[onboarding | 2 Company — at rest | text] ROLE
+[onboarding | 2 Company — at rest | text] CATEGORY
+[onboarding | 2 Company — at rest | text] ICP
+[onboarding | 2 Company — at rest | text] FIRST ACCOUNT
+[onboarding | 2 Company — at rest | text] QUOTA
+[onboarding | 2 Company — at rest | text] STEP 2 OF 7 — COMPANY
+[onboarding | 2 Company — at rest | heading 2] Your company name?
+[onboarding | 2 Company — at rest | text] Lowest-friction question first. Everything else stays optional.
+[onboarding | 2 Company — at rest | text] COMPANY NAME
+[onboarding | 2 Company — at rest | field] COMPANY NAME
+[onboarding | 2 Company — at rest | placeholder] e.g., Antaeus GTM
+[onboarding | 2 Company — at rest | text] Doesn't have to be the legal entity. Just what your team calls itself.
+[onboarding | 2 Company — at rest | button] Back
+[onboarding | 2 Company — at rest | button] Continue
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | link] ANTAEUS · ONBOARDING
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | aria-label] Antaeus — home
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | button] ⌘K JUMP
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | aria-label] Jump to a page (press cmd+K)
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | button] Open current analysis
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | aria-label] Scheduled actions
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] SCHEDULED ACTIONS
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | button] ⚙
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | title] Settings
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | aria-label] Open settings
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | button] −
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | title] Minimize
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | aria-label] Minimize
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] UPCOMING
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] Nothing scheduled yet.
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | aria-label] Onboarding progress
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] STEP 2 OF 7
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] 29%
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] INTRO
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] COMPANY
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] ROLE
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] CATEGORY
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] ICP
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] FIRST ACCOUNT
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] QUOTA
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] STEP 2 OF 7 — COMPANY
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | heading 2] Your company name?
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] Lowest-friction question first. Everything else stays optional.
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] COMPANY NAME
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | field] COMPANY NAME
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | placeholder] e.g., Antaeus GTM
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | text] Doesn't have to be the legal entity. Just what your team calls itself.
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | button] Back
+[onboarding | 2 Company — name entered, after Continue with the name empty moved on and Back returned | button] Continue
+[onboarding | 3 Role — at rest, nothing picked (validation) | link] ANTAEUS · ONBOARDING
+[onboarding | 3 Role — at rest, nothing picked (validation) | aria-label] Antaeus — home
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] ⌘K JUMP
+[onboarding | 3 Role — at rest, nothing picked (validation) | aria-label] Jump to a page (press cmd+K)
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] Open current analysis
+[onboarding | 3 Role — at rest, nothing picked (validation) | aria-label] Scheduled actions
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] SCHEDULED ACTIONS
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] ⚙
+[onboarding | 3 Role — at rest, nothing picked (validation) | title] Settings
+[onboarding | 3 Role — at rest, nothing picked (validation) | aria-label] Open settings
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] −
+[onboarding | 3 Role — at rest, nothing picked (validation) | title] Minimize
+[onboarding | 3 Role — at rest, nothing picked (validation) | aria-label] Minimize
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] UPCOMING
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] Nothing scheduled yet.
+[onboarding | 3 Role — at rest, nothing picked (validation) | aria-label] Onboarding progress
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] STEP 3 OF 7
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] 43%
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] INTRO
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] COMPANY
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] ROLE
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] CATEGORY
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] ICP
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] FIRST ACCOUNT
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] QUOTA
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] STEP 3 OF 7 — ROLE
+[onboarding | 3 Role — at rest, nothing picked (validation) | heading 2] Which seat are you in?
+[onboarding | 3 Role — at rest, nothing picked (validation) | text] Role decides which surface the Dashboard centers first. You can change this anytime from Settings.
+[onboarding | 3 Role — at rest, nothing picked (validation) | aria-label] Role
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] Founder You are still the one selling. Antaeus is the system holding everything you can't keep in your head.
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] First GTM hire You are taking over a sales process the founder built. Antaeus documents it so the handoff is clear.
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] CRO / Head of Revenue You own the function. The system is the operating layer underneath your team.
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] VP Sales You are formalizing the system for the next 3-5 hires.
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] Operator You run the day-to-day — you need the right object on top, fast.
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] Advisor You are an outside lens — the system shows you what is real.
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] Back
+[onboarding | 3 Role — at rest, nothing picked (validation) | button] Continue
+[onboarding | 4 Category — at rest, nothing picked (validation) | link] ANTAEUS · ONBOARDING
+[onboarding | 4 Category — at rest, nothing picked (validation) | aria-label] Antaeus — home
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] ⌘K JUMP
+[onboarding | 4 Category — at rest, nothing picked (validation) | aria-label] Jump to a page (press cmd+K)
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Open current analysis
+[onboarding | 4 Category — at rest, nothing picked (validation) | aria-label] Scheduled actions
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] SCHEDULED ACTIONS
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] ⚙
+[onboarding | 4 Category — at rest, nothing picked (validation) | title] Settings
+[onboarding | 4 Category — at rest, nothing picked (validation) | aria-label] Open settings
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] −
+[onboarding | 4 Category — at rest, nothing picked (validation) | title] Minimize
+[onboarding | 4 Category — at rest, nothing picked (validation) | aria-label] Minimize
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] UPCOMING
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] Nothing scheduled yet.
+[onboarding | 4 Category — at rest, nothing picked (validation) | aria-label] Onboarding progress
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] STEP 4 OF 7
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] 57%
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] INTRO
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] COMPANY
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] ROLE
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] CATEGORY
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] ICP
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] FIRST ACCOUNT
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] QUOTA
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] STEP 4 OF 7 — CATEGORY & INDUSTRIES
+[onboarding | 4 Category — at rest, nothing picked (validation) | heading 2] What do you sell, and who do you sell it to?
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] Two quick picks. The product category is the shape of what you sell. Industries are the verticals you sell into — pick as many as fit, or mark yourself industry-agnostic.
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] The product category you sell from
+[onboarding | 4 Category — at rest, nothing picked (validation) | aria-label] Product category
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] HR Tech / People Ops
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] EOR / Global Employment / Payroll
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Sales Tech / Revenue Intelligence
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Marketing Tech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] CX / Support Automation
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Data Infrastructure / Analytics
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Customer Data Platform
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Vertical SaaS
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Horizontal SaaS / Productivity
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] DevOps / Engineering Tools
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Cybersecurity / Compliance
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] FinTech / Payments
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Legal Tech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] AI-Native (foundation models / agents)
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Hardware / IoT
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Services / Consulting
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Other
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] The industries you sell into
+[onboarding | 4 Category — at rest, nothing picked (validation) | field] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — at rest, nothing picked (validation) | text] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — at rest, nothing picked (validation) | aria-label] Industries
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] B2B SaaS / Tech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Financial Services / FinTech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Healthcare / Health Tech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Retail / E-commerce
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Manufacturing / Industrial
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Logistics / Supply Chain
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Energy / Utilities
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Real Estate / PropTech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Construction
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Education / EdTech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Media / Entertainment
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Telecommunications
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Travel / Hospitality
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Insurance / InsurTech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Legal / Professional Services
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Government / Public Sector
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Non-profit / Social Impact
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Agriculture / AgTech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Aerospace / Defense
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Pharma / Biotech
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Consumer Goods / CPG
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Marketing / Advertising
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Cybersecurity
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Back
+[onboarding | 4 Category — at rest, nothing picked (validation) | button] Continue
+[onboarding | 4 Category — product category picked, no industry yet (validation) | link] ANTAEUS · ONBOARDING
+[onboarding | 4 Category — product category picked, no industry yet (validation) | aria-label] Antaeus — home
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] ⌘K JUMP
+[onboarding | 4 Category — product category picked, no industry yet (validation) | aria-label] Jump to a page (press cmd+K)
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Open current analysis
+[onboarding | 4 Category — product category picked, no industry yet (validation) | aria-label] Scheduled actions
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] SCHEDULED ACTIONS
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] ⚙
+[onboarding | 4 Category — product category picked, no industry yet (validation) | title] Settings
+[onboarding | 4 Category — product category picked, no industry yet (validation) | aria-label] Open settings
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] −
+[onboarding | 4 Category — product category picked, no industry yet (validation) | title] Minimize
+[onboarding | 4 Category — product category picked, no industry yet (validation) | aria-label] Minimize
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] UPCOMING
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] Nothing scheduled yet.
+[onboarding | 4 Category — product category picked, no industry yet (validation) | aria-label] Onboarding progress
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] STEP 4 OF 7
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] 57%
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] INTRO
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] COMPANY
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] ROLE
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] CATEGORY
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] ICP
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] FIRST ACCOUNT
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] QUOTA
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] STEP 4 OF 7 — CATEGORY & INDUSTRIES
+[onboarding | 4 Category — product category picked, no industry yet (validation) | heading 2] What do you sell, and who do you sell it to?
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] Two quick picks. The product category is the shape of what you sell. Industries are the verticals you sell into — pick as many as fit, or mark yourself industry-agnostic.
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] The product category you sell from
+[onboarding | 4 Category — product category picked, no industry yet (validation) | aria-label] Product category
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] HR Tech / People Ops
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] EOR / Global Employment / Payroll
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Sales Tech / Revenue Intelligence
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Marketing Tech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] CX / Support Automation
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Data Infrastructure / Analytics
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Customer Data Platform
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Vertical SaaS
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Horizontal SaaS / Productivity
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] DevOps / Engineering Tools
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Cybersecurity / Compliance
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] FinTech / Payments
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Legal Tech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] AI-Native (foundation models / agents)
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Hardware / IoT
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Services / Consulting
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Other
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] The industries you sell into
+[onboarding | 4 Category — product category picked, no industry yet (validation) | field] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — product category picked, no industry yet (validation) | text] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — product category picked, no industry yet (validation) | aria-label] Industries
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] B2B SaaS / Tech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Financial Services / FinTech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Healthcare / Health Tech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Retail / E-commerce
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Manufacturing / Industrial
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Logistics / Supply Chain
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Energy / Utilities
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Real Estate / PropTech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Construction
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Education / EdTech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Media / Entertainment
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Telecommunications
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Travel / Hospitality
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Insurance / InsurTech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Legal / Professional Services
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Government / Public Sector
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Non-profit / Social Impact
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Agriculture / AgTech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Aerospace / Defense
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Pharma / Biotech
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Consumer Goods / CPG
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Marketing / Advertising
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Cybersecurity
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Back
+[onboarding | 4 Category — product category picked, no industry yet (validation) | button] Continue
+[onboarding | 4 Category — one industry picked | link] ANTAEUS · ONBOARDING
+[onboarding | 4 Category — one industry picked | aria-label] Antaeus — home
+[onboarding | 4 Category — one industry picked | button] ⌘K JUMP
+[onboarding | 4 Category — one industry picked | aria-label] Jump to a page (press cmd+K)
+[onboarding | 4 Category — one industry picked | button] Open current analysis
+[onboarding | 4 Category — one industry picked | aria-label] Scheduled actions
+[onboarding | 4 Category — one industry picked | text] SCHEDULED ACTIONS
+[onboarding | 4 Category — one industry picked | button] ⚙
+[onboarding | 4 Category — one industry picked | title] Settings
+[onboarding | 4 Category — one industry picked | aria-label] Open settings
+[onboarding | 4 Category — one industry picked | button] −
+[onboarding | 4 Category — one industry picked | title] Minimize
+[onboarding | 4 Category — one industry picked | aria-label] Minimize
+[onboarding | 4 Category — one industry picked | text] UPCOMING
+[onboarding | 4 Category — one industry picked | text] Nothing scheduled yet.
+[onboarding | 4 Category — one industry picked | aria-label] Onboarding progress
+[onboarding | 4 Category — one industry picked | text] STEP 4 OF 7
+[onboarding | 4 Category — one industry picked | text] 57%
+[onboarding | 4 Category — one industry picked | text] INTRO
+[onboarding | 4 Category — one industry picked | text] COMPANY
+[onboarding | 4 Category — one industry picked | text] ROLE
+[onboarding | 4 Category — one industry picked | text] CATEGORY
+[onboarding | 4 Category — one industry picked | text] ICP
+[onboarding | 4 Category — one industry picked | text] FIRST ACCOUNT
+[onboarding | 4 Category — one industry picked | text] QUOTA
+[onboarding | 4 Category — one industry picked | text] STEP 4 OF 7 — CATEGORY & INDUSTRIES
+[onboarding | 4 Category — one industry picked | heading 2] What do you sell, and who do you sell it to?
+[onboarding | 4 Category — one industry picked | text] Two quick picks. The product category is the shape of what you sell. Industries are the verticals you sell into — pick as many as fit, or mark yourself industry-agnostic.
+[onboarding | 4 Category — one industry picked | text] The product category you sell from
+[onboarding | 4 Category — one industry picked | aria-label] Product category
+[onboarding | 4 Category — one industry picked | button] HR Tech / People Ops
+[onboarding | 4 Category — one industry picked | button] EOR / Global Employment / Payroll
+[onboarding | 4 Category — one industry picked | button] Sales Tech / Revenue Intelligence
+[onboarding | 4 Category — one industry picked | button] Marketing Tech
+[onboarding | 4 Category — one industry picked | button] CX / Support Automation
+[onboarding | 4 Category — one industry picked | button] Data Infrastructure / Analytics
+[onboarding | 4 Category — one industry picked | button] Customer Data Platform
+[onboarding | 4 Category — one industry picked | button] Vertical SaaS
+[onboarding | 4 Category — one industry picked | button] Horizontal SaaS / Productivity
+[onboarding | 4 Category — one industry picked | button] DevOps / Engineering Tools
+[onboarding | 4 Category — one industry picked | button] Cybersecurity / Compliance
+[onboarding | 4 Category — one industry picked | button] FinTech / Payments
+[onboarding | 4 Category — one industry picked | button] Legal Tech
+[onboarding | 4 Category — one industry picked | button] AI-Native (foundation models / agents)
+[onboarding | 4 Category — one industry picked | button] Hardware / IoT
+[onboarding | 4 Category — one industry picked | button] Services / Consulting
+[onboarding | 4 Category — one industry picked | button] Other
+[onboarding | 4 Category — one industry picked | text] The industries you sell into
+[onboarding | 4 Category — one industry picked | field] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — one industry picked | text] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — one industry picked | aria-label] Industries
+[onboarding | 4 Category — one industry picked | button] B2B SaaS / Tech
+[onboarding | 4 Category — one industry picked | button] Financial Services / FinTech
+[onboarding | 4 Category — one industry picked | button] Healthcare / Health Tech
+[onboarding | 4 Category — one industry picked | button] Retail / E-commerce
+[onboarding | 4 Category — one industry picked | button] Manufacturing / Industrial
+[onboarding | 4 Category — one industry picked | button] Logistics / Supply Chain
+[onboarding | 4 Category — one industry picked | button] Energy / Utilities
+[onboarding | 4 Category — one industry picked | button] Real Estate / PropTech
+[onboarding | 4 Category — one industry picked | button] Construction
+[onboarding | 4 Category — one industry picked | button] Education / EdTech
+[onboarding | 4 Category — one industry picked | button] Media / Entertainment
+[onboarding | 4 Category — one industry picked | button] Telecommunications
+[onboarding | 4 Category — one industry picked | button] Travel / Hospitality
+[onboarding | 4 Category — one industry picked | button] Insurance / InsurTech
+[onboarding | 4 Category — one industry picked | button] Legal / Professional Services
+[onboarding | 4 Category — one industry picked | button] Government / Public Sector
+[onboarding | 4 Category — one industry picked | button] Non-profit / Social Impact
+[onboarding | 4 Category — one industry picked | button] Agriculture / AgTech
+[onboarding | 4 Category — one industry picked | button] Aerospace / Defense
+[onboarding | 4 Category — one industry picked | button] Pharma / Biotech
+[onboarding | 4 Category — one industry picked | button] Consumer Goods / CPG
+[onboarding | 4 Category — one industry picked | button] Marketing / Advertising
+[onboarding | 4 Category — one industry picked | button] Cybersecurity
+[onboarding | 4 Category — one industry picked | text] 1 industry selected. Add as many as are relevant.
+[onboarding | 4 Category — one industry picked | button] Back
+[onboarding | 4 Category — one industry picked | button] Continue
+[onboarding | 4 Category — two industries picked | link] ANTAEUS · ONBOARDING
+[onboarding | 4 Category — two industries picked | aria-label] Antaeus — home
+[onboarding | 4 Category — two industries picked | button] ⌘K JUMP
+[onboarding | 4 Category — two industries picked | aria-label] Jump to a page (press cmd+K)
+[onboarding | 4 Category — two industries picked | button] Open current analysis
+[onboarding | 4 Category — two industries picked | aria-label] Scheduled actions
+[onboarding | 4 Category — two industries picked | text] SCHEDULED ACTIONS
+[onboarding | 4 Category — two industries picked | button] ⚙
+[onboarding | 4 Category — two industries picked | title] Settings
+[onboarding | 4 Category — two industries picked | aria-label] Open settings
+[onboarding | 4 Category — two industries picked | button] −
+[onboarding | 4 Category — two industries picked | title] Minimize
+[onboarding | 4 Category — two industries picked | aria-label] Minimize
+[onboarding | 4 Category — two industries picked | text] UPCOMING
+[onboarding | 4 Category — two industries picked | text] Nothing scheduled yet.
+[onboarding | 4 Category — two industries picked | aria-label] Onboarding progress
+[onboarding | 4 Category — two industries picked | text] STEP 4 OF 7
+[onboarding | 4 Category — two industries picked | text] 57%
+[onboarding | 4 Category — two industries picked | text] INTRO
+[onboarding | 4 Category — two industries picked | text] COMPANY
+[onboarding | 4 Category — two industries picked | text] ROLE
+[onboarding | 4 Category — two industries picked | text] CATEGORY
+[onboarding | 4 Category — two industries picked | text] ICP
+[onboarding | 4 Category — two industries picked | text] FIRST ACCOUNT
+[onboarding | 4 Category — two industries picked | text] QUOTA
+[onboarding | 4 Category — two industries picked | text] STEP 4 OF 7 — CATEGORY & INDUSTRIES
+[onboarding | 4 Category — two industries picked | heading 2] What do you sell, and who do you sell it to?
+[onboarding | 4 Category — two industries picked | text] Two quick picks. The product category is the shape of what you sell. Industries are the verticals you sell into — pick as many as fit, or mark yourself industry-agnostic.
+[onboarding | 4 Category — two industries picked | text] The product category you sell from
+[onboarding | 4 Category — two industries picked | aria-label] Product category
+[onboarding | 4 Category — two industries picked | button] HR Tech / People Ops
+[onboarding | 4 Category — two industries picked | button] EOR / Global Employment / Payroll
+[onboarding | 4 Category — two industries picked | button] Sales Tech / Revenue Intelligence
+[onboarding | 4 Category — two industries picked | button] Marketing Tech
+[onboarding | 4 Category — two industries picked | button] CX / Support Automation
+[onboarding | 4 Category — two industries picked | button] Data Infrastructure / Analytics
+[onboarding | 4 Category — two industries picked | button] Customer Data Platform
+[onboarding | 4 Category — two industries picked | button] Vertical SaaS
+[onboarding | 4 Category — two industries picked | button] Horizontal SaaS / Productivity
+[onboarding | 4 Category — two industries picked | button] DevOps / Engineering Tools
+[onboarding | 4 Category — two industries picked | button] Cybersecurity / Compliance
+[onboarding | 4 Category — two industries picked | button] FinTech / Payments
+[onboarding | 4 Category — two industries picked | button] Legal Tech
+[onboarding | 4 Category — two industries picked | button] AI-Native (foundation models / agents)
+[onboarding | 4 Category — two industries picked | button] Hardware / IoT
+[onboarding | 4 Category — two industries picked | button] Services / Consulting
+[onboarding | 4 Category — two industries picked | button] Other
+[onboarding | 4 Category — two industries picked | text] The industries you sell into
+[onboarding | 4 Category — two industries picked | field] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — two industries picked | text] We're industry-agnostic — we sell to everyone
+[onboarding | 4 Category — two industries picked | aria-label] Industries
+[onboarding | 4 Category — two industries picked | button] B2B SaaS / Tech
+[onboarding | 4 Category — two industries picked | button] Financial Services / FinTech
+[onboarding | 4 Category — two industries picked | button] Healthcare / Health Tech
+[onboarding | 4 Category — two industries picked | button] Retail / E-commerce
+[onboarding | 4 Category — two industries picked | button] Manufacturing / Industrial
+[onboarding | 4 Category — two industries picked | button] Logistics / Supply Chain
+[onboarding | 4 Category — two industries picked | button] Energy / Utilities
+[onboarding | 4 Category — two industries picked | button] Real Estate / PropTech
+[onboarding | 4 Category — two industries picked | button] Construction
+[onboarding | 4 Category — two industries picked | button] Education / EdTech
+[onboarding | 4 Category — two industries picked | button] Media / Entertainment
+[onboarding | 4 Category — two industries picked | button] Telecommunications
+[onboarding | 4 Category — two industries picked | button] Travel / Hospitality
+[onboarding | 4 Category — two industries picked | button] Insurance / InsurTech
+[onboarding | 4 Category — two industries picked | button] Legal / Professional Services
+[onboarding | 4 Category — two industries picked | button] Government / Public Sector
+[onboarding | 4 Category — two industries picked | button] Non-profit / Social Impact
+[onboarding | 4 Category — two industries picked | button] Agriculture / AgTech
+[onboarding | 4 Category — two industries picked | button] Aerospace / Defense
+[onboarding | 4 Category — two industries picked | button] Pharma / Biotech
+[onboarding | 4 Category — two industries picked | button] Consumer Goods / CPG
+[onboarding | 4 Category — two industries picked | button] Marketing / Advertising
+[onboarding | 4 Category — two industries picked | button] Cybersecurity
+[onboarding | 4 Category — two industries picked | text] 2 industries selected. Add as many as are relevant.
+[onboarding | 4 Category — two industries picked | button] Back
+[onboarding | 4 Category — two industries picked | button] Continue
+[onboarding | 5 ICP — at rest, nothing typed (validation) | link] ANTAEUS · ONBOARDING
+[onboarding | 5 ICP — at rest, nothing typed (validation) | aria-label] Antaeus — home
+[onboarding | 5 ICP — at rest, nothing typed (validation) | button] ⌘K JUMP
+[onboarding | 5 ICP — at rest, nothing typed (validation) | aria-label] Jump to a page (press cmd+K)
+[onboarding | 5 ICP — at rest, nothing typed (validation) | button] Open current analysis
+[onboarding | 5 ICP — at rest, nothing typed (validation) | aria-label] Scheduled actions
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] SCHEDULED ACTIONS
+[onboarding | 5 ICP — at rest, nothing typed (validation) | button] ⚙
+[onboarding | 5 ICP — at rest, nothing typed (validation) | title] Settings
+[onboarding | 5 ICP — at rest, nothing typed (validation) | aria-label] Open settings
+[onboarding | 5 ICP — at rest, nothing typed (validation) | button] −
+[onboarding | 5 ICP — at rest, nothing typed (validation) | title] Minimize
+[onboarding | 5 ICP — at rest, nothing typed (validation) | aria-label] Minimize
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] UPCOMING
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] Nothing scheduled yet.
+[onboarding | 5 ICP — at rest, nothing typed (validation) | aria-label] Onboarding progress
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] STEP 5 OF 7
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] 71%
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] INTRO
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] COMPANY
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] ROLE
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] CATEGORY
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] ICP
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] FIRST ACCOUNT
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] QUOTA
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] STEP 5 OF 7 — ICP
+[onboarding | 5 ICP — at rest, nothing typed (validation) | heading 2] Write one specific ICP.
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] One sentence is enough. Specific means fewer assumptions, fewer personas, fewer use cases — that's the definition the rest of the app works from.
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] WHO IS THIS FOR?
+[onboarding | 5 ICP — at rest, nothing typed (validation) | field] WHO IS THIS FOR?
+[onboarding | 5 ICP — at rest, nothing typed (validation) | placeholder] e.g., Mid-market freight forwarders in EU expanding past their first compliance audit.
+[onboarding | 5 ICP — at rest, nothing typed (validation) | text] WHAT PAIN DO YOU SOLVE FOR THEM? (OPTIONAL)
+[onboarding | 5 ICP — at rest, nothing typed (validation) | field] WHAT PAIN DO YOU SOLVE FOR THEM? (OPTIONAL)
+[onboarding | 5 ICP — at rest, nothing typed (validation) | placeholder] e.g., Compliance prep is a 3-month manual scramble.
+[onboarding | 5 ICP — at rest, nothing typed (validation) | button] Back
+[onboarding | 5 ICP — at rest, nothing typed (validation) | button] Continue
+[onboarding | 5 ICP — vague answer typed | link] ANTAEUS · ONBOARDING
+[onboarding | 5 ICP — vague answer typed | aria-label] Antaeus — home
+[onboarding | 5 ICP — vague answer typed | button] ⌘K JUMP
+[onboarding | 5 ICP — vague answer typed | aria-label] Jump to a page (press cmd+K)
+[onboarding | 5 ICP — vague answer typed | button] Open current analysis
+[onboarding | 5 ICP — vague answer typed | aria-label] Scheduled actions
+[onboarding | 5 ICP — vague answer typed | text] SCHEDULED ACTIONS
+[onboarding | 5 ICP — vague answer typed | button] ⚙
+[onboarding | 5 ICP — vague answer typed | title] Settings
+[onboarding | 5 ICP — vague answer typed | aria-label] Open settings
+[onboarding | 5 ICP — vague answer typed | button] −
+[onboarding | 5 ICP — vague answer typed | title] Minimize
+[onboarding | 5 ICP — vague answer typed | aria-label] Minimize
+[onboarding | 5 ICP — vague answer typed | text] UPCOMING
+[onboarding | 5 ICP — vague answer typed | text] Nothing scheduled yet.
+[onboarding | 5 ICP — vague answer typed | aria-label] Onboarding progress
+[onboarding | 5 ICP — vague answer typed | text] STEP 5 OF 7
+[onboarding | 5 ICP — vague answer typed | text] 71%
+[onboarding | 5 ICP — vague answer typed | text] INTRO
+[onboarding | 5 ICP — vague answer typed | text] COMPANY
+[onboarding | 5 ICP — vague answer typed | text] ROLE
+[onboarding | 5 ICP — vague answer typed | text] CATEGORY
+[onboarding | 5 ICP — vague answer typed | text] ICP
+[onboarding | 5 ICP — vague answer typed | text] FIRST ACCOUNT
+[onboarding | 5 ICP — vague answer typed | text] QUOTA
+[onboarding | 5 ICP — vague answer typed | text] STEP 5 OF 7 — ICP
+[onboarding | 5 ICP — vague answer typed | heading 2] Write one specific ICP.
+[onboarding | 5 ICP — vague answer typed | text] One sentence is enough. Specific means fewer assumptions, fewer personas, fewer use cases — that's the definition the rest of the app works from.
+[onboarding | 5 ICP — vague answer typed | text] WHO IS THIS FOR?
+[onboarding | 5 ICP — vague answer typed | field] WHO IS THIS FOR?
+[onboarding | 5 ICP — vague answer typed | placeholder] e.g., Mid-market freight forwarders in EU expanding past their first compliance audit.
+[onboarding | 5 ICP — vague answer typed | text] WHAT PAIN DO YOU SOLVE FOR THEM? (OPTIONAL)
+[onboarding | 5 ICP — vague answer typed | field] WHAT PAIN DO YOU SOLVE FOR THEM? (OPTIONAL)
+[onboarding | 5 ICP — vague answer typed | placeholder] e.g., Compliance prep is a 3-month manual scramble.
+[onboarding | 5 ICP — vague answer typed | button] Back
+[onboarding | 5 ICP — vague answer typed | button] Continue
+[onboarding | 5 ICP — specific answer and pain typed | link] ANTAEUS · ONBOARDING
+[onboarding | 5 ICP — specific answer and pain typed | aria-label] Antaeus — home
+[onboarding | 5 ICP — specific answer and pain typed | button] ⌘K JUMP
+[onboarding | 5 ICP — specific answer and pain typed | aria-label] Jump to a page (press cmd+K)
+[onboarding | 5 ICP — specific answer and pain typed | button] Open current analysis
+[onboarding | 5 ICP — specific answer and pain typed | aria-label] Scheduled actions
+[onboarding | 5 ICP — specific answer and pain typed | text] SCHEDULED ACTIONS
+[onboarding | 5 ICP — specific answer and pain typed | button] ⚙
+[onboarding | 5 ICP — specific answer and pain typed | title] Settings
+[onboarding | 5 ICP — specific answer and pain typed | aria-label] Open settings
+[onboarding | 5 ICP — specific answer and pain typed | button] −
+[onboarding | 5 ICP — specific answer and pain typed | title] Minimize
+[onboarding | 5 ICP — specific answer and pain typed | aria-label] Minimize
+[onboarding | 5 ICP — specific answer and pain typed | text] UPCOMING
+[onboarding | 5 ICP — specific answer and pain typed | text] Nothing scheduled yet.
+[onboarding | 5 ICP — specific answer and pain typed | aria-label] Onboarding progress
+[onboarding | 5 ICP — specific answer and pain typed | text] STEP 5 OF 7
+[onboarding | 5 ICP — specific answer and pain typed | text] 71%
+[onboarding | 5 ICP — specific answer and pain typed | text] INTRO
+[onboarding | 5 ICP — specific answer and pain typed | text] COMPANY
+[onboarding | 5 ICP — specific answer and pain typed | text] ROLE
+[onboarding | 5 ICP — specific answer and pain typed | text] CATEGORY
+[onboarding | 5 ICP — specific answer and pain typed | text] ICP
+[onboarding | 5 ICP — specific answer and pain typed | text] FIRST ACCOUNT
+[onboarding | 5 ICP — specific answer and pain typed | text] QUOTA
+[onboarding | 5 ICP — specific answer and pain typed | text] STEP 5 OF 7 — ICP
+[onboarding | 5 ICP — specific answer and pain typed | heading 2] Write one specific ICP.
+[onboarding | 5 ICP — specific answer and pain typed | text] One sentence is enough. Specific means fewer assumptions, fewer personas, fewer use cases — that's the definition the rest of the app works from.
+[onboarding | 5 ICP — specific answer and pain typed | text] WHO IS THIS FOR?
+[onboarding | 5 ICP — specific answer and pain typed | field] WHO IS THIS FOR?
+[onboarding | 5 ICP — specific answer and pain typed | placeholder] e.g., Mid-market freight forwarders in EU expanding past their first compliance audit.
+[onboarding | 5 ICP — specific answer and pain typed | text] WHAT PAIN DO YOU SOLVE FOR THEM? (OPTIONAL)
+[onboarding | 5 ICP — specific answer and pain typed | field] WHAT PAIN DO YOU SOLVE FOR THEM? (OPTIONAL)
+[onboarding | 5 ICP — specific answer and pain typed | placeholder] e.g., Compliance prep is a 3-month manual scramble.
+[onboarding | 5 ICP — specific answer and pain typed | button] Back
+[onboarding | 5 ICP — specific answer and pain typed | button] Continue
+[onboarding | 6 First account — at rest | link] ANTAEUS · ONBOARDING
+[onboarding | 6 First account — at rest | aria-label] Antaeus — home
+[onboarding | 6 First account — at rest | button] ⌘K JUMP
+[onboarding | 6 First account — at rest | aria-label] Jump to a page (press cmd+K)
+[onboarding | 6 First account — at rest | button] Open current analysis
+[onboarding | 6 First account — at rest | aria-label] Scheduled actions
+[onboarding | 6 First account — at rest | text] SCHEDULED ACTIONS
+[onboarding | 6 First account — at rest | button] ⚙
+[onboarding | 6 First account — at rest | title] Settings
+[onboarding | 6 First account — at rest | aria-label] Open settings
+[onboarding | 6 First account — at rest | button] −
+[onboarding | 6 First account — at rest | title] Minimize
+[onboarding | 6 First account — at rest | aria-label] Minimize
+[onboarding | 6 First account — at rest | text] UPCOMING
+[onboarding | 6 First account — at rest | text] Nothing scheduled yet.
+[onboarding | 6 First account — at rest | aria-label] Onboarding progress
+[onboarding | 6 First account — at rest | text] STEP 6 OF 7
+[onboarding | 6 First account — at rest | text] 86%
+[onboarding | 6 First account — at rest | text] INTRO
+[onboarding | 6 First account — at rest | text] COMPANY
+[onboarding | 6 First account — at rest | text] ROLE
+[onboarding | 6 First account — at rest | text] CATEGORY
+[onboarding | 6 First account — at rest | text] ICP
+[onboarding | 6 First account — at rest | text] FIRST ACCOUNT
+[onboarding | 6 First account — at rest | text] QUOTA
+[onboarding | 6 First account — at rest | text] STEP 6 OF 7 — FIRST ACCOUNT
+[onboarding | 6 First account — at rest | heading 2] Pick one company that fits the ICP.
+[onboarding | 6 First account — at rest | text] Optional, but the workspace feels real once a named account lands in Signal Console.
+[onboarding | 6 First account — at rest | text] ACCOUNT NAME (OPTIONAL)
+[onboarding | 6 First account — at rest | field] ACCOUNT NAME (OPTIONAL)
+[onboarding | 6 First account — at rest | placeholder] e.g., Meridian Logistics
+[onboarding | 6 First account — at rest | text] WHY NOW? (ONE SIGNAL THAT PULLED THEM UP — OPTIONAL)
+[onboarding | 6 First account — at rest | field] WHY NOW? (ONE SIGNAL THAT PULLED THEM UP — OPTIONAL)
+[onboarding | 6 First account — at rest | placeholder] e.g., Just announced EU expansion.
+[onboarding | 6 First account — at rest | button] Back
+[onboarding | 6 First account — at rest | button] Continue
+[onboarding | 6 First account — Boeing and a reason entered | link] ANTAEUS · ONBOARDING
+[onboarding | 6 First account — Boeing and a reason entered | aria-label] Antaeus — home
+[onboarding | 6 First account — Boeing and a reason entered | button] ⌘K JUMP
+[onboarding | 6 First account — Boeing and a reason entered | aria-label] Jump to a page (press cmd+K)
+[onboarding | 6 First account — Boeing and a reason entered | button] Open current analysis
+[onboarding | 6 First account — Boeing and a reason entered | aria-label] Scheduled actions
+[onboarding | 6 First account — Boeing and a reason entered | text] SCHEDULED ACTIONS
+[onboarding | 6 First account — Boeing and a reason entered | button] ⚙
+[onboarding | 6 First account — Boeing and a reason entered | title] Settings
+[onboarding | 6 First account — Boeing and a reason entered | aria-label] Open settings
+[onboarding | 6 First account — Boeing and a reason entered | button] −
+[onboarding | 6 First account — Boeing and a reason entered | title] Minimize
+[onboarding | 6 First account — Boeing and a reason entered | aria-label] Minimize
+[onboarding | 6 First account — Boeing and a reason entered | text] UPCOMING
+[onboarding | 6 First account — Boeing and a reason entered | text] Nothing scheduled yet.
+[onboarding | 6 First account — Boeing and a reason entered | aria-label] Onboarding progress
+[onboarding | 6 First account — Boeing and a reason entered | text] STEP 6 OF 7
+[onboarding | 6 First account — Boeing and a reason entered | text] 86%
+[onboarding | 6 First account — Boeing and a reason entered | text] INTRO
+[onboarding | 6 First account — Boeing and a reason entered | text] COMPANY
+[onboarding | 6 First account — Boeing and a reason entered | text] ROLE
+[onboarding | 6 First account — Boeing and a reason entered | text] CATEGORY
+[onboarding | 6 First account — Boeing and a reason entered | text] ICP
+[onboarding | 6 First account — Boeing and a reason entered | text] FIRST ACCOUNT
+[onboarding | 6 First account — Boeing and a reason entered | text] QUOTA
+[onboarding | 6 First account — Boeing and a reason entered | text] STEP 6 OF 7 — FIRST ACCOUNT
+[onboarding | 6 First account — Boeing and a reason entered | heading 2] Pick one company that fits the ICP.
+[onboarding | 6 First account — Boeing and a reason entered | text] Optional, but the workspace feels real once a named account lands in Signal Console.
+[onboarding | 6 First account — Boeing and a reason entered | text] ACCOUNT NAME (OPTIONAL)
+[onboarding | 6 First account — Boeing and a reason entered | field] ACCOUNT NAME (OPTIONAL)
+[onboarding | 6 First account — Boeing and a reason entered | placeholder] e.g., Meridian Logistics
+[onboarding | 6 First account — Boeing and a reason entered | text] WHY NOW? (ONE SIGNAL THAT PULLED THEM UP — OPTIONAL)
+[onboarding | 6 First account — Boeing and a reason entered | field] WHY NOW? (ONE SIGNAL THAT PULLED THEM UP — OPTIONAL)
+[onboarding | 6 First account — Boeing and a reason entered | placeholder] e.g., Just announced EU expansion.
+[onboarding | 6 First account — Boeing and a reason entered | button] Back
+[onboarding | 6 First account — Boeing and a reason entered | button] Continue
+[onboarding | 7 Quota — at rest | link] ANTAEUS · ONBOARDING
+[onboarding | 7 Quota — at rest | aria-label] Antaeus — home
+[onboarding | 7 Quota — at rest | button] ⌘K JUMP
+[onboarding | 7 Quota — at rest | aria-label] Jump to a page (press cmd+K)
+[onboarding | 7 Quota — at rest | button] Open current analysis
+[onboarding | 7 Quota — at rest | aria-label] Scheduled actions
+[onboarding | 7 Quota — at rest | text] SCHEDULED ACTIONS
+[onboarding | 7 Quota — at rest | button] ⚙
+[onboarding | 7 Quota — at rest | title] Settings
+[onboarding | 7 Quota — at rest | aria-label] Open settings
+[onboarding | 7 Quota — at rest | button] −
+[onboarding | 7 Quota — at rest | title] Minimize
+[onboarding | 7 Quota — at rest | aria-label] Minimize
+[onboarding | 7 Quota — at rest | text] UPCOMING
+[onboarding | 7 Quota — at rest | text] Nothing scheduled yet.
+[onboarding | 7 Quota — at rest | aria-label] Onboarding progress
+[onboarding | 7 Quota — at rest | text] STEP 7 OF 7
+[onboarding | 7 Quota — at rest | text] 100%
+[onboarding | 7 Quota — at rest | text] INTRO
+[onboarding | 7 Quota — at rest | text] COMPANY
+[onboarding | 7 Quota — at rest | text] ROLE
+[onboarding | 7 Quota — at rest | text] CATEGORY
+[onboarding | 7 Quota — at rest | text] ICP
+[onboarding | 7 Quota — at rest | text] FIRST ACCOUNT
+[onboarding | 7 Quota — at rest | text] QUOTA
+[onboarding | 7 Quota — at rest | text] STEP 7 OF 7 — QUOTA
+[onboarding | 7 Quota — at rest | heading 2] What revenue does the year owe?
+[onboarding | 7 Quota — at rest | text] Quota Workback turns these into a weekly execution plan. Optional — you can fill it later.
+[onboarding | 7 Quota — at rest | text] ANNUAL QUOTA ($)
+[onboarding | 7 Quota — at rest | field] ANNUAL QUOTA ($)
+[onboarding | 7 Quota — at rest | placeholder] e.g., 1,200,000
+[onboarding | 7 Quota — at rest | text] AVG DEAL SIZE ($)
+[onboarding | 7 Quota — at rest | field] AVG DEAL SIZE ($)
+[onboarding | 7 Quota — at rest | placeholder] e.g., 50,000
+[onboarding | 7 Quota — at rest | button] Back
+[onboarding | 7 Quota — at rest | button] Finish onboarding
+[onboarding | 7 Quota — annual quota entered | link] ANTAEUS · ONBOARDING
+[onboarding | 7 Quota — annual quota entered | aria-label] Antaeus — home
+[onboarding | 7 Quota — annual quota entered | button] ⌘K JUMP
+[onboarding | 7 Quota — annual quota entered | aria-label] Jump to a page (press cmd+K)
+[onboarding | 7 Quota — annual quota entered | button] Open current analysis
+[onboarding | 7 Quota — annual quota entered | aria-label] Scheduled actions
+[onboarding | 7 Quota — annual quota entered | text] SCHEDULED ACTIONS
+[onboarding | 7 Quota — annual quota entered | button] ⚙
+[onboarding | 7 Quota — annual quota entered | title] Settings
+[onboarding | 7 Quota — annual quota entered | aria-label] Open settings
+[onboarding | 7 Quota — annual quota entered | button] −
+[onboarding | 7 Quota — annual quota entered | title] Minimize
+[onboarding | 7 Quota — annual quota entered | aria-label] Minimize
+[onboarding | 7 Quota — annual quota entered | text] UPCOMING
+[onboarding | 7 Quota — annual quota entered | text] Nothing scheduled yet.
+[onboarding | 7 Quota — annual quota entered | aria-label] Onboarding progress
+[onboarding | 7 Quota — annual quota entered | text] STEP 7 OF 7
+[onboarding | 7 Quota — annual quota entered | text] 100%
+[onboarding | 7 Quota — annual quota entered | text] INTRO
+[onboarding | 7 Quota — annual quota entered | text] COMPANY
+[onboarding | 7 Quota — annual quota entered | text] ROLE
+[onboarding | 7 Quota — annual quota entered | text] CATEGORY
+[onboarding | 7 Quota — annual quota entered | text] ICP
+[onboarding | 7 Quota — annual quota entered | text] FIRST ACCOUNT
+[onboarding | 7 Quota — annual quota entered | text] QUOTA
+[onboarding | 7 Quota — annual quota entered | text] STEP 7 OF 7 — QUOTA
+[onboarding | 7 Quota — annual quota entered | heading 2] What revenue does the year owe?
+[onboarding | 7 Quota — annual quota entered | text] Quota Workback turns these into a weekly execution plan. Optional — you can fill it later.
+[onboarding | 7 Quota — annual quota entered | text] ANNUAL QUOTA ($)
+[onboarding | 7 Quota — annual quota entered | field] ANNUAL QUOTA ($)
+[onboarding | 7 Quota — annual quota entered | placeholder] e.g., 1,200,000
+[onboarding | 7 Quota — annual quota entered | text] AVG DEAL SIZE ($)
+[onboarding | 7 Quota — annual quota entered | field] AVG DEAL SIZE ($)
+[onboarding | 7 Quota — annual quota entered | placeholder] e.g., 50,000
+[onboarding | 7 Quota — annual quota entered | button] Back
+[onboarding | 7 Quota — annual quota entered | button] Finish onboarding
+[onboarding | 8 Complete — after finishing | link] ANTAEUS · ONBOARDING
+[onboarding | 8 Complete — after finishing | aria-label] Antaeus — home
+[onboarding | 8 Complete — after finishing | button] ⌘K JUMP
+[onboarding | 8 Complete — after finishing | aria-label] Jump to a page (press cmd+K)
+[onboarding | 8 Complete — after finishing | button] Open current analysis
+[onboarding | 8 Complete — after finishing | aria-label] Scheduled actions
+[onboarding | 8 Complete — after finishing | text] SCHEDULED ACTIONS
+[onboarding | 8 Complete — after finishing | button] ⚙
+[onboarding | 8 Complete — after finishing | title] Settings
+[onboarding | 8 Complete — after finishing | aria-label] Open settings
+[onboarding | 8 Complete — after finishing | button] −
+[onboarding | 8 Complete — after finishing | title] Minimize
+[onboarding | 8 Complete — after finishing | aria-label] Minimize
+[onboarding | 8 Complete — after finishing | text] UPCOMING
+[onboarding | 8 Complete — after finishing | text] Nothing scheduled yet.
+[onboarding | 8 Complete — after finishing | aria-label] Onboarding progress
+[onboarding | 8 Complete — after finishing | text] STEP 7 OF 7
+[onboarding | 8 Complete — after finishing | text] 100%
+[onboarding | 8 Complete — after finishing | text] INTRO
+[onboarding | 8 Complete — after finishing | text] COMPANY
+[onboarding | 8 Complete — after finishing | text] ROLE
+[onboarding | 8 Complete — after finishing | text] CATEGORY
+[onboarding | 8 Complete — after finishing | text] ICP
+[onboarding | 8 Complete — after finishing | text] FIRST ACCOUNT
+[onboarding | 8 Complete — after finishing | text] QUOTA
+[onboarding | 8 Complete — after finishing | text] ONBOARDING COMPLETE
+[onboarding | 8 Complete — after finishing | heading 2] The workspace is live.
+[onboarding | 8 Complete — after finishing | text] Your answers seeded an ICP, an account, and a quota plan. Welcome will guide the next real moves.
+[onboarding | 8 Complete — after finishing | link] Start the first move
+[onboarding | 8 Complete — after finishing | text] Or jump straight to the Dashboard, Quota Workback, or Settings.
+[onboarding | 8 Complete — after finishing | link] the Dashboard
+[onboarding | 8 Complete — after finishing | link] Quota Workback
+[onboarding | 8 Complete — after finishing | link] Settings
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] ANTAEUS · ONBOARDING
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | aria-label] Antaeus — home
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | button] ⌘K JUMP
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | aria-label] Jump to a page (press cmd+K)
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | aria-label] Page directory
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] ⌘K
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | field] Filter pages
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | aria-label] Filter pages
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | placeholder] Jump to a page… (Esc to close)
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] 26 / 26
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] GETTING STARTED
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] WELCOME Welcome Today's recommended starting point.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] ONBOARDING Onboarding Set up your ICP, role, accounts, deals, and quota.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] PRIORITIES
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] DASHBOARD Dashboard Pipeline, account priorities, activity, and deal risk.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] SALES ACTIVITY
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] SIGNAL CONSOLE Signal Console Monitor account signals and priority.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] OUTBOUND STUDIO Outbound Studio Create and manage account-specific outbound messages.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] COLD CALL STUDIO Cold Call Studio Prepare for cold calls and record the outcomes.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] LINKEDIN PLAYBOOK LinkedIn Playbook Plan LinkedIn outreach alongside calls and email.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] DISCOVERY STUDIO Discovery Studio Prepare and run a discovery call, with buyer-specific questions and next-step capture.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] CALL IN A FAVOR Call in a Favor Request specific help from your network for a deal.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] GETTING TO SIGNED Getting to Signed Manage legal, security, finance, and final approval.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] OUTDOORS EVENTS Outdoors Events Find events relevant to your target buyers and accounts.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] SALES PLANNING
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] ICP STUDIO ICP Studio Define the companies and buyers you sell to.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] TERRITORY ARCHITECT Territory Architect Create and prioritize territory segments.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] PROSPECTING DESK Prospecting Desk Save target criteria, add companies, and qualify accounts.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] PILOT DESK Pilot Desk Plan pilots, measure results, and agree on the next decision.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] DEAL RISK
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] DEAL WORKSPACE Deal Workspace Review open deals, next steps, and risk factors.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] FUTURE AUTOPSY Future Autopsy Review deal-loss risk, supporting evidence, and corrective actions.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] ANALYSIS AND HANDOFF
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] QUOTA WORKBACK Quota Workback Calculate the activity and pipeline required to hit quota.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] FOUNDING GTM Founding GTM Document sales patterns and processes for another seller.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] BRIEFING Briefing Review account and market changes, evidence, and recommendations.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] WORKSPACE SETTINGS
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | link] SETTINGS Settings Backup, restore, demo mode, category, cloud sync.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] SKILLS
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | button] SKILL Review this week's workspace analysis Open the Dashboard to review current sales priorities and supporting evidence.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | button] ⏰
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | aria-label] Schedule Review this week's workspace analysis
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | button] SKILL Prep for my next call Open Discovery Studio for the highest-priority account in Signal Console, ready to prepare the call.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | aria-label] Schedule Prep for my next call
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | button] SKILL What's at risk this week Open Deal Workspace pre-filtered to the five most stalled open deals in your pipeline.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | aria-label] Schedule What's at risk this week
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | button] SKILL Plan a pilot for the highest-risk deal Open Pilot Desk with the highest-ranked open deal preselected for pilot planning.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | aria-label] Schedule Plan a pilot for the highest-risk deal
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | button] SKILL Compose this week's outbound Open Outbound Studio with the highest-priority account from Signal Console preselected.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | aria-label] Schedule Compose this week's outbound
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] ↑↓ navigate · ↵ open · Esc close
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | button] Open current analysis
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | aria-label] Scheduled actions
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] SCHEDULED ACTIONS
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | button] ⚙
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | title] Settings
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | aria-label] Open settings
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | button] −
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | title] Minimize
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | aria-label] Minimize
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] UPCOMING
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] Nothing scheduled yet.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | aria-label] Onboarding progress
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] STEP 1 OF 7
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] 14%
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] INTRO
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] COMPANY
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] ROLE
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] CATEGORY
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] ICP
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] FIRST ACCOUNT
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] QUOTA
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] STEP 1 OF 7 — WELCOME
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | heading 2] Antaeus turns the revenue work a founder is doing into a clear picture of what's actually happening.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] It's not a CRM and it's not an enablement library. Six quick answers and the workspace will already be live.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] The dashboard wakes up live. Every answer here turns into a real Brief item before you leave Onboarding.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] You can skip any step except the first. The first ask is a one-line ICP — everything else the system does compounds off of it.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | text] Nothing is sent anywhere. Everything below stays on this device until you decide to wire cloud sync from Settings.
+[onboarding | 1 Intro — jump list opened (“⌘K JUMP”) | button] Begin
+[onboarding | 1 Intro — “Open current analysis” opened | link] ANTAEUS · ONBOARDING
+[onboarding | 1 Intro — “Open current analysis” opened | aria-label] Antaeus — home
+[onboarding | 1 Intro — “Open current analysis” opened | button] ⌘K JUMP
+[onboarding | 1 Intro — “Open current analysis” opened | aria-label] Jump to a page (press cmd+K)
+[onboarding | 1 Intro — “Open current analysis” opened | aria-label] Current analysis
+[onboarding | 1 Intro — “Open current analysis” opened | text] BIRDSEYE · CURRENT ANALYSIS
+[onboarding | 1 Intro — “Open current analysis” opened | button] ×
+[onboarding | 1 Intro — “Open current analysis” opened | aria-label] Close
+[onboarding | 1 Intro — “Open current analysis” opened | text] No higher-priority recommended action is available right now. Check again after account, deal, or activity data changes.
+[onboarding | 1 Intro — “Open current analysis” opened | button] Close current analysis
+[onboarding | 1 Intro — “Open current analysis” opened | aria-label] Scheduled actions
+[onboarding | 1 Intro — “Open current analysis” opened | text] SCHEDULED ACTIONS
+[onboarding | 1 Intro — “Open current analysis” opened | button] ⚙
+[onboarding | 1 Intro — “Open current analysis” opened | title] Settings
+[onboarding | 1 Intro — “Open current analysis” opened | aria-label] Open settings
+[onboarding | 1 Intro — “Open current analysis” opened | button] −
+[onboarding | 1 Intro — “Open current analysis” opened | title] Minimize
+[onboarding | 1 Intro — “Open current analysis” opened | aria-label] Minimize
+[onboarding | 1 Intro — “Open current analysis” opened | text] UPCOMING
+[onboarding | 1 Intro — “Open current analysis” opened | text] Nothing scheduled yet.
+[onboarding | 1 Intro — “Open current analysis” opened | aria-label] Onboarding progress
+[onboarding | 1 Intro — “Open current analysis” opened | text] STEP 1 OF 7
+[onboarding | 1 Intro — “Open current analysis” opened | text] 14%
+[onboarding | 1 Intro — “Open current analysis” opened | text] INTRO
+[onboarding | 1 Intro — “Open current analysis” opened | text] COMPANY
+[onboarding | 1 Intro — “Open current analysis” opened | text] ROLE
+[onboarding | 1 Intro — “Open current analysis” opened | text] CATEGORY
+[onboarding | 1 Intro — “Open current analysis” opened | text] ICP
+[onboarding | 1 Intro — “Open current analysis” opened | text] FIRST ACCOUNT
+[onboarding | 1 Intro — “Open current analysis” opened | text] QUOTA
+[onboarding | 1 Intro — “Open current analysis” opened | text] STEP 1 OF 7 — WELCOME
+[onboarding | 1 Intro — “Open current analysis” opened | heading 2] Antaeus turns the revenue work a founder is doing into a clear picture of what's actually happening.
+[onboarding | 1 Intro — “Open current analysis” opened | text] It's not a CRM and it's not an enablement library. Six quick answers and the workspace will already be live.
+[onboarding | 1 Intro — “Open current analysis” opened | text] The dashboard wakes up live. Every answer here turns into a real Brief item before you leave Onboarding.
+[onboarding | 1 Intro — “Open current analysis” opened | text] You can skip any step except the first. The first ask is a one-line ICP — everything else the system does compounds off of it.
+[onboarding | 1 Intro — “Open current analysis” opened | text] Nothing is sent anywhere. Everything below stays on this device until you decide to wire cloud sync from Settings.
+[onboarding | 1 Intro — “Open current analysis” opened | button] Begin
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | link] ANTAEUS · ONBOARDING
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | aria-label] Antaeus — home
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | button] ⌘K JUMP
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | aria-label] Jump to a page (press cmd+K)
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | button] Open current analysis
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | aria-label] Scheduled actions
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] SCHEDULED ACTIONS
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | button] ⚙
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | title] Settings
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | aria-label] Close settings
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | button] −
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | title] Minimize
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | aria-label] Minimize
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] UPCOMING
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] Nothing scheduled yet.
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] SETTINGS
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] Show in-session notifications
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | button] Show in-session notifications
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] Show tooltip hints
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | button] Show tooltip hints
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] Show schedule panel
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | button] Show schedule panel
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] Pause notifications
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | button] OFF
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | button] 1H
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | button] 4H
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | aria-label] Onboarding progress
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] STEP 1 OF 7
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] 14%
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] INTRO
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] COMPANY
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] ROLE
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] CATEGORY
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] ICP
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] FIRST ACCOUNT
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] QUOTA
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] STEP 1 OF 7 — WELCOME
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | heading 2] Antaeus turns the revenue work a founder is doing into a clear picture of what's actually happening.
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] It's not a CRM and it's not an enablement library. Six quick answers and the workspace will already be live.
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] The dashboard wakes up live. Every answer here turns into a real Brief item before you leave Onboarding.
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] You can skip any step except the first. The first ask is a one-line ICP — everything else the system does compounds off of it.
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | text] Nothing is sent anywhere. Everything below stays on this device until you decide to wire cloud sync from Settings.
+[onboarding | 1 Intro — scheduled-actions settings opened (“⚙”) | button] Begin

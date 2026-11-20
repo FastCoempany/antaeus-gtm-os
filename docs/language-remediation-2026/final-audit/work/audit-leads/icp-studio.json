@@ -1,0 +1,180 @@
+{
+ "area": "icp-studio",
+ "coverage": [
+  {
+   "surface": "ICP Studio default screen (v4)",
+   "generation": "v4",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/icp-studio/v4/IcpStudioV4.tsx",
+    "src/icp-studio/lib/quality.ts",
+    "src/icp-studio/lib/builders.ts",
+    "src/signal-console/lib/icp-match.ts"
+   ],
+   "note": "Read the full component and the quality/builder/match code it calls; compared against the SMB walkthrough (corpus-smb/icp-studio.txt, area at rest + 'The first seller hired' click). Not executed in a browser by me."
+  }
+ ],
+ "findings": [
+  {
+   "id": "ICP-001",
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/icp-studio/v4/IcpStudioV4.tsx",
+   "line": 57,
+   "generation": "v4",
+   "state": "Area at rest, any workspace: the 8th quality check and the tier label",
+   "current": "activeAccounts: totalWorked.value  \u2192  check renders \"The working account list is small; confirm that the list is large enough to support the planned outreach volume.\" (SMB walkthrough, area at rest) while the same screen says \"HOW YOUR 29 WATCHED ACCOUNTS MATCH THE ICP\"",
+   "problem": "totalWorked is not an account count. It is the number of ICPs marked worked (demo seed: icps.filter(i=>i.worked).length, js/demo-seed-runtime.js:191) and it is bumped by 1 every time an ICP is saved (state.ts saveDraftAsIcp \u2192 bumpTotalWorked(1)). The quality engine treats it as the working-list size, so the screen tells the user their account list is small (or 'No working-list size is recorded yet') based on a count of saved ICPs. The comment at line 68-69 repeats the wrong premise. This also lowers/raises the quality score and the tier the user sees. Second divergence: saveDraftAsIcp() computes the stored qualityScore with engineActive (always 0 from v4, which has no input for it), so the score saved and later read by Signal Console/Readiness (bestSavedIcp, readiness quality) differs from the score shown when the user clicked Save.",
+   "governing": "COPY_STANDARD.md \u00a721 (claims discipline: never more certain than the data); comprehension principle; AUDIT_BRIEF \u00a75 'copy that now claims something the code does not do'",
+   "proposed": "Pass the number of watched accounts the screen already reads: in IcpStudioV4 compute `const accounts = readAccounts();` before buildIcpQuality and use `activeAccounts: accounts.length`; correct the comment at lines 68-69. In state.ts saveDraftAsIcp accept an optional activeAccounts override (default engineActive) and pass the same accounts.length from the v4 save() so the stored qualityScore equals the score shown. OWNER DECISION: whether the working-list check should measure watched Signal Console accounts or a separate target the user enters (the ds/legacy screens have an engineActive input; v4 has none).",
+   "testsAffected": [
+    "src/icp-studio/state.test.ts (saveDraftAsIcp quality assertions, if the signature changes)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-002",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/icp-studio/v4/IcpStudioV4.tsx",
+   "line": 163,
+   "generation": "v4",
+   "state": "Area at rest with watched accounts: account-match columns",
+   "current": "Header \"Accounts that do not match \u00b7 and why\"; rows render only \"<b>Notion</b> \u2014 Productivity Software\" / \"Warby Parker \u2014 DTC Eyewear\"; partial matches are counted (\"3 partial matches\") but never listed or explained",
+   "problem": "Batch 01 structural requirement for ICP Studio says the account-match area must answer how many strongly match, partially match, do not match, AND why. The header promises a reason but each row shows only the account's industry, so the user must infer the comparison (industry vs ICP industry, HQ vs ICP geography) themselves. The 3 partial matches have no list and no reason at all. The match is computed only from industry and geography (scoreAccountAgainstIcp) \u2014 company size is ignored \u2014 which the screen never says.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md 'Structural requirements \u00b7 ICP Studio' (account-match area must answer why)",
+   "proposed": "Derive a reason per account from the same two comparisons scoreAccountAgainstIcp makes and render it: non-match row \"Notion \u2014 industry is Productivity Software, not Food service / DTC / CPG\"; when industry matches but HQ does not: \"<name> \u2014 based outside US\". Add a third column \"Partial matches \u00b7 and why\" listing up to 2 with the same reason format plus \"+ N more partial matches\". Under the counts add one line: \"Matching compares each account's industry and headquarters with the ICP. Company size is not used.\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-003",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/icp-studio/v4/IcpStudioV4.tsx",
+   "line": 128,
+   "generation": "v4",
+   "state": "Area at rest when the ICP tier is Too broad / Partially defined / Well defined",
+   "current": "{t(\"Why this ICP is specific\")} \u00b7 {passed} {t(\"of\")} {quality.checks.length} {t(\"criteria\")}  \u2192 e.g. \"WHY THIS ICP IS SPECIFIC \u00b7 2 OF 8 CRITERIA\" above a list of \u2715 items on a Too broad ICP",
+   "problem": "The approved replacement was written for the highly-specific case; the label is rendered unconditionally, so a Too broad ICP is headed 'Why this ICP is specific' \u2014 the header contradicts the tier pill and the \u2715 list (declarative certainty / misleading). Also the denominator is checks.length, which becomes 9 when the founder/first-seller coverage warning is appended, so '7 of 9 criteria' counts a warning as a criterion.",
+   "governing": "04_REWRITE_BATCH_01_SHARED_AND_CORE.md exact row 'WHAT MAKES IT SHARP \u2014 6 OF 8' \u2192 'WHY THIS ICP IS SPECIFIC \u00b7 6 OF 8 CRITERIA' (record B1-X-055); comprehension principle",
+   "proposed": "Render the approved text only when quality.tier === \"sharp\"; otherwise \"ICP criteria met \u00b7 {passed} of 8\". Count the denominator from the eight scored checks (exclude the role coverage warning, e.g. quality.checks.slice(0, 8)).",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-004",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/icp-studio/lib/builders.ts",
+   "line": 53,
+   "generation": "shared",
+   "state": "Area at rest with a complete ICP: headline statement, input label and quality check for the same field",
+   "current": "Field label \"Time to demonstrate value\" (IcpStudioV4.tsx:225); statement \"\u2026and the planned value-validation period is 14-30 days.\" (builders.ts:53); check \"The evidence window is defined.\" (quality.ts:114/116); risk \"Choose a time window for demonstrating value\u2026\"",
+   "problem": "One input is called three different things on one screen ('time to demonstrate value', 'value-validation period', 'evidence window'), so the reader has to work out that they are the same criterion (high-context / private ontology; 'evidence window' and 'value-validation period' are not terms a newcomer knows). The statement also calls the trigger 'the proposed buying trigger'.",
+   "governing": "COPY_STANDARD.md \u00a72 (literal nouns, one name per concept); comprehension principle",
+   "proposed": "Use the field's own label everywhere. builders.ts:53 \u2192 `\u2026where the ${buyer} owns ${pain}. The buying trigger is ${trigger.toLowerCase()}, and the time to demonstrate value is ${proofWindow}.`; quality.ts:114 \u2192 \"Time to demonstrate value is defined and short enough to evaluate quickly.\"; quality.ts:116 \u2192 \"Time to demonstrate value is defined.\"; builders.ts:21 hint \u2192 \"Tip: choose one owner, one problem, one trigger and one time to demonstrate value.\"",
+   "testsAffected": [
+    "src/icp-studio/lib/builders.test.ts:44 (expects 'planned value-validation period')"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "ICP-005",
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/icp-studio/v4/IcpStudioV4.tsx",
+   "line": 246,
+   "generation": "v4",
+   "state": "Area at rest, footer next to 'Save this ICP'",
+   "current": "This ICP is used to score accounts in Territory \u00b7 Prospecting \u00b7 Signal Console \u00b7 Outbound \u00b7 Discovery and contributes to Readiness and sales handoff documentation.",
+   "problem": "The claim is not what the code does. A repo-wide search for readers of gtmos_icp_analytics / bestSavedIcp / matchAccountToIcp finds no reader in territory-architect, outbound-studio or discovery-studio. ICP match scores are computed only in Signal Console's ds/legacy account cards (signal-console/components/AccountCard.tsx, ds/components/AccountCardDS.tsx) \u2014 the default Signal Console v4 screen does not show them \u2014 and on this ICP Studio screen. Prospecting Desk reads the ICP as search context (prospecting-desk/lib/research-context.ts), LinkedIn Playbook reads it for context, and Readiness (dashboard/lib/readiness-aggregator.ts) and Founding GTM (founding-gtm/lib/cross-room.ts) do read it. A first-time user is told five areas score their accounts with this ICP; three never read it.",
+   "governing": "COPY_STANDARD.md \u00a721 (claims discipline); original record INV-0255 (01_USER_FACING_COPY_INVENTORY.json records[255], 'review_and_rewrite_if_functional_meaning_is_obscured'); AUDIT_BRIEF \u00a75 copy that claims something the code does not do",
+   "proposed": "Replace with what is wired today: \"This ICP is shown as a match score on this page, guides account searches in Prospecting Desk, and counts toward Readiness and the sales handoff documentation.\" OWNER DECISION: if Territory, Outbound and Discovery are meant to use the ICP, that is new behavior to build; until then the screen must not say they do.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-006",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/icp-studio/lib/builders.ts",
+   "line": 78,
+   "generation": "shared",
+   "state": "ds FOCUS card and legacy FOCUS RECOMMENDATION output after the user types a Working-list size / Active accounts value",
+   "current": "n <= 20: \"Work ${n} active accounts over the next 30 days, using the target you entered. Rank them and review the order weekly.\"; n > 20: \"\u2026Keep the top ${ranked} ranked and review the order weekly.\"",
+   "problem": "'Rank' is used for something the user is asked to do, which the owner ruled out (COPY_STANDARD \u00a726; owner 2026-11-09: 'I don't like it in language associated with inputs/things the user is doing'). It also does not say what to order by. Not rendered on v4 (v4 calls buildFocus(role, null)) but rendered on the ds and legacy screens.",
+   "governing": "COPY_STANDARD.md \u00a726; AUDIT_BRIEF \u00a73 disputed term 'rank'; area instruction ('lib/builders.ts \"Rank them and review the order weekly\" asks the user to rank')",
+   "proposed": "n <= 20: \"Work ${n} active accounts over the next 30 days, using the target you entered. Put them in priority order and review that order weekly.\"; n > 20: \"Work ${n} active accounts over the next 30 days, using the target you entered. Keep your ${ranked} highest-priority accounts at the top and review that list weekly.\" Also update the doc comment at builders.ts:63-64.",
+   "testsAffected": [
+    "src/icp-studio/lib/builders.test.ts (buildFocus cases, if they assert the text)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-007",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/icp-studio/ds/components/IcpObject.tsx",
+   "line": 99,
+   "generation": "ds",
+   "state": "ds screen (?v4=0) once an industry is chosen: handoff strip at the bottom of the ICP object",
+   "current": "kicker \"RUN THE ICP\"; title \"Take this target into the strategy flow\"; aria-label \"Use the ICP in outreach\"; routes \"Build the territory\" \u00b7 \"Source prospects\" \u00b7 \"Watch the radar\" \u00b7 \"Compose outbound\"",
+   "problem": "'Watch the radar' is a metaphor standing for Signal Console (metaphor / high-context: the reader cannot tell where the link goes). 'the strategy flow' is internal doctrine naming the sequence of areas (private ontology). 'RUN THE ICP' is compressed \u2014 an ICP is not run. The aria-label says 'outreach' while three of the four routes are not outreach.",
+   "governing": "COPY_STANDARD.md \u00a73 (private vocabulary), \u00a74 (branded names need a literal description); comprehension principle",
+   "proposed": "kicker \"USE THIS ICP\"; title \"Use this ICP to plan territory, find accounts, and write outreach\"; aria-label \"Use this ICP in other areas\"; routes \"Build the territory\" \u00b7 \"Find matching accounts in Prospecting Desk\" \u00b7 \"Open Signal Console\" \u00b7 \"Compose outbound\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-008",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/icp-studio/ds/components/IcpBuilder.tsx",
+   "line": 343,
+   "generation": "ds",
+   "state": "ds builder form, and legacy WorkArea form + ledger",
+   "current": "ds label \"Evidence window\" (IcpBuilder.tsx:343); legacy label \"Evidence window\" with hint \"How fast you can demonstrate value (matters a lot early stage).\" (WorkArea.tsx:315-316); legacy ledger row field \"Evidence window\" (WedgeLedger.tsx:158); RunDocket \"Evidence window is unset.\" (RunDocket.tsx:86)",
+   "problem": "'Evidence window' is not a term a first-time user knows; the ds screen gives no hint at all, so the reader cannot tell it means how long the buyer needs to see value. The v4 screen already calls the same field 'Time to demonstrate value'.",
+   "governing": "COPY_STANDARD.md \u00a72 (literal nouns); comprehension principle; consistency with ICP-004",
+   "proposed": "Label \"Time to demonstrate value\" in IcpBuilder.tsx:343, WorkArea.tsx:315, WedgeLedger.tsx:158 and RunDocket.tsx:86 (\"Time to demonstrate value is not set.\"); legacy hint \u2192 \"How long the buyer needs to see value from the product.\"",
+   "testsAffected": [
+    "tests/e2e/program-6-pr5-icp-studio-refacing-walk.spec.ts:54 (expects ledger field 'Evidence window')"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "ICP-009",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "js/demo-seed-data-smb.js",
+   "line": 310,
+   "generation": "seed",
+   "state": "ds screen SAVED ICPS list and legacy SAVED ICPS library, demo books",
+   "current": "Demo ICP rows (smb icp_s1..s3, js/demo-seed-data-smb.js:310-313; ent icp_e1..e3, js/demo-seed-data-ent.js:478-481) carry no qualityScore; persistence.ts:70 parses it to 0, so the ds list shows a bare \"0\" chip before each statement (ds walkthrough: \"0 AI-native companies hiring engineers\u2026\") and legacy shows \"0/100 \u00b7 Broad\".",
+   "problem": "Well-specified sample ICPs are presented as scoring 0 / 'Broad', which misleads the user about what the quality score means; the same 0 feeds bestSavedIcp tie-breaking and anything reading qualityScore. The ds chip is also an unlabeled bare number.",
+   "governing": "AUDIT_BRIEF \u00a75 (demo/sample content; a number that no longer matches its formula); COPY_STANDARD.md \u00a721",
+   "proposed": "In loadAnalytics/parseSavedIcp (persistence.ts:53-75) and icp-bridge.ts:136, when qualityScore is absent compute it with buildIcpQuality from the row's fields (activeAccounts = engineActive) instead of defaulting to 0. In IcpObject.tsx:164 render the chip as `${icp.qualityScore}/100`.",
+   "confidence": "medium",
+   "testsAffected": []
+  },
+  {
+   "id": "ICP-010",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/icp-studio/lib/builders.ts",
+   "line": 131,
+   "generation": "shared",
+   "state": "ds EVIDENCE SIGNALS card and legacy EVIDENCE SIGNALS output when the pain/trigger pair has no mapped signals",
+   "current": "No evidence map found for this combo (pick a different pain/trigger).",
+   "problem": "'evidence map' is an internal data-structure name and 'combo' is shorthand; the user is not told what the card normally shows.",
+   "governing": "comprehension principle; COPY_STANDARD.md \u00a73",
+   "proposed": "No example signals are available for this problem and trigger. Choose a different problem or trigger to see what to look for.",
+   "confidence": "medium",
+   "testsAffected": []
+  }
+ ],
+ "dispositions": [],
+ "retained": [],
+ "gaps": []
+}

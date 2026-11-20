@@ -1,0 +1,178 @@
+{
+ "area": "settings",
+ "coverage": [
+  {
+   "surface": "Settings default screen (v4)",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/settings/v4/SettingsV4.tsx",
+    "src/settings/state.ts"
+   ],
+   "note": "Read the full component and all toasts in state.ts; compared with the SMB walkthrough generated today (not signed in, sample workspace active). Signed-in states (connected status, minted BCC address, calendar connected) were reviewed from source only."
+  }
+ ],
+ "findings": [
+  {
+   "id": "SETTINGS-001",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/settings/v4/SettingsV4.tsx",
+   "line": 240,
+   "generation": "v4",
+   "state": "Data controls \u00b7 Restore from an export (at rest)",
+   "current": "Puts back what's in a JSON file from Download my workspace. Things the system records on its own, like observations and search history, rebuild themselves and aren't put back.",
+   "problem": "Accuracy + personification. restoreCloudExport (src/settings/lib/cloud-sync.ts:509-550) skips every SYSTEM table in lib/workspace-tables.ts: observations, prospecting_research_runs (search history), outdoors_events_runs, captured_meetings, proposed_modifications, scheduled_skill_fires, briefing_pattern_eval. Nothing rebuilds search history, event-search runs, past suggestions or scheduled-skill run logs; observations are only regenerated for conditions that are true at the next heartbeat, and calendar matches only within the calendar sync window. The copy promises a recovery that does not happen, and 'rebuild themselves' / 'the system records' personifies the process (COPY_STANDARD \u00a79).",
+   "governing": "COPY_STANDARD.md \u00a79 and \u00a721 (claims discipline); comprehension principle (unsupported certainty)",
+   "proposed": "Puts back what's in a JSON file from Download my workspace. Records Antaeus writes automatically \u2014 observations, search and event-search history, calendar matches, past suggestions and scheduled-skill runs \u2014 are not restored. Observations and calendar matches are created again on the next automatic check; the history records are not.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "SETTINGS-002",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/settings/lib/cloud-sync.ts",
+   "line": 530,
+   "generation": "shared",
+   "state": "Restore from a file after Delete everything (the main restore use case)",
+   "current": "restoreCloudExport upserts each restorable table's rows verbatim (including foreign-key columns) and skips SYSTEM tables. outdoors_events.run_id references outdoors_events_runs(id) (supabase/migrations/20260601220000_outdoors_events_discovery.sql:113), and workspace_skill_overrides.accepted_proposal_id / active_observation_variants.accepted_proposal_id reference proposed_modifications(id) (supabase/migrations/20260602240000_phase_f_apply_side_effects.sql:45, :93). Delete everything removes the referenced runs/proposals, and restore never puts them back.",
+   "problem": "After Delete everything, restoring a JSON download inserts outdoors_events rows whose run_id and accepted-suggestion rows whose accepted_proposal_id point at rows that no longer exist, so each of those tables' upsert fails its foreign key and the whole table is not restored. The toast only says 'N parts couldn't be put back' (src/settings/state.ts:171) without naming them, while the copy says the JSON file puts the workspace back. Discovered events and accepted suggestions are silently lost. Not executed against a database (no live Supabase here); derived from the migrations and the restore code.",
+   "governing": "Owner requirements (01_OWNER_REQUIREMENTS.md, Required work 7: persistence, upsert behavior, error handling); comprehension principle (copy must match behavior)",
+   "proposed": "In restoreCloudExport, before upserting a table, null any foreign-key column whose target table is not restored (outdoors_events.run_id; workspace_skill_overrides.accepted_proposal_id; active_observation_variants.accepted_proposal_id) unless the referenced id is present in the same file's restored rows \u2014 both FKs are already ON DELETE SET NULL, so a null is a valid state. Add a cloud-sync.test.ts case that restores an export whose events carry run_ids. Also name the failed parts in the partial-restore toast: `${n} part(s) couldn't be put back: ${labels}.` using WORKSPACE_TABLES labels.",
+   "testsAffected": [
+    "src/settings/lib/cloud-sync.test.ts"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "SETTINGS-003",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/settings/v4/SettingsV4.tsx",
+   "line": 212,
+   "generation": "v4",
+   "state": "Sample workspace active (demo mode) \u00b7 Download my workspace / cloud status",
+   "current": "In the sample workspace createDataClient() returns the demo-local client (src/lib/data-client.ts:238-247: stub client, currentWorkspace \u2192 null). The status line reads 'The cloud status check failed. Review the connection and try again.' and Download my workspace produces a file with 0 records and the toast 'Workspace downloaded, but 40 parts couldn't be read. 0 records are in the file, and it lists what's missing.' (SMB walkthrough, 'After clicking \u201cDownload my workspace\u201d').",
+   "problem": "A first-time user exploring the sample is told the connection failed and that 40 parts of their workspace could not be read, when in fact the sample data is local and the cloud controls simply don't apply to it. The message misleads about data health and gives no next step.",
+   "governing": "CLAUDE.md Part II \u00a76 (error/loading states: honest, specific, recoverable); comprehension principle",
+   "proposed": "When demo.value.active is true, replace the Workspace data status line with 'You're viewing sample data in this browser. Cloud status, Download my workspace, Restore and Delete everything apply to a signed-in workspace \u2014 exit the sample to use them.' and disable the Download, Restore and Delete everything buttons (keep Device copy and Exit sample enabled).",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "SETTINGS-004",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/settings/state.ts",
+   "line": 283,
+   "generation": "shared",
+   "state": "Toast after Download my workspace (success and partial)",
+   "current": "Workspace downloaded \u2014 ${snap.totalRows} records across ${parts} parts of the app. / Workspace downloaded, but ${n} parts couldn't be read.",
+   "problem": "High-context / inconsistent count. `parts` is snap.manifest.length \u2014 the number of database tables (40) \u2014 but the same page's 'What's included?' list presents 16 'parts' (sections). The user sees '40 parts of the app' and cannot map it to anything on screen; in the walkthrough it reads 'but 40 parts couldn't be read'.",
+   "governing": "comprehension principle (high-context dependence, numbers must match what is shown)",
+   "proposed": "Count sections, not tables: `Workspace downloaded \u2014 ${totalRows} records across ${Object.keys(snap.sections).length} parts of the app.` and for the partial case name the failed sections: `Workspace downloaded, but ${k} part(s) couldn't be read: ${failedSectionNames}. The file lists what's missing.`",
+   "testsAffected": [
+    "src/settings/state.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "SETTINGS-005",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/settings/state.ts",
+   "line": 520,
+   "generation": "shared",
+   "state": "Toast after choosing Show me how / Step back (v4, ds and legacy)",
+   "current": "The system will walk you through every surface. / The system will step back and trust your way around.",
+   "problem": "Personification (the system walks, trusts) and internal vocabulary ('surface'). This is the old dialect the batch-03 rewrite removed from the setting's description (B3-X-102: 'Show me how includes more explanation. Step back uses a more compact interface.'), but it survives in the confirmation toast.",
+   "governing": "10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json exact_replacements (B3-X-102 intent); COPY_STANDARD.md \u00a79",
+   "proposed": "Explanation level set to Show me how \u2014 screens include more explanation. / Explanation level set to Step back \u2014 screens use a more compact layout.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "SETTINGS-006",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/settings/state.ts",
+   "line": 228,
+   "generation": "shared",
+   "state": "Toast after Clear device copy (v4) / Clear local data (ds, legacy)",
+   "current": "Workspace cleared. ${removed} keys removed from this device.",
+   "problem": "'Workspace cleared' tells the user their workspace was cleared, but clearWorkspace() only removes this browser's gtmos_* entries; cloud records are untouched (the v4 confirm dialog says so). 'keys' is browser-storage jargon that canon \u00a74.20 lists as banned on the face ('keys on this device').",
+   "governing": "CLAUDE.md Part I \u00a74.20 Language bullet (no 'keys on this device', 'browser cache'); COPY_STANDARD.md \u00a721",
+   "proposed": "This device's copy was cleared (${removed} saved items removed from this browser). Your cloud workspace was not changed.",
+   "testsAffected": [
+    "src/settings/state.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "SETTINGS-007",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/settings/state.ts",
+   "line": 146,
+   "generation": "shared",
+   "state": "Toasts after Export device copy / importing a device backup / export or import failure",
+   "current": "Backup exported. ${n} keys captured. \u00b7 Backup imported. ${n} keys applied, ${m} skipped. \u00b7 Export failed. See browser console. \u00b7 Import failed: file is not valid JSON.",
+   "problem": "'keys' is browser-storage jargon (canon \u00a74.20); 'See browser console' points a seller at a developer tool. 'Import failed: file is not valid JSON.' is also shown when the JSON is valid but restoreCloudExport throws (the catch at state.ts:211 wraps both paths), so the stated cause can be wrong.",
+   "governing": "CLAUDE.md Part I \u00a74.20 Language bullet; CLAUDE.md Part II \u00a76 (error states honest and specific)",
+   "proposed": "Device copy downloaded (${n} saved items from this browser). \u00b7 Device copy restored (${n} items put back${m ? `, ${m} skipped` : ''}). \u00b7 Couldn't create the download. Try again. \u00b7 For the catch: if JSON.parse failed \u2192 'That file isn't a JSON file from Antaeus. Nothing was changed.'; otherwise \u2192 'Couldn't restore that file. Check your connection and try again.'",
+   "testsAffected": [
+    "src/settings/state.test.ts"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "SETTINGS-008",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/settings/v4/SettingsV4.tsx",
+   "line": 451,
+   "generation": "v4",
+   "state": "Preferences \u00b7 Show recent activity (at rest)",
+   "current": "The recent-activity panel shows today's activity, new events, and accounts with no recent response. Hiding the panel does not stop activity tracking.",
+   "problem": "The panel's 'still quiet' account is computed by readStillQuiet (src/lib/edge/edge-data.ts:292-296): no new signal AND no outreach for \u22655 days. It does not measure buyer responses. 'No recent response' asserts a buyer-reply fact the code never checks (the same label renders on the panel: src/lib/edge/LiveEdge.tsx:298 'No recent response'). This is the approved B3-X-104 wording, but it is inaccurate to the code.",
+   "governing": "COPY_STANDARD.md \u00a721 (never more certain than the data); 09_REWRITE_BATCH_03 B3-X-104 (implemented verbatim, accuracy issue)",
+   "proposed": "Settings: The recent-activity panel shows today's messages and calls, new events, and the watched account with no new signals or outreach for the longest time. Hiding the panel does not stop activity tracking. \u2014 and route to lib/edge: LiveEdge.tsx:298 'No recent response' \u2192 'No recent activity'.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "SETTINGS-009",
+   "category": "A11Y",
+   "severity": 2,
+   "file": "src/settings/v4/SettingsV4.tsx",
+   "line": 432,
+   "generation": "v4",
+   "state": "Preferences \u00b7 Product category select",
+   "current": "<select class=\"st4-sel\" \u2026> with no label, aria-label or id link; SMB walkthrough reports '(unlabelled field)'. Same in ds (SettingsCardsDS.tsx ~line 262; ds walkthrough '(unlabelled field)').",
+   "problem": "Screen-reader users hear an unnamed combobox. Also the calendar URL input (line 391), the backfill textarea (line 253) and the delete-confirmation input (line 304) are named only by placeholder text.",
+   "governing": "comprehension principle (accessible names)",
+   "proposed": "Add aria-label=\"Product category\" to the select; aria-label=\"Calendar ICS URL\" on the calendar input; aria-label=\"Closed deals to import\" on the textarea; wrap the delete phrase prompt in a <label> (or aria-label=\"Type delete my workspace to confirm\").",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "SETTINGS-010",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/settings/v4/SettingsV4.tsx",
+   "line": 465,
+   "generation": "v4",
+   "state": "Allow recommendations / Explanation level when the save fails",
+   "current": "togglePhaseF and setDensity write failures to phaseFError / densityError (src/settings/state.ts:401, :514) and revert or keep state, but SettingsV4 never renders phaseFError or densityError. In the ds walkthrough the same failures appear ('Your workspace profile isn't set up yet. Complete onboarding first.' / 'No workspace to save against.'), but on the default screen the button simply flips back with no message.",
+   "problem": "On the default screen a failed save is silent: the user clicks On/Off or Step back and nothing visibly happens. Violates 'saved/unsaved \u2014 never let the user wonder if it saved'.",
+   "governing": "CLAUDE.md Part II \u00a76 (saved/unsaved states); Part III \u00a73 rule 5",
+   "proposed": "Render phaseFError and densityError under their rows in SettingsV4 (e.g. <div class=\"st4-id\">{phaseFError.value}</div>), and reword the underlying messages from src/settings/lib/phase-f-toggle.ts and src/lib/density: 'No workspace to save against.' \u2192 'Couldn't save this preference because no signed-in workspace was found.'",
+   "testsAffected": [],
+   "confidence": "high"
+  }
+ ],
+ "dispositions": [],
+ "retained": [],
+ "gaps": []
+}

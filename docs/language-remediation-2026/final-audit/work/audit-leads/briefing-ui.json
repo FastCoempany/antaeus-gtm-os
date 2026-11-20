@@ -1,0 +1,571 @@
+{
+  "area": "briefing-ui",
+  "coverage": [
+    {
+      "surface": "Briefing default screen (v4)",
+      "generation": "v4",
+      "how": "executed-in-walkthrough",
+      "files": [
+        "src/briefing/v4/BriefingV4.tsx",
+        "src/briefing/v4/lib/reads.ts",
+        "src/briefing/v4/lib/world-events.ts",
+        "src/briefing/v4/lib/weather.ts",
+        "src/briefing/components/PatternCard.tsx",
+        "src/briefing/components/MarksBar.tsx",
+        "src/briefing/components/ShowYourWork.tsx",
+        "src/briefing/components/BriefingLead.tsx",
+        "src/briefing/components/PatternList.tsx",
+        "src/briefing/components/EmptyState.tsx",
+        "src/briefing/components/ContrarianRail.tsx",
+        "src/briefing/components/PeripheryRail.tsx",
+        "src/briefing/components/WatchList.tsx",
+        "src/briefing/components/AddTriggerFlow.tsx",
+        "src/briefing/components/BriefingFooter.tsx",
+        "src/briefing/components/FirstVisitPrimer.tsx",
+        "src/briefing/components/StaleRunBanner.tsx"
+      ],
+      "note": "SMB walkthrough (generated today) read in full; all source read in full. Populated work list, suggestion band, drafts chips, contrarian, periphery, stale banner, populated audit envelope and cost warn/throttle states are not seeded in demo, so reviewed from source only."
+    },
+    {
+      "surface": "Briefing previous screen version (?v4=0, BriefingDS)",
+      "generation": "ds",
+      "how": "executed-in-walkthrough",
+      "files": [
+        "src/briefing/ds/BriefingDS.tsx",
+        "src/briefing/ds/components/TopbarDS.tsx",
+        "src/briefing/ds/components/ViewToggleDS.tsx",
+        "src/briefing/ds/components/BriefingFooterDS.tsx",
+        "src/briefing/components/WorkspaceReads.tsx",
+        "src/briefing/components/DraftsTray.tsx",
+        "src/briefing/components/SuggestionsSection.tsx",
+        "src/briefing/components/OutdoorsEventsChip.tsx"
+      ],
+      "note": "ds walkthrough covers the Your-work view at rest only (empty). Your-market view, populated work list, drafts tray, suggestions reviewed from source."
+    },
+    {
+      "surface": "Briefing oldest screen version (?v4=0&ds=0, Briefing.tsx)",
+      "generation": "legacy",
+      "how": "source-and-test-reviewed",
+      "files": [
+        "src/briefing/Briefing.tsx",
+        "src/briefing/components/Topbar.tsx",
+        "src/briefing/components/ViewToggle.tsx",
+        "src/briefing/main.tsx"
+      ],
+      "note": "corpus-legacy/briefing.txt did not exist when checked; reviewed from source. Shares all stream components with ds."
+    },
+    {
+      "surface": "Briefing draft banner + saved drafts (cross-area handoff)",
+      "generation": "shared",
+      "how": "source-and-test-reviewed",
+      "files": [
+        "src/lib/briefing-draft-banner.tsx",
+        "src/lib/briefing-drafts.ts",
+        "src/briefing/lib/destinations.ts",
+        "src/briefing/lib/observation-routing.ts"
+      ],
+      "note": "Traced recommended-action link -> URL params -> global banner -> localStorage breadcrumb -> tray/chips. Not clicked in a browser."
+    }
+  ],
+  "findings": [
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 563,
+      "generation": "v4",
+      "state": "Default Briefing, market section header (SMB walkthrough 1. The area at rest: \"Your market, in full\")",
+      "current": "Your market, in full",
+      "problem": "Semantic compression / high-context: \"in full\" does not say what the section contains (market patterns, conflicting evidence, accounts to consider, monitoring rules). The original exact replacement was never applied.",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement B2-X-048 (\"Your market, in full\" -> \"Market analysis\"); Batch 02 Structural requirements, Briefing",
+      "proposed": "Market analysis",
+      "testsAffected": [],
+      "confidence": "high",
+      "id": "BRIEFING-UI-001"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 1,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 387,
+      "generation": "v4",
+      "state": "Default Briefing, \"Your work\" header subtitle (SMB walkthrough: \"inside your deals and accounts\")",
+      "current": "inside your deals and accounts",
+      "problem": "Exact replacement not applied. The fragment does not say what the list holds (changes); the Briefing structural rule names section 1 \"Changes in your deals and accounts\".",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement B2-X-043; Batch 02 Structural requirements, Briefing item 1",
+      "proposed": "changes in your deals and accounts",
+      "testsAffected": [],
+      "confidence": "high",
+      "id": "BRIEFING-UI-002"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 177,
+      "generation": "v4",
+      "state": "Default Briefing, market ticker item tags (SMB walkthrough shows bare tag \"pattern\"); lines 180 and 186 produce \"challenge\" and \"blind spot\" when conflicting-evidence or accounts-to-consider rows exist",
+      "current": "tag: \"pattern\" / tag: \"challenge\" / tag: \"blind spot\" (not wrapped in t())",
+      "problem": "Private ontology and metaphor: \"challenge\" and \"blind spot\" are the old Contrarian/Periphery doctrine names; a newcomer cannot tell that \"blind spot\" means a company to consider adding to the watchlist. \"pattern\" alone was slated to become \"market pattern\". The ticker labels contradict the section names the primer teaches (Market patterns / Evidence that conflicts with an assumption / Accounts to consider). Strings also bypass the t() voice gate.",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md B2-X-046 (\"pattern\" -> \"market pattern\"); Batch 02 Structural requirements, Briefing (sections 2-4); /home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md Briefing-specific rule",
+      "proposed": "tag: t(\"market pattern\") / tag: t(\"conflicting evidence\") / tag: t(\"account to consider\")",
+      "testsAffected": [],
+      "confidence": "high",
+      "id": "BRIEFING-UI-003"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/PatternCard.tsx",
+      "line": 39,
+      "generation": "shared",
+      "state": "Every market-pattern card meta row in v4, ds-World and legacy-World (SMB walkthrough: \"RISING\", \"STABLE\")",
+      "current": "trajectoryLabel: \"Rising\" / \"Declining\" / \"Stable\" / \"New\"",
+      "problem": "Elliptical: the chip does not say what is rising (how often the pattern appears in evidence across runs). Original exact replacement RISING -> INCREASING not applied; \"New\" for a null trajectory is also unexplained.",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement B2-X-051 (\"RISING\" -> \"INCREASING\")",
+      "proposed": "\"Increasing\" / \"Decreasing\" / \"Unchanged\" / \"First seen this week\" (and add title=\"How often this pattern appears in new evidence compared with earlier weeks\" on the chip if the trajectory field is defined that way in src/briefing/lib/patterns.ts)",
+      "testsAffected": [
+        "src/briefing/components/PatternCard.test.tsx:58 (expects \"Rising\")"
+      ],
+      "confidence": "medium",
+      "id": "BRIEFING-UI-004"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/PatternCard.tsx",
+      "line": 117,
+      "generation": "shared",
+      "state": "Every market-pattern card with recommended actions (SMB walkthrough: \"RECOMMENDED MOVES\")",
+      "current": "Recommended moves",
+      "problem": "\"move\" as the private recommendation noun (disputed-term rule: \"Recommended moves\" becomes \"recommended action\"). ContrarianRail.tsx:207 already says \"Recommended actions\", so the two card types disagree.",
+      "governing": "AUDIT_BRIEF disputed terms (move); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md \"one move\" row; /home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md Structural requirements, Briefing (\"recommended action\")",
+      "proposed": "Recommended actions",
+      "testsAffected": [
+        "src/briefing/components/PatternCard.test.tsx:68 (asserts \"Recommended moves\" absent when there are none; update the string)"
+      ],
+      "confidence": "high",
+      "id": "BRIEFING-UI-005"
+    },
+    {
+      "category": "LANG-B",
+      "severity": 2,
+      "file": "src/briefing/components/PatternCard.tsx",
+      "line": 63,
+      "generation": "shared",
+      "state": "Recommended-action destination link on every pattern/contrarian card (SMB walkthrough: \"Outbound Studio · hooks · draft →\", \"Deal Workspace · pipeline · review →\")",
+      "current": "destLabel = `${DESTINATION_ROOM_LABEL[token.room]} · ${token.section}` — renders raw pipeline tokens such as \"hooks · draft\", \"pipeline · review\", and for live output \"Phase 4\", \"Objection Bank\", \"Hook Library\", \"Deal-Watch · Acme\"",
+      "problem": "High-context / private ontology: the section tokens are internal pipeline vocabulary that names nothing visible in the destination area (\"hooks\" is not an Outbound Studio section; Discovery Studio has no \"Phase 4\" since the segment rename). Because parseAction() (src/briefing/lib/destinations.ts:62) only recognizes new/refresh/alert, \"draft\" and \"review\" are appended to the section text.",
+      "governing": "comprehension principle; COPY_STANDARD.md §2-§3 (literal nouns); owner decision: Discovery segment titles (AUDIT_BRIEF §4)",
+      "proposed": "Render the link as `${t(\"Open in\")} ${DESTINATION_ROOM_LABEL[token.room]}` and drop the section from the visible label (keep it in the briefingDraftSection URL param). Optionally extend parseAction to accept \"draft\" (-> \"new\") and \"review\" so the section param stops carrying the verb.",
+      "testsAffected": [
+        "src/briefing/lib/destinations.test.ts (section parsing assertions, if any include action words)"
+      ],
+      "confidence": "high",
+      "id": "BRIEFING-UI-006"
+    },
+    {
+      "category": "FUNC",
+      "severity": 2,
+      "file": "src/briefing/lib/destinations.ts",
+      "line": 47,
+      "generation": "shared",
+      "state": "Enterprise demo pattern demo-ent-2 recommended action (old enterprise walkthrough line 82: \"Review territory tiers against closed-deal performance … Territory Architect · tiers · review\" as plain text)",
+      "current": "ROOM_MAP and roomPath() know only discovery-studio, outbound-studio, deal-workspace, asset-builder; a \"Territory Architect · tiers · review\" destination returns null from parseDestination and renders as unlinked raw token text",
+      "problem": "The recommended action points to an area the user cannot open from the card, and the raw token \"tiers · review\" is shown as if it were a label. The original B2-X-062 replacement expects \"Review territory tiers against closed-deal performance · Territory Architect\" as a working route.",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement B2-X-062; AUDIT_BRIEF §5 (cross-area handoff links)",
+      "proposed": "Add \"territory-architect\" to DestinationRoom, ROOM_MAP ([\"territory architect\",\"territory\"]), roomPath (\"/territory-architect/\") and DESTINATION_ROOM_LABEL (\"Territory Architect\"); add a destinations.test.ts case. (The global BriefingDraftBanner mounts via RoomChrome, so the destination shows the draft banner.)",
+      "testsAffected": [
+        "src/briefing/lib/destinations.test.ts"
+      ],
+      "confidence": "high",
+      "id": "BRIEFING-UI-007"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/MarksBar.tsx",
+      "line": 330,
+      "generation": "shared",
+      "state": "Hover text and aria-label on the three feedback buttons under every pattern card (SMB walkthrough hover: \"I acted on this — the system was right.\")",
+      "current": "\"I acted on this — the system was right.\" / \"I already knew this — accurate but no new value.\" / \"This was wrong, useless, or off-target.\"; group aria-label \"Rate this read\" (line 355); button aria-label concatenates label + hint (\"I acted on this: I acted on this — the system was right.\")",
+      "problem": "Personification (\"the system was right\") and an unsupported claim: acting on an analysis does not establish it was correct. \"read\" is the generic analysis noun the Briefing rule removes. The aria-label repeats the visible label.",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md Structural requirements, Briefing (\"Remove read as the generic noun… remove system-personification language\"); COPY_STANDARD.md §9",
+      "proposed": "BUTTON_HINTS: used \"I took action based on this analysis.\" / met \"I already knew this; it was accurate but not new.\" / noise \"This was wrong, not useful, or not relevant.\"; group aria-label \"Rate this analysis\"; button aria-label = BUTTON_HINTS[mark] only.",
+      "testsAffected": [],
+      "confidence": "high",
+      "id": "BRIEFING-UI-008"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/ShowYourWork.tsx",
+      "line": 56,
+      "generation": "shared",
+      "state": "\"Show sources and reasoning\" opened on a pattern with no audit envelope (SMB walkthrough after clicking SHOW SOURCES AND REASONING; every demo pattern)",
+      "current": "No source record is saved for this read. Reads created from now on will include one.",
+      "problem": "\"read\"/\"Reads\" as the generic noun for an analysis, which the Briefing rule removes; this is the text shown on every demo card.",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md Structural requirements, Briefing (\"Remove read as the generic noun for analysis\")",
+      "proposed": "No source record is saved for this analysis. Analyses created from now on include one.",
+      "testsAffected": [],
+      "confidence": "high",
+      "id": "BRIEFING-UI-009"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/ShowYourWork.tsx",
+      "line": 106,
+      "generation": "shared",
+      "state": "\"Show sources and reasoning\" panel when an audit envelope exists (live workspaces; not reachable in demo)",
+      "current": "Labels \"The cluster\", \"Anchor\", \"Type\", \"Weighted evidence\" (3 decimals), \"What we challenged\" (raw JSON), \"Stated positions at synthesis time\" (raw JSON), \"LLM call chain\", \"Draft / Critique / Revise\", \"click to expand\", \"prompt_version … · model_v_hash …\", \"Quality gate\", \"Passed/Failed (N failures: <check ids>)\", \"The LLM declined to challenge: …\", \"+ N more items in the envelope\", evidence meta \"[source_id · rel 0.83 · …]\", \"Total cost: $… · captured …\"",
+      "problem": "Internal pipeline architecture as visible copy (cluster, anchor, envelope, synthesis, gate, LLM call chain, model hash) — the operator must learn the pipeline to read the explanation. \"What we challenged\" and \"declined to challenge\" personify. Hard reject in canon Part II §5 (\"internal architecture language as visible product copy\").",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md Structural requirements, Briefing (observation -> evidence -> interpretation -> recommended action); CLAUDE.md Part II §5 hard rejects; COPY_STANDARD.md §9",
+      "proposed": "\"Evidence group\" / \"Main topic\" / \"Group type\" / \"Evidence weight\" / \"Assumption tested\" / \"Workspace information used\" / \"How the analysis was written\" / \"First draft\" / \"Review\" / \"Revision\" / \"Show details\" / \"Prompt version … · model version …\" / \"Quality checks\" / \"Passed\" or \"Did not pass (N checks: …)\" / \"No conflicting evidence was found: …\" / \"+ N more evidence items in the source record\" / \"[source · relevance 0.83 · …]\" / \"Total cost: $… · recorded …\". Keep raw JSON only behind a \"Show raw data\" disclosure.",
+      "testsAffected": [],
+      "confidence": "medium",
+      "id": "BRIEFING-UI-010"
+    },
+    {
+      "category": "LANG-B",
+      "severity": 2,
+      "file": "src/briefing/v4/lib/reads.ts",
+      "line": 77,
+      "generation": "v4",
+      "state": "Default Briefing \"Your work\" list: collapsed-run line \"+ N {label}\" when a generator has more than three rows, and per-row tag chip",
+      "current": "RUN_LABELS: \"more accounts gone quiet\" / \"more deals sitting still\" / \"more pilots past their readout\" / \"more reads on your call rhythm\" / fallback \"more reads like these\"; tagFor: \"{n}d\" / \"due\" / \"0 logged\" / \"new\"",
+      "problem": "Metaphor and private shorthand carry the state (\"gone quiet\", \"sitting still\", \"readout\", \"call rhythm\", \"reads\"); tags \"0 logged\" and \"due\" are elliptical (0 of what? due for what?). These are the default work-list labels.",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement for the old Your-work primer (\"deals going stale, accounts going quiet, evidence past its readout\" -> \"material changes in active deals, watched accounts, and pilot evidence\"); COPY_STANDARD.md §17 (state names an observable condition); Batch 02 Structural requirements, Briefing",
+      "proposed": "RUN_LABELS: \"more watched accounts with no recent signals\" / \"more deals with no recent activity\" / \"more pilots past their results-review date\" / \"more notes about discovery-call activity\" / \"more similar items\"; tags: \"{n} days\" / \"review overdue\" / \"0 calls this week\" / \"new\". Error fallback (line 131) \"Couldn't load your reads.\" -> \"Couldn't load workspace changes.\"",
+      "testsAffected": [
+        "src/briefing/v4/lib (no reads.test.ts found; add one)"
+      ],
+      "confidence": "medium",
+      "id": "BRIEFING-UI-011"
+    },
+    {
+      "category": "A11Y",
+      "severity": 2,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 323,
+      "generation": "v4",
+      "state": "Bell button in the Briefing bar, shown only when a pending suggestion exists; it hides/shows the suggestion band",
+      "current": "aria-label \"Show current analysis\" (constant, whether the band is visible or hidden); band label \"NOTICED\" (line 335); snooze button \"Later\" (line 354)",
+      "problem": "The accessible name describes a different control (the Birdseye float is also \"Open current analysis\") and does not change with state; the button actually toggles the suggested-change band. \"NOTICED\" personifies the system and does not say the band is a suggested settings change. \"Later\" hides a 30-day cooldown (src/briefing/lib/suggestions.ts:33).",
+      "governing": "comprehension principle; COPY_STANDARD.md §9; AUDIT_BRIEF §5 (aria-label)",
+      "proposed": "aria-label = noticedHidden ? \"Show suggested change\" : \"Hide suggested change\" (and aria-expanded); band label \"SUGGESTED CHANGE\"; snooze label \"Ask again in 30 days\".",
+      "testsAffected": [],
+      "confidence": "high",
+      "id": "BRIEFING-UI-012"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 1,
+      "file": "src/briefing/v4/BriefingV4.tsx",
+      "line": 396,
+      "generation": "v4",
+      "state": "Default Briefing, \"Your work\" list loading state",
+      "current": "Reading your work…",
+      "problem": "Narrates the system's analysis with a personified verb and the vague stand-in noun \"your work\".",
+      "governing": "COPY_STANDARD.md §9 and §26 (name the thing instead of a casual stand-in noun)",
+      "proposed": "Loading changes in your deals and accounts…",
+      "testsAffected": [],
+      "confidence": "high",
+      "id": "BRIEFING-UI-013"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/BriefingLead.tsx",
+      "line": 418,
+      "generation": "shared",
+      "state": "Weekly lead above the pattern list, rendered in v4, ds-World and legacy-World when the compose stage produced a lead",
+      "current": "kicker and aria-label \"The read this week\"",
+      "problem": "\"read\" as the generic noun for analysis, removed by the Briefing rule.",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md Structural requirements, Briefing",
+      "proposed": "This week's summary",
+      "testsAffected": [],
+      "confidence": "high",
+      "id": "BRIEFING-UI-014"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 1,
+      "file": "src/briefing/components/PatternList.tsx",
+      "line": 440,
+      "generation": "shared",
+      "state": "Market section loading state and list aria-label",
+      "current": "\"Reading the week…\"; aria-label \"This week's reads\" (line 451)",
+      "problem": "Personified loading narration and \"reads\" as the analysis noun.",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md Structural requirements, Briefing",
+      "proposed": "\"Loading market analysis…\"; aria-label \"This week's market analyses\"",
+      "testsAffected": [],
+      "confidence": "high",
+      "id": "BRIEFING-UI-015"
+    },
+    {
+      "category": "CLAIM",
+      "severity": 2,
+      "file": "src/briefing/components/EmptyState.tsx",
+      "line": 485,
+      "generation": "shared",
+      "state": "Market section when the latest run produced no patterns (all live workspaces until the weekly run; ds-World and legacy-World too)",
+      "current": "\"Nothing to read this week\" / \"There are no market reads for this week yet.\" / \"Market reads appear here after the weekly market review runs. Each one summarizes a change in your market: a company you aren't tracking yet that matches your targets, or evidence that disagrees with an assumption you've made.\" / \"Each read lists its sources. You can open it to see the articles it used, how it was written and checked, and what it cost to produce.\"",
+      "problem": "Misdescribes the section: market patterns are recurring market developments; \"a company you aren't tracking yet\" and \"evidence that disagrees with an assumption\" are the separate Accounts-to-consider and Conflicting-evidence sections. Also uses \"reads\" as the analysis noun.",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md Structural requirements, Briefing (five separate sections); B2-X-039 approved description of market patterns",
+      "proposed": "Label \"NO MARKET ANALYSIS THIS WEEK\"; headline \"No market analyses have been produced for this week yet.\"; body \"Market analyses appear here after the weekly market review runs on Monday mornings. Each one describes a recurring development across your target market, the evidence behind it, and a recommended action.\" and \"Each analysis lists its sources. Open “Show sources and reasoning” to see the articles used, how the analysis was drafted and checked, and what it cost to produce.\"",
+      "testsAffected": [],
+      "confidence": "high",
+      "id": "BRIEFING-UI-016"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/lib/watchlist-client.ts",
+      "line": 49,
+      "generation": "shared",
+      "state": "Saved monitoring rules list, each enabled rule's type label (all three screen versions)",
+      "current": "triggerTypeLabel: \"Event\" / \"Aggregation\" / \"Threshold\" / \"Adjacency\" / \"Silence\"",
+      "problem": "Internal enum vocabulary (\"Aggregation\", \"Adjacency\", \"Silence\") on the face; the same five types are already named plainly in AddTriggerFlow.tsx:163 (\"One-time event\", \"Repeated events\", \"Threshold\", \"Related company\", \"No activity\"), so the confirm step and the saved list disagree.",
+      "governing": "comprehension principle; COPY_STANDARD.md §2",
+      "proposed": "Reuse the AddTriggerFlow labels: \"One-time event\" / \"Repeated events\" / \"Threshold\" / \"Related company\" / \"No activity\" (move TRIGGER_TYPE_LABEL into watchlist-client.ts and have both import it).",
+      "testsAffected": [
+        "src/briefing/lib/watchlist-client.test.ts (if it asserts triggerTypeLabel output)"
+      ],
+      "confidence": "high",
+      "id": "BRIEFING-UI-017"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/lib/cost/tracker.ts",
+      "line": 137,
+      "generation": "shared",
+      "state": "Cost footer pill when weekly LLM spend reaches warn/throttle/paused (all three screen versions)",
+      "current": "\"Approaching weekly ceiling\" / \"Throttling — Sonnet substituting for Opus\" / \"Paused — runs skip until next week\"",
+      "problem": "Model names and pipeline jargon (\"throttling\", \"runs skip\") on the face; a user cannot tell what changes for them. Canon session log 2026-07-02 removed model names from the Briefing face.",
+      "governing": "comprehension principle; CLAUDE.md Part II §5 (no internal architecture language as copy)",
+      "proposed": "\"Near the weekly spending limit\" / \"Over the weekly limit — market analysis now uses a lower-cost model and fewer sources\" / \"Paused — market analysis resumes next week\"",
+      "testsAffected": [
+        "src/briefing/lib/cost/*.test.ts (if stateLabel is asserted)"
+      ],
+      "confidence": "medium",
+      "id": "BRIEFING-UI-018"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/PeripheryRail.tsx",
+      "line": 308,
+      "generation": "shared",
+      "state": "Accounts to consider rows (live workspaces; all three screen versions)",
+      "current": "\"co-occurrence {n}\" and \" · topic overlap {n}\"",
+      "problem": "Bare statistical labels with unexplained numbers; a seller cannot tell that the number counts evidence items that mention the company alongside watched accounts (src/briefing/lib/periphery/scoring.ts:150).",
+      "governing": "comprehension principle; COPY_STANDARD.md §7 (state the evidence)",
+      "proposed": "\"Mentioned with watched accounts in {n} evidence items\" and \" · {n} shared topics\"",
+      "testsAffected": [],
+      "confidence": "medium",
+      "id": "BRIEFING-UI-019"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 1,
+      "file": "src/briefing/components/AddTriggerFlow.tsx",
+      "line": 229,
+      "generation": "shared",
+      "state": "Add monitoring rule form (SMB walkthrough after clicking Add monitoring rule: \"WHAT SHOULD THE SYSTEM WATCH FOR?\"); parse error fallback line 205",
+      "current": "\"What should the system watch for?\" (not in t()); error \"The parser couldn't read that. Try rephrasing.\"",
+      "problem": "Mild personification and internal component name (\"the parser\"). The primer already says \"events you have asked Antaeus to watch for\".",
+      "governing": "COPY_STANDARD.md §9",
+      "proposed": "\"What should Antaeus watch for?\"; error \"Antaeus couldn't interpret that request. Try rephrasing it.\"",
+      "testsAffected": [],
+      "confidence": "high",
+      "id": "BRIEFING-UI-020"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/WorkspaceReads.tsx",
+      "line": 153,
+      "generation": "ds",
+      "state": "Previous screen version (?v4=0), \"Your work\" view, empty state (ds walkthrough: \"WORKSPACE · NOTHING TO SURFACE\" / \"The system has nothing to flag in your work right now.\") — same component in the oldest version",
+      "current": "kicker \"WORKSPACE · NOTHING TO SURFACE\"; headline \"The system has nothing to flag in your work right now.\" (lines 155, not in t()); body \"A scheduled check reviews your deals, signals, pilot evidence, and discovery calls every 30 minutes. When a deal or account goes without activity, it will show up here.\"",
+      "problem": "The original exact replacement (\"Nothing to flag in your work right now. The system checks every half hour…\" -> \"No material changes are currently detected in your active deals or watched accounts. This check refreshes every 30 minutes.\") was applied in v4 (BriefingV4.tsx:399) but not here. \"nothing to surface\"/\"flag\" are system-voice shorthand and personify \"the system\".",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacement row \"Nothing to flag in your work right now…\"; COPY_STANDARD.md §9",
+      "proposed": "kicker \"YOUR WORK · NO CHANGES\"; headline \"No material changes are currently detected in your active deals or watched accounts.\"; body \"This check refreshes every 30 minutes. Deals and watched accounts with no recent activity appear here.\"",
+      "testsAffected": [
+        "src/briefing/components/WorkspaceReads.test.tsx:44 (expects \"nothing to flag in your work right now\")"
+      ],
+      "confidence": "high",
+      "id": "BRIEFING-UI-021"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/WorkspaceReads.tsx",
+      "line": 73,
+      "generation": "ds",
+      "state": "Previous and oldest screen versions, \"Your work\" view with observations: group headers, count line, aria-labels, loading text",
+      "current": "GENERATOR_LABELS \"Deals going stale\" / \"Accounts going quiet\" / \"Evidence past its readout\" / \"Discovery rhythm\"; count \"{n} read(s) surfaced\" (line 172); kicker \"YOUR WORK · THIS WEEK\" (line 170); aria-label \"Workspace reads\" (lines 127,142,152,168); loading \"Reading your work…\" (145); row button aria \"Dismiss this read\" (220); error fallback \"Couldn't load your workspace reads.\" (51)",
+      "problem": "These are exactly the phrases the original primer rewrite removed (B2-X-038: \"deals going stale, accounts going quiet, evidence past its readout\" -> \"material changes in active deals, watched accounts, and pilot evidence\"); metaphorical state labels and \"read\" as the analysis noun. \"THIS WEEK\" is not accurate: the list is the latest 60 undismissed observations with no date window (listObservations({ limit: 60 })).",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md B2-X-038 / HS-134 and Structural requirements, Briefing; COPY_STANDARD.md §17",
+      "proposed": "GENERATOR_LABELS \"Deals with no recent activity\" / \"Watched accounts with no recent signals\" / \"Pilots past their results-review date\" / \"Discovery-call activity\"; count \"{n} change(s) to review\"; kicker \"YOUR WORK · CHANGES TO REVIEW\"; aria-label \"Changes in your deals and accounts\"; loading \"Loading changes in your deals and accounts…\"; dismiss aria \"Dismiss this item\"; error \"Couldn't load changes in your deals and accounts.\"",
+      "testsAffected": [
+        "src/briefing/components/WorkspaceReads.test.tsx:58 (\"Deals going stale\")",
+        "src/briefing/components/WorkspaceReads.test.tsx:75 (\"2 reads surfaced\")"
+      ],
+      "confidence": "high",
+      "id": "BRIEFING-UI-022"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/ds/components/TopbarDS.tsx",
+      "line": 147,
+      "generation": "ds",
+      "state": "Previous screen version (?v4=0) header (ds walkthrough: \"BRIEFING · THE DAILY READ\" / \"Your stated preferences are a hypothesis. The pipeline tests them against what's actually moving — and tells you when the evidence and the hypothesis stop agreeing.\")",
+      "current": "Kicker \"BRIEFING · THE DAILY READ\"; sub \"Your stated preferences are a hypothesis. The pipeline tests them against what's actually moving — and tells you when the evidence and the hypothesis stop agreeing.\"",
+      "problem": "Aphoristic cadence and high-context: \"the pipeline\" reads as the sales pipeline to a seller (it means the market-analysis process); \"what's actually moving\" is metaphor; the pipeline \"tells you\" personifies; \"actually\" is a §26 judgment word. \"READ\" is the retired analysis noun. The approved description is HS-076.",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/15_HIGH_SEVERITY_INTERACTION_PATCH.md row \"BRIEFING Briefing Weekly read of what's moving…\" (HS-076); /home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md Structural requirements, Briefing; COPY_STANDARD.md §26",
+      "proposed": "Kicker \"BRIEFING · DAILY SUMMARY\"; sub \"Briefing compares the assumptions recorded in your workspace — your ICP, watchlist, and competitors — with new evidence, and points out where the evidence does not support them.\"",
+      "testsAffected": [
+        "src/briefing/ds/ds-components.test.tsx (check for header text)"
+      ],
+      "confidence": "high",
+      "id": "BRIEFING-UI-023"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/Topbar.tsx",
+      "line": 517,
+      "generation": "legacy",
+      "state": "Oldest screen version (?v4=0&ds=0) header — reviewed from source; no oldest-version walkthrough was available",
+      "current": "Kicker \"Briefing · weekly read\"; title \"What changed this week.\"; sub \"The operator's stated preferences are a hypothesis. The pipeline tests them against what's actually moving in the world. This page tells you when the evidence and the hypothesis stop agreeing.\" (lines 518-526 not in t())",
+      "problem": "Same problems as TopbarDS plus third-person \"the operator\" addressed to the reader; manifesto-fragment cadence.",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/15_HIGH_SEVERITY_INTERACTION_PATCH.md HS-076; COPY_STANDARD.md §26",
+      "proposed": "Kicker \"Briefing · weekly summary\"; sub \"Briefing compares the assumptions recorded in your workspace — your ICP, watchlist, and competitors — with new evidence, and points out where the evidence does not support them.\"",
+      "testsAffected": [],
+      "confidence": "high",
+      "id": "BRIEFING-UI-024"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 1,
+      "file": "src/briefing/ds/BriefingDS.tsx",
+      "line": 53,
+      "generation": "ds",
+      "state": "Skip link in previous (ds walkthrough \"Skip to this week's reads\") and oldest (src/briefing/Briefing.tsx:50) screen versions",
+      "current": "Skip to this week's reads",
+      "problem": "\"reads\" as the analysis noun; v4 already says \"Skip to your work\".",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md Structural requirements, Briefing",
+      "proposed": "Skip to the Briefing content",
+      "testsAffected": [],
+      "confidence": "high",
+      "id": "BRIEFING-UI-025"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/SuggestionsSection.tsx",
+      "line": 56,
+      "generation": "ds",
+      "state": "Suggested-change band in previous and oldest screen versions when a Phase F proposal is pending",
+      "current": "kicker \"A SUGGESTION\"; label \"What I noticed:\"; buttons \"Yes, make that change\" / \"Ask me again in a month\" / \"Not now\" (not in t())",
+      "problem": "First-person \"What I noticed\" personifies the software (COPY_STANDARD §9); the v4 band uses a third label (\"NOTICED\"), so the three versions disagree. \"Not now\" dismisses with a 30-day cooldown (src/briefing/lib/suggestions.ts:33), same as snooze, which the label does not say.",
+      "governing": "COPY_STANDARD.md §9; comprehension principle",
+      "proposed": "kicker \"SUGGESTED CHANGE\"; label \"What Antaeus found:\"; buttons \"Yes, make that change\" / \"Ask again in 30 days\" / \"Dismiss\"",
+      "testsAffected": [
+        "src/briefing/components/SuggestionsSection.test.tsx (check for \"What I noticed\")"
+      ],
+      "confidence": "medium",
+      "id": "BRIEFING-UI-026"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 1,
+      "file": "src/briefing/components/ViewToggle.tsx",
+      "line": 160,
+      "generation": "legacy",
+      "state": "Oldest screen version view toggle",
+      "current": "\"YOUR WORK\" / \"Workspace\" and \"YOUR MARKET\" / \"World\"",
+      "problem": "\"World\" is the internal stream name (ADR-014); the ds version already shows \"Your work\" / \"Your market\" only. Two labels per tab, one opaque.",
+      "governing": "comprehension principle",
+      "proposed": "Tab labels \"Your deals and accounts\" and \"Your market\" (drop the \"Workspace\"/\"World\" second line)",
+      "testsAffected": [
+        "src/briefing/components/ViewToggle.test.tsx (check for \"World\")"
+      ],
+      "confidence": "medium",
+      "id": "BRIEFING-UI-027"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/OutdoorsEventsChip.tsx",
+      "line": 193,
+      "generation": "ds",
+      "state": "Market view in previous and oldest screen versions (bottom navigation chip)",
+      "current": "kicker \"ALSO OUT THERE\"; label \"Outdoors Events — gatherings the system found for your category\" (not in t())",
+      "problem": "Metaphor/vague kicker and personification (\"the system found\"); v4 already uses \"UPCOMING EVENTS FOR YOUR TARGET MARKET\". Original B2-X-047 replaced the equivalent \"WHERE YOUR WORLD IS GATHERING\".",
+      "governing": "/home/user/antaeus-gtm-os/ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md B2-X-047; COPY_STANDARD.md §9",
+      "proposed": "kicker \"UPCOMING EVENTS\"; label \"Outdoors Events — events relevant to your target market\"",
+      "testsAffected": [],
+      "confidence": "high",
+      "id": "BRIEFING-UI-028"
+    },
+    {
+      "category": "CLAIM",
+      "severity": 2,
+      "file": "src/lib/briefing-draft-banner.tsx",
+      "line": 166,
+      "generation": "shared",
+      "state": "Destination area (Outbound Studio / Discovery Studio / Deal Workspace) after clicking a Briefing recommended-action link; banner mounted globally via RoomChrome",
+      "current": "kicker \"FROM BRIEFING · {DRAFT|DRAFT NEW|REFRESH|ALERT}\" plus raw section token (e.g. \"hooks · draft\"); primary button \"Save to {draft|draft new|refresh|alert} list\"; aria-label \"Drafted from the Briefing\"",
+      "problem": "\"Save to draft new list\" is ungrammatical, and no \"draft list\" exists in the destination: the button only stores a reminder in localStorage that reappears in the Briefing drafts tray. Nothing is drafted or saved in the destination area, so \"Drafted from the Briefing\" / \"draft\" overstate what happened. The section token is internal pipeline vocabulary.",
+      "governing": "comprehension principle; AUDIT_BRIEF §5 (copy that claims something the code does not do)",
+      "proposed": "kicker \"SUGGESTED IN BRIEFING\"; drop the section token; primary button \"Save as a reminder in Briefing\"; aria-label \"Recommended action from Briefing\". OWNER DECISION: actually create a draft in the destination area (the deferred ADR-013 per-room save) if the \"draft\" wording should stay.",
+      "testsAffected": [
+        "src/lib/briefing-draft-banner.test.tsx (check for button text assertions)"
+      ],
+      "confidence": "high",
+      "id": "BRIEFING-UI-029"
+    },
+    {
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/briefing/components/DraftsTray.tsx",
+      "line": 338,
+      "generation": "ds",
+      "state": "Previous and oldest screen versions when reminders were saved from the banner; v4 equivalent is the \"DRAFTS\" chip row (BriefingV4.tsx:440)",
+      "current": "\"PENDING DRAFTS\" / \"{n} drafts acknowledged\" (not in t()); v4 \"DRAFTS\" + \"✎ {label} Open · {area}\"",
+      "problem": "\"acknowledged\" does not tell the user what state the item is in, and \"draft\" implies written content exists in the destination area, which it does not (only the recommended action's label and rationale are stored).",
+      "governing": "comprehension principle",
+      "proposed": "ds/legacy: \"SAVED FROM BRIEFING\" / \"{n} saved recommendation(s)\"; v4: \"SAVED FROM BRIEFING\" (drop the ✎ pencil glyph).",
+      "testsAffected": [
+        "src/briefing/components/DraftsTray.test.tsx:35 (\"1 draft acknowledged\")"
+      ],
+      "confidence": "medium",
+      "id": "BRIEFING-UI-030"
+    },
+    {
+      "category": "LANG-B",
+      "severity": 1,
+      "file": "src/lib/briefing-drafts.ts",
+      "line": 127,
+      "generation": "shared",
+      "state": "Area name shown on saved Briefing reminders (DraftsTray, v4 draft chips)",
+      "current": "roomLabelForPath: \"/poc-framework\" -> \"PoC Framework\", \"/advisor-deploy\" -> \"Advisor Deploy\"; current paths \"/pilot-desk\", \"/call-in-a-favor\", \"/getting-to-signed\", \"/prospecting-desk\" fall through to lowercase \"pilot desk\" etc.",
+      "problem": "Retired area names and lowercase fallbacks; a reminder saved on Pilot Desk would show \"pilot desk\".",
+      "governing": "CLAUDE.md §4.15/§4.16 renames (Pilot Desk, Call in a Favor)",
+      "proposed": "Map \"/pilot-desk\" and \"/poc-framework\" -> \"Pilot Desk\"; \"/call-in-a-favor\" and \"/advisor-deploy\" -> \"Call in a Favor\"; add \"/getting-to-signed\" -> \"Getting to Signed\", \"/prospecting-desk\" -> \"Prospecting Desk\", \"/briefing\" -> \"Briefing\".",
+      "testsAffected": [
+        "src/lib/briefing-drafts.test.ts"
+      ],
+      "confidence": "high",
+      "id": "BRIEFING-UI-031"
+    }
+  ],
+  "dispositions": [],
+  "retained": [],
+  "gaps": []
+}

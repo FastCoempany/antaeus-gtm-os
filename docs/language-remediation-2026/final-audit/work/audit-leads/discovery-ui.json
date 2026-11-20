@@ -1,0 +1,179 @@
+{
+ "area": "discovery-ui",
+ "coverage": [
+  {
+   "surface": "Discovery Studio default screen (v4 live-call screen): framework picker, top bar, call-state line, segment strip, question/response/suggested response, persona lens, After the call, drawer tabs (Objections / Buyer questions / Evidence / Recovery prompts / Facts & signals / Next step)",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/discovery-studio/v4/DiscoveryStudioV4.tsx",
+    "src/discovery-studio/v4/discovery-studio-v4.css"
+   ],
+   "note": "Read the full component and the SMB walkthrough (172 states, 792 unique strings). The walkthrough never opened 'Facts & signals' after picking a response, so the populated 'What their answers suggested' rows, the 'used/available' tieback rows and the auto-flag on pushback were reviewed from source plus a node script that loaded the real runtime data."
+  }
+ ],
+ "findings": [
+  {
+   "id": "DUI-001",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/discovery-studio/lib/load-frameworks.ts",
+   "line": 249,
+   "generation": "shared",
+   "state": "Every framework; pick any buyer response, then open 'Facts & signals' (or watch the Objections tab when the buyer pushes back).",
+   "current": "projectBranch maps the authored branch tone through toBranchTone(), which only accepts grn|org|red|blu|pur. The runtime authors every branch tone as \"ok\" (265 branches), \"ly\" (204) or \"fl\" (257) (checked by loading js/discovery-segment-runtime*.js in node), so every branch becomes cls \"blu\".",
+   "problem": "The language work in v4 added plain tone labels keyed on ok/ly/fl (DiscoveryStudioV4.tsx:161-165: 'Good sign' / 'Unclear' / 'Warning sign'), but they can never render: every row under 'What their answers suggested' reads 'Noted', so the seller loses the good/unclear/warning read of the buyer's answers that the screen promises. The pushback auto-flag (v4 line 116, `branch.cls === \"red\"`) is dead code, so the Objections tab never surfaces itself when the buyer pushes back (canon §4.12 live cockpit: 'they push back → the objection auto-appears'). The tone colour classes (tone-${b.cls}) in v4, DS and the oldest screen are also all blue.",
+   "governing": "CLAUDE.md Part I §4.12 Face ('they push back → the objection auto-appears'); comprehension principle (a label that always says 'Noted' carries no information).",
+   "proposed": "In load-frameworks.ts map the authored codes before validation, e.g. `const LEGACY_CLS = { ok: \"grn\", ly: \"org\", fl: \"red\" } as const;` and in projectBranch use `cls: toBranchTone(LEGACY_CLS[legacy.cls as keyof typeof LEGACY_CLS] ?? legacy.cls) ?? \"blu\"`. Then key v4 TONE_LABEL on the mapped tones: `{ grn: t(\"Good sign\"), org: t(\"Unclear\"), red: t(\"Warning sign\") }`. That makes the existing `branch.cls === \"red\"` flag fire on the 'fl' (pushback / no-pain) answers. Add a load-frameworks test with cls \"ok\"/\"ly\"/\"fl\" fixtures.",
+   "testsAffected": [
+    "src/discovery-studio/lib/load-frameworks.test.ts (fixtures use cls 'grn'; unaffected, but add a case for ok/ly/fl)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "DUI-002",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/discovery-studio/v4/DiscoveryStudioV4.tsx",
+   "line": 497,
+   "generation": "v4",
+   "state": "'Facts & signals' tab → 'What their answers suggested' list, after any buyer response is selected.",
+   "current": "<span class=\"dv4-fv\">{t(\"at\")} {sig.nodeId.split(\"--\").pop()?.replace(/-/g, \" \")}</span> — renders the internal node slug, e.g. 'Noted at primary', 'Noted at gc pressure' (legal node id trigger-and-urgency--gc-pressure), 'Noted at economic owner', 'Noted at deal review', 'Noted at human edge'.",
+   "problem": "High-context dependence / private ontology: the row shows a code identifier instead of the question the seller asked. Several slugs are exactly the vocabulary the remediation removed from the visible labels (HS-093 'Find the GC pressure' → 'Ask what the General Counsel cares about now'; 'human edge'), so the old dialect leaks back in through the id.",
+   "governing": "original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[93] (HS-093); COPY_STANDARD.md §2-§3 (literal nouns); comprehension principle.",
+   "proposed": "Look up the node's authored badge and show it instead of the slug: `const nodeLabel = fw.segments.flatMap((s) => s.nodes).find((n) => n.id === sig.nodeId)?.badge ?? \"\";` and render `<span class=\"dv4-fv\">{nodeLabel}</span>` (e.g. 'Good sign · Ask what the General Counsel cares about now'). Drop the bare 'at'.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "DUI-003",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/discovery-studio/v4/DiscoveryStudioV4.tsx",
+   "line": 219,
+   "generation": "v4",
+   "state": "Top bar pre-call check, every framework (walkthrough: 'Before the call: 0 of 4 set — still missing: account, buyer role, first answer recorded, next-step purpose').",
+   "current": "preflightItems = account, buyer role, 'first answer recorded' (facts.length > 0), 'next-step purpose'; label `Before the call: {n} of 4 set — still missing: …`; switches to 'Ready for the call' when 3 of 4 are set (`preflight >= 3`).",
+   "problem": "The label says 'Before the call' but two of the four items can only be completed during or after the call (a recorded buyer answer, an agreed next-step purpose), so a seller who is fully prepared is told they are not ready; and 'Ready for the call' appears while an item (even 'account') is still missing. Canon §4.12 defines the absorbed pre-call readiness check as real person / persona / account context / why-now / linked deal.",
+   "governing": "CLAUDE.md Part I §4.11 salvage item 3 and §4.12 ('pre-call readiness check … real person / persona / account context / why-now / linked deal'); COPY_STANDARD.md §21 (claims no stronger than the data).",
+   "proposed": "Smallest accurate change: rename the chip to what it counts and only say complete when it is: `Call checklist: {n} of 4 done — still missing: …` and show `Call checklist complete` only when all 4 are set (change `preflight >= 3` to `preflight === preflightItems.length`). OWNER DECISION: replace the items with canon's pre-call items (named contact, buyer role, account, reason for the call now, linked deal) read from Signal Console / Deal Workspace, and keep the in-call items in the call-state line.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "DUI-004",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/discovery-studio/lib/call-log.ts",
+   "line": 253,
+   "generation": "shared",
+   "state": "Any page load of Discovery Studio after a call whose outcome was set in 'After the call' (autosaved disposition is advanced/stalled/lost/won/no-show).",
+   "current": "main.tsx:135 wires startCallLogPersistence() synchronously (its effect consumes `firstRun` on the initial 'in-progress' value). bootPersistence (main.tsx:139-152, persistence.ts:444-457) then calls seedSignalsFromState, which sets callDisposition from 'in-progress' to the saved terminal value (persistence.ts:141). The call-log effect sees a terminal disposition with currentCallId === null and appends a brand-new DiscoveryCallRecord (call-log.ts:268-285) stamped with whatever account is in the URL now.",
+   "problem": "Every reload of a finished session writes a duplicate (and possibly mis-attributed) completed-call record to gtmos_discovery_call_log. That log is counted by the Readiness 'Prepare 8+ discovery calls in Discovery Studio' check (dashboard/lib/readiness-aggregator.ts:166-175 → lib/readiness/dimensions.ts:166-176) and read by Founding GTM (founding-gtm/lib/cross-room.ts:424), so the readiness evidence line '{n} discovery calls prepared' over-counts.",
+   "governing": "CLAUDE.md Part I §4.12 (callDisposition / postCallPackage) and §4.17 (readiness gates as present evidence); owner requirements: 'Do not invent … certainty'; comprehension principle (a number must match its formula).",
+   "proposed": "Commit the call record from the user's action, not from any change to the signal: export `commitCallOutcome(disposition)` from call-log.ts (the current effect body) and call it in the v4 'How did the call end?' button handler (DiscoveryStudioV4.tsx:378); remove the effect, or have seedSignalsFromState set a `restoring` flag that the effect checks and skips. Persist the in-flight call id in the session blob so a restored session updates its own record instead of creating one. Add a call-log test: seed a session with disposition 'advanced' after startCallLogPersistence and assert no new record.",
+   "testsAffected": [
+    "src/discovery-studio/lib/call-log.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "DUI-005",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/discovery-studio/lib/persistence.ts",
+   "line": 444,
+   "generation": "shared",
+   "state": "Open Discovery Studio from Deal Workspace / Signal Console for account B after a call with account A was saved.",
+   "current": "bootPersistence always restores the latest session row (framework, active question, learnedFacts, signal ledger, tieback ledger, next-step date/owner/purpose, disposition). The account is not part of PersistedSessionState, and no screen calls resetSession() — there is no 'start a new call' control on the v4, DS or oldest screen.",
+   "problem": "The call-state line shows 'Ramp' facts and next step under the new account's name ('Boeing · 4 facts recorded · Next step: date, owner, and purpose set'), and After the call shows the previous outcome already selected. A first-time user is told things about this call that were recorded on another call.",
+   "governing": "CLAUDE.md Part I §2 (nouns carry context between rooms without restating; a Call is attached to an account/deal) and §4.12; comprehension principle.",
+   "proposed": "Smallest change: add `accountName` to PersistedSessionState (bump SCHEMA_VERSION to 2; older rows parse with accountName ''), and in bootPersistence skip seedSignalsFromState (start fresh) when the inbound focusedAccount is non-empty and differs from the stored accountName. OWNER DECISION: add an explicit 'Start a new call' control (calls resetSession() and starts a new session row) on the After the call step.",
+   "testsAffected": [
+    "src/discovery-studio/lib/persistence.test.ts"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "DUI-006",
+   "category": "FUNC",
+   "severity": 1,
+   "file": "src/discovery-studio/v4/DiscoveryStudioV4.tsx",
+   "line": 263,
+   "generation": "v4",
+   "state": "Reload Discovery Studio after choosing an outcome in 'After the call'.",
+   "current": "'Call status:' reads activeTrack, which is set only by the outcome buttons (line 378) and is not persisted; callDisposition is persisted and restored. After reload the line says 'Call status: in progress' while After the call shows 'Advanced — dated next step set' selected.",
+   "problem": "Two parts of the same screen state different outcomes for one call.",
+   "governing": "comprehension principle (consistent state); CLAUDE.md Part II §6 (saved/unsaved state never ambiguous).",
+   "proposed": "Derive the label from callDisposition (`TRACK_LABEL[callDisposition.value]`) or set `activeTrack.value = s.callDisposition` in seedSignalsFromState (persistence.ts:141).",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "DUI-007",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/lib/operator-help/registry.ts",
+   "line": 116,
+   "generation": "shared",
+   "state": "Operator help text for /discovery-studio/ (whatItIsFor / theMoveHere).",
+   "current": "\"Discovery Studio supports a live discovery call with question paths, notes, objection handling, and next-step capture.\" / \"Use the question path that matches the current part of the conversation and record what the buyer actually says.\"",
+   "problem": "No Discovery Studio screen (v4, DS or oldest) has a notes field or any free-text capture of the buyer's words; the seller selects the closest pre-written response and the product records that response's pre-written fact. The help promises a capability the screen does not have.",
+   "governing": "COPY_STANDARD.md §21 (claims discipline); owner requirements §'Function' (copy that claims something the code does not do).",
+   "proposed": "whatItIsFor: \"Discovery Studio supports a live discovery call with question paths, suggested responses, objection handling, recorded facts, and next-step capture.\" theMoveHere: \"Use the question path that matches the current part of the conversation and select the buyer response closest to what they said.\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "DUI-008",
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "src/settings/v4/SettingsV4.tsx",
+   "line": 416,
+   "generation": "v4",
+   "state": "Settings → call guidance list.",
+   "current": "\"Scheduled discovery calls: use Discovery Studio during the call when you want its questions, notes, and deal fields available.\"",
+   "problem": "Discovery Studio has no notes field and no deal fields (only champion/approver name chips and the next-step docket). Same accuracy problem as DUI-007, outside this area.",
+   "governing": "COPY_STANDARD.md §21.",
+   "proposed": "\"Scheduled discovery calls: use Discovery Studio during the call when you want its question paths, suggested responses, and next-step fields available.\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "DUI-009",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/discovery-studio/state.ts",
+   "line": 383,
+   "generation": "shared",
+   "state": "After the call → 'Open in Deal Workspace →' / 'Review loss risk →'.",
+   "current": "postCallPackage and handoffPayload (primitives 20 and 21) are declared but never written anywhere in src/ (grep finds only their declarations and resetSession). The post-call links pass only `focusObject=<account>` (lib/handoff.ts:210-224). Nothing recorded in the call (facts, champion/approver names, next-step date/owner/purpose, disposition) reaches Deal Workspace or Future Autopsy; Deal Workspace has no reader for discovery data.",
+   "problem": "Canon §4.12 'Flows out: Deal Workspace (active framework, learned facts, stakeholder map, … next-step lock); Future Autopsy (…)' and the capability map list these flows as reachable. A seller who sets a dated next step here reasonably expects the deal's next step to update; it does not.",
+   "governing": "CLAUDE.md Part I §4.12 Flows out + 'Must never be flattened: any of the 19 primitives'; Part I §2 rules for nouns; DOC-103/DOC-104 doctrine lines.",
+   "proposed": "Smallest accurate change without a product decision: under the post-call links add plain copy that states the current behaviour, e.g. `Facts and the next step stay in Discovery Studio. Update the deal's next step in Deal Workspace.` OWNER DECISION: implement the handoff — on outcome selection build postCallPackage and write the next-step lock + facts to the matching deal (data.deals update by account), so Deal Workspace's next step and Future Autopsy inputs reflect the call.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "DUI-010",
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/dashboard/lib/readiness-aggregator.ts",
+   "line": 177,
+   "generation": "shared",
+   "state": "Readiness drawer → discovery gaps 'Record 6+ discovery calls with outcome 'advanced'' and 'Run 5+ Discovery Studio sessions'.",
+   "current": "readDiscoveryStats reads gtmos_discovery_stats.advancedCalls / totalCalls; the only writer of that key is Cold Call Studio (src/cold-call-studio/lib/persistence.ts:21, cold-call-studio/state.ts:148). Choosing 'Advanced — dated next step set' in Discovery Studio writes gtmos_discovery_call_log, which this function does not read.",
+   "problem": "The readiness gaps (src/lib/readiness/dimensions.ts:180-202) tell the user to run Discovery Studio sessions and record advanced discovery calls, but doing exactly that in Discovery Studio never moves either count; only cold calls do. A first-time user is misled about what will change their readiness.",
+   "governing": "CLAUDE.md Part I §4.17 (gate evidence must be real); COPY_STANDARD.md §21; owner: 'Numbers shown in more than one area come from the area that owns them' (Discovery Studio owns discovery outcomes).",
+   "proposed": "Count Discovery Studio's own log for the two discovery numbers: in readiness-aggregator.ts, `discoveryStudioSessions` = number of gtmos_discovery_call_log records and `discoveryAdvancedCalls` = records with disposition 'advanced' or 'won' (optionally plus the Cold Call meeting-booked count, labelled separately). If the owner prefers to keep the Cold Call source, the gap text must say so: 'Book 6+ meetings from cold calls' / 'Log 5+ calls in Cold Call Studio'. OWNER DECISION: which source the readiness discovery dimension should use (changes readiness scoring inputs). Coordinate with the readiness reviewer.",
+   "testsAffected": [
+    "src/dashboard/lib/readiness-aggregator.test.ts (if present)",
+    "src/lib/readiness/*.test.ts"
+   ],
+   "confidence": "high"
+  }
+ ],
+ "dispositions": [],
+ "retained": [],
+ "gaps": []
+}

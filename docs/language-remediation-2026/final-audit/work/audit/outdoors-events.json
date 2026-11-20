@@ -1,0 +1,1072 @@
+{
+ "area": "outdoors-events",
+ "coverage": [
+  {
+   "surface": "Outdoors Events default screen: header, search console and last-search line, three relevance groups, event rows (date, name, place, reason, source link), travel/calendar icon links, weather glyph, status select, × button, 'Added manually' group, manual-add form, loading and empty states",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+    "src/outdoors-events/v4/outdoors-events-v4.css",
+    "src/outdoors-events/main.tsx",
+    "src/outdoors-events/state.ts",
+    "src/outdoors-events/lib/types.ts"
+   ],
+   "note": "Read every line of the component, state.ts and types.ts and compared them with the SMB walkthrough generated today (at rest, 'Find relevant events' click, '+ Add event manually' form, hover titles) and with the 2026-11-06 enterprise walkthrough (same strings; the '×' click is recorded there). Executed only in the demo: at rest, the search click (which returns the 'not available in this copy' message because the walkthrough build has no database), the manual form opening, × on a row. Reviewed from source, not executed: the last-search line for a completed, limited, failed or unfinished run (the demo has no run rows), the loading state, the empty state, a failed list load, a failed save/status change/delete, the weather glyph (every seeded event is outside the 16-day forecast window), submitting the manual form, and the date column in a US time zone (reproduced with a Node script under TZ=America/Chicago and TZ=America/Los_Angeles: 'Sep 22 – Sep 23' for 2026-09-23/24). The resumed review (2026-11-17) re-read the component, state.ts, types.ts and get-there.ts line by line, confirmed every line reference in findings OE-001 to OE-018, and reproduced the date shift again under TZ=America/Chicago ('Sep 22 – Sep 23' for 2026-09-23/24)."
+  },
+  {
+   "surface": "Travel and calendar helpers: weather glance (Open-Meteo), Google Flights / hotel search links, downloadable .ics",
+   "generation": "v4",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/outdoors-events/v4/lib/get-there.ts"
+   ],
+   "note": "Read in full; no test file exists for it. The earlier reviewer of this area called the public geocoder with the seeded place strings ('Nashville, TN', 'Las Vegas, NV', 'New York, NY', 'Anaheim, CA' resolve; 'SF Bay Area, CA', 'Online' and venue names return nothing); I did not repeat that call. The forecast call, the Google links and the .ics import into a calendar app were not executed. The links hand off to outside sites and nothing about a trip is stored, which matches the stated boundary (CLAUDE.md §4.22)."
+  },
+  {
+   "surface": "Event search function: request parsing, authentication and workspace membership, run_one and run_all, 7-day cost limits, prompt, response parsing and wording gate, dedupe key, insert-versus-refresh, run ledger",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "supabase/functions/outdoors-events-discovery/index.ts",
+    "supabase/functions/outdoors-events-discovery/_shared.ts",
+    "supabase/functions/outdoors-events-discovery/anthropic.ts",
+    "supabase/functions/outdoors-events-discovery/README.md",
+    "src/outdoors-events/lib/discovery-function.test.ts",
+    "src/outdoors-events/lib/discovery-shared.test.ts"
+   ],
+   "note": "Read all four files and both test files. Ran the real handler source and the real _shared.ts in Node with stand-ins for the database and the model (scratch scripts oe-probe/probe.cjs and oe-probe/shared-probe.cjs; no network, no paid call, no database). Observed there: a workspace with no product category still makes the paid call with the prompt 'Product category: (product category not set)'; a deleted event is inserted again on the next run; a refresh rewrites kind, place, dates and link and leaves status, notes, name and tags; a paused result is HTTP 200 with ok:false and writes no ledger row; a limited run uses 3 searches and the direct-only prompt; a cost-lookup failure returns HTTP 500 and stops run_all part-way; a model answer that is cut off, or that has a bracket in the prose before the array, parses to 0 events; the date '2027-13-45' passes the parser; a past event passes; 'Your buyers will attend this event.' passes the wording gate. Confirmed by reading: the ledger column is completed_at in the migration, the generated types, closeRun and the client (no finished_at anywhere in src or supabase); run_one returns {ok, result, error} and the client reads ok and result.status; an empty, array, non-object or unknown-action body returns 400 before any work; run_all needs the service-role credential; buildDedupeKey takes three arguments at its one call site (index.ts:294). Not executed: the deployed function, a live model call, live web search, real database constraints, the 120-second timeout path. There is no schedule for this function (no cron migration exists; run_all is manual). The resumed review re-read index.ts, _shared.ts, anthropic.ts and the README, re-ran the stand-in script for the shared helpers (same results), and checked the two API facts the findings rely on against the API reference: a server-tool loop that reaches its iteration limit ends with stop_reason pause_turn, and web-search errors come back inside an HTTP 200 response. Neither was observed live."
+  },
+  {
+   "surface": "Search client and page state: triggerDiscovery, loadLatestRun, runDiscoveryNow, list/insert/update/delete of events, demo data client",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/outdoors-events/lib/discovery.ts",
+    "src/outdoors-events/lib/discovery.test.ts",
+    "src/outdoors-events/state.ts",
+    "src/outdoors-events/state.test.ts",
+    "src/outdoors-events/lib/persistence.ts",
+    "src/outdoors-events/lib/persistence.test.ts",
+    "src/lib/data-client.ts",
+    "src/lib/data-client-demo-local.ts"
+   ],
+   "note": "Read in full. The default screen shows only the four fixed messages in DISCOVERY_MESSAGES; raw transport and database text goes to error reporting (discovery.ts:99-149; asserted in discovery.test.ts:121-143). The demo path was executed in today's walkthrough (the 'not available in this copy' message, because the walkthrough build has no database address; the hosted demo instead gets 'Sign in to a workspace to search for events.' because the demo data client returns no workspace, data-client.ts:247). state.test.ts has no test for runDiscoveryNow, saveDraft, changeStatus, removeEvent or bootEvents. Not verified: behavior for a user who belongs to more than one workspace — the event list is scoped only by row-level security (every workspace the user is a member of), while the search runs for the workspace the user owns (data-client.ts:298-315); no screen for adding members exists, so I did not treat it as reachable. The resumed review re-read these files and added OE-044 (demo and signed-out messages) and OE-046 (manual links)."
+  },
+  {
+   "surface": "Tables and generated types: outdoors_events, outdoors_events_runs, row-level security, dedupe index, delete-everything and download/restore coverage",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "supabase/migrations/20260601200000_outdoors_events.sql",
+    "supabase/migrations/20260601220000_outdoors_events_discovery.sql",
+    "supabase/migrations/20261105130000_delete_workspace_data.sql",
+    "src/lib/database.types.ts",
+    "src/settings/lib/workspace-tables.ts",
+    "src/settings/lib/cloud-sync.ts"
+   ],
+   "note": "Read both events migrations and the two type blocks (database.types.ts:1362-1495); columns, nullability and the status values agree with the function and the client. The runs table allows running/completed/failed/throttled (no 'paused'), which matches the function writing no row for a paused request. Members can read both tables; only the function writes the runs table. Both tables are in the delete-everything list (20261105130000_delete_workspace_data.sql:58-59) and in the download (workspace-tables.ts:145-146). Restore was read, not executed against a database (see OE-028). Re-read by the resumed review: the run table's status check is ('running','completed','failed','throttled') at 20260601220000_outdoors_events_discovery.sql:64-65, completed_at at line 63, the run_id foreign key at lines 111-114; no schedule migration exists for this function."
+  },
+  {
+   "surface": "Links and descriptions that lead to Outdoors Events from other areas: workspace map entry, command list entry, page help text, Briefing links, Settings download labels",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/lib/ground/motion.ts",
+    "src/lib/palette/registry.ts",
+    "src/lib/operator-help/registry.ts",
+    "src/briefing/v4/BriefingV4.tsx",
+    "src/briefing/v4/lib/world-events.ts",
+    "src/briefing/components/OutdoorsEventsChip.tsx",
+    "src/settings/lib/workspace-tables.ts"
+   ],
+   "note": "Workspace map: 'find events where target buyers may be present' (motion.ts:40) is the approved description. Briefing default screen: 'UPCOMING EVENTS FOR YOUR TARGET MARKET' with up to three upcoming events and 'N more in Outdoors Events →' (BriefingV4.tsx:543-556); it leaves out ended, 'passed' and 'archived' events, which the Outdoors Events list keeps (see OE-002). All links are plain '/outdoors-events/' with no return parameters; the default Outdoors Events screen has no back control other than the workspace map, so nothing is lost. The help text is shown only on the previous screen version (the default screen has no '?' control). Settings labels 'Events' and 'Event searches Antaeus ran' are plain."
+  },
+  {
+   "surface": "Outdoors Events previous screen version (?v4=0): header, search panel with last-run chip and line, three groups, event cards (kind, place, dates, relevance sentence, note, tags, status, source link, Delete), empty and loading states, manual-add control and nine-field form, page help ('?')",
+   "generation": "ds",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/outdoors-events/ds/OutdoorsEventsDS.tsx",
+    "src/outdoors-events/ds/components/DiscoveryConsoleDS.tsx",
+    "src/outdoors-events/ds/components/EventListDS.tsx",
+    "src/outdoors-events/ds/components/EventComposerDS.tsx",
+    "src/outdoors-events/ds/lib/adapters.ts",
+    "src/outdoors-events/ds/outdoors-events-ds.css",
+    "src/outdoors-events/ds/ds-components.test.tsx",
+    "src/outdoors-events/main.tsx",
+    "src/lib/operator-help/registry.ts",
+    "src/components/input.tsx"
+   ],
+   "note": "Read every file in full and compared with the walkthrough of this version generated today (enterprise demo book: at rest, '?', 'Run discovery now', 'Delete'). Executed there: at rest, the help panel, the search click (returns 'Event search isn't available in this copy of the app.'), a delete. Reviewed from source only: the last-run chip and line (the demo has no run rows), the stored-error line, the empty state, the loading state, the open manual form and its save, tags on a card (the seeded tags are strings and are dropped, OE-042). The Birdseye panel, the scheduled-actions panel and the command list on this screen are shared code reported by other areas (dashboard findings DASH-029 to DASH-031); I did not repeat them."
+  },
+  {
+   "surface": "Outdoors Events oldest screen version (?v4=0&ds=0): header, search panel, groups, event rows, empty and loading states, manual-add control and form",
+   "generation": "legacy",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/outdoors-events/OutdoorsEvents.tsx",
+    "src/outdoors-events/components/Topbar.tsx",
+    "src/outdoors-events/components/DiscoveryConsole.tsx",
+    "src/outdoors-events/components/EventList.tsx",
+    "src/outdoors-events/components/EventRow.tsx",
+    "src/outdoors-events/components/EventComposer.tsx",
+    "src/outdoors-events/components/DiscoveryConsole.test.tsx",
+    "src/outdoors-events/components/EventList.test.tsx",
+    "src/outdoors-events/outdoors-events.css"
+   ],
+   "note": "No walkthrough of this version existed when I reached it (the corpus-legacy folder was absent), so it was reviewed from source and its two component tests. Not executed. It shares state.ts, lib/types.ts, lib/discovery.ts and lib/persistence.ts with the other two versions, so OE-005, OE-013, OE-017, OE-023 and OE-024 apply here too. Its status control is labelled ('STATUS') and its delete button has an accessible name ('Delete {event name}'); dates are parsed as local days and print the year."
+  },
+  {
+   "surface": "Demo sample events in both books (relevance sentences, notes, tags, dates, links) and the missing sample search run",
+   "generation": "seed",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "js/demo-seed-data-smb.js",
+    "js/demo-seed-data-ent.js",
+    "js/demo-seed-runtime.js",
+    "src/lib/data-client-demo-local.ts"
+   ],
+   "note": "SMB book rendered today on the default screen; enterprise book rendered today on the previous screen and on 2026-11-06 on the default screen. Read the seed rows in both files (smb 490-494, ent 689-694) and the writer (runtime 290-294). Whether the named conferences really take place on the seeded dates, and whether the seeded links are live, was not checked (no network use in this stage)."
+  },
+  {
+   "surface": "Internal descriptions of the area: capability map shown in the tester walkthrough, canon section 4.22, function README",
+   "generation": "doctrine",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "deliverables/room-capability-maps/outdoors-events-capability-map-2026-07-07.html",
+    "CLAUDE.md",
+    "supabase/functions/outdoors-events-discovery/README.md",
+    "deliverables/adr/adr-016-outdoors-events-discovery-surface-2026-06-01.md"
+   ],
+   "note": "Read the capability map (all content is on line 41), CLAUDE.md lines 435-450 and the README, and compared each statement with the code. ADR-015 and ADR-016 are dated decision records; I read ADR-016 for context and did not treat its wording as active instruction."
+  },
+  {
+   "surface": "Original rewrite records for this area (7 that needed judgment, 8 matched automatically, 0 on the watch list)",
+   "generation": "tooling",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json",
+    "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/01_USER_FACING_COPY_INVENTORY.json",
+    "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/06_INTERNAL_DOCTRINE_HITS.json",
+    "tools/language-remediation/reconcile-original.js"
+   ],
+   "note": "All 7 judged records have a disposition. I checked all 8 automatically matched records against source and the walkthrough generated today: 6 are right for the default screen (exact_replacements[18], [20], [21], [22], [25], [27]); [16] is a false match and [19] is incomplete, and both have a corrected disposition (see also OE-045). The older screen versions still carry pre-remediation wording that was never in the original inventory, because the inventory was taken from the default screens; that wording is in OE-031 to OE-036."
+  },
+  {
+   "surface": "Named functional checks for the event search function (owner requirement 7): outcome of each",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "supabase/functions/outdoors-events-discovery/index.ts",
+    "supabase/functions/outdoors-events-discovery/_shared.ts",
+    "supabase/functions/outdoors-events-discovery/anthropic.ts",
+    "supabase/migrations/20260601220000_outdoors_events_discovery.sql",
+    "src/lib/database.types.ts",
+    "src/outdoors-events/lib/discovery.ts",
+    "src/outdoors-events/state.ts",
+    "src/outdoors-events/lib/discovery-function.test.ts"
+   ],
+   "note": "Ran the handler test file alone on 2026-11-17 (npx vitest run src/outdoors-events/lib/discovery-function.test.ts --maxWorkers=1): 18 of 18 pass; it executes the real index.ts with stand-ins for the database and the model. Outcome per item. completed_at vs finished_at: correct — the column is completed_at in the migration (line 63), the generated types, closeRun (index.ts:280) and the client (discovery.ts:64, 73); finished_at occurs only in a test that asserts its absence. run_one response: correct — {ok, result, error} (index.ts:433); the client reads ok and result.status (discovery.ts:127-136). Malformed body: correct — empty, array, non-object, unknown action or blank workspaceId returns 400 before any work (index.ts:386-400; test lines 92-102). Workspace scoping: correct — a user token must belong to a member of the requested workspace (index.ts:417-427); every read and write carries workspace_id; run_all needs the service-role credential. Dedupe key: buildDedupeKey takes three arguments and its one call site passes three (index.ts:294); the old one-argument call is gone. Insert versus refresh: correct for exact key matches — a refresh writes only the search's fields and leaves status, notes, name and tags (index.ts:302-324; test lines 123-136); weaknesses are in OE-022 (near-duplicate names), OE-004 (a deleted event returns) and OE-020 (dates). Paused request: correct on the default path — ok:false, no ledger row, plain message (index.ts:156-165, 432-433; discovery.ts:134); the wording of the message is in OE-024. Raw errors: fixed for the search button on all versions (discovery.ts:99-149); still printed from the stored error_summary on the two older screens (OE-033). Schedule: none; run_all is manual (OE-025). Open defects on this path: OE-012 (search with no product category), OE-019 (unusable model answer recorded as a finished search), OE-021 (link not checked against search results)."
+  }
+ ],
+ "findings": [
+  {
+   "id": "OE-001",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+   "line": 58,
+   "generation": "v4",
+   "state": "Default screen, date column of every event row, for any user whose time zone is behind UTC (all of the Americas; the app's operating time zone is America/Chicago)",
+   "current": "fmtWhen: `const s = new Date(ev.startDate);` … `s.toLocaleDateString(undefined, opts)` and `new Date(ev.endDate).toLocaleDateString(undefined, opts)` (lines 58-63). start_date/end_date are date-only strings ('2026-09-23'), which JavaScript parses as midnight UTC.",
+   "problem": "The row shows the day before the real date. Reproduced with Node under TZ=America/Chicago and TZ=America/Los_Angeles: an event stored as 2026-09-23 to 2026-09-24 prints 'Sep 22 – Sep 23' (UTC, Berlin and Tokyo print 'Sep 23 – Sep 24'). The walkthrough machine runs in UTC, so the corpus looks right. The same row's flight link and calendar file use the stored date (get-there.ts:78, 92), and the previous and oldest screens append 'T00:00:00' (ds/components/EventListDS.tsx:29, components/EventRow.tsx:19) and show the right day, so only the default screen is wrong. A US seller reads the wrong conference dates.",
+   "governing": "comprehension principle (a date must mean what it says); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (adversarial functional review of displayed results)",
+   "proposed": "In fmtWhen parse the stored date as a local calendar day, the same way get-there.ts:97 does: `const at = (iso: string): Date => new Date(`${iso.slice(0, 10)}T12:00:00`);` then `const s = at(ev.startDate);` and `at(ev.endDate).toLocaleDateString(undefined, opts)`. Add a unit test for fmtWhen (export it or test through render) that sets process.env.TZ = 'America/Chicago' and expects 'Sep 23 – Sep 24' for 2026-09-23 / 2026-09-24.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-002",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+   "line": 59,
+   "generation": "v4",
+   "state": "Default screen, date column, when listed events fall in different years or have already ended (the demo books today: first row 'Sep 23 – Sep 24' is RecFest USA 2026, which ended two months before 2026-11-16; the next rows are April and May 2027)",
+   "current": "`const opts: Intl.DateTimeFormatOptions = { month: \"short\", day: \"numeric\" };` → 'Sep 23 – Sep 24', 'Apr 12 – Apr 14', 'May 11 – May 13' (SMB walkthrough lines 9, 19, 30). No year, and nothing marks an event that is over.",
+   "problem": "High-context dependence: the reader has to know which year each row means. Under a heading that promises currently scheduled events, 'Sep 23 – Sep 24' seen in November reads as next September, but the stored event is in the past; 'Apr 12 – Apr 14' is next year. The previous screen prints the year ('Sep 23, 2026 – Sep 24, 2026').",
+   "governing": "COPY_STANDARD.md §13 (state units and time frames); comprehension principle",
+   "proposed": "In fmtWhen add the year whenever it is not the current year, and mark finished events: build `const yr = (d: Date) => d.getFullYear() !== new Date().getFullYear() ? { ...opts, year: \"numeric\" as const } : opts;` and format the last date in the range with yr(), giving 'Apr 12 – Apr 14, 2027'; when the end date (or the start date if there is no end date) is before today, append ` · ${t(\"ended\")}` so the row reads 'Sep 23 – Sep 24 · ended'.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-003",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+   "line": 142,
+   "generation": "v4",
+   "state": "Default screen, the small line under the search heading, once the workspace has at least one search run (not reachable in the demo, which has no run rows)",
+   "current": "`{t(\"Last search\")} {run.completedAt ? new Date(run.completedAt).toLocaleDateString() : t(\"just now\")} · {run.eventsWritten} {t(\"events returned\")} · {run.status}` (lines 142-143) → for example 'Last search 11/16/2026 · 7 events returned · throttled', 'Last search 11/16/2026 · 0 events returned · failed', 'Last search just now · 0 events returned · running', 'Last search 11/16/2026 · 1 events returned · completed'.",
+   "problem": "Three defects in one line. (1) The stored status key is printed raw. 'throttled' does not tell a first-time user that this search looked only for directly relevant events, with at most 3 web searches instead of 6, because the workspace had already spent $1.00 on event searches in the previous 7 days (supabase/functions/outdoors-events-discovery/index.ts:36, 166, 128-131, 204); 'completed', 'failed' and 'running' are database words, not a result. (2) A run row whose completed_at is empty is dated 'just now' whenever the page loads, even when the run started days ago and never closed (the function was stopped before closeRun ran), so a dead run reads as one in progress. (3) '1 events returned'. The previous screen maps the same keys to labels (ds/lib/adapters.ts:24-30); the default screen does not.",
+   "governing": "COPY_STANDARD.md §13, §14 and §17 (a state names an observable condition; number + unit); comprehension principle; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (response and error behavior)",
+   "proposed": "Replace lines 142-143 with a small formatter. Date: `new Date(run.completedAt ?? run.startedAt).toLocaleDateString()`. Count: `run.eventsWritten === 1 ? t(\"1 event returned\") : run.eventsWritten + \" \" + t(\"events returned\")`. Then by status. completed: 'Last search {date} · {count}'. throttled: 'Last search {date} · {count} · ' + t(\"limited to directly relevant events to stay within the 7-day search budget\", { class: \"body\" }). failed: t(\"The search on\") + ' {date} ' + t(\"did not finish\") + (eventsWritten > 0 ? ' · {count}' : ''). running (completed_at empty): t(\"A search started on\") + ' {date} ' + t(\"has not finished\"). Never print run.status. Add a render test for the four cases.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-004",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+   "line": 103,
+   "generation": "v4",
+   "state": "Default screen, the × at the end of every event row (hover title 'Dismiss'); the same action is the 'Delete' button on the previous screen (ds/components/EventListDS.tsx:90-96) and the oldest screen (components/EventRow.tsx:117-125)",
+   "current": "`<button type=\"button\" class=\"oe4-x\" title={t(\"Dismiss\")} onClick={() => void removeEvent(ev.id)}>×</button>` → state.ts:181-191 removeEvent → lib/persistence.ts:165-177 deleteOutdoorsEvent → the row is deleted from outdoors_events. One click, no confirmation, no undo. Separately, choosing 'Archived' or 'Passed' in the status list leaves the row where it is, looking the same, in all three screen versions.",
+   "problem": "'Dismiss' says the event will stay out of the list. The row is deleted, and its dedupe_key goes with it, so the next 'Find relevant events' run finds no existing row (supabase/functions/outdoors-events-discovery/index.ts:313-324) and inserts the same conference again as a new 'Watching' row. Anything the seller had set on it (status, notes) is gone. A seller who removed an irrelevant event sees it return after the next search, and no status hides a row either, so the page has no way to keep an unwanted event out of view. This is the one case where a user's decision about an event does not survive a re-run; status and notes on rows that still exist are protected (verified in src/outdoors-events/lib/discovery-function.test.ts:123-136).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (operator status/notes protection, dedupe); deliverables/adr/adr-016-outdoors-events-discovery-surface-2026-06-01.md line 23 ('The operator can mark status … and dismiss'); comprehension principle (a control's name must predict its result)",
+   "proposed": "Make the label say what happens: title={t(\"Delete event\")} plus aria-label={t(\"Delete event\")} on line 103. OWNER DECISION: make a dismissal last. Have × set status to 'archived' (changeStatus(ev.id, \"archived\")) instead of deleting, leave archived rows out of the three relevance groups (show them in a collapsed 'Archived' group), and keep a real delete only for rows the user added manually. The row and its dedupe_key then stay in the table, so a later search refreshes the archived row instead of adding the event again.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-005",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/outdoors-events/state.ts",
+   "line": 170,
+   "generation": "shared",
+   "state": "Any screen version, signed-in workspace: the user changes an event's status or deletes an event and the request fails (offline, expired session, permission error)",
+   "current": "changeStatus: `const ok = await updateOutdoorsEvent(id, { status: next }); if (ok) { …update the list… }` (lines 168-178) and removeEvent the same (lines 182-190). When ok is false nothing else happens: no message is set and nothing re-renders.",
+   "problem": "The failure is silent. The status <select> keeps showing the value the user just picked (the list did not change, so the row is not re-rendered and the control is not put back), so the screen shows a status that was not saved; on reload it reverts. A failed delete does nothing at all. The user cannot tell whether the change was saved. No test covers changeStatus or removeEvent (src/outdoors-events/state.test.ts tests only the pure grouping and composer helpers).",
+   "governing": "CLAUDE.md Part II §6 (saved/unsaved: 'never let the user wonder if it saved'; error states never swallowed); comprehension principle",
+   "proposed": "In state.ts add `export const rowError: Signal<{ id: string; message: string } | null> = signal(null);`. In changeStatus set `rowError.value = ok ? null : { id, message: \"The status change wasn't saved. Check your connection and try again.\" }`; in removeEvent use \"The event wasn't deleted. Check your connection and try again.\". In each row component read rowError.value and, for the matching id, render the message in a role=\"alert\" element under the row (v4: `<div class=\"oe4-err\" role=\"alert\">`); reading the signal re-renders the row, which puts the select back to the saved status. Add state tests for both failure paths (mock ./lib/persistence).",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-006",
+   "category": "A11Y",
+   "severity": 2,
+   "file": "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+   "line": 94,
+   "generation": "v4",
+   "state": "Default screen: every event row and the manual-add form",
+   "current": "Status `<select class=\"oe4-status\">` has no label, aria-label or title (lines 94-102; the walkthrough records it as '(unlabelled field)'). The four travel/calendar links contain only an emoji (✈ 🛏 🎫 📅) with a title (lines 85-92). The delete button contains only '×' with a title (line 103). In the form, the two text inputs are named only by placeholder ('Event name', 'City / venue', lines 194-197) and the date input has no name at all (line 198). The search error is a plain <span> with no role (line 148). The save error in the manual form is also a plain <span> (line 205).",
+   "problem": "A screen-reader user hears an unnamed combo box, 'airplane', 'bed', 'ticket', 'calendar', 'times' and an unnamed date field, and is not told when a search fails. A sighted user also has no text saying that the dropdown is the event's status or that the date is the start date.",
+   "governing": "comprehension principle (what a control is and does); WCAG 2.1 SC 4.1.2 Name, Role, Value and SC 3.3.2 Labels or Instructions",
+   "proposed": "Line 94: add aria-label={t(\"Status\")}. Lines 85-92 and 103: add aria-label equal to each title (t(\"Check flights\"), t(\"Hotels nearby\"), t(\"Open event site\", { class: \"body\" }), t(\"Add to calendar\"), and the delete label from OE-004). Lines 194-198: add aria-label={t(\"Event name\")}, aria-label={t(\"City / venue\")} and aria-label={t(\"Start date\")} with title={t(\"Start date\")} on the date input. Line 148: render the error as `<span class=\"oe4-err\" role=\"alert\">`. Line 205: render the save error the same way, `<span class=\"oe4-err\" role=\"alert\">`.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-007",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+   "line": 47,
+   "generation": "v4",
+   "state": "Default screen, an event that starts within the next 15 days (or has no date) in a place the geocoder recognises: the small weather reading after the place name",
+   "current": "`<span class=\"oe4-wx\" title={t(\"Forecast for the event dates\", { class: \"body\" })}>{glyph} {w.tempC}°</span>` → for example '☀ 24°'. The number is degrees Celsius (get-there.ts:10, 59-67: Open-Meteo temperature_2m_max in its default unit).",
+   "problem": "A number with no unit, in a different unit from the Briefing, which requests Fahrenheit and prints '{tempF}°' (src/briefing/v4/lib/weather.ts:127, BriefingV4.tsx:478). A US seller reads '24°' for Las Vegas as 24°F. The tooltip is also inexact: the figure is the forecast high for the first day only (start_date=end_date=start day), and for an event with no date it is today's high (get-there.ts:50), not a forecast 'for the event dates'.",
+   "governing": "COPY_STANDARD.md §13 (state units and time frames) and §21 (claims discipline); comprehension principle (what a number means)",
+   "proposed": "Show the unit and say what the figure is: render `{glyph} {w.tempC}°C` and set title to t(\"Forecast high on the event's first day\", { class: \"body\" }); pass a flag from weatherFor when no date was given and use t(\"Today's forecast high at this location\", { class: \"body\" }) in that case. OWNER DECISION: show Fahrenheit like the Briefing (add `&temperature_unit=fahrenheit` to the forecast URL at get-there.ts:59, rename tempC to tempF, render '°F').",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-008",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/outdoors-events/v4/lib/get-there.ts",
+   "line": 93,
+   "generation": "v4",
+   "state": "Default screen, 📅 'Add to calendar' on an event with no start date (a manually added event saved without a date, or a search result whose start_date came back null)",
+   "current": "`const start = startIso ? fmt(startIso) : localYmd(new Date());` and `const endDate = endSrc ? new Date(…) : new Date(); endDate.setDate(endDate.getDate() + 1);` (lines 93-99). The link is always rendered (OutdoorsEventsV4.tsx:92).",
+   "problem": "For an event whose row says 'date not set', the downloaded file creates an all-day entry on today's date in the seller's calendar. The control produces a date the product does not have.",
+   "governing": "comprehension principle (a control must not create data the product does not have); COPY_STANDARD.md §21",
+   "proposed": "In OutdoorsEventsV4.tsx line 92 render the calendar link only when the event has a start date: `{ev.startDate ? (<a class=\"oe4-ic\" …>📅</a>) : null}`. Leave calendarIcs unchanged apart from making startIso a required string.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-009",
+   "category": "FUNC",
+   "severity": 1,
+   "file": "src/outdoors-events/v4/lib/get-there.ts",
+   "line": 100,
+   "generation": "v4",
+   "state": "Default screen, 📅 'Add to calendar' on any event; the file is imported into a calendar app",
+   "current": "The VEVENT has SUMMARY, DTSTART, DTEND and LOCATION only (lines 100-111). It has no UID and no DTSTAMP.",
+   "problem": "RFC 5545 §3.6.1 requires UID and DTSTAMP in every VEVENT. Without a UID, importing the same event twice creates a duplicate entry, and stricter calendar clients can refuse the file. Not executed here; stated from the standard.",
+   "governing": "comprehension principle (the control should do what its label says in common calendar apps); RFC 5545 §3.6.1",
+   "proposed": "Add two lines after BEGIN:VEVENT: `UID:${start}-${encodeURIComponent(name).slice(0, 60)}@antaeus.app` and `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, \"\").slice(0, 15)}Z`. Add a unit test for calendarIcs that checks the decoded file contains UID, DTSTAMP, DTSTART;VALUE=DATE and an exclusive DTEND.",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-010",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+   "line": 52,
+   "generation": "v4",
+   "state": "Default screen: header (line 133), second relevance group heading (line 52), empty state (line 161); the same phrase is in the page help text (src/lib/operator-help/registry.ts:192)",
+   "current": "'events relevant to your market and buyer context' · 'Adjacent to your buyer context' · 'Run event discovery to search for currently scheduled events relevant to your category and buyer context.' · help: 'review the product category and buyer context used for discovery'",
+   "problem": "'Buyer context' is an abstraction the reader has to unpack (semantic compression): it stands for the roles, functions and problems of the people the user sells to, which the group's own sub-line says in plain words. The approved wording for the header was 'events relevant to your target buyers' (Batch 03). The group heading rightly stopped claiming that buyers attend, but 'adjacent to your buyer context' replaced one opaque phrase with another. The search also has no stored buyer data: it receives only product category, what you sell and value proposition (index.ts:117-126), so 'buyer context used for discovery' in the help text names an input that does not exist.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json exact_replacements[16] and [23]; COPY_STANDARD.md §2 (literal nouns); comprehension principle",
+   "proposed": "Line 133: t(\"events relevant to your market and target buyers\", { class: \"body\" }). Line 52 label: t(\"Relevant to your target buyers\", { class: \"body\" }) (keep the sub-line 'events focused on the roles, functions, or problems you sell into'). Line 161: see OE-011. registry.ts:192: \"If no useful events are returned, check the product category saved for your workspace, which the search uses, or add a known event manually.\"",
+   "testsAffected": [
+    "src/lib/operator-help/registry.test.ts (only if it asserts the sentence)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-011",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+   "line": 160,
+   "generation": "v4",
+   "state": "Default screen with no saved events — before any search, and also right after a search that returned nothing",
+   "current": "'No events found yet.' / 'Run event discovery to search for currently scheduled events relevant to your category and buyer context.' (lines 160-161). The only control is the button 'Find relevant events'; the line above already says 'No event search has been run yet.'",
+   "problem": "The text names an action, 'Run event discovery', that no control on the page carries, so the reader has to work out that it means the 'Find relevant events' button. Shown after a search that returned nothing, 'No events found yet. Run event discovery…' tells the user to repeat what they just did.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md CTA standard (a control's name predicts the action); comprehension principle",
+   "proposed": "When no run exists: <h3>{t(\"No events are listed.\")}</h3><p>{t(\"Select Find relevant events to search for scheduled events related to your product category, or add an event manually below.\", { class: \"body\" })}</p>. When the latest run exists and returned 0 events: <h3>{t(\"The last search returned no events.\")}</h3><p>{t(\"Check the product category saved for your workspace, which the search uses, or add an event manually below.\", { class: \"body\" })}</p>.",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-012",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "supabase/functions/outdoors-events-discovery/index.ts",
+   "line": 118,
+   "generation": "backend",
+   "state": "A signed-in user selects 'Find relevant events' in a workspace where no product category is saved — which is every workspace set up through the default screens",
+   "current": "buildUserPrompt: `const category = profile.product_category?.trim() || \"(product category not set)\";` (lines 118-119). runForWorkspace does not check the profile before opening the ledger row and making the paid web-search call (lines 174-205). The only code that writes workspace_profile.product_category, what_we_sell or value_prop is ICP Studio's commercial-profile form (src/icp-studio/lib/profile-persistence.ts:94, 119), and that form is rendered only by the previous and oldest ICP Studio screens (src/icp-studio/ds/components/IcpBuilder.tsx:188, src/icp-studio/components/CommercialProfileBanner.tsx:69). The default ICP Studio screen (src/icp-studio/v4/IcpStudioV4.tsx) has no such field; onboarding writes only its own two columns (src/onboarding/lib/cloud.ts:17-21) and the setup flow writes the ICP to the icps table (src/onboarding/seeding/lib/cloud-mirror.ts:75-83).",
+   "problem": "The search's only input does not exist for a user on the default screens. Run with the real handler and stand-ins: with product_category null, or with no profile row, the function still makes the paid call, sends 'Product category: (product category not set)', stores whatever comes back and returns ok:true / completed. The page then lists those events under 'Directly relevant to your category'. The user pays for a search based on nothing and is told the results match their category. run_all already skips such workspaces (activeWorkspaceIds, lines 354-362); run_one, the path the button uses, does not. The same three columns feed the Briefing pipeline (supabase/functions/briefing-pipeline/index.ts:268).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (function contract, persistence, response behavior) and Required work 5 ('Do not invent causality, certainty…'); COPY_STANDARD.md §21 (claims discipline); comprehension principle",
+   "proposed": "Stop before any cost. In runForWorkspace, right after `const profile = await readProfile(sb, workspaceId);` (line 174): `if (![profile.product_category, profile.what_we_sell, profile.value_prop].some((v) => v?.trim())) { return { workspaceId, status: \"failed\", eventsWritten: 0, cost: 0, searchCount: 0, error: \"missing_product_category\" }; }`. In src/outdoors-events/lib/discovery.ts add to DISCOVERY_MESSAGES `noCategory: \"Event search needs a description of what you sell, and none is saved for this workspace. You can still add events manually.\"` and return it when `res.error === \"missing_product_category\"` (before the generic failed message). Add a handler test (profile with all three fields empty → ok:false, no ledger row, no model call) and a client test for the new message. OWNER DECISION: where a user on the default screens enters what they sell. Either add the commercial-profile fields (product category, what you sell, value proposition) to the default ICP Studio screen and name that place in the message, or let the search use the saved ICP statement (icps.summary) when the profile is empty.",
+   "testsAffected": [
+    "src/outdoors-events/lib/discovery-function.test.ts (new case; existing cases keep a product category)",
+    "src/outdoors-events/lib/discovery.test.ts (new case)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-013",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/outdoors-events/lib/persistence.ts",
+   "line": 105,
+   "generation": "shared",
+   "state": "Any screen version when reading the saved events fails (offline, expired session, server error) on page load or right after a search",
+   "current": "listOutdoorsEvents: `catch (err) { reportError(err, { op: \"outdoors-events.list\" }); return []; }` (lines 105-108). bootEvents (state.ts:110-112) and runDiscoveryNow (state.ts:134) pass that empty list to setEvents, which also sets loaded = true. The default screen then renders 'No events found yet.' / 'Run event discovery to search for currently scheduled events relevant to your category and buyer context.' (OutdoorsEventsV4.tsx:158-162); the previous screen renders 'DISCOVERY HASN'T RUN YET'; the oldest renders 'The system will find events worth knowing about.'",
+   "problem": "A failed read is shown as a workspace with no events. A seller who has saved events is told none exist and is pointed at a paid search. After a successful search whose reload fails, the list that was on screen is replaced by the empty state. An error state must not look like an empty state. The last-search read has the same pattern: loadLatestRun returns null on any failure (src/outdoors-events/lib/discovery.ts:78-81), so a failed read is shown as 'No event search has been run yet.'",
+   "governing": "CLAUDE.md Part II §6 ('loading / error — never blank; never swallowed'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (response/error behavior); comprehension principle",
+   "proposed": "Return null from listOutdoorsEvents on failure (type `Promise<ReadonlyArray<OutdoorsEvent> | null>`). In state.ts add `export const loadError: Signal<boolean> = signal(false);`; bootEvents: `const rows = await listOutdoorsEvents(); loadError.value = rows === null; setEvents(rows ?? []);`; in runDiscoveryNow keep the current list when the reload returns null (`const rows = await listOutdoorsEvents(); if (rows) setEvents(rows); else loadError.value = true;`). In each screen, before the empty state, render when loadError.value is true: heading t(\"Your events couldn't be loaded.\") and text t(\"Check your connection and reload the page. Your saved events have not been changed.\", { class: \"body\" }) inside a role=\"alert\" element (v4: `<div class=\"oe4-empty\" role=\"alert\">`). Add tests for the failed-load path in lib/persistence.test.ts and state.test.ts. For the last-search line, have loadLatestRun return undefined when the read fails (keep null for 'no runs') and render no last-search sentence in that case, so the page does not state that no search has been run.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-014",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "js/demo-seed-runtime.js",
+   "line": 292,
+   "generation": "seed",
+   "state": "Default screen in both demo books, at rest (SMB walkthrough lines 4-32; enterprise walkthrough lines 4-35)",
+   "current": "The console line reads 'No event search has been run yet.' and directly below it the page lists four (SMB) or five (enterprise) events under 'DIRECTLY RELEVANT TO YOUR CATEGORY', 'ADJACENT TO YOUR BUYER CONTEXT' and 'BROADER RELATED EVENTS', each with a relevance sentence and 'View source →'. The seed writes only the events (`localStorage.setItem('gtmos_demo__outdoors_events', …)`, line 292; rows carry source_kind:'discovery_run' in js/demo-seed-data-ent.js:690-694 and js/demo-seed-data-smb.js:491-494). Nothing is written to gtmos_demo__outdoors_events_runs, which is what the line reads (src/outdoors-events/lib/discovery.ts:50-58).",
+   "problem": "The page states that no search has been run while showing a search's results. A tester cannot tell where the listed events came from, and the sample never shows what the last-search line looks like after a search.",
+   "governing": "COPY_STANDARD.md §21 (claims discipline); comprehension principle; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 8 (the demo-seeded tester pathway)",
+   "proposed": "Seed one finished search per book. js/demo-seed-data-ent.js after line 694: `E.outdoorsEventsRuns=[{id:'oer_e1',status:'completed',started_at:d(22),completed_at:d(22),events_written:5,total_cost_usd:0.31,llm_call_count:1,error_summary:null}];`. js/demo-seed-data-smb.js after line 494: the same with id 'oer_s1' and events_written:4. js/demo-seed-runtime.js after line 292: `localStorage.setItem('gtmos_demo__outdoors_events_runs',JSON.stringify(data.outdoorsEventsRuns||[]));`. With OE-003 applied the line then reads 'Last search {date} · 5 events returned'.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-015",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+   "line": 193,
+   "generation": "v4",
+   "state": "Default screen: every event row, and the form opened by '+ Add event manually'",
+   "current": "The row renders date, name, place, the relevance sentence and the source link (lines 70-80). It never renders ev.notes, ev.kind or ev.tags. The manual form has three inputs: 'Event name', 'City / venue' and a start date (lines 194-199). The previous screen's form has nine fields including end date, link and notes (ds/components/EventComposerDS.tsx:52-124) and its cards show notes (ds/components/EventListDS.tsx:60).",
+   "problem": "A note is one of the seller's own decisions about an event, and the search function is written to leave notes alone when it refreshes a row (supabase/functions/outdoors-events-discovery/index.ts:302-312). On the default screen a note can be neither written nor read. The demo books seed notes ('About half of our HR contacts attend.', js/demo-seed-data-smb.js:491) that never appear. A manually added event cannot have an end date, so a three-day private event shows one day; it cannot have a link, so it has no 'Open event site'; and the seller cannot record why they added it.",
+   "governing": "deliverables/room-capability-maps/outdoors-events-capability-map-2026-07-07.html section 1 ('operator decisions such as watching, attending, skipping, and notes') and section 3 (the event record includes notes); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (operator status/notes)",
+   "proposed": "Show a saved note in the row: after line 77 add `{ev.notes ? <div class=\"oe4-reason\">{t(\"Your note:\")} {ev.notes}</div> : null}`. OWNER DECISION: extend the default form, which changes the settled layout. Add an end-date input (aria-label t(\"End date\")), a link input (type=\"url\", placeholder t(\"Event link (optional)\")) and a note input (placeholder t(\"Note (optional)\")), wired with patchDraft({ endDate }), patchDraft({ sourceUrl }) and patchDraft({ notes }); the draft type and the insert already carry all three (state.ts:93-95, lib/persistence.ts:77-94). Decide also whether a note can be edited on an existing row (an inline editor calling updateOutdoorsEvent(id, { notes })).",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-016",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+   "line": 138,
+   "generation": "v4",
+   "state": "Default screen, the sentence beside the 'Find relevant events' button (SMB walkthrough line 3), and the button's busy label (line 152)",
+   "current": "'Search current event sources, then decide which events are worth pursuing.' · busy label 'Searching event sources…'",
+   "problem": "'Current event sources' does not say what is searched, and it can be read as 'current-event sources', that is, news. The function runs web searches (supabase/functions/outdoors-events-discovery/anthropic.ts:93-99). The approved sentence named the actor and the result ('Antaeus identifies relevant events; you decide which ones are worth pursuing.'); the current one names neither the web nor the product category the search is based on.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json exact_replacements[17]; COPY_STANDARD.md §2 (literal nouns) and §8 (unmistakable referents)",
+   "proposed": "Line 138: t(\"Search the web for scheduled events related to what you sell, then decide which ones are worth pursuing.\", { class: \"body\" }). Line 152 busy label: t(\"Searching the web for events…\").",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-017",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/outdoors-events/lib/types.ts",
+   "line": 65,
+   "generation": "shared",
+   "state": "All three screen versions: the status list on every event row and in the previous/oldest manual forms (Watching · Planning · Attending · Attended · Passed · Archived)",
+   "current": "`passed: \"Passed\"`",
+   "problem": "'Passed' has two readings on a list of dated events: the seller passed on the event, or the event's date has passed. The code means the first (the Briefing leaves 'passed' and 'archived' events out of its upcoming list, src/briefing/v4/lib/world-events.ts:60). A first-time user choosing a status for an event that is over can pick it for the wrong reason.",
+   "governing": "COPY_STANDARD.md §17 (a state names an observable condition) and §14; comprehension principle",
+   "proposed": "`passed: \"Not attending\"` (the stored key stays 'passed').",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-018",
+   "category": "FUNC",
+   "severity": 1,
+   "file": "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+   "line": 83,
+   "generation": "v4",
+   "state": "Default screen, a row whose place is 'Online' (the search prompt allows it: \"where_at\": \"string (city, venue, or 'Online')\", supabase/functions/outdoors-events-discovery/index.ts:106)",
+   "current": "`{ev.whereAt ? (<> ✈ Check flights … 🛏 Hotels nearby … </>) : null}` (lines 83-88) and the weather lookup `if (!ev.whereAt || …) continue;` (line 119) run for any non-empty place, so an online event gets 'Check flights' (a Google Flights search for 'flights to Online'), 'Hotels nearby' ('hotels in Online') and a geocoder request for 'Online'.",
+   "problem": "The travel links are meaningless for an event with no location, and the function's own header says it finds offline events (index.ts:4) while its prompt invites online ones.",
+   "governing": "comprehension principle (a control must do something sensible for the row it is on); CLAUDE.md §4.22 (the area finds offline gatherings)",
+   "proposed": "In OutdoorsEventsV4.tsx add `const isOnline = (w: string | null): boolean => !!w && /^(online|virtual|remote)\\b/i.test(w.trim());` and use `ev.whereAt && !isOnline(ev.whereAt)` at lines 83 and 119. OWNER DECISION: whether online events belong on this page at all. If not, change the prompt at index.ts:91 to ask for in-person events and at index.ts:106 to \"where_at\": \"string (city and venue)\", and drop events whose where_at is online in parseDiscoveredEvents.",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-019",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "supabase/functions/outdoors-events-discovery/index.ts",
+   "line": 228,
+   "generation": "backend",
+   "state": "A search whose model answer is cut off, paused, or is not a clean JSON array",
+   "current": "`const parsed = parseDiscoveredEvents(extractJsonArray(call.text));` then the run is closed as completed (or throttled) with events_written = 0 (lines 228-237). extractJsonArray returns [] for every failure: no array, or JSON.parse throwing (_shared.ts:203-216). callWithWebSearch never reads the response's stop_reason and joins all text blocks with a newline (anthropic.ts:115-123).",
+   "problem": "A search that did not produce a usable answer is recorded and shown as a finished search that found nothing ('0 events returned', then the empty state telling the user to search again), and its cost is spent. Reproduced with the real _shared.ts: an array cut off after two complete events (what the 4096-token limit produces) parses to 0 events; prose containing a bracket before the array ('I searched [1] and [2].') parses to 0 events; a plain-text answer parses to 0 events. Two more ways to reach it, read from the API's documented behavior and not executed here: stop_reason 'pause_turn' (the server-side search loop stopped early and expects the request to be continued) is treated as a final answer, and an answer returned as several text blocks (the API splits text where web-search citations attach) gets a newline inserted between blocks, which breaks JSON.parse when the split falls inside a string.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (response/error behavior; a result that did nothing must not look like success); comprehension principle",
+   "proposed": "(1) anthropic.ts: join the text blocks with \"\" instead of \"\\n\" (line 122) and add `stop_reason: typeof data?.stop_reason === \"string\" ? data.stop_reason : null` to the result. (2) _shared.ts: add `export function extractJsonArrayOrNull(text: string): unknown[] | null` that takes the fenced block if present, then tries each '[' position in order up to the last ']' until JSON.parse returns an array, and returns null when none parses; keep extractJsonArray as `extractJsonArrayOrNull(text) ?? []` so its tests stand. (3) index.ts line 228: `const raw = extractJsonArrayOrNull(call.text); if (raw === null) { await closeRun(sb, runId, { status: \"failed\", events_written: 0, total_cost_usd: call.cost_usd, llm_call_count: 1, error_summary: \"Model answer was not a complete event list (stop_reason: \" + (call.stop_reason ?? \"unknown\") + \")\" }); return { workspaceId, status: \"failed\", eventsWritten: 0, cost: call.cost_usd, searchCount: call.search_count, error: \"incomplete_model_answer\" }; }`. The client already shows 'The event search didn't finish. Try again in a few minutes.' for a failed result. Add handler tests for a truncated answer and a prose-plus-array answer.",
+   "testsAffected": [
+    "src/outdoors-events/lib/discovery-function.test.ts (new cases)",
+    "src/outdoors-events/lib/discovery-shared.test.ts (new cases for extractJsonArrayOrNull)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-020",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "supabase/functions/outdoors-events-discovery/_shared.ts",
+   "line": 192,
+   "generation": "backend",
+   "state": "A search whose answer contains an event that is already over, or a date that does not exist",
+   "current": "normalizeDate accepts any text shaped NNNN-NN-NN: `const m = v.trim().match(/^(\\d{4})-(\\d{2})-(\\d{2})/); … return m[1]-m[2]-m[3]` (lines 192-197). parseDiscoveredEvents has no check against today's date or that the end date is not before the start date (lines 151-190). The user prompt gives the model no date (index.ts:117-138), while the system prompt asks for 'currently scheduled' events 'in the next 6 months'.",
+   "problem": "Run with the real parser: an event dated 2019-01-01 is accepted; '2027-13-45' is passed through unchanged; an end date before the start date is accepted. An impossible date makes the database insert fail, which stops the run at that event: earlier events are saved, later ones are not, the run is recorded as failed and the user is told to try again (and pay again). A past event is saved and listed on a page whose text says it searches for currently scheduled events; without today's date in the prompt the model has to guess what 'upcoming' means.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (persistence, response/error behavior); COPY_STANDARD.md §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rule 1 (state observed facts as facts)",
+   "proposed": "(1) normalizeDate: after the match, build `const d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));` and return null unless `d.getUTCFullYear() === +m[1] && d.getUTCMonth() === +m[2] - 1 && d.getUTCDate() === +m[3]`. (2) parseDiscoveredEvents(raw, today): take today's date as 'YYYY-MM-DD'; set end_date to null when it is earlier than start_date; skip an event whose last day (end_date ?? start_date) is earlier than today. (3) buildUserPrompt: add as the first line `Today's date: ${new Date().toISOString().slice(0, 10)}` and the sentence 'Return only events that have not ended as of today.' Call parseDiscoveredEvents with that same date. Tests must pass the date explicitly (the handler test's fixture event is dated 2027-01-15).",
+   "testsAffected": [
+    "src/outdoors-events/lib/discovery-shared.test.ts ('parseDiscoveredEvents normalizes dates + drops bad ones' still passes; add cases)",
+    "src/outdoors-events/lib/discovery-function.test.ts (pass a fixed 'today')"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-021",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "supabase/functions/outdoors-events-discovery/_shared.ts",
+   "line": 169,
+   "generation": "backend",
+   "state": "Every event the search saves: the link behind 'View source →' and 'Open event site'",
+   "current": "`if (!/^https?:\\/\\//i.test(sourceUrl)) continue;` (lines 166-169) is the whole check. callWithWebSearch returns only the text, cost and search count (anthropic.ts:43-57); the URLs the web search returned are discarded. The README calls this the 'Hallucination guard' and says the URL must be a 'real https://' address (README.md:67-70); 'http://x' passes.",
+   "problem": "'View source →' tells the user the link is where the event was found. The function only checks that the text starts with http:// or https://, so a link the model made up, or a wrong page for a real event, is stored and labeled as the source. The newer Prospecting Desk search in the same repository keeps the URLs that appeared in search results and rejects any cited URL outside that set (supabase/functions/prospecting-research/_shared.ts:473-488 and index.ts:188); the event search has no equivalent. Not executed against the live model, so how often this happens is unknown.",
+   "governing": "deliverables/room-capability-maps/outdoors-events-capability-map-2026-07-07.html section 6 ('The audit envelope chain (where did this event come from?)'); COPY_STANDARD.md §21 (claims discipline); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json exact_replacements[22] ('View source →')",
+   "proposed": "Apply the rule Prospecting Desk already uses. In anthropic.ts collect `result_urls` from every `web_search_tool_result` block (each result's url) and every text block's citations (same loop as collectResultUrls in the prospecting function) and return it. In index.ts build a set of those URLs normalized to host + path (lowercase host, no trailing slash, no query) and pass it to parseDiscoveredEvents; skip an event whose source_url, normalized the same way, is not in the set. Add a handler test: an event citing a URL that was not in the search results is not saved. Correct README.md:69 to say what is checked. OWNER DECISION: this removes events whose link cannot be matched. The alternative is to keep such an event and save it without a link (no 'View source →'), which would also need the 'URL required' rule in parseDiscoveredEvents relaxed.",
+   "testsAffected": [
+    "src/outdoors-events/lib/discovery-shared.test.ts ('parseDiscoveredEvents drops events without a real URL' still passes; add cases)",
+    "src/outdoors-events/lib/discovery-function.test.ts (the model stand-in must return result_urls)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-022",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "supabase/functions/outdoors-events-discovery/_shared.ts",
+   "line": 108,
+   "generation": "backend",
+   "state": "A second search that returns an event already in the list with its name or place written differently; or returns an event the user added manually",
+   "current": "buildDedupeKey = lowercase slug of the whole name (60 characters) + '__' + year-month of the start date + '__' + slug of the whole place (24 characters) (lines 108-123). upsertEvents matches an existing row only on that exact key (index.ts:313-324). Manual events are saved with no key (src/outdoors-events/lib/persistence.ts:77-94).",
+   "problem": "Run with the real function: 'Transform 2027' + 'Las Vegas, NV' → transform-2027__2027-04__las-vegas-nv; the same event as 'Transform' + 'Las Vegas' → transform__2027-04__las-vegas; with the venue first ('Wynn Las Vegas, Las Vegas, NV') → …__wynn-las-vegas-las-vegas; with no date → …__nodate__…; an event reported as starting April 30 on one run and May 1 on the next gets two keys. Each variant is inserted as a new 'Watching' row, so the same conference appears twice and the seller's status sits on only one of them. A manually added event is never matched, so it is listed again under a relevance group when a search finds it. The test named 'buildDedupeKey is stable across phrasing tweaks' covers only spacing and a comma (src/outdoors-events/lib/discovery-shared.test.ts:70-83). Wording differences between two model runs are expected; the frequency was not measured live.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (dedupe; operator status/notes protection)",
+   "proposed": "Match more loosely before inserting. In upsertEvents read the workspace's existing rows once (`select id, dedupe_key, name, start_date, source_url, source_kind`). For each returned event look for a row, in this order: same dedupe_key; same source_url after normalizing to host + path; same name slug after removing a four-digit year, with start dates no more than 3 days apart (or both empty). When a row created by a search (source_kind 'discovery_run') matches, refresh its discovery fields by id exactly as today and leave its key unchanged; otherwise insert. Add tests for the four variants above. OWNER DECISION: whether a search result may also be merged into a manually added row (the refresh would then replace that row's place, dates and link with the search's and move it from 'Added manually' into a relevance group; its status, notes, name and tags would stay).",
+   "testsAffected": [
+    "src/outdoors-events/lib/discovery-function.test.ts (the database stand-in needs the extra select)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-023",
+   "category": "FUNC",
+   "severity": 1,
+   "file": "src/outdoors-events/state.ts",
+   "line": 129,
+   "generation": "shared",
+   "state": "Any screen version: 'Find relevant events' ends in a failure",
+   "current": "`if (!result.ok) { discoveryError.value = result.error ?? \"Discovery didn't complete. Try again.\"; return; }` (lines 129-133). The event list and the last-search summary are reloaded only on success (lines 134-135).",
+   "problem": "A failed run can already have saved events (the handler test 'records partial writes if a later event fails' shows events_written: 1 on a failed run) and always has a new ledger row. Neither is shown until the page is reloaded: the line keeps the previous search's date and count next to the new error message, and the saved events are missing. The fallback text 'Discovery didn't complete. Try again.' cannot currently be reached (triggerDiscovery always returns a message on failure) but would put the old noun on screen if that changed.",
+   "governing": "CLAUDE.md Part II §6 (saved/unsaved state must be visible); comprehension principle",
+   "proposed": "In the failure branch reload both before returning: `discoveryError.value = result.error ?? DISCOVERY_MESSAGES.failed; const rows = await listOutdoorsEvents(); if (rows) setEvents(rows); latestRun.value = await loadLatestRun(); return;` (import DISCOVERY_MESSAGES from ./lib/discovery; with OE-013 applied listOutdoorsEvents returns null on failure). Add a state test for the failed path.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-024",
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "src/outdoors-events/lib/discovery.ts",
+   "line": 102,
+   "generation": "shared",
+   "state": "Any screen version: 'Find relevant events' when the workspace has spent $3.00 or more on event searches in the previous 7 days",
+   "current": "'This week's search budget is used up. Event search will be available again next week.'",
+   "problem": "The limit is a rolling 7 days counted back from now (supabase/functions/outdoors-events-discovery/index.ts:69-87, 155-165), not a calendar week. Search becomes available as soon as enough earlier searches are more than 7 days old, which can be tomorrow, and is not tied to 'next week'.",
+   "governing": "COPY_STANDARD.md §21 (claims discipline) and §13 (state time frames)",
+   "proposed": "paused: \"Event search has used its budget for the last 7 days. It will be available again once earlier searches are more than 7 days old.\"",
+   "testsAffected": [
+    "src/outdoors-events/lib/discovery.test.ts (asserts the constant by reference and that it contains no '$'; still passes)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-025",
+   "category": "FUNC",
+   "severity": 1,
+   "file": "supabase/functions/outdoors-events-discovery/index.ts",
+   "line": 437,
+   "generation": "backend",
+   "state": "Administrative run_all when the cost lookup fails for one workspace",
+   "current": "`for (const id of ids) results.push(await runForWorkspace(sb, id));` (line 437). runForWorkspace calls weeklySpend before its try block (line 155), so a lookup error is thrown out of the loop and the handler's outer catch returns HTTP 500 with the raw database message (lines 448-450).",
+   "problem": "Run with stand-ins: three workspaces, lookup failing on the second → HTTP 500, body {ok:false, error:'Cost lookup failed: relation \"outdoors_events_runs\" does not exist'}; the first workspace had already run and been charged, the third never ran, and the response lists none of them. The administrator cannot tell which workspaces were searched.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (cron/admin path, response/error behavior)",
+   "proposed": "Keep run_one as it is (its test expects HTTP 500 and no paid call) and isolate failures in the run_all loop: `for (const id of ids) { try { results.push(await runForWorkspace(sb, id)); } catch (err) { results.push({ workspaceId: id, status: \"failed\", eventsWritten: 0, cost: 0, searchCount: 0, error: err instanceof Error ? err.message : String(err) }); } }`. Add a handler test: three workspaces, lookup fails on the second, response is 200 with three results and failed: 1.",
+   "testsAffected": [
+    "src/outdoors-events/lib/discovery-function.test.ts (new case)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-026",
+   "category": "LANG-C",
+   "severity": 2,
+   "file": "supabase/functions/outdoors-events-discovery/index.ts",
+   "line": 100,
+   "generation": "backend",
+   "state": "The system prompt that produces every relevance sentence shown under an event",
+   "current": "Line 98: '\"indirect\": the event is broader but related to the operator's market, territory, or buyer context.' Line 100: 'For relevance_reason, state the concrete relationship between the event and the operator's category or buyer context. Use complete sentences. Do not claim that a buyer will attend unless a source supports that claim. Avoid buzzwords and promotional language.' The reader is called 'the operator' throughout (lines 91-100) and the prompt never says how the sentence should address the reader. The wording gate checks banned words and length only (_shared.ts:68-97).",
+   "problem": "The sentence is shown to the seller as page copy, but the prompt's own vocabulary is what a model tends to repeat: 'the operator's category', 'buyer context', 'tier'. Nothing tells it to write 'your'. The attendance rule covers only the future tense ('will attend'); the present-tense form passes the prompt's wording and the gate ('Your buyers will attend this event.' and 'Buyers in one room.' both pass the real parser), and it is the form the demo data shows ('Our retail accounts attend…', 'Enterprise HR-technology buyers attend this conference.'). The model is also asked to classify by 'territory' and 'buyer roles' it is never given (the user prompt carries only product category, what they sell and value proposition, lines 117-126). Output not sampled from the live model.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rules 1, 3, 9 and 13; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md 'Causal-language rule'; COPY_STANDARD.md §21",
+   "proposed": "Replace line 98 with: '- \"indirect\": the event is broader but still related to the seller's market. Include it only when the relationship is specific enough to explain in one sentence.' Replace line 100 with: 'For relevance_reason, write one complete sentence addressed to the seller as \"you\" that says what the event covers and how that relates to what you were told the seller sells (for example: \"Covers recruiting technology, which is your product category.\"). Describe who the event is for only as its own page describes it. Do not say that the seller's buyers, customers or accounts attend, in any tense, unless a search result says so. Do not use the words \"operator\", \"tier\", \"we\" or \"our\". Avoid buzzwords and promotional language.' In line 97 replace 'the buyer roles, functions, or business problems the operator targets' with 'the job roles, functions, or business problems that the seller's product is for'. Add a parser test with a sentence containing 'the operator' to decide whether the gate should also reject it. OWNER DECISION: the search is not given the buyer roles or industries saved in ICP Studio, so the second group rests on the model's own idea of who buys the product category. Sending the saved ICP's buyer roles and industries in the user prompt would make that group reflect the workspace's own buyers; it changes which events are returned.",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-028",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/settings/lib/cloud-sync.ts",
+   "line": 534,
+   "generation": "shared",
+   "state": "Settings → restore a downloaded workspace copy after 'Delete everything' (or into a workspace whose event searches no longer exist), when the copy contains events found by a search",
+   "current": "restoreCloudExport upserts each table's rows exactly as downloaded: `await sb.from(spec.table).upsert(rows as unknown[], { ignoreDuplicates: spec.restore === \"insert\" })` (lines 534-538). outdoors_events_runs is not restored (`entry(\"outdoors_events_runs\", SECTION.events, \"Event searches Antaeus ran\", SYSTEM)`, restore 'none', src/settings/lib/workspace-tables.ts:145), while outdoors_events is (line 146). Every event found by a search carries run_id (supabase/functions/outdoors-events-discovery/index.ts:311), and run_id has a foreign key to outdoors_events_runs (supabase/migrations/20260601220000_outdoors_events_discovery.sql:111-114).",
+   "problem": "After 'Delete everything' both tables are empty. Restoring then sends events whose run_id points at search runs that no longer exist and are not restored, so the database rejects the statement with a foreign-key error. The rows go in one statement, so manually added events in the same download are not restored either, and the user sees the raw database message for the 'Events' table. Read from the code and the schema; not executed against a database.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (persistence, database columns, cross-area handoffs); comprehension principle (Restore must put back what Download saved)",
+   "proposed": "Clear the reference to rows that are not restored. In restoreCloudExport, before the upsert: `const toWrite = spec.table === \"outdoors_events\" ? (rows as Array<Record<string, unknown>>).map((r) => ({ ...r, run_id: null })) : rows;` and upsert toWrite. (A general form: give WorkspaceTable an optional `clearOnRestore: [\"run_id\"]` list and apply it for every table.) Add a test in src/settings/lib/cloud-sync.test.ts that restores an events row with a run_id and asserts the written row has run_id null.",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-029",
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "src/lib/palette/registry.ts",
+   "line": 287,
+   "generation": "shared",
+   "state": "The command list (opened from the previous and oldest screen versions): the description under 'Outdoors Events'",
+   "current": "description: \"Find events relevant to your target buyers and accounts.\"",
+   "problem": "The search does not read the workspace's accounts. Its only inputs are product category, what you sell and value proposition (supabase/functions/outdoors-events-discovery/index.ts:47-65, 117-126). 'and accounts' promises account-based matching that does not exist. The workspace map uses the approved description ('find events where target buyers may be present', src/lib/ground/motion.ts:40).",
+   "governing": "COPY_STANDARD.md §21 (claims discipline); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md Navigation rewrite ('Outdoors Events | Find events where target buyers may be present')",
+   "proposed": "description: \"Find events where target buyers may be present.\"",
+   "testsAffected": [
+    "src/lib/palette/registry.test.ts (only if it asserts this description)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-030",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "js/demo-seed-data-smb.js",
+   "line": 491,
+   "generation": "seed",
+   "state": "Default screen in both demo books: the relevance sentence under each event name (SMB walkthrough lines 11, 21, 27, 32; enterprise walkthrough of 2026-11-06 lines 21, 24, 30, 35). The same sentences show on the previous and oldest screens.",
+   "current": "SMB book (js/demo-seed-data-smb.js:491-494): 'The main US event for the people we sell to.' · 'People-leadership buyers in one room.' · 'Growing consumer-goods brands attend, and growth means hiring.' · 'Founders and HR leads from our software accounts often attend.' Enterprise book (js/demo-seed-data-ent.js:691-694): 'People-leadership buyers and the HR-tech vendor field in one room.' · 'Enterprise HR-technology buyers attend this conference.' · 'Our retail accounts attend; hiring is a standing agenda item.' · 'Founders and HR leaders from our AI-native accounts often attend.' Every row is marked source_kind:'discovery_run' and sits beside 'View source →'.",
+   "problem": "The sample shows these as the search's own relevance sentences, and four of them state that the user's accounts or buyers attend ('Our retail accounts attend', 'Founders and HR leaders from our AI-native accounts often attend', 'Founders and HR leads from our software accounts often attend', 'Growing consumer-goods brands attend'). The search has no attendance or account data: it is given only the product category, what the workspace sells and its value proposition (supabase/functions/outdoors-events-discovery/index.ts:47-65, 117-126), and its prompt forbids this claim (index.ts:100: 'Do not claim that a buyer will attend unless a source supports that claim'). A tester learns from the sample that Antaeus knows which of their accounts go to an event. Three further problems: the sentences say 'we' and 'our' on a page that addresses the reader as 'your' (the reader cannot tell who is speaking; the enterprise book's first row says 'Luca' instead); two are verbless fragments ('…buyers in one room.'); and 'growth means hiring' is a maxim standing in for the reason. 'hiring is a standing agenda item' is a statement about the event's agenda with no source. The second and third sample groups are also built on the industries of the sample company's accounts (retail, consumer goods, software), which is information the search is never given; the sample therefore shows a kind of result the search cannot produce today.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md 'Causal-language rule'; COPY_STANDARD.md §21 (claims discipline), §19 (fragments) and §10 (no insight voice); deliverables/room-capability-maps/outdoors-events-capability-map-2026-07-07.html:40 ('relevance does not show that a buyer will attend'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 5 (seeded narratives) and 8",
+   "proposed": "Replace the relevance_reason values. Each new sentence says what the event is and how it relates to what the sample company sells (recruiting software), addresses the reader as 'you', and hedges where the link is an inference. js/demo-seed-data-smb.js — line 491: 'A major US conference for recruiting and talent-acquisition leaders, the people you sell to.' line 492: 'A conference on people leadership and HR technology, which is your market.' line 493: 'A trade show for natural and consumer-goods brands. It may be relevant because growing brands hire often, and your product is for hiring.' line 494: 'A large conference for software founders and executives. It may be relevant if software companies are among your buyers.' js/demo-seed-data-ent.js — line 690: 'A major US conference for recruiting and talent-acquisition leaders, the people you sell to.' line 691: 'A conference on people leadership and HR technology, which is your market.' line 692: 'A conference on HR technology for enterprise HR leaders.' line 693: 'The annual trade show of the National Retail Federation. Retail is an industry that hires store staff in large numbers, which is the problem your product addresses.' line 694: 'A large conference for software founders and executives. It may be relevant if software companies are among your buyers.' Leave the notes fields as they are: a note is the seller's own words, where 'our' is right. Regenerate the walkthrough afterwards; do not edit it by hand.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-031",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/outdoors-events/ds/OutdoorsEventsDS.tsx",
+   "line": 39,
+   "generation": "ds",
+   "state": "Previous screen version (?v4=0, or the room_outdoors_events_v4_off flag): the heading, the paragraph under it and the search panel (previous-screen walkthrough lines 5-9); the busy label appears while a search runs.",
+   "current": "OutdoorsEventsDS.tsx:39 'Where people are gathering, found for you.' · :43 'The system reads your product category and finds offline gatherings worth knowing about — direct to your space, adjacent to it, and indirect-but-buyer-relevant. You decide which ones matter.' · ds/components/DiscoveryConsoleDS.tsx:25 aria-label 'Discovery console' · :27 'DISCOVERY' · :30 'Reads your product category and finds gatherings — direct, adjacent, and indirect — with real source links.' · :39 'Searching the world…' / 'Run discovery now'",
+   "problem": "These are the sentences the original batch replaced on the default screen, still shown on a version users can reach. 'Run discovery now' is the original string of exact_replacements[19], unchanged. 'Direct to your space, adjacent to it, and indirect-but-buyer-relevant' uses the three group names as if the reader already knew them (private vocabulary, high-context). 'Reads your product category and finds gatherings' has no subject (elliptical). 'Discovery' is the product's private noun for the event search; the default screen calls it a search. 'Searching the world…' overstates a web search limited to 6 queries (index.ts:204). 'Real source links' promises a check the function does not make (OE-021). 'Found for you' and 'the system … finds' describe the software as an agent where 'searches' says what happens.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json exact_replacements[16], [17] and [19]; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md CTA standard; COPY_STANDARD.md §9 (personification) and §21 (claims); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md 'Audit from requirements through runtime' (fallback interfaces are in scope)",
+   "proposed": "OutdoorsEventsDS.tsx:39 t(\"Events relevant to your market and target buyers\", { class: \"body\" }). :43 t(\"Antaeus searches the web for scheduled conferences, trade shows and meetups related to your product category. You decide which ones are worth pursuing.\", { class: \"body\" }). DiscoveryConsoleDS.tsx:25 aria-label t(\"Event search\"). :27 t(\"EVENT SEARCH\"). :30 t(\"The search uses your product category. Each result is placed in a relevance group and carries a link to the event's page.\", { class: \"body\" }). :39 busy ? t(\"Searching the web for events…\") : t(\"Find relevant events\").",
+   "testsAffected": [
+    "src/outdoors-events/ds/ds-components.test.tsx:69 (getByText(\"Run discovery now\") → \"Find relevant events\")"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-032",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/outdoors-events/lib/types.ts",
+   "line": 32,
+   "generation": "shared",
+   "state": "Previous and oldest screen versions: the three group headings, the line under each heading, the label on every event card (previous screen) and the chip beside every event name (oldest screen). Previous-screen walkthrough lines 10-12, 26-28, 33-34.",
+   "current": "TIER_LABEL = { direct: \"Direct\", adjacent: \"Adjacent\", indirect: \"Indirect\" } (lines 32-36) and TIER_HINT = { direct: \"Gatherings about your product category.\", adjacent: \"Gatherings of buyer personas you sell into.\", indirect: \"Gatherings where your ICP might show up.\" } (lines 38-42). Used at ds/components/EventListDS.tsx:48, 133, 137 and components/EventList.tsx:51, 56 and components/EventRow.tsx:53.",
+   "problem": "'Direct', 'Adjacent' and 'Indirect' do not say direct to what; the reader has to learn the product's three-group scheme first (private vocabulary, high-context). 'Your ICP might show up' uses an unexplained abbreviation and treats a customer profile as people who attend. 'Buyer personas you sell into' is marketing shorthand. The default screen already carries the approved headings ('Directly relevant to your category', 'Broader related events') and plain sub-lines, so the three versions disagree.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json exact_replacements[20], [21], [23]-[26]; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/01_USER_FACING_COPY_INVENTORY.json records[294]; COPY_STANDARD.md §2 and §14",
+   "proposed": "TIER_LABEL = { direct: \"Directly relevant to your category\", adjacent: \"Relevant to your target buyers\", indirect: \"Broader related events\" }; TIER_HINT = { direct: \"Events focused directly on your market.\", adjacent: \"Events focused on the roles, functions, or problems you sell into.\", indirect: \"Events that may be useful for your territory or travel plans.\" }. For the small per-event label, where the full heading is too long, add TIER_SHORT_LABEL = { direct: \"Your category\", adjacent: \"Your buyers\", indirect: \"Broader\" } and use it at ds/components/EventListDS.tsx:48 and components/EventRow.tsx:53. (If OE-010 is applied, the default screen's second heading becomes the same 'Relevant to your target buyers'.)",
+   "testsAffected": [
+    "src/outdoors-events/components/EventList.test.tsx:60 (toContain(\"Adjacent\") → the new heading; the \"Direct\" assertions at :59, :72, :88 still pass as substrings)",
+    "src/outdoors-events/ds/ds-components.test.tsx:105 (getAllByText(\"Direct\") → the new heading or short label)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-033",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/outdoors-events/ds/components/DiscoveryConsoleDS.tsx",
+   "line": 54,
+   "generation": "ds",
+   "state": "Previous screen version (and the oldest, components/DiscoveryConsole.tsx:71-75), signed-in workspace: the page is loaded when the most recent event search failed.",
+   "current": "`{run.errorSummary ? (<span class=\"oed-console__run-error\">{run.errorSummary}</span>) : null}` (ds lines 54-56; oldest lines 71-75). The function stores raw failure text in error_summary: the model call's error — `HTTP ${res.status}: ${bodyText.slice(0, 300)}`, 'ANTHROPIC_API_KEY missing', 'Timed out after 120000ms' (supabase/functions/outdoors-events-discovery/anthropic.ts:73, 110, 170, written at index.ts:216) — and thrown errors — 'Workspace profile lookup failed: <database message>', 'Event refresh failed: <database message>', 'Event insert failed: <database message>' (index.ts:56, 319, 345, written at index.ts:256).",
+   "problem": "Raw service and database text is printed on the page, for example 'HTTP 529: {\"type\":\"error\",\"error\":{\"type\":\"overloaded_error\",…' or 'Event insert failed: invalid input syntax for type date: \"2027-13-45\"' (the second follows from OE-020). A first-time user cannot act on it and it exposes internals. The default screen never shows this field, and the search button's own error path was already changed to fixed sentences (src/outdoors-events/lib/discovery.ts:99-105), so only this stored field still leaks. The certification lists 'raw database errors were shown' for this area under 'Defects fixed in this pass' (docs/language-remediation-2026/18_CERTIFICATION.md:116); that fix did not reach these two screens. The table comment calls the column an 'Operator-friendly summary' (supabase/migrations/20260601220000_outdoors_events_discovery.sql:72-74), which the stored text is not. Read from source; not executed (the demo has no search runs). The oldest screen's test asserts the stored text is shown (components/DiscoveryConsole.test.tsx:60-66).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (response/error behavior); CLAUDE.md Part III §10 (error language: 'honest, calm, specific, recoverable … not technical-by-default'); comprehension principle",
+   "proposed": "On both screens stop rendering run.errorSummary. Replace the block with a fixed sentence shown only for a failed run: `{run.status === \"failed\" ? (<span class=\"oed-console__run-error\">{DISCOVERY_MESSAGES.failed}</span>) : null}` (import DISCOVERY_MESSAGES from \"../../lib/discovery\" on the previous screen and from \"../lib/discovery\" on the oldest; the text is 'The event search didn't finish. Try again in a few minutes.'). Keep error_summary in the table for support. Change the oldest screen's test to expect that sentence for a failed run and to assert that the stored error text is not in the page.",
+   "testsAffected": [
+    "src/outdoors-events/components/DiscoveryConsole.test.tsx:52-67 (asserts 'Weekly cost ceiling reached' is rendered; must assert the fixed sentence and the absence of the stored text instead)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-034",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/outdoors-events/ds/components/EventListDS.tsx",
+   "line": 119,
+   "generation": "ds",
+   "state": "Previous screen version: the empty state, the group of manually added events, and the manual-add control and form (previous-screen walkthrough lines 38-39; the empty state and the open form were read from source).",
+   "current": "ds/components/EventListDS.tsx:119 'DISCOVERY HASN'T RUN YET' · :121 'The system reads your product category and surfaces conferences, mixers, and meetups — direct, adjacent, or indirect to your space, each with a real link and a one-line reason it matters.' · :129 aria-label 'Discovered events' · :147 'Added by hand' · :149 'Events you added before discovery, or that the system hasn't classified.' · ds/components/EventComposerDS.tsx:33 '+ Add one by hand' · :37 'Discovery does the finding. But if you already know about a private invite or a local hang the system hasn't surfaced — add it here.' · :50 'ADD ONE BY HAND' · :63 placeholder 'conference / mixer / show…' · :137 'Add the event'",
+   "problem": "The wording the original batch replaced on the default screen ('+ Add one by hand — a private invite the system can't see' → '+ Add event manually'; 'No sweep yet' → 'No event search has been run yet.') is still shown here. 'Discovery does the finding' makes the product's private noun the actor. 'A local hang' is slang. 'The system hasn't surfaced' and 'the system hasn't classified' describe events by what the software has not done. 'Direct, adjacent, or indirect to your space' again assumes the three group names. The empty state also states that no search has run, but the same card shows after a search that returned nothing and after a failed load (OE-013), so the statement can be false.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json exact_replacements[18] and [27]; COPY_STANDARD.md §9 (personification), §26 (describing by absence) and §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md (fallback interfaces are in scope)",
+   "proposed": "EventListDS.tsx:119 kicker t(\"NO EVENTS LISTED\"). :121 t(\"Select Find relevant events to search the web for scheduled conferences, trade shows and meetups related to your product category. Each result links to the event's page and says why it is relevant.\", { class: \"body\" }). :129 aria-label t(\"Events\"). :147 t(\"Added manually\"). :149 t(\"Events you added yourself, and events with no relevance group.\", { class: \"body\" }). EventComposerDS.tsx:33 t(\"+ Add event manually\"). :37 t(\"Use this for an event the search did not return, such as a private invitation or a local meetup.\", { class: \"body\" }). :50 t(\"ADD EVENT MANUALLY\"). :63 t(\"conference / trade show / meetup…\", { class: \"body\" }). :137 t(\"Add event\").",
+   "testsAffected": [
+    "src/outdoors-events/ds/ds-components.test.tsx:112 and :114 (getByText(\"+ Add one by hand\") → \"+ Add event manually\")"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-035",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/outdoors-events/components/Topbar.tsx",
+   "line": 9,
+   "generation": "legacy",
+   "state": "Oldest screen version (?v4=0&ds=0, or the room_outdoors_events_legacy flag with the default screen switched off): header, search panel, empty state, manual group, manual-add control and form. Reviewed from source; no walkthrough of this version exists.",
+   "current": "components/Topbar.tsx:9 'Where people are gathering, found for you.' · :12-16 'The system reads your product category and finds offline gatherings worth knowing about — direct to your space, adjacent to it, and indirect-but-buyer-relevant. Conferences, mixers, trade shows, meetups. You decide which ones matter.' · components/DiscoveryConsole.tsx:45 aria-label 'Discovery console' · :53 'Searching the world…' / 'Run discovery now' · :56-57 'Reads your product category and finds gatherings — direct, adjacent, and indirect — with real source links.' · components/EventList.tsx:29 aria-label 'No events yet' · :30 'DISCOVERY HASN'T RUN YET' · :32 'The system will find events worth knowing about.' · :35-39 'Press \"Run discovery now\" above. The system reads your product category and surfaces conferences, mixers, and meetups that are direct, adjacent, or indirect to your space — each with a real link and a one-line reason it matters.' · :46 aria-label 'Discovered events' · :69 'Added by hand' · :75-76 'Events you added before discovery, or that the system hasn't classified.' · components/EventComposer.tsx:37 '+ Add one by hand' · :40-42 'Discovery does the finding. But if you already know about a gathering the system hasn't surfaced — a private invite, a local hang — add it here.' · :98 placeholder 'conference / mixer / show / hang…' · :207 placeholder 'Who you want to see there, what you're scoping…'",
+   "problem": "The same pre-remediation wording as the previous screen (OE-031, OE-034), plus two lines of its own. 'The system will find events worth knowing about.' is a promise about a search that may return nothing (unsupported certainty, personification). 'Conferences, mixers, trade shows, meetups.' is a verbless list between two sentences. Most of these strings are plain JSX text, not passed through t(), so the wording check that runs on declared strings never sees them.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json exact_replacements[16]-[19] and [27]; COPY_STANDARD.md §9, §19 and §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 4 ('fallbacks, and reachable legacy interfaces')",
+   "proposed": "Topbar.tsx:9 {t(\"Events relevant to your market and target buyers\", { class: \"body\" })}. :12-16 {t(\"Antaeus searches the web for scheduled conferences, trade shows and meetups related to your product category. You decide which ones are worth pursuing.\", { class: \"body\" })}. DiscoveryConsole.tsx:45 t(\"Event search\"). :53 busy ? t(\"Searching the web for events…\") : t(\"Find relevant events\"). :56-57 {t(\"The search uses your product category. Each result is placed in a relevance group and carries a link to the event's page.\", { class: \"body\" })}. EventList.tsx:29 t(\"No events listed\"). :30 t(\"NO EVENTS LISTED\"). :32 {t(\"No events are listed.\")}. :35-39 {t(\"Select Find relevant events above to search the web for scheduled conferences, trade shows and meetups related to your product category. Each result links to the event's page and says why it is relevant.\", { class: \"body\" })}. :46 t(\"Events\"). :69 {t(\"Added manually\")}. :75-76 {t(\"Events you added yourself, and events with no relevance group.\", { class: \"body\" })}. EventComposer.tsx:37 {t(\"+ Add event manually\")}. :40-42 {t(\"Use this for an event the search did not return, such as a private invitation or a local meetup.\", { class: \"body\" })}. :98 t(\"conference / trade show / meetup…\", { class: \"body\" }). :207 t(\"Who you want to meet there, and why you are going\", { class: \"body\" }).",
+   "testsAffected": [
+    "src/outdoors-events/components/DiscoveryConsole.test.tsx:22 (\"Run discovery now\") and :34 (\"Searching the world\"); :23 (\"product category\") still passes",
+    "src/outdoors-events/components/EventList.test.tsx:43-46 (the two empty-state strings) and :73 (\"Added by hand\")"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-036",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/outdoors-events/ds/lib/adapters.ts",
+   "line": 24,
+   "generation": "ds",
+   "state": "Previous screen version (and the oldest, components/DiscoveryConsole.tsx:31-38 and 62-70), signed-in workspace with at least one search run: the status chip and the line beside it in the search panel. Not reachable in the demo (no run rows are seeded).",
+   "current": "RUN_STATUS_LABEL = { completed: \"Last run\", throttled: \"Last run (budget-limited)\", failed: \"Last run failed\", paused: \"Paused — weekly budget reached\", running: \"Running…\" } (adapters.ts:24-30), followed by `{run.eventsWritten} event{s} · ${run.totalCostUsd.toFixed(2)} · {relativeTime(run.completedAt ?? run.startedAt)}` (ds/components/DiscoveryConsoleDS.tsx:48-53) → for example 'Last run (budget-limited)  3 events · $0.21 · 2d ago'.",
+   "problem": "(1) '$0.21' has no noun. It is what the search cost in model and web-search fees (anthropic.ts:151-154), but beside a list of conferences it can be read as a price or as a charge to the user; the default screen leaves it out. (2) 'Budget-limited' does not say what was limited: the search looked only for directly relevant events, with at most 3 web searches instead of 6, because $1.00 or more had been spent on event searches in the previous 7 days (index.ts:36, 128-131, 166, 204). (3) 'Running…' is shown for any row with no completion time, including a search that was cut off days ago, so 'Running… 0 events · $0.00 · 3d ago' reads as a search still in progress. (4) 'Paused — weekly budget reached' can never come from the table: a paused request writes no row (index.ts:156-165) and the table's status check does not allow 'paused' (supabase/migrations/20260601220000_outdoors_events_discovery.sql); the label and the test that pins it describe a state that does not occur. (5) 'Run' is the code's word; every other screen text calls it a search.",
+   "governing": "COPY_STANDARD.md §13, §14 and §17 (number + unit; a state names an observable condition); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (response behavior); comprehension principle (what a number means)",
+   "proposed": "adapters.ts: `export function runStatusLabel(run: { status: DiscoveryRunStatus; startedAt: string }): string` returning \"Last search\" for completed and throttled, \"Last search did not finish\" for failed, and for running: \"Search in progress\" when startedAt is less than 3 minutes old (the model call times out at 120 seconds) and \"Last search did not finish\" otherwise; delete the paused entry (parseStatus in lib/discovery.ts can keep accepting the value). In both consoles build the line as `${n} ${n === 1 ? \"event\" : \"events\"} returned · search cost $${cost.toFixed(2)} · ${relativeTime(...)}` and, when run.status === \"throttled\", append \" · limited to directly relevant events to stay within the 7-day search budget\". Apply the same mapping to statusLabel in components/DiscoveryConsole.tsx:31-38. OWNER DECISION: whether a seller should see the search cost at all (the settled default screen does not show it); if not, drop the dollar figure from both older screens instead of labeling it.",
+   "testsAffected": [
+    "src/outdoors-events/ds/ds-components.test.tsx:55-56 and :83 (\"Last run\", \"Last run failed\")",
+    "src/outdoors-events/components/DiscoveryConsole.test.tsx:48-49 (\"9 events\", \"$0.18\" still pass) and :52-67 (the paused-label case describes a row the table cannot hold; replace it with a throttled case)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-037",
+   "category": "A11Y",
+   "severity": 2,
+   "file": "src/outdoors-events/ds/components/EventListDS.tsx",
+   "line": 69,
+   "generation": "ds",
+   "state": "Previous screen version: the status control at the foot of every event card (previous-screen walkthrough line 17 records it as '(unlabelled field)').",
+   "current": "`<Select value={event.status} onChange={…} disabled={busy} options={…} />` (lines 69-79) with no label. The shared Select component accepts only value, onChange, options, disabled and id (src/components/input.tsx:61-70), so a caller cannot name it.",
+   "problem": "A screen-reader user hears an unnamed combo box reading 'Watching', and a sighted user is not told that the dropdown is the event's status. The oldest screen labels the same control 'STATUS' (components/EventRow.tsx:96-97); the default screen has the same gap (OE-006).",
+   "governing": "WCAG 2.1 SC 4.1.2 (Name, Role, Value) and SC 3.3.2 (Labels or Instructions); comprehension principle",
+   "proposed": "Add an optional `ariaLabel?: string` prop to Select in src/components/input.tsx and render `aria-label={props.ariaLabel}` on the <select>; in EventListDS.tsx:69 pass ariaLabel={t(\"Status\")}. (Other pages that render a bare Select get the same option.)",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-038",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/outdoors-events/ds/components/EventListDS.tsx",
+   "line": 60,
+   "generation": "ds",
+   "state": "Previous and oldest screen versions: an event that has both a relevance sentence and a note (previous-screen walkthrough lines 15-16 and 31-32).",
+   "current": "`{event.relevanceReason ? <p class=\"oed-event__reason\">{event.relevanceReason}</p> : null}` then `{event.notes ? <p class=\"oed-event__notes\">{event.notes}</p> : null}` (ds lines 57-60; oldest components/EventRow.tsx:69-74) → 'A major US conference for recruiting and talent-acquisition leaders, the people Luca sells to.' directly followed by 'The main event for recruiting leaders — about half of our champions attend.'",
+   "problem": "Two unlabeled sentences sit one under the other. The first is written by the search and the second by the seller, but nothing says so; the note ('about half of our champions attend') reads as a second claim by Antaeus. The reader cannot tell which statement came from a source and which is their own.",
+   "governing": "COPY_STANDARD.md §7 (evidence and interpretation kept distinguishable) and §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rule 1 (observed facts stated as facts); comprehension principle",
+   "proposed": "Label the note on both screens: `{event.notes ? <p class=\"oed-event__notes\">{t(\"Your note:\")} {event.notes}</p> : null}` (EventListDS.tsx:60) and the same inside `<p class=\"oe-row__notes\">` at components/EventRow.tsx:72-74. Use the same label on the default screen if OE-015 is applied.",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-039",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/lib/operator-help/registry.ts",
+   "line": 190,
+   "generation": "shared",
+   "state": "Previous screen version: the panel opened by the '?' button, under 'WHAT TO DO HERE' (previous-screen walkthrough line 49). The default screen has no '?' control.",
+   "current": "theMoveHere: \"Run event discovery, review the returned sources, and mark the events that are relevant to your territory or buyer strategy.\"",
+   "problem": "'Run event discovery' names an action no control carries (the button reads 'Find relevant events' on the default screen and 'Run discovery now' on this one). 'Mark the events' does not say how; the only marking is the status list on each event. 'Buyer strategy' is vague. The third line of the same entry is covered in OE-010.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md CTA standard; COPY_STANDARD.md §2 and §16 (the explaining layer must be the most literal text)",
+   "proposed": "theMoveHere: \"Select Find relevant events, open each result's source link, and set a status on the events you plan to pursue.\"",
+   "testsAffected": [
+    "src/lib/operator-help/registry.test.ts:43-49 (checks only that each of the three lines is longer than 10 characters; still passes)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-040",
+   "category": "LANG-D",
+   "severity": 2,
+   "file": "deliverables/room-capability-maps/outdoors-events-capability-map-2026-07-07.html",
+   "line": 41,
+   "generation": "doctrine",
+   "state": "The capability map for this area, which is embedded in the tester walkthrough as the description of what the area offers (sections 2 to 6; one more phrase on line 40).",
+   "current": "Section 2: 'The tiering is felt as distance, not flat labels' and the table 'Direct | your category — closest in', 'Adjacent | your buyers — one ring out', 'Indirect | their orbit — the outer ring (your ICP might show up)'. Section 3: 'The discovery console | \"Run discovery now\" + the last-run summary (status · events written · cost · relative time).', 'The discovery run ledger | outdoors_events_runs — cost + search-count + status per sweep.', 'The audit envelope | per discovered event — where did this event come from?', 'The manual \"add by hand\" | A demoted secondary affordance for a private invite the system missed.' Section 4: 'Once the scout finds a gathering worth the time…'. Section 5: 'Cost ceiling per workspace; degradation policy (warning 80%, throttle 100% drops adjacent + indirect, pause 150%).' and 'workspace_profile.product_category (the seed for the query plan)'. Section 6: 'The discovery posture (the operator does not author events — the system does)'. Line 40: '…scheduled events relevant to target accounts or buyers.'",
+   "problem": "Two problems in a text testers read and writers work from. (1) It gives the replaced screen wording as the area's wording: 'closest in', 'one ring out', 'their orbit — the outer ring', 'Run discovery now', 'add by hand', 'a private invite the system missed', plus 'the scout', 'sweep' and 'gathering'. The banner at the top says earlier references do not authorize deprecated language, but these rows read as the current specification, and a writer or model that follows them restores the old labels. (2) Several statements do not match the code. The default screen's last-search line shows a date, a count and a status, not cost or relative time (src/outdoors-events/v4/OutdoorsEventsV4.tsx:142-143). The run table has no search count; it stores cost, the number of model calls and status (supabase/migrations/20260601220000_outdoors_events_discovery.sql:58-79). No audit record is stored for an event; a found event keeps its link and the id of the search that produced it (supabase/functions/outdoors-events-discovery/index.ts:302-312). The budget steps are $1.00 (reduced search) and $3.00 (no search) over the previous 7 days, with no warning step, not 80% / 100% / 150% (index.ts:35-37, 155-166). The search is sent three profile fields, not one, and has no query plan (index.ts:117-126). It does not read accounts ('relevant to target accounts', line 40).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md ('Internal architecture names may be technical, but they must not be used as a source of customer-facing language'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 6; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/06_INTERNAL_DOCTRINE_HITS.json records[82]",
+   "proposed": "Rewrite the named rows on line 41, keeping the layout. Section 2 sentence: 'Events are grouped by how closely they relate to what the workspace sells.' Table (stored key | heading on screen | meaning): 'direct | Directly relevant to your category | the event is about the product category or market'; 'adjacent | Relevant to your target buyers | the event is for the roles, functions or problems the workspace sells into'; 'indirect | Broader related events | related to the market; included only when the relationship can be stated in one sentence'. Section 3: 'The search panel | \"Find relevant events\" and a line giving the date of the last search, the number of events it returned and whether it finished.'; 'The search record | outdoors_events_runs: cost, number of model calls and status for each search.'; 'Source link | each event found by a search keeps the link the search returned and the id of that search. No other audit record is stored.'; 'Manual add | \"+ Add event manually\", for an event the search did not return.' Section 4 opening: 'Once an event is worth attending, Outdoors Events links out to…'. Section 5: 'A search runs only when the user starts it. Per workspace, counted over the previous 7 days: from $1.00 spent, a search looks only for directly relevant events and uses at most 3 web searches; from $3.00 spent, no search runs.' and 'workspace_profile: product_category, what_we_sell and value_prop (the three fields sent to the search)'. Section 6 first item: 'The search finds events; the user decides which to pursue and can add events manually.' Line 40: '…scheduled events relevant to the workspace's product category and target buyers.' If OE-010 is not applied, use the default screen's current second heading ('Adjacent to your buyer context') in the table instead.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-041",
+   "category": "LANG-D",
+   "severity": 1,
+   "file": "CLAUDE.md",
+   "line": 449,
+   "generation": "doctrine",
+   "state": "Canon Part I §4.22 (lines 435-450), read by every session before it works on this area.",
+   "current": "Line 437: 'the \"Run discovery now\" button + the last-run summary — status, events written, cost, relative time … a trailing \"Added by hand\" bucket … a secondary \"Add one by hand\" affordance'. Line 441: 'degradation policy (warning 80%, throttle 100% drops adjacent + indirect, pause 150%)'. Line 449: 'the discovery console is the working header (\"Run discovery now\" + last-swept summary); … *your category (closest in) → your buyers (one ring out) → their orbit (the outer ring)* … The manual \"add by hand\" recedes to the bottom.' The section has no Language bullet. The function README names the button the same way (supabase/functions/outdoors-events-discovery/README.md:30, 46).",
+   "problem": "Most other areas in Part I §4 were given a Language bullet on 2026-11-05 that maps the internal description to the labels the screen shows. §4.22 was not, so the only wording it offers for the screen is the replaced wording, quoted as button and heading text. The general note in 'Authority order' says internal vocabulary is not a source of copy, but quoted labels are easy to copy back. The budget figures also differ from the code (reduced search from $1.00, no search from $3.00, no warning step; index.ts:35-37).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md; CLAUDE.md 'Authority order' (language is governed by COPY_STANDARD.md); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 6",
+   "proposed": "Add a bullet to §4.22 after the 'Face' bullet: '- **Language (COPY_STANDARD §2, §9, §21):** \"Run discovery now\", \"sweep\", \"the scout\", \"gathering\", \"closest in / one ring out / the outer ring\" and \"add by hand\" above are internal shorthand, never copy. On the face: the button is *Find relevant events*; the groups are *Directly relevant to your category*, *Adjacent to your buyer context* and *Broader related events*; the manual control is *+ Add event manually*; the links read *View source →*, *Check flights*, *Hotels nearby*, *Open event site*, *Add to calendar*. A relevance sentence says how the event relates to what the workspace sells and never states that a buyer attends unless a source says so.' In line 441 replace the bracketed policy with '(from $1.00 spent in the previous 7 days a search looks only for directly relevant events; from $3.00 no search runs)'. In README.md:30 and :46 replace \"Run discovery now\" with \"Find relevant events\". (If OE-010 is applied, give the second group as *Relevant to your target buyers*.)",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-042",
+   "category": "FUNC",
+   "severity": 1,
+   "file": "js/demo-seed-data-ent.js",
+   "line": 690,
+   "generation": "seed",
+   "state": "Both demo books, previous and oldest screen versions: the tag chips on an event card (the default screen does not show tags).",
+   "current": "Every sample event stores its tags as one string — tags:'talent acquisition', tags:'people leadership', tags:'HR technology', tags:'retail', tags:'software' (js/demo-seed-data-ent.js:690-694) and the same in js/demo-seed-data-smb.js:491-494 (tags:'CPG' on line 493). The column is a text array (supabase/migrations/20260601200000_outdoors_events.sql:48) and the reader keeps tags only when the value is an array: `tags: Array.isArray(row.tags) ? row.tags : []` (src/outdoors-events/lib/persistence.ts:65).",
+   "problem": "The sample tags are dropped on load, so the demo never shows a tag on any card although the cards have a place for them (ds/components/EventListDS.tsx:61-67, components/EventRow.tsx:75-83). Confirmed in the previous-screen walkthrough generated today: no tag appears under any of the five events. The sample data does not have the shape the live table has.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 8 (the demo-seeded tester pathway) and Required work 7 (persisted shapes); comprehension principle",
+   "proposed": "Store each tag as a one-element array in both files: tags:['talent acquisition'], tags:['people leadership'], tags:['HR technology'], tags:['retail'], tags:['software'] (ent 690-694) and tags:['talent acquisition'], tags:['people leadership'], tags:['consumer goods'], tags:['software'] (smb 491-494; 'CPG' spelled out).",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-043",
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "js/demo-seed-data-smb.js",
+   "line": 491,
+   "generation": "seed",
+   "state": "Both demo books on any date after 2026-09-24: the first sample event; and the last sample event's source link.",
+   "current": "RecFest USA: start_date:'2026-09-23', end_date:'2026-09-24', status:'planning' (js/demo-seed-data-smb.js:491, js/demo-seed-data-ent.js:690). SaaStr Annual: start_date:'2027-05-11', end_date:'2027-05-13', source_url:'https://www.saastrannual2026.com/' (smb 494, ent 694). The sample events use fixed calendar dates, while the rest of the demo data uses dates relative to today.",
+   "problem": "(1) Seen today (2026-11-17), the first row of each book is an event that ended in September and is still marked 'Planning'; on the default screen it prints as 'Sep 23 – Sep 24' with no year (OE-002), so it reads as an event still to come. The Briefing already leaves it out as past (src/briefing/v4/lib/world-events.ts:44-50), so the two pages disagree about it. (2) The SaaStr row is dated May 2027 but its 'View source →' link is the 2026 event's site, so the link cannot be where those dates came from. I did not open any of the links or check the 2027 dates of the other sample events (no network use).",
+   "governing": "COPY_STANDARD.md §21 (claims discipline); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 8; comprehension principle",
+   "proposed": "(1) In both files set the RecFest row to status:'attended' (its dates are in the past and stay true); with OE-002 applied it prints 'Sep 23 – Sep 24, 2026 · ended'. (2) For the SaaStr row, open the organizer's site, and either use the address of the 2027 edition's page with its published dates or, if 2027 dates are not published, remove the start and end dates from the row (the screen then shows 'date not set') and link the organizer's main page. Check the other three links and dates the same way when editing.",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-044",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/outdoors-events/lib/discovery.ts",
+   "line": 104,
+   "generation": "shared",
+   "state": "Any screen version: 'Find relevant events' (a) in the demo, and (b) in a signed-in workspace whose session has ended.",
+   "current": "(a) Demo: 'Event search isn't available in this copy of the app.' when the build has no database address (SMB walkthrough line 53; lines 104, 145-147), or 'Sign in to a workspace to search for events.' on the hosted demo, where the demo data client returns no workspace (line 101; src/lib/data-client.ts:247). (b) Every error returned by the function call, including HTTP 401 and 403, becomes 'The event search didn't finish. Try again in a few minutes.' (lines 123-126).",
+   "problem": "(a) 'This copy of the app' is not something a tester can identify, and neither demo message says that the events on the page are samples; next to 'No event search has been run yet.' (OE-014) the tester cannot tell where the listed events came from. (b) After a session has ended, trying again in a few minutes cannot work; the user has to sign in again. The message sends them the wrong way.",
+   "governing": "CLAUDE.md Part III §10 (error language: specific, recoverable); COPY_STANDARD.md §8 (unmistakable referents) and §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (response/error behavior)",
+   "proposed": "Add two messages to DISCOVERY_MESSAGES: `demo: \"Event search is switched off in the demo. The events listed here are samples.\"` and `signedOut: \"Your session has ended. Sign in again, then search for events.\"`. In triggerDiscovery, as the first statement inside try: `if (isDemoModeActive()) return { ok: false, error: DISCOVERY_MESSAGES.demo };` (import isDemoModeActive from \"@/lib/data-client-demo-local\"). In the `if (error)` branch, before the generic return: `const status = (error as { context?: { status?: number } }).context?.status; if (status === 401) return { ok: false, error: DISCOVERY_MESSAGES.signedOut };` (the function-call error carries the HTTP response as `context`). Keep `unavailable` for a signed-in build with no database address, reworded to \"Event search isn't set up in this build of the app.\" Add client tests for the demo and 401 cases.",
+   "testsAffected": [
+    "src/outdoors-events/lib/discovery.test.ts (new cases; existing cases unchanged because demo mode is off in tests)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "OE-045",
+   "category": "TOOLING",
+   "severity": 2,
+   "file": "tools/language-remediation/reconcile-original.js",
+   "line": 154,
+   "generation": "tooling",
+   "state": "The automatic check that decides whether an original rewrite record is already implemented (it produced this area's obligations list).",
+   "current": "`else if (r.replacement && (newR || newS) && !oldR) { r.auto = newR ? \"REPLACEMENT_RENDERED_VERBATIM\" : \"REPLACEMENT_IN_SOURCE_VERBATIM\"; … }` (line 154). `oldR` looks only at the rendered walkthrough of the default screens. `originalInSource` is collected (line 145) but not used in the decision. `inSource` tests whether the text occurs anywhere in a file's joined string literals (`s.n.includes(n)`, line 96).",
+   "problem": "Two records in this area were marked implemented when they are not, and neither reached a reviewer's list. (1) exact_replacements[19]: 'Run discovery now' still renders on the previous and oldest screens (ds/components/DiscoveryConsoleDS.tsx:39, components/DiscoveryConsole.tsx:53), but the record is 'rendered verbatim' because the replacement shows on the default screen and the older versions are not in the walkthrough. (2) exact_replacements[16]: 'events relevant to your target buyers' is 'in source verbatim' because those words are part of another sentence in the command list (src/lib/palette/registry.ts:287); the page header it was written for says something else. The same two weaknesses apply to every area with older screen versions.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md ('A linter, an inventory's automated classification … are evidence or review tools'; 'Do not claim … executed when it was only mocked or inspected'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 2 (evidence must support each status)",
+   "proposed": "In reconcile-original.js: (a) keep the individual string literals per file as well as the joined text, and count a replacement as 'in source verbatim' only when one literal equals it after normalization; when it is only part of a longer literal, set `REPLACEMENT_PART_OF_OTHER_TEXT` and leave the record for review. (b) Before assigning either verbatim status at line 154, check `r.evidence.originalInSource`; when the original still occurs in a served source file, set `ORIGINAL_STILL_IN_SOURCE` and leave the record for review. (c) Pass the previous-screen and oldest-screen walkthroughs with `--corpus` so `oldR` covers them. Add test cases for (a) and (b) beside tools/language-remediation/copy-audit.test.js.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-046",
+   "category": "FUNC",
+   "severity": 1,
+   "file": "src/outdoors-events/lib/persistence.ts",
+   "line": 89,
+   "generation": "shared",
+   "state": "Previous and oldest screen versions: a manually added event whose 'Source URL' was typed without 'https://' (for example 'recfest.com/usa'). The link then shows on all three versions.",
+   "current": "`source_url: draft.sourceUrl.trim() || null` (line 89). The value is rendered unchanged as a link: `<a … href={ev.sourceUrl} target=\"_blank\">` (v4/OutdoorsEventsV4.tsx:79 and :90, ds/components/EventListDS.tsx:81-88, components/EventRow.tsx:85-92). The previous screen's field is a plain text input (ds/components/EventComposerDS.tsx:108-112); the oldest uses type=\"url\" with no form submission, so the browser never checks it.",
+   "problem": "A link saved without a scheme is treated as a path on the Antaeus site: 'View source →' opens antaeus.app/outdoors-events/recfest.com/usa, which does not exist. Any text is accepted, including a 'javascript:' address, which the page would place in a link for every member of the workspace. Events found by a search are checked for http(s) (supabase/functions/outdoors-events-discovery/_shared.ts:169); manual ones are not.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 7 (persistence, persisted shapes); comprehension principle (a link must open what its label says)",
+   "proposed": "In persistence.ts add `function normalizeUrl(raw: string): string | null { const v = raw.trim(); if (!v) return null; const withScheme = /^[a-z][a-z0-9+.-]*:/i.test(v) ? v : `https://${v}`; return /^https?:\\/\\//i.test(withScheme) ? withScheme : null; }` and use `source_url: normalizeUrl(draft.sourceUrl)` in draftToInsert (line 89) and for `patch.sourceUrl` in updateOutdoorsEvent (line 154). Add cases to src/outdoors-events/lib/persistence.test.ts: 'recfest.com/usa' → 'https://recfest.com/usa'; 'javascript:alert(1)' → null; '' → null.",
+   "testsAffected": [
+    "src/outdoors-events/lib/persistence.test.ts (new cases)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "OE-047",
+   "category": "TOOLING",
+   "severity": 2,
+   "file": "tests/e2e/smoke.spec.ts",
+   "line": 852,
+   "generation": "tooling",
+   "state": "The automated tests for this area: unit and component tests under src/outdoors-events, and the two end-to-end smoke tests that open the page.",
+   "current": "tests/e2e/smoke.spec.ts:852-880 opens /outdoors-events/ in the end-to-end build, which forces the oldest screen (it asserts `.oe-topbar__kicker`, `.oe-composer__open-btn`, `.oe-list`). tests/e2e/new-surface-smoke.spec.ts:42 opens it with `ds=1`, the previous screen. The component tests cover the oldest screen (components/DiscoveryConsole.test.tsx, components/EventList.test.tsx) and the previous screen (ds/ds-components.test.tsx). src/outdoors-events/v4 has no test file: nothing renders OutdoorsEventsV4.tsx and nothing calls v4/lib/get-there.ts. state.test.ts covers only the grouping and form helpers, not runDiscoveryNow, saveDraft, changeStatus, removeEvent or bootEvents.",
+   "problem": "The screen users get by default is the only one of the three with no automated test, so defects on it reach production unnoticed: the wrong day in US time zones (OE-001), the raw status key in the last-search line (OE-003), the calendar file dated today for an undated event (OE-008). The older screens' tests also pin replaced wording ('Run discovery now', 'DISCOVERY HASN'T RUN YET', 'Paused — weekly budget reached'), so the suite currently protects the old text and not the new.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md Required work 11 ('targeted discovered-defect regressions') and Required work 7; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md 'Verification' layer",
+   "proposed": "Add src/outdoors-events/v4/OutdoorsEventsV4.test.tsx that renders the screen with events in each group and asserts: the three group headings and 'Added manually'; the date text for a 2026-09-23/24 event with process.env.TZ = 'America/Chicago' (OE-001); the last-search line for completed, throttled, failed and unfinished runs (OE-003); the empty state, the load-failure state (OE-013) and the search error message; that the calendar link is absent for an undated event (OE-008). Add src/outdoors-events/v4/lib/get-there.test.ts for flightsHref, hotelsHref and calendarIcs (all-day start, exclusive end, no date). Add state tests for runDiscoveryNow, changeStatus and removeEvent failure paths (OE-005, OE-023). Add `{ slug: \"outdoors-events\", param: \"v4=1\" }`-style coverage to an end-to-end smoke test that asserts `.oe4` is attached with no page errors (the `v4=1` parameter overrides the forced older screens, src/outdoors-events/main.tsx:71-73).",
+   "testsAffected": [
+    "tests/e2e/smoke.spec.ts:852-880 and tests/e2e/new-surface-smoke.spec.ts:42 (unchanged; new cases added beside them)"
+   ],
+   "confidence": "high"
+  }
+ ],
+ "dispositions": [
+  {
+   "recordId": "INV-0201",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Enterprise HR-technology buyers attend this conference.",
+   "where": "js/demo-seed-data-ent.js:692 (relevance_reason of 'UNLEASH America 2027'; enterprise walkthrough of 2026-11-06 line 24; previous-screen walkthrough generated today line 25)",
+   "note": "The compressed 'buying committees walk the floor here' is gone and the sentence now says in plain words who the conference is for. It describes the event's general audience, which the event's own page can support, so it is acceptable as it stands. OE-030 rewords it only so that all the sample sentences share one form; the sample sentences that say the user's own accounts attend ('Our retail accounts attend…') are the real problem filed there."
+  },
+  {
+   "recordId": "INV-0294",
+   "status": "IMPLEMENTED",
+   "currentText": "Directly relevant to your category (shown in capitals: DIRECTLY RELEVANT TO YOUR CATEGORY)",
+   "where": "src/outdoors-events/v4/OutdoorsEventsV4.tsx:51; SMB walkthrough line 6",
+   "note": "This is the Batch 03 replacement for the same string (10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json exact_replacements[20]) on the default screen. The previous and oldest screens still head the group 'Direct' with 'Gatherings about your product category.' (src/outdoors-events/lib/types.ts:33, 39); that is filed as OE-032."
+  },
+  {
+   "recordId": "B3-X-017",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Search current event sources, then decide which events are worth pursuing.",
+   "where": "src/outdoors-events/v4/OutdoorsEventsV4.tsx:138; SMB walkthrough line 3",
+   "note": "The personified 'The system finds the gatherings' and the dash are gone; the sentence is now an instruction that matches the control beside it (the user starts the search) and keeps 'you decide which are worth pursuing'. 'Current event sources' is slightly vague (minor, OE-016). The previous and oldest screens still say 'The system reads your product category and finds offline gatherings…' (OE-031)."
+  },
+  {
+   "recordId": "B3-X-023",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Adjacent to your buyer context (shown in capitals), with the sub-line 'events focused on the roles, functions, or problems you sell into'",
+   "where": "src/outdoors-events/v4/OutdoorsEventsV4.tsx:52; SMB walkthrough lines 22-23",
+   "note": "The ring metaphor and the dash are gone. The approved wording 'ADJACENT EVENTS YOUR BUYERS ATTEND' was not used, and rightly: the search has no attendance data, and the capability map now says 'relevance does not show that a buyer will attend'. The heading is understandable with its sub-line; 'buyer context' is an abstraction where 'target buyers' would do (minor, OE-010). The previous and oldest screens still show 'Adjacent' / 'Gatherings of buyer personas you sell into.' (OE-032)."
+  },
+  {
+   "recordId": "B3-X-024",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "events focused on the roles, functions, or problems you sell into",
+   "where": "src/outdoors-events/v4/OutdoorsEventsV4.tsx:52; SMB walkthrough line 23",
+   "note": "Same intent as 'events commonly attended by your target buyers' without the attendance claim the product cannot support. It matches the definition the search prompt gives this group (supabase/functions/outdoors-events-discovery/index.ts:97: 'focused on the buyer roles, functions, or business problems the operator targets')."
+  },
+  {
+   "recordId": "B3-X-026",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "events that may be useful for your territory or travel plans",
+   "where": "src/outdoors-events/v4/OutdoorsEventsV4.tsx:53; SMB walkthrough line 29",
+   "note": "A shortened form of 'broader events that may be useful when relevant to your territory or travel'. It keeps the hedge ('may be useful') and reads plainly under the heading 'Broader related events'. The previous and oldest screens still show 'Indirect' / 'Gatherings where your ICP might show up.' (OE-032)."
+  },
+  {
+   "recordId": "DOC-082",
+   "status": "IMPLEMENTED",
+   "currentText": "workspace_profile.product_category (the seed for the query plan)",
+   "where": "deliverables/room-capability-maps/outdoors-events-capability-map-2026-07-07.html:41 (section 5 · Flows, 'Flows in' list)",
+   "note": "Text unchanged. 'Seed' here is the ordinary technical word for a search's starting input, not the onboarding metaphor the migration map retires, and no screen text derives from it (03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md: internal names may be technical). The line is inaccurate in another way (the search sends three profile fields and has no 'query plan'); that is in the capability-map finding OE-040."
+  },
+  {
+   "recordId": "B3-X-016",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "events relevant to your market and buyer context",
+   "where": "src/outdoors-events/v4/OutdoorsEventsV4.tsx:133; SMB walkthrough line 2",
+   "note": "Correction to the automatic status. The 'verbatim in source' match is a false match: the replacement text was found inside a different sentence, 'Find events relevant to your target buyers and accounts.' (src/lib/palette/registry.ts:287, the command-list description, OE-029). The page header this record was written for was reworded; it drops 'found for you' and is understandable, though 'buyer context' is vaguer than the approved 'target buyers' (minor, OE-010). The previous and oldest screens still read 'Where people are gathering, found for you.' (OE-031, OE-035)."
+  },
+  {
+   "recordId": "B3-X-019",
+   "status": "STILL MISSING",
+   "currentText": "'Find relevant events' on the default screen; 'Run discovery now' (the original, unchanged) on the previous and oldest screens",
+   "where": "src/outdoors-events/v4/OutdoorsEventsV4.tsx:152 (replacement; SMB walkthrough line 5); src/outdoors-events/ds/components/DiscoveryConsoleDS.tsx:39 and src/outdoors-events/components/DiscoveryConsole.tsx:53 (original; previous-screen walkthrough line 9)",
+   "note": "Correction to the automatic status. The replacement is on the default screen verbatim, but the original label still renders on two versions a user can reach (?v4=0 and ?v4=0&ds=0, or their flags). Fix proposed in OE-031 and OE-035."
+  }
+ ],
+ "retained": [
+  {
+   "file": "js/demo-seed-data-ent.js",
+   "line": 691,
+   "text": "People-leadership buyers and the HR-tech vendor field in one room.",
+   "term": "room",
+   "why": "'In one room' means a physical place where people meet, which is ordinary English (AUDIT_BRIEF section 3, 'room' row; docs/language-remediation-2026/19_ROOM_WORD_AUDIT.md:71). The word is not the problem; the sentence is rewritten in OE-030 because it is a fragment and reads as an attendance claim."
+  },
+  {
+   "file": "js/demo-seed-data-smb.js",
+   "line": 492,
+   "text": "People-leadership buyers in one room.",
+   "term": "room",
+   "why": "Same as the enterprise row: literal place, ordinary English; the sentence itself is replaced in OE-030 for other reasons."
+  },
+  {
+   "file": "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+   "line": 146,
+   "text": "No event search has been run yet.",
+   "term": "run / yet",
+   "why": "The approved replacement, verbatim (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json exact_replacements[18]). 'Run' is the literal verb for a search and 'yet' states a fact about the workspace, not a failing of the reader. Its accuracy in the demo is a separate matter (OE-014)."
+  },
+  {
+   "file": "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+   "line": 152,
+   "text": "Find relevant events",
+   "term": "(approved label)",
+   "why": "Approved replacement, verbatim (exact_replacements[19]); the button starts a search for events, which is what it says."
+  },
+  {
+   "file": "src/outdoors-events/v4/OutdoorsEventsV4.tsx",
+   "line": 132,
+   "text": "Outdoors Events",
+   "term": "branded area name",
+   "why": "A branded name is allowed when a literal description sits with it (COPY_STANDARD.md §4). The header line beside it and the workspace map entry ('find events where target buyers may be present', src/lib/ground/motion.ts:40) say what the area does."
+  },
+  {
+   "file": "src/outdoors-events/lib/types.ts",
+   "line": 61,
+   "text": "Watching / Planning / Attending / Attended / Archived",
+   "term": "status labels",
+   "why": "Ordinary words for what a seller is doing about an event; each names an observable condition (COPY_STANDARD.md §17). 'Passed' on line 65 is the exception and is filed as OE-017."
+  },
+  {
+   "file": "src/outdoors-events/ds/OutdoorsEventsDS.tsx",
+   "line": 33,
+   "text": "<WayfinderBar room={t(\"OUTDOORS EVENTS\")} tail={tail} />",
+   "term": "room",
+   "why": "'room' is a prop name (identifier). The text shown is the area's name."
+  },
+  {
+   "file": "src/outdoors-events/OutdoorsEvents.tsx",
+   "line": 23,
+   "text": "<main id=\"oe-room-main\" class=\"oe-room\">",
+   "term": "room",
+   "why": "Element id and CSS class (identifiers); not shown to the user. Not to be renamed."
+  },
+  {
+   "file": "src/lib/operator-help/registry.ts",
+   "line": 189,
+   "text": "theMoveHere:",
+   "term": "move",
+   "why": "Object key (identifier). The heading shown for this field is 'WHAT TO DO HERE'. The sentence stored under it is filed as OE-039 for other reasons."
+  },
+  {
+   "file": "src/outdoors-events/ds/OutdoorsEventsDS.tsx",
+   "line": 18,
+   "text": "dominant move — an in-room action, so there is no cross-room pulling cell",
+   "term": "move / room",
+   "why": "Code comment (category E). Not rendered and not an instruction that produces screen text."
+  },
+  {
+   "file": "supabase/functions/outdoors-events-discovery/_shared.ts",
+   "line": 69,
+   "text": "\"wedge\", \"verdict\", \"decision-grade\", \"operating truth\", \"command intelligence\"",
+   "term": "deprecated terms",
+   "why": "Entries in the list of phrases the function rejects in generated relevance sentences. A reject list has to contain the words it rejects."
+  },
+  {
+   "file": "supabase/functions/outdoors-events-discovery/index.ts",
+   "line": 96,
+   "text": "\"direct\" / \"adjacent\" / \"indirect\"; runDiscoveryNow, DiscoveryRun, outdoors_events_runs, status key \"passed\"",
+   "term": "stored keys and identifiers",
+   "why": "Stable keys in the table, the function contract and saved rows. The audit asks for display text to change, not identifiers (AUDIT_BRIEF section 5, 'Guard against overcorrection')."
+  }
+ ],
+ "gaps": [
+  "Live event search: the deployed function, a real model call with web search, and real database constraints were not run (no credentials or network use in this stage; a paid call is out of scope for a read-only review). Findings OE-019, OE-021, OE-022 and OE-026 rest on reading the code plus runs with stand-ins, and their frequency in production is unknown. Whether the API still accepts tool type web_search_20250305 for claude-sonnet-4-6, and how often it splits a JSON answer across text blocks, was checked only against the API reference, not observed.",
+  "Signed-in states of all three screen versions (a real last-search line or chip, the stored-error line on the two older screens, a failed save, a failed delete, a failed list load, the weather glyph, an expired session) were reviewed from source; the walkthroughs only reach demo states.",
+  "Oldest screen version (?v4=0&ds=0): no walkthrough existed for it during this review, so nothing on it was executed. Its text and behavior were read from source and its two component tests.",
+  "Previous screen version: today's walkthrough covers the page at rest, the help panel, the search click and a delete. The open manual form, saving it, a status change, and the empty and loading states were read from source.",
+  "Restore after delete (OE-028) was traced through the code and the migration, not executed against a database.",
+  "Sample events: whether RecFest USA, Transform, UNLEASH America, NRF Big Show, Natural Products Expo West and SaaStr Annual take place on the seeded dates, and whether the seeded links are live, was not checked (no network use). OE-043 reports only what the data itself shows.",
+  "Administrative run_all: workspaces are searched one after another and one search can take up to 120 seconds. Whether several workspaces fit inside the hosting platform's time limit for one function call was not verified; no schedule calls this path today.",
+  "A user who belongs to more than one workspace: the event list is scoped by row-level security (every workspace the user is a member of), while the search and manual adds go to the workspace the user owns (src/lib/data-client.ts:298-315). No screen for adding members exists, so this was not treated as reachable and was not tested.",
+  "Shared parts of these pages that belong to other areas were not re-reviewed here: the workspace map and recent-activity panel on the default screen, and the Birdseye panel, scheduled-actions panel and command list on the previous screen."
+ ]
+}

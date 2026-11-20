@@ -1,0 +1,326 @@
+{
+ "area": "icp-studio",
+ "coverage": [
+  {
+   "surface": "ICP Studio default screen (populated, demo books)",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/icp-studio/v4/IcpStudioV4.tsx",
+    "src/icp-studio/v4/icp-studio-v4.css",
+    "src/icp-studio/main.tsx",
+    "src/icp-studio/index.html"
+   ],
+   "note": "Read every line of the component and compared it with the SMB walkthrough generated today (area at rest + the 'The first seller hired' click) and the 2026-11-06 enterprise walkthrough. The walkthrough tool clicked only the role button; it did not type in fields or click 'Save this ICP'."
+  },
+  {
+   "surface": "ICP Studio default screen: empty workspace, partly filled ICP, post-onboarding ICP, save click",
+   "generation": "v4",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/icp-studio/v4/IcpStudioV4.tsx",
+    "src/icp-studio/state.ts",
+    "src/icp-studio/lib/persistence.ts",
+    "src/onboarding/seeding/lib/seed-writer.ts",
+    "src/onboarding/seeding/lib/cloud-mirror.ts"
+   ],
+   "note": "These states are not in any walkthrough. Derived from source; the quality engine, statement builder and account matcher were executed directly in node (esbuild bundle of the current source) against both demo seed files and against empty input. No browser was run. There is no unit test for IcpStudioV4.tsx."
+  }
+ ],
+ "findings": [
+  {
+   "id": "ICP-001",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/icp-studio/v4/IcpStudioV4.tsx",
+   "line": 57,
+   "generation": "v4",
+   "state": "Default screen, any workspace: the eighth quality criterion, the 'N of 8 criteria' count and the quality tier",
+   "current": "activeAccounts: totalWorked.value  — renders \"The working account list is small; confirm that the list is large enough to support the planned outreach volume.\" in both demo books, directly above \"HOW YOUR 29 WATCHED ACCOUNTS MATCH THE ICP\". In a new workspace it renders \"No working-list size is recorded yet. Add or size the initial account set to evaluate coverage.\"",
+   "problem": "totalWorked is not a number of accounts. It is the number of saved ICPs flagged worked (js/demo-seed-runtime.js:191 and js/supabase-config.js:969,978 compute it as icps.filter(worked).length) and src/icp-studio/state.ts:272 adds 1 to it every time 'Save this ICP' is clicked. The quality engine (src/icp-studio/lib/quality.ts:122-132) treats the value as the size of the account list, so the screen makes a statement about the user's account list that is computed from how many ICPs they have saved: both demo books show 'the working account list is small' (value 2) beside 29 watched accounts; each Save click raises the 'list' by one; after 20 saves the criterion turns green. The comment at lines 68-69 repeats the wrong premise ('a running count of accounts worked'). The instruction 'Add or size the initial account set' cannot be followed on this screen because it has no such input. Second defect on the same path: saveDraftAsIcp (src/icp-studio/state.ts:240-252) scores the saved record with draft.engineActive, which this screen never sets, so the stored qualityScore and qualityChecks differ from what the screen showed (executed on the demo ICPs: shown 90 and 92, stored 86 and 88; with a 5,000+ size band and a regional geography the screen shows 'highly specific' (87) and stores 83, 'well defined'). Readiness, Prospecting Desk and Signal Console read the stored score.",
+   "governing": "AUDIT_BRIEF §5 Function ('a number that no longer matches its formula', 'copy that now claims something the code does not do'); COPY_STANDARD.md §21 (claims discipline); original record INV-0263 (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/01_USER_FACING_COPY_INVENTORY.json records[263]) asked that this line's functional meaning not be obscured",
+   "proposed": "In IcpStudioV4.tsx move `const accounts = readAccounts();` above the buildIcpQuality call and pass `activeAccounts: accounts.length` (the watched-account count the same screen already displays); replace the comment at lines 68-69 with one that says totalWorked counts saved ICPs. In src/icp-studio/state.ts give saveDraftAsIcp an optional `activeAccounts?: number` argument that, when provided, replaces engineActiveNum in the buildIcpQuality call, and have the v4 save() pass accounts.length so the stored score and checks equal the ones shown. Add a unit test (new src/icp-studio/v4/IcpStudioV4.test.tsx) that seeds gtmos_sc_v4 with 29 accounts and totalWorked 2 and asserts the 'within range' criterion renders, and a state test that the saved qualityScore equals the displayed one. OWNER DECISION: whether the eighth criterion on the default screen should measure watched accounts (proposed here), a 30-day target the user types (what the two older screens do), or be removed from the default screen (then the count reads 'of 7').",
+   "testsAffected": [
+    "src/icp-studio/state.test.ts (saveDraftAsIcp cases near lines 216-233 keep passing if the new argument is optional)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-002",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/signal-console/lib/icp-match.ts",
+   "line": 138,
+   "generation": "shared",
+   "state": "Default ICP Studio screen, account-match area ('How your N watched accounts match the ICP'); also the ICP chip on the previous and oldest Signal Console account cards",
+   "current": "hasOverlap(a, b) returns true only when one whole lower-cased string contains the other (lines 138-144). scoreAccountAgainstIcp uses it for industry (line 172) and for headquarters against the ICP geography (line 185). A strong match needs 75 points: industry overlap (60) plus geography overlap (30), or industry overlap plus NO headquarters recorded (15).",
+   "problem": "Executed on both demo books with the current source (esbuild bundle of icp-match.ts run in node against js/demo-seed-data-ent.js and js/demo-seed-data-smb.js). (1) Industry: an ICP that lists several industries only matches an account whose industry text is a contiguous piece of the ICP text. Enterprise ICP 'Retail / Food Service / Aviation / Logistics': Starbucks ('Food Service / Retail') and Nike ('Apparel / Retail') are classed as not matching. SMB ICP 'Food service / DTC / CPG': Chomps and Siete Foods ('CPG / Food'), Warby Parker ('DTC Eyewear'), Allbirds, Bombas and Rothy's ('DTC …') are classed as not matching — Rothy's and Siete are named in the same seed as wins for this ICP. The screen then lists 'Starbucks — Food Service / Retail' and 'Warby Parker — DTC Eyewear' under 'Accounts that do not match · and why' while the headline says 'We target Retail / Food Service …' / '… DTC …'. (2) Geography: headquarters are stored as 'City, ST' and the ICP geography is 'US', 'North America', etc. 'Chicago, IL' does not contain 'north america' or 'us', so no account with a headquarters can be a strong match for a regional ICP: both books show 0 strong matches for an ICP rated 'highly specific' (11 and 3 accounts stop at 70 points). An account with no headquarters recorded scores higher (75, strong) than one with a US headquarters (70, partial). The only geography hits are accidental letter matches: with ICP geography 'US', 'Austin, TX', 'Houston, TX', 'Columbus, OH', 'Brussels, Belgium' and 'Sydney, Australia' all get the geography points because the letters 'us' appear inside them (executed: a Food Service account in Sydney, Australia scores 90, strong; one in Los Angeles, CA scores 70, partial). The two-letter industry 'AI' matches inside 'Retail'. The user is told '0 strong matches … Refine the ICP or add accounts', but no ICP edit made through the form's menu values and no added account with a headquarters changes this.",
+   "governing": "AUDIT_BRIEF §5 Function (scoring thresholds, recommendation selection; 'copy that now claims something the code does not do'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md 'Structural rules that cannot be expressed as literal replacement · ICP Studio' (the account-match area must answer how many watched accounts strongly match, partially match, do not match, and why); the module's own header (icp-match.ts:10) documents the intent as 'industry overlap + at least one secondary'",
+   "proposed": "Two copy edits keep the default screen truthful without changing any score: (a) src/icp-studio/v4/IcpStudioV4.tsx:160 → \"No watched account matches this ICP on both industry and headquarters.\" (drop \"Refine the ICP or add accounts\", which today cannot produce a strong match for a regional ICP); (b) under the three counts add \"Accounts are compared with this ICP by industry and headquarters only.\" These edits do not correct the wrong classifications. Repair in src/signal-console/lib/icp-match.ts: compare industries term by term — split both strings on '/', ',', '&', '+' and ' and ', and count an overlap when every word of the shorter term appears as a whole word in a term of the other ('Food Service / Retail' then matches an ICP listing 'Retail / Food Service / Aviation / Logistics'; 'CPG / Food' and 'DTC Eyewear' match 'Food service / DTC / CPG'; 'AI' no longer matches inside 'Retail'). Compare geography on whole words, never on letter sequences ('US' must not match 'Austin' or 'Australia'). Score a missing headquarters the same as one that differs (10), not higher. Add src/signal-console/lib/icp-match.test.ts covering these cases (the module has no test file today). OWNER DECISION: (1) approve the term-level industry comparison and whole-word geography comparison above — they implement the 'overlap' the module header documents, but they change which accounts are classed as matching (in the demo Starbucks, Nike, Chomps, Siete Foods, Warby Parker, Allbirds, Bombas and Rothy's leave 'do not match'; Tecovas and Siete Foods lose the accidental 'US' hit); (2) how geography should be recognised — the smallest useful rule is that a headquarters ending in a two-letter US state code (or naming the United States) is inside 'US' and 'North America', Canada and Mexico are inside 'North America', and 'Global' matches every headquarters; EMEA and APAC need a country list. Without such a rule a strong match stays unreachable for every regional geography the older screens offer (North America, EMEA, APAC) and for 'US' except by accident.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-003",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/icp-studio/v4/IcpStudioV4.tsx",
+   "line": 163,
+   "generation": "v4",
+   "state": "Default screen with watched accounts: the match bar, its three counts, and the two account columns under it",
+   "current": "Column header \"Accounts that do not match · and why\"; rows are `<b>{a.name}</b> — {a.industry}` (\"Notion — Productivity Software\", \"Boeing — Aerospace / Manufacturing\"). Counts: \"0 strong matches\", \"11 partial matches\", \"18 do not match\". Partial matches are only counted; they are never listed and no reason is shown. The strong column shows the same name — industry rows.",
+   "problem": "The header promises a reason, and the original structural requirement asks the area to answer why. Each row shows only the account's industry, so the reader has to work out the comparison (which ICP field it failed, and whether headquarters was the problem). Nothing says what separates a strong match from a partial one (strong = industry and headquarters both match; partial = industry matches but headquarters does not, or headquarters matches and no industry is recorded). Partial matches — the largest useful group in both demo books — have no reason, and the approved '· monitor' guidance for them was dropped. Nothing on the page says that only industry and headquarters are compared and that company size is ignored, although Company size is one of the ICP fields directly below (high-context dependence; semantic compression).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md 'Structural rules · ICP Studio' (\"The account-match area should answer: how many watched accounts strongly match; how many partially match; how many do not match; why.\"); exact rows '11 loose — watch' → '11 partial matches · monitor' and 'KEPT OUT — AND WHY (GOOD)' → 'ACCOUNTS THAT DO NOT MATCH · AND WHY'; original record INV-0277 (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/01_USER_FACING_COPY_INVENTORY.json records[277])",
+   "proposed": "Have scoreAccountAgainstIcp also return which comparison passed (add `industry: 'match' | 'differs' | 'not recorded' | 'not compared'` and `geo: …` to IcpMatch — additive, no scoring change) and render the reason on each listed row: not matching → \"Notion — industry is Productivity Software\"; when the industry matches but the score is still low → \"… — headquarters is Malmö, Sweden\". Under the three counts add one line that defines the groups: \"Strong: industry and headquarters both match this ICP. Partial: the industry matches and the headquarters does not. Company size is not compared.\" Change the middle count to \"{n} partial matches · monitor\" (the approved wording). Do this together with ICP-002: with today's whole-text comparison the reasons would read as wrong (a Chicago headquarters shown as the reason an account is only a partial match for North America). OWNER DECISION: add a third column that lists partial matches with their reasons (\"Sweetgreen — industry matches; headquarters is Los Angeles, CA\", \"+ N more partial matches\"); today only strong matches and non-matches are listed.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-004",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/icp-studio/v4/IcpStudioV4.tsx",
+   "line": 128,
+   "generation": "v4",
+   "state": "Default screen whenever the ICP is not in the top tier — including a brand-new workspace, where it reads \"WHY THIS ICP IS SPECIFIC · 0 OF 8 CRITERIA\" under the pill \"ICP quality: too broad\"",
+   "current": "{t(\"Why this ICP is specific\")} · {passed} {t(\"of\")} {quality.checks.length} {t(\"criteria\")}",
+   "problem": "The approved replacement was written for the 6-of-8 case and is rendered in every tier. On a too-broad or partially defined ICP the heading asserts the opposite of the tier pill and sits above a list of ✕ items telling the user what to choose (declarative certainty; the heading contradicts the state). The original 'What makes it sharp' was neutral about whether the ICP had got there. Smaller point: the denominator is quality.checks.length, which is 9 when the engine appends the founder / first-seller coverage warning (quality.ts:134-145), so the count can read '7 of 9 criteria' although there are eight criteria.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md exact row 'WHAT MAKES IT SHARP — 6 OF 8' → 'WHY THIS ICP IS SPECIFIC · 6 OF 8 CRITERIA' (manifest record B1-X-055): implemented verbatim, but inaccurate outside the top tier — AUDIT_BRIEF §5 'unless a real comprehension or accuracy problem exists'",
+   "proposed": "Keep the approved text when quality.tier === \"sharp\". In the other three tiers render \"What would make this ICP specific · {passed} of 8 criteria met\". Count against the eight scored criteria only: `const scored = quality.checks.slice(0, 8)` for both the count and the denominator, and keep rendering any ninth coverage warning below the list.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-005",
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/icp-studio/v4/IcpStudioV4.tsx",
+   "line": 246,
+   "generation": "v4",
+   "state": "Default screen footer, beside 'Save this ICP'",
+   "current": "This ICP is used to score accounts in Territory · Prospecting · Signal Console · Outbound · Discovery and contributes to Readiness and sales handoff documentation.",
+   "problem": "Most of the sentence is not what the code does. Searching src/ and supabase/ for every reader of gtmos_icp_analytics, the icps table, bestSavedIcp and matchAccountToIcp: Territory Architect, Outbound Studio and Discovery Studio never read the ICP. Signal Console shows an ICP chip only on its previous and oldest account cards (src/signal-console/ds/components/AccountCardDS.tsx:66, src/signal-console/components/AccountCard.tsx:39); its default screen (src/signal-console/v4) has no ICP code. Prospecting Desk does not score accounts with it; it sends the saved ICP statement as context for its web search (src/prospecting-desk/lib/research-context.ts:44, supabase/functions/prospecting-research/_shared.ts:552). Readiness (src/dashboard/lib/readiness-aggregator.ts:84-97) and the sales handoff (src/founding-gtm/lib/cross-room.ts:98) do read saved ICPs. 'This ICP' is also wrong in a workspace with several saved ICPs: other areas pick the saved ICP with the highest stored score, not the one on screen (see ICP-012). A first-time user is told five areas score their accounts against this definition; none of the five default screens does.",
+   "governing": "COPY_STANDARD.md §21 (claims discipline) and §13 (product copy states what the system does); original record INV-0255 (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/01_USER_FACING_COPY_INVENTORY.json records[255]); AUDIT_BRIEF §5 ('copy that now claims something the code does not do')",
+   "proposed": "\"A saved ICP guides account searches in Prospecting Desk and counts toward Readiness and the sales handoff documentation.\" (render 'Prospecting Desk' in the existing <b>). OWNER DECISION: if Territory Architect, Signal Console's default screen, Outbound Studio and Discovery Studio are meant to score or filter by the ICP, that behavior has to be built; the sentence can name them once it exists.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-006",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/icp-studio/lib/builders.ts",
+   "line": 78,
+   "generation": "shared",
+   "state": "Previous screen (?v4=0): FOCUS card after a number is typed in 'Working-list size'. Oldest screen (?v4=0&ds=0): 'FOCUS RECOMMENDATION' output after a number is typed in 'Active accounts (optional)' or a template button is clicked (every template sets a number). Not rendered on the default screen, which calls buildFocus(role, null).",
+   "current": "n <= 20: `Work ${n} active accounts over the next 30 days, using the target you entered. Rank them and review the order weekly.` (line 78); n > 20: `Work ${n} active accounts over the next 30 days, using the target you entered. Keep the top ${ranked} ranked and review the order weekly.` (line 79). Executed: \"Work 1 active accounts over the next 30 days, using the target you entered. Rank them and review the order weekly.\"; \"Work 85 active accounts over the next 30 days, using the target you entered. Keep the top 20 ranked and review the order weekly.\"",
+   "problem": "'Rank them' and 'Keep the top 20 ranked' ask the user to rank, which the owner ruled out; neither says what to order the accounts by. With a target of 1 the sentence reads 'Work 1 active accounts … Rank them'. The original v4 line ('Maintain a ranked top-20 and rotate weekly', inventory records[2695]) was reworded but kept the instruction to rank.",
+   "governing": "COPY_STANDARD.md §26 '\"Rank\" describes what the product does, never what the user does' (owner 2026-11-09: \"I don't like it in language associated with inputs/things the user is doing\"); AUDIT_BRIEF §3 disputed terms, row rank / ranked / ranking; area instruction for this audit (lib/builders.ts \"Rank them and review the order weekly\" asks the user to rank)",
+   "proposed": "n <= 20: `Work ${n} active ${n === 1 ? \"account\" : \"accounts\"} over the next 30 days, using the target you entered. Review each of them every week.` n > 20: `Work ${n} active accounts over the next 30 days, using the target you entered. Each week, review the ${ranked} accounts with the highest priority scores in Signal Console.` (Signal Console is where the product orders watched accounts by priority score, so the ordering is described as something the product does.) Update the doc comment at builders.ts:63-64 to match.",
+   "testsAffected": [
+    "src/icp-studio/lib/builders.test.ts:62 (expects \"top 20 ranked\")"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-007",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/icp-studio/v4/IcpStudioV4.tsx",
+   "line": 232,
+   "generation": "v4",
+   "state": "Default screen whenever 'Who owns the problem (role)' is empty: a new workspace, and every workspace whose only ICP came from onboarding (onboarding stores a sentence, no buyer field)",
+   "current": "{t(\"Buying group minimum:\")} <b>{group.join(\" + \")}</b> — {t(\"a smaller group may not include the roles needed to evaluate and approve the purchase.\")} is rendered whenever group.length > 0 (lines 230-234). buildBuyingGroup(\"\") returns [\"Select a Primary Buyer to populate buying-group minimum.\"] (src/icp-studio/lib/builders.ts:97), so the screen reads: \"Buying group minimum: Select a Primary Buyer to populate buying-group minimum. — a smaller group may not include the roles needed to evaluate and approve the purchase.\"",
+   "problem": "An instruction is printed inside a sentence that is built for a list of roles, so the line does not parse (elliptical / broken generated sentence). The instruction names a control this screen does not have: there is no 'Primary Buyer' menu to select from; the field is a text box labelled 'Who owns the problem (role)'. Smaller point in the populated state: roles are joined with ' + ' while one role contains a plus sign (\"… + Security/IT (risk review) + Finance (pricing + terms)\"), so the reader cannot tell where one role ends.",
+   "governing": "comprehension principle (AUDIT_BRIEF §1: a first-time user should understand what to do next and where); AUDIT_BRIEF §5 dimensions 7 and 9 (paratactic compression, elliptical syntax); original inventory record 2236 (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/01_USER_FACING_COPY_INVENTORY.json records[2236], 'Buying group minimum: …', retain unless context requires change)",
+   "proposed": "In IcpStudioV4.tsx render the roles sentence only when `buyer` is non-empty and join the roles with \", \" (\"Buying group minimum: Economic buyer (budget owner), Primary owner (your selected buyer), … Finance (pricing + terms) — a smaller group may not include the roles needed to evaluate and approve the purchase.\"). When `buyer` is empty render: \"Enter who owns the problem to see the minimum buying group.\" In src/icp-studio/lib/builders.ts:97 (still shown as the single list item in the BUYING GROUP card of the previous screen and the BUYING GROUP MINIMUM output of the oldest screen, where the control is a 'Primary buyer' menu) change the prompt to \"Choose a primary buyer to see the minimum buying group.\"",
+   "testsAffected": [
+    "src/icp-studio/lib/builders.test.ts:96 and :102 (assert the prompt text \"Select a Primary Buyer to populate buying-group minimum.\")"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-008",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/icp-studio/lib/builders.ts",
+   "line": 53,
+   "generation": "shared",
+   "state": "The ICP statement: the page headline (h1) on the default screen once all seven fields are filled; 'THE ICP' card on the previous screen; 'NARROW ICP STATEMENT' and the hero on the oldest screen. It is also stored as the saved ICP's statement and sent by Prospecting Desk with each account search (src/prospecting-desk/lib/research-context.ts:59-60).",
+   "current": "`We target ${industry} companies (${size}, ${geo}) where the ${buyer} owns ${pain}. The proposed buying trigger is ${trigger.toLowerCase()}, and the planned value-validation period is ${proofWindow}.` Executed with the default screen's own placeholder examples as input: \"We target B2B SaaS companies (200–800, North America) where the Head of RevOps owns Can't trust their forecast. The proposed buying trigger is a missed quarter, a new cro, and the planned value-validation period is One quarter.\" Enterprise demo headline: \"… where the VP Talent Acquisition owns Seasonal or standing volume hiring outrunning the recruiting team; screening by gut at scale. The proposed buying trigger is a public hiring wave — …\"",
+   "problem": "(1) trigger.toLowerCase() rewrites the user's words: 'a new CRO' becomes 'a new cro', 'SOC 2 audit' becomes 'soc 2 audit', and the seeded ICP trigger 'A new CHRO/CPO or a people-org restructuring…' would read 'a new chro/cpo…'. (2) The problem text is dropped in after 'owns' unchanged. The template was written for the older screens' menu values (noun phrases such as 'Cost control / spend leakage'); on the default screen the field is free text, so the sentence carries a capital in mid-sentence ('owns Seasonal or standing volume hiring…' in the enterprise demo, 'owns Opening crews…' in the SMB demo) and does not parse when the problem is written the way the placeholder shows ('owns Can't trust their forecast.'). (3) 'the planned value-validation period' is a third name for the field the same screen labels 'Time to demonstrate value' (see ICP-009).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md 'Implementation principle' (a dynamically generated sentence is fixed in the generator); AUDIT_BRIEF §5 Generation (deterministic builders) and dimension 9 (elliptical syntax); COPY_STANDARD.md §2 (literal nouns, one name per concept)",
+   "proposed": "Keep the user's words exactly as typed and place each after a label, so casing and phrasing cannot break the sentence: `We target ${industry} companies (${size}, ${geo}) where the ${buyer} owns this problem: ${pain}. Proposed buying trigger: ${trigger}. Planned time to demonstrate value: ${proofWindow}.` (strip a trailing period from each typed value first). Result for the enterprise demo: \"We target Retail / Food Service / Aviation / Logistics companies (10,000+ employees, North America) where the VP Talent Acquisition owns this problem: Seasonal or standing volume hiring outrunning the recruiting team; screening by gut at scale. Proposed buying trigger: A public hiring wave — seasonal ramp, production rebuild, expansion announcement. Planned time to demonstrate value: 30-60 days.\" Statements already saved are not rewritten.",
+   "testsAffected": [
+    "src/icp-studio/lib/builders.test.ts:40 (expects lower-cased \"hiring spike\")",
+    "src/icp-studio/lib/builders.test.ts:44 (expects \"planned value-validation period\")",
+    "src/icp-studio/lib/builders.test.ts:48-55 (\"lowercases the trigger inside the sentence (legacy parity)\" expects \"big trigger\" and not \"BIG TRIGGER\")"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-010",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/icp-studio/lib/builders.ts",
+   "line": 139,
+   "generation": "shared",
+   "state": "Quality criterion for the primary buyer on all three screens, when the typed buyer role contains one of the listed letter sequences (default screen: 'Who owns the problem (role)' text box; older screens: 'Other (type)')",
+   "current": "const BROAD_LANGUAGE_RE = /(anyone|everyone|multiple|various|several|committee|leadership team|all buyers|all teams|whoever|general)/; (lines 139-140) tested against the lower-cased buyer with no word boundaries; when it matches, src/icp-studio/lib/quality.ts:92 emits \"The primary buyer is still broad. Name one role that owns the problem.\" and awards 8 points instead of 15. Executed: containsBroadLanguage(\"General Counsel\") → true; \"General Manager\" → true; \"Attorney General\" → true; \"VP of General Merchandise\" → true.",
+   "problem": "A buyer who is one named role is told the buyer is broad and to 'name one role', and the ICP loses 7 points, which can lower the tier (for example 85 'highly specific' → 78 'well defined'). General Counsel is the standard buyer for the legal category the product ships a Discovery framework for. The criterion text states a judgment the code did not make: it only found the letters 'general' inside the role.",
+   "governing": "AUDIT_BRIEF §5 Function (scoring thresholds; copy that claims something the code does not do); COPY_STANDARD.md §21 (claims discipline)",
+   "proposed": "builders.ts:139-140 → `const BROAD_LANGUAGE_RE = /\\b(anyone|everyone|multiple|various|several|committee|leadership team|all buyers|all teams|whoever|in general|generally)\\b/;` Add cases to the existing `describe(\"containsBroadLanguage\")` block in src/icp-studio/lib/builders.test.ts: \"General Counsel\", \"General Manager\" and \"Attorney General\" → false; \"the leadership team\" and \"buyers in general\" → true.",
+   "testsAffected": [
+    "src/icp-studio/lib/builders.test.ts:164-185 (containsBroadLanguage block; existing cases keep passing)",
+    "src/icp-studio/lib/quality.test.ts:140-151 (leadership-team case keeps passing)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-011",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/icp-studio/lib/quality.ts",
+   "line": 84,
+   "generation": "shared",
+   "state": "Default screen: quality criteria for Geography, Company size and Time to demonstrate value, which are free-text boxes there (the older screens use fixed menus whose values these checks were written against)",
+   "current": "quality.ts compares typed text with exact menu values: size === \"5,000+ employees\" (line 65); geo === \"Global\" (75); geo === \"North America\" || \"EMEA\" || \"APAC\" (77-81); proofWindow === \"7 days\" || \"14 days\" (113). Anything else non-empty gets the full-credit text, e.g. line 84 \"Geography is specific enough to assign account coverage.\" Executed: geo \"Global\" → \"Global coverage is broad for an initial 30-day account set.\"; geo \"global\", \"Worldwide\" or \"NA\" → \"Geography is specific enough to assign account coverage.\"; geo \"North America\" → warning, \"north america\" → full credit. Size \"5,000+ employees\" → warning; the enterprise demo ICP's \"10,000+ employees\" and \"25,000+ employees\" → \"Company-size band is defined.\" Industry \"Any\" (two seeded demo ICPs) → \"Industry is defined. A target-account list can be built from it.\"",
+   "problem": "On the default screen the criteria state an assessment the code did not make. 'Geography is specific enough to assign account coverage' is shown for any typed text that is not one of four exact strings, including 'Worldwide'. Whether the user gets a warning depends on capitalisation and on typing the exact wording of a menu they never see. The same ICP typed two ways gets two scores and can land in different tiers.",
+   "governing": "COPY_STANDARD.md §21 (claims discipline: copy must not be more precise than the evidence); AUDIT_BRIEF §5 Function (scoring thresholds; a number that no longer matches its formula)",
+   "proposed": "Without changing any score: quality.ts:84 → \"Geography is defined.\" (true for any typed value, and parallel to \"Company-size band is defined.\"). OWNER DECISION: make the three comparisons tolerant of typed input — compare case-insensitively after trimming; treat 'global', 'worldwide', 'international' and 'all regions' as Global; treat 'north america', 'na', 'emea', 'europe', 'apac' and 'asia' as a region; apply the enterprise-range warning to any open-ended size of 5,000 or more ('5,000+', '10,000+', '25,000+'); read the time to demonstrate value as a duration (14 days or less, or 2 weeks or less, counts as short). This changes scores for typed ICPs: the enterprise demo ICP would get the size warning (3 points lower).",
+   "testsAffected": [
+    "src/icp-studio/lib/quality.test.ts:112-191 (per-check arithmetic cases use the exact menu values and keep passing)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-012",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/icp-studio/state.ts",
+   "line": 155,
+   "generation": "shared",
+   "state": "Any workspace with more than one saved ICP (both demo books have three): which ICP the default ICP Studio screen opens on, compared with the ICP that Signal Console's ICP chip (previous and oldest account cards) and Prospecting Desk's search context use",
+   "current": "Three selection rules for 'the' ICP. (a) ICP Studio: hydrateDraftFromLatest takes icps[icps.length - 1], the last element of the array (state.ts:155); the cloud list it is fed is loaded with no ordering (src/icp-studio/lib/cloud-persistence.ts:74, `client.icps.list({ limit: 500 })`). (b) Signal Console: bestSavedIcp takes the highest stored qualityScore, ties broken by the later updatedAt (src/signal-console/lib/icp-match.ts:107-117). (c) Prospecting Desk: readIcpSummary takes the highest stored qualityScore, first row on ties (src/prospecting-desk/lib/research-context.ts:49-56). Executed on the demo seeds: ICP Studio shows 'Frontline Volume Hirers' (Retail / Food Service / Aviation / Logistics) and 'Expansion-Wave Consumer' (Food service / DTC / CPG); bestSavedIcp returns icp_e2 'AI / Software / Data' and icp_s2 'Software / AI', because the seeded rows carry no qualityScore or updatedAt and every tie goes to the first row.",
+   "problem": "The ICP the user sees and edits in ICP Studio is not necessarily the one other areas use. In the enterprise demo the previous Signal Console cards rate accounts against the AI / Software ICP (OpenAI, Databricks, Palantir get the match chip) while ICP Studio lists the same accounts under 'do not match'. For a real user, every Save adds a new record (ICP-013); an older version with a higher stored score keeps being used by Signal Console and Prospecting Desk after the user has changed the ICP. 'Most recent' in ICP Studio depends on array position, and the cloud list has no ORDER BY, so which record opens can change between sessions.",
+   "governing": "AUDIT_BRIEF §4 owner decision 'Numbers shown in more than one area come from the area that owns them'; AUDIT_BRIEF §5 Function (recommendation selection, cross-area handoffs)",
+   "proposed": "The default screen makes no wrong statement about this once ICP-005 is applied ('A saved ICP …' instead of 'This ICP …'). Repair without a product decision: make ICP Studio's own choice deterministic — in state.ts hydrateDraftFromLatest pick the record with the latest updatedAt (the ordering recentIcps already uses at state.ts:116-126), keeping the last array element on ties so the demo books still open on the same ICP. OWNER DECISION: which saved ICP the rest of the app should use when several exist — the one most recently saved in ICP Studio (recommended, so an edit takes effect everywhere) or the highest-scoring one (today's rule in Signal Console and Prospecting Desk). Whichever is chosen, export one selector from src/icp-studio/lib and use it in bestSavedIcp and readIcpSummary so all areas agree.",
+   "testsAffected": [
+    "src/icp-studio/state.test.ts (no test covers hydrateDraftFromLatest ordering today; add one)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-013",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/icp-studio/v4/IcpStudioV4.tsx",
+   "line": 92,
+   "generation": "v4",
+   "state": "Default screen, after clicking 'Save this ICP' (not exercised by any walkthrough on the default screen; the previous-screen walkthrough shows the same save path: 'ICP STUDIO · 3 SAVED' becomes 'ICP STUDIO · 4 SAVED' after one click)",
+   "current": "function save(): void { const icp = saveDraftAsIcp(); if (icp) void saveIcp(icp); } (lines 92-95). saveDraftAsIcp always builds a new record with a new id and appends it (src/icp-studio/state.ts:255, :271), adds 1 to totalWorked (:272), and saveIcp inserts a new cloud row because the id is not a uuid (src/icp-studio/lib/cloud-persistence.ts:144-147). The default screen renders nothing in response: no 'Saved' text, no change to the button.",
+   "problem": "(1) The user cannot tell whether the click saved anything. The only visible change is a side effect of ICP-001 (the eighth criterion changes because the save counter went up). The oldest screen confirms a save ('Saved · {industry} ({score}/100).', src/icp-studio/components/WorkArea.tsx:435); the default screen dropped it. (2) Every click stores another copy, including when nothing was edited. The default screen has no list of saved ICPs and no delete, so the copies cannot be seen or removed there, but other areas count them: Readiness reports the number of saved ICPs ('{n} ICP defined', src/lib/readiness/dimensions.ts:39) and the sales handoff reads all of them (src/founding-gtm/lib/cross-room.ts:98).",
+   "governing": "AUDIT_BRIEF §5 States (success state) and Function (dedupe/upsert); comprehension principle (the user should know what happened and what to do next)",
+   "proposed": "In IcpStudioV4.tsx keep a local `saved` flag: after a successful save render beside the button, with role=\"status\", \"ICP saved.\"; clear it on the next edit. Do not create a record when nothing changed: in save(), compare the seven fields and the role with the latest saved ICP and, when they are identical, skip saveDraftAsIcp and show \"No changes to save.\" OWNER DECISION: whether saving an edited ICP on the default screen should update the existing record (one current ICP per workspace) or keep adding versions; if versions are kept, the default screen needs a place to see and delete them, as the two older screens have.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "ICP-014",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/icp-studio/v4/IcpStudioV4.tsx",
+   "line": 108,
+   "generation": "v4",
+   "state": "Default screen in a real workspace straight after onboarding (the ICP exists only as the sentence assembled in onboarding). Not in any walkthrough — the demo books are seeded with structured ICPs; derived from source and from running the quality engine on the empty draft.",
+   "current": "Onboarding stores the ICP as { id, name, statement, pain: \"\", qualityScore: 78, qualityBand: \"ready\", … } with no industry, size, geography, buyer, trigger or time field (src/onboarding/seeding/lib/seed-writer.ts:64-76; the older onboarding flow stores qualityScore 60, src/onboarding/lib/seed.ts:157-169). parseSavedIcp reads the missing fields as empty (src/icp-studio/lib/persistence.ts:53-93) and hydrateDraftFromLatest therefore fills nothing (src/icp-studio/state.ts:149-170). The default screen then renders: pill \"ICP quality: too broad\"; headline \"Complete the criteria below to create one ICP definition that can be used consistently across the workspace.\"; \"WHY THIS ICP IS SPECIFIC · 0 OF 8 CRITERIA\" over seven ✕ rows; no account-match area (no industry or geography to compare); the broken buying-group line (ICP-007). The saved statement is not rendered anywhere on the default screen.",
+   "problem": "The user has just written their ICP in onboarding ('Your ICP — in your words … Account research will be checked against this.') and the page that owns the ICP does not show it and rates the workspace's ICP 'too broad', 0 of 8. Two areas then disagree about the same number: Readiness reads the stored 78 and reports 'Best ICP quality: 78/100' (src/lib/readiness/dimensions.ts:48-55), a score the ICP quality engine never produced, while ICP Studio shows 0. In a signed-in workspace the stored score also changes when ICP Studio is opened: onboarding's cloud copy is inserted without a score (src/onboarding/seeding/lib/cloud-mirror.ts:77-82, data: { source }), ICP Studio loads cloud rows as the source of truth (src/icp-studio/lib/cloud-persistence.ts:74-78; src/icp-studio/lib/icp-bridge.ts:136 reads the absent score as 0) and its persistence effect writes them back to gtmos_icp_analytics (src/icp-studio/state.ts:285-296), so Readiness drops from 78 to 0 ('Complete the missing ICP criteria; current quality is below 75/100') because the page was visited. The cloud half of this was traced in source, not executed against a database.",
+   "governing": "AUDIT_BRIEF §4 owner decision 'Numbers shown in more than one area come from the area that owns them'; AUDIT_BRIEF §5 Function (persistence, downstream handoffs, stored shapes); comprehension principle (a first-time user should understand what they see and why a conclusion was reached)",
+   "proposed": "Smallest change on the default screen, no scoring change: when none of the seven fields is filled and the latest saved ICP has a statement, render that statement as the headline with the line \"This is the ICP you wrote during setup. Enter the seven criteria below to rate it and to compare your watched accounts with it.\"; in that state show the pill as \"ICP criteria not entered\" instead of \"ICP quality: too broad\" (and use the non-top-tier heading from ICP-004). OWNER DECISION: (1) onboarding already collects the buyer role, the company-size band and the trigger as three separate answers (src/onboarding/seeding/lib/icp.ts:26-57) — store them in the ICP record's buyer, size and trigger fields so ICP Studio opens with three criteria filled; (2) replace the fixed 78 (and 60) with the score the ICP quality engine gives the stored fields, and write the same data into the cloud row, so Readiness and ICP Studio show one number and opening ICP Studio no longer changes it.",
+   "testsAffected": [
+    "src/onboarding/seeding/lib/seed-writer.test.ts and src/onboarding/seeding/lib/cloud-mirror.test.ts (only if the owner approves storing structured fields or a computed score)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "ICP-016",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/icp-studio/lib/quality.ts",
+   "line": 152,
+   "generation": "shared",
+   "state": "Quality summary under the headline on the default screen (and under the quality chip on the previous screen, in the docket on the oldest screen) when the ICP is 'too broad' or 'partially defined'. A new workspace shows the first one.",
+   "current": "Too broad (lines 151-152): \"The ICP is missing enough specificity that downstream account qualification still requires substantial interpretation.\" Partially defined (167-168): \"Several ICP criteria are present, but downstream qualification still requires interpretation.\"",
+   "problem": "Both sentences replace the old dialect with abstract nouns instead of a plain statement (semantic compression; awkward literalism of the kind the semantic-damage review looks for). 'Downstream' is workflow shorthand, and 'requires substantial interpretation' does not say what goes wrong or what to do. This is the first sentence a new user reads about their ICP.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md item 10 (semantic-damage review: awkward literalism, generic wording); COPY_STANDARD.md §23 (what not to replace this style with) and §2 (literal nouns and verbs)",
+   "proposed": "Too broad: \"Too many criteria are missing to tell which accounts qualify. Fill in the missing criteria below.\" Partially defined: \"Some criteria are defined, but not enough to tell consistently which accounts qualify.\"",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "ICP-017",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/icp-studio/v4/IcpStudioV4.tsx",
+   "line": 168,
+   "generation": "v4",
+   "state": "Default screen, account-match area, right column when every scored account is a strong or partial match (no account in the 'do not match' group)",
+   "current": "No accounts are currently excluded. Review whether the ICP criteria are specific enough to distinguish target accounts.",
+   "problem": "'Excluded' suggests the ICP removes accounts from something; nothing is excluded anywhere in the product, and the rest of the area says 'do not match'. A reader has to decide whether 'excluded' and 'do not match' are two different things (private term for an ordinary concept; inconsistent naming).",
+   "governing": "COPY_STANDARD.md §2 (most literal noun and verb that describes the product behavior); comprehension principle",
+   "proposed": "Every watched account matches this ICP at least partly. Check whether the criteria are specific enough to tell target accounts apart.",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "ICP-018",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/icp-studio/lib/builders.ts",
+   "line": 82,
+   "generation": "shared",
+   "state": "'Recommended focus' block on the default screen (always, because the default screen passes no account target); FOCUS card / FOCUS RECOMMENDATION on the older screens while no working-list size is entered",
+   "current": "Line 82: \"Founder-led default: focus 60-120 active accounts for the next 30 days. If personalization is heavy, start at 60.\" Line 84: \"First AE default: focus 120-220 active accounts for the next 30 days. Start lower if research depth is high.\"",
+   "problem": "'focus 60-120 active accounts' drops the preposition or uses 'focus' as a transitive verb (elliptical syntax). On the default screen the button that produces the second sentence is labelled 'The first seller hired' while the sentence says 'First AE', so the same role has two names side by side. 'If personalization is heavy' and 'if research depth is high' compress the condition into abstract nouns.",
+   "governing": "AUDIT_BRIEF §5 dimension 9 (elliptical syntax) and dimension 1 (semantic compression); COPY_STANDARD.md §2",
+   "proposed": "Line 82: \"Founder-led default: work 60-120 active accounts over the next 30 days. If each message is heavily personalized, start at 60.\" Line 84: \"First seller (AE) default: work 120-220 active accounts over the next 30 days. Start lower if each account needs deep research.\"",
+   "testsAffected": [
+    "src/icp-studio/lib/builders.test.ts:75 and :88 (expect \"First AE default\")"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "ICP-019",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/icp-studio/lib/quality.ts",
+   "line": 123,
+   "generation": "shared",
+   "state": "Eighth quality criterion (working-list size). Previous screen at rest in both demo books (walkthrough: \"No working-list size is recorded yet. Add or size the initial account set to evaluate coverage.\"); oldest screen ledger row 8; default screen in a workspace that has never saved an ICP.",
+   "current": "Line 123: \"No working-list size is recorded yet. Add or size the initial account set to evaluate coverage.\" Line 127: \"Working-list size is within the current focused 30-day range.\" Line 131: \"The working account list is too broad for the current focused 30-day range.\"",
+   "problem": "'Add or size the initial account set to evaluate coverage' does not tell the user what to do: 'size' is used as a verb, 'the initial account set' is not a thing named anywhere on the screen, and the control that answers it is labelled 'Working-list size' (previous screen) or 'Active accounts (optional)' (oldest screen). 'The current focused 30-day range' refers to a range the user is never shown (the code's thresholds are 20 to 160 accounts for full credit and 220 as the upper limit). High-context dependence; semantic compression.",
+   "governing": "COPY_STANDARD.md §14 (number + unit; microcopy more literal than marketing copy) and §20 (if the product knows the measure, name it); comprehension principle",
+   "proposed": "Line 123: \"No working-list size is recorded. Enter how many accounts you plan to work in the next 30 days.\" Line 127: \"The working list is within the 20 to 160 accounts suited to a focused 30-day plan.\" Line 131: \"The working list is above 220 accounts, which is more than a focused 30-day plan can cover.\" (On the default screen this criterion needs ICP-001 first: it has no field in which to enter the number.)",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "ICP-020",
+   "category": "A11Y",
+   "severity": 1,
+   "file": "src/icp-studio/v4/IcpStudioV4.tsx",
+   "line": 132,
+   "generation": "v4",
+   "state": "Default screen: criteria list, match bar, role buttons, empty fields, disabled Save button",
+   "current": "Criteria marks are bare characters with colour (line 132: \"✓\" / \"!\" / \"✕\"). In the match bar the strong and partial segments are a bare number on a coloured block (lines 144-145: blue = strong, amber = partial); only the grey segment has words. The role buttons mark the selected one with a CSS class only (lines 178-191, `is-on`). Empty fields are shown with a red border and no text (class `is-miss`, lines 194-224); in a new workspace all seven fields are red before anything is typed. 'Save this ICP' is disabled until all seven fields are filled and gives no reason (line 248).",
+   "problem": "Status is carried by colour or glyph alone. A screen reader announces 'check mark', 'exclamation mark', 'multiplication sign' and two unlabelled numbers; it cannot tell which role is selected or why Save is unavailable. A sighted first-time user has to infer that amber means partial and that the red boxes are the reason Save is greyed out.",
+   "governing": "AUDIT_BRIEF §5 States (validation; `aria-label`, `title`) and category A11Y; comprehension principle",
+   "proposed": "Line 132: add a visually hidden label after the glyph — \"Met\", \"Needs attention\", \"Missing\" (or put the glyph in aria-hidden and the word in an sr-only span). Lines 144-145: add aria-label and title \"{n} strong matches\" / \"{n} partial matches\" to the two segments. Lines 178-191: add aria-pressed={d.role === \"founder\"} / aria-pressed={d.role === \"firstae\"}. Line 248: when disabled, add title and an sr-only description \"Fill in all seven fields to save.\"",
+   "testsAffected": [],
+   "confidence": "medium"
+  }
+ ],
+ "dispositions": [],
+ "retained": [],
+ "gaps": []
+}

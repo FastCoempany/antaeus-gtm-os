@@ -1,0 +1,165 @@
+{
+ "area": "cold-call-studio",
+ "coverage": [
+  {
+   "surface": "Cold Call Studio default screen (v4)",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/cold-call-studio/v4/ColdCallStudioV4.tsx",
+    "src/cold-call-studio/v4/lib/custom-pushbacks.ts",
+    "src/cold-call-studio/lib/threads.ts",
+    "src/cold-call-studio/lib/personalize.ts",
+    "src/cold-call-studio/state.ts"
+   ],
+   "note": "Read all of ColdCallStudioV4.tsx and custom-pushbacks.ts; checked against the SMB walkthrough (at rest, every account selected, empty selection, add-buyer-response row, every outcome button and its toast). Toast after save of a custom response and remove-button behavior read from source only."
+  }
+ ],
+ "findings": [
+  {
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/cold-call-studio/lib/handoff.ts",
+   "line": 136,
+   "generation": "shared",
+   "state": "v4 'Booked a meeting' button (subtitle 'Creates a deal in Deal Workspace') and toast 'Meeting booked. A deal was created for {account}.'; DS flash 'Meeting booked \u2014 a deal was created.'; legacy empty state 'creates a new deal automatically'",
+   "current": "createDealFromCall appends a deal only to localStorage key gtmos_deal_workspaces. Deal Workspace loadDeals (src/deal-workspace/lib/persistence.ts:81-107) uses cloud rows whenever the workspace has at least one deal and reads the localStorage mirror only when the cloud returns 0 rows or throws; publishExternalState then rewrites gtmos_deal_workspaces from the cloud deals, erasing the appended deal. The v4 toast (ColdCallStudioV4.tsx:91) is shown whether or not createDealFromCall succeeded (state.ts:187 ignores its return value). Booking twice for the same account appends a second deal with no dedupe.",
+   "problem": "For any signed-in workspace that already has cloud deals, the copy tells the seller a deal now exists in Deal Workspace, but the deal never reaches the deals table and is overwritten the next time Deal Workspace loads. The seller is misled about where their booked meeting went, and downstream areas (Dashboard, Future Autopsy, Quota coverage) that read the cloud deals never see it.",
+   "governing": "CLAUDE.md \u00a74.9 'Flows out: on a booked meeting, creates a Deal'; Batch 03 exact replacement 'A booked meeting creates a deal automatically' (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md); comprehension principle (copy must not claim what the code does not do)",
+   "proposed": "Make createDealFromCall also insert through the data client when one is booted: in state.logCall (or the v4/DS/legacy call sites), after the localStorage append call `createDataClient().deals.insert({ account_name: accountName, stage: 'prospect', value: 0, next_step: 'First meeting from cold call', ... })` via the deal-bridge `dealToDbWrite` shape, catching errors with reportError; skip if an open deal for the same account name already exists. Return a success flag from logCall and only show 'A deal was created for {account}' when the write succeeded; otherwise show 'Meeting logged. Add the deal for {account} in Deal Workspace.'",
+   "testsAffected": [
+    "src/cold-call-studio/lib/handoff.test.ts",
+    "src/cold-call-studio/state.test.ts"
+   ],
+   "confidence": "high",
+   "id": "CCS-001"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/cold-call-studio/v4/ColdCallStudioV4.tsx",
+   "line": 103,
+   "generation": "v4",
+   "state": "v4 call plan, buyer reply 'Who is this?' (SMB walkthrough: '[Your name] with [your company]. I am calling about\u2026')",
+   "current": "const ctx = { accountName: account?.name ?? \"\", topSignal: account?.topSignal ?? \"\" }; \u2014 companyName is not passed, so personalize() always substitutes the placeholder '[your company]'. The DS surface passes companyName and renders '[Your name] with Luca Industries.' for the same seed (DS walkthrough).",
+   "problem": "Regression in the default screen: the seller's company name, already stored in gtmos_playbook.company and loaded into the companyName signal at boot, is dropped, so the suggested line keeps a fill-in-the-blank the product could have filled.",
+   "governing": "comprehension principle; parity with src/cold-call-studio/ds/components/ThreadConsole.tsx:237-241",
+   "proposed": "Import companyName from ../state and use `const ctx = { accountName: account?.name ?? \"\", topSignal: account?.topSignal ?? \"\", companyName: companyName.value };`",
+   "confidence": "high",
+   "testsAffected": [],
+   "id": "CCS-002"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/cold-call-studio/lib/types.ts",
+   "line": 81,
+   "generation": "shared",
+   "state": "v4 after clicking 'Not interested' / 'Callback requested' / 'Referral provided' (SMB walkthrough: toast 'Logged: rejected.', 'Logged: callback scheduled.', 'Logged: referral.'; summary 'most recent: Sweetgreen (rejected)'); DS and legacy outcome buttons and call history",
+   "current": "OUTCOME_LABELS = { meeting_booked: \"meeting booked\", callback_scheduled: \"callback scheduled\", referral: \"referral\", voicemail: \"voicemail\", rejected: \"rejected\", hung_up: \"hung up\", no_answer: \"no answer\", logged: \"logged\" }; v4 overrides only the button text (ColdCallStudioV4.tsx:234, 244) while the toast (line 93) and recent-calls line (line 261) use OUTCOME_LABELS.",
+   "problem": "The seller clicks 'Not interested' and is told 'Logged: rejected.' \u2014 a different word with an unclear subject (who rejected whom?). 'Callback requested' becomes 'callback scheduled', which claims a scheduled time that was never captured. The confirmation does not match the action, so the reader has to work out whether the right outcome was saved.",
+   "governing": "COPY_STANDARD.md \u00a717 (state labels name the observable condition); comprehension principle",
+   "proposed": "Change OUTCOME_LABELS values to: meeting_booked \"meeting booked\", callback_scheduled \"callback requested\", referral \"referral provided\", voicemail \"voicemail\", rejected \"not interested\", hung_up \"hung up\", no_answer \"no answer\", logged \"call logged\" (keys unchanged), and drop the v4 special-casing at lines 234 and 244 so button, toast and history use one label.",
+   "testsAffected": [
+    "tests/e2e/program-6-pr10-cold-call-studio-walk.spec.ts (check for outcome-label assertions)"
+   ],
+   "confidence": "high",
+   "id": "CCS-003"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/cold-call-studio/v4/ColdCallStudioV4.tsx",
+   "line": 257,
+   "generation": "v4",
+   "state": "v4 'Recorded' line after one call (SMB walkthrough: 'Recorded: 1 meetings booked', '1 calls \u00b7 100% resulted in a booked meeting')",
+   "current": "{stats.meetings} {t(\"meetings booked\")} \u2026 <b>{stats.total}</b> {t(\"calls\")}",
+   "problem": "Fixed plurals produce '1 meetings booked' and '1 calls'.",
+   "governing": "comprehension principle",
+   "proposed": "Use singular/plural: `${stats.meetings} ${stats.meetings === 1 ? 'meeting booked' : 'meetings booked'}` and `${stats.total} ${stats.total === 1 ? 'call' : 'calls'}` (wrap each phrase in t()).",
+   "confidence": "high",
+   "testsAffected": [],
+   "id": "CCS-004"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/cold-call-studio/state.ts",
+   "line": 157,
+   "generation": "shared",
+   "state": "any outcome logged from the v4 default screen; the saved entry later shown in the DS 'CALL MEMORY' rows and legacy call table (DS walkthrough row: 'Boeing Ask permission first. The first win is a yes to 20 seconds. meeting booked'), and stored in discovery_call_logs.data.threadTitle",
+   "current": "logCall freezes findThread(activeThread.value).title. v4 never changes activeThread (setSelectedAccount sets it to 'opener'), so every v4-logged call is saved with threadId 'opener' and threadTitle 'Ask permission first. The first win is a yes to 20 seconds.'",
+   "problem": "The call history records a step the seller never chose, implying every call ended at the opener. Anyone reading the log (fallback screens, cloud rows, Founding GTM cross-room reads of the log) sees a false record of where the call went.",
+   "governing": "comprehension principle (data shown must match what happened)",
+   "proposed": "Give logCall an option to omit the step: `logCall(outcome, now, { recordStep: false })` stores threadTitle \"\" and buyerResponse/recommendedResponse \"\" (threadId may stay 'opener' for type compatibility); v4 calls it with recordStep:false; CallMemoryDS and legacy CallMemory render the step cell only when threadTitle is non-empty.",
+   "testsAffected": [
+    "src/cold-call-studio/state.test.ts"
+   ],
+   "confidence": "high",
+   "id": "CCS-005"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/cold-call-studio/v4/ColdCallStudioV4.tsx",
+   "line": 263,
+   "generation": "v4",
+   "state": "v4 after any meeting has ever been booked: link 'Open Deal Workspace \u2192'; DS Wayfinder 'Work the deal {account}' (src/cold-call-studio/ds/lib/adapters.ts:450-461)",
+   "current": "Both link to hrefToDealWorkspace(selectedAccount.name) whenever callStats.meetings > 0 \u2014 i.e. the account currently selected in the dropdown (auto-selected highest-priority account on load), not the account the meeting was booked with.",
+   "problem": "After booking with Sweetgreen and then selecting another account, or on the next visit, the link opens Deal Workspace focused on an account that has no new deal, so the seller cannot find the deal the screen says was created.",
+   "governing": "comprehension principle; CLAUDE.md \u00a72 continuity params (focusObject must name the object in focus)",
+   "proposed": "Derive the target from the most recent callLog entry with outcome 'meeting_booked' (its accountName) and label the link `Open the {account} deal in Deal Workspace \u2192`; in DS toPulling use the same account for object and href.",
+   "confidence": "high",
+   "testsAffected": [],
+   "id": "CCS-006"
+  },
+  {
+   "category": "A11Y",
+   "severity": 2,
+   "file": "src/cold-call-studio/v4/ColdCallStudioV4.tsx",
+   "line": 122,
+   "generation": "v4",
+   "state": "v4 at rest (SMB walkthrough: '(unlabelled field)' for the account select)",
+   "current": "<select class=\"cc4-acct\"> has no label or aria-label (the 'Account and contact' text is a div); contact input and notes textarea are named only by placeholder; custom-response remove button is '\u2715' with title 'remove' (line 196).",
+   "problem": "Screen-reader users hear an unnamed combo box; placeholders disappear once typed; 'remove' does not say what is removed.",
+   "governing": "comprehension principle (accessible names)",
+   "proposed": "Add aria-label={t(\"Account\")} to the select, aria-label={t(\"Contact name and role\")} to the contact input, aria-label={t(\"Call notes\")} to the textarea, and aria-label/title `Remove buyer response: ${rep.buyer}` on the \u2715 button.",
+   "confidence": "high",
+   "testsAffected": [],
+   "id": "CCS-007"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/cold-call-studio/v4/ColdCallStudioV4.tsx",
+   "line": 81,
+   "generation": "v4",
+   "state": "v4: type notes, click an outcome, select another account, click another outcome",
+   "current": "logOutcome never clears draft.notes or draft.contactName after logCall; the same notes are saved on every later call until the seller edits the field. DS (ThreadConsole.tsx:244) and legacy (TalkLoom.tsx:546) behave the same.",
+   "problem": "Notes from one call are silently attached to the next account's call in the log and in cloud rows.",
+   "governing": "comprehension principle (recorded data must match the call)",
+   "proposed": "After a successful logCall, call patchDraft({ notes: \"\" }) (and clear contactName when the account changes in setSelectedAccount).",
+   "confidence": "medium",
+   "testsAffected": [],
+   "id": "CCS-008"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/cold-call-studio/v4/ColdCallStudioV4.tsx",
+   "line": 132,
+   "generation": "v4",
+   "state": "v4 account cell when the selected account's priority score is above 75",
+   "current": "{account && account.heat > 75 ? <span class=\"cc4-hot\">{t(\"HIGH PRIORITY\")}</span> : null}",
+   "problem": "Signal Console, which owns account priority, labels an account 'High priority' only when the score is \u226578 AND the freshest signal is \u22642 days old (src/signal-console/v4/lib/attention.ts:80-88); otherwise it shows 'Priority declining'. Cold Call Studio shows HIGH PRIORITY for any score above 75, so the same account carries two different priority labels in two areas.",
+   "governing": "Owner decision: numbers shown in more than one area come from the area that owns them (AUDIT_BRIEF \u00a74); Batch 03 'HOT' \u2192 'HIGH PRIORITY'",
+   "proposed": "Show the owning number instead of a re-derived band: `Account priority {account.heat}` (same score Signal Console shows), or compute the band in account-loader with Signal Console's classifyBand and show 'HIGH PRIORITY' only when it returns 'now'.",
+   "confidence": "medium",
+   "testsAffected": [],
+   "id": "CCS-009"
+  }
+ ],
+ "dispositions": [],
+ "retained": [],
+ "gaps": []
+}

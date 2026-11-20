@@ -1,0 +1,304 @@
+{
+ "area": "briefing-pipeline",
+ "coverage": [
+  {
+   "surface": "Briefing enrichment prompt (browser source + Deno mirror)",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/briefing/lib/llm/prompts.ts",
+    "supabase/functions/briefing-pipeline/llm/_shared.ts"
+   ],
+   "note": "Read ENRICH_SYSTEM_PROMPT + buildEnrichPrompt in both; diffed. Mirror is semantically identical (only formatting/an extra blank line differs). Epistemic rules (fact/claim/speculation, no added causation) present. No live model call executed."
+  },
+  {
+   "surface": "Briefing synthesis prompts: draft / critique / revise / gate-repair, voice rules, quality gate (browser + Deno mirror)",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/briefing/lib/synthesis/prompts.ts",
+    "src/briefing/lib/synthesis/voice-rules.ts",
+    "src/briefing/lib/synthesis/quality-gate.ts",
+    "supabase/functions/briefing-pipeline/llm/synthesis-shared.ts"
+   ],
+   "note": "Read all four prompts and gate in both copies. Calibrated uncertainty permitted (MAX_HEDGING_ADVERBS deprecated, not used by gate) \u2014 approved evolution intact. Mirror drift found in critique task text and draft system prompt (see findings)."
+  },
+  {
+   "surface": "Contrarian (conflicting-evidence) prompt, parser and gate (browser + Deno mirror)",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/briefing/lib/synthesis/contrarian.ts",
+    "supabase/functions/briefing-pipeline/llm/contrarian-shared.ts",
+    "src/briefing/lib/synthesis/contrarian.test.ts"
+   ],
+   "note": "Prompt/parser/gate identical between copies; a parity test (describe.each browser vs Edge mirror) exists for the gate."
+  },
+  {
+   "surface": "Compose (lead summary) prompt and gate, Deno mirror vs src/briefing/lib/compose/lead.ts",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "supabase/functions/briefing-pipeline/llm/compose-shared.ts",
+    "src/briefing/lib/compose/lead.ts"
+   ],
+   "note": "Diffed from COMPOSE_PROMPT_VERSION onward: only comments differ."
+  },
+  {
+   "surface": "Retroactive pattern critic prompt",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "supabase/functions/briefing-pattern-critic/prompt.ts",
+    "supabase/functions/briefing-pattern-critic/index.ts"
+   ],
+   "note": "Read system + user prompt and parser; no browser twin."
+  },
+  {
+   "surface": "Briefing voice document spec and its wiring",
+   "generation": "doctrine",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "deliverables/specs/briefing/signal_console_voice_document_v0.1.md",
+    "src/briefing/lib/adapters/voice-document.ts",
+    "deliverables/specs/briefing/00-naming-note.md",
+    "CLAUDE.md"
+   ],
+   "note": "Read whole document. It is not loaded by any prompt or gate (adapter returns an uninitialized shell; grep finds no runtime reader), but CLAUDE.md \u00a74.21 and the specs naming note still name it as the binding voice authority."
+  },
+  {
+   "surface": "Watchlist trigger parser prompt, response parser, disposition (browser + Deno mirror) and its UI path (AddTriggerFlow)",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/briefing/lib/triggers/parser.ts",
+    "supabase/functions/briefing-pipeline/triggers/_shared.ts",
+    "supabase/functions/briefing-pipeline/index.ts",
+    "src/briefing/lib/watchlist-client.ts",
+    "src/briefing/components/AddTriggerFlow.tsx"
+   ],
+   "note": "Prompt text identical between copies (one blank line differs). Traced parse_trigger request \u2192 Edge response (200/502/500) \u2192 parseTriggerNL \u2192 AddTriggerFlow rendering. Not executed against a live model."
+  },
+  {
+   "surface": "Trigger runner fire summaries (deterministic) \u2192 WatchList recent matches and compose prompt",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "supabase/functions/briefing-pipeline/triggers/runner.ts",
+    "src/briefing/components/WatchList.tsx"
+   ],
+   "note": "Read evalSingleEvent/evalAdjacency/evalAggregation/summarize/targetLabel and the FireRow that renders fire.summary verbatim."
+  },
+  {
+   "surface": "Cost ceiling / degradation labels (server + browser tracker) shown in the Briefing cost footer (v4, legacy and ds)",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/briefing/lib/cost/tracker.ts",
+    "supabase/functions/briefing-pipeline/cost/_shared.ts",
+    "supabase/functions/briefing-pipeline/cost/check.ts",
+    "src/briefing/components/BriefingFooter.tsx",
+    "src/briefing/ds/components/BriefingFooterDS.tsx",
+    "supabase/functions/briefing-pipeline/llm/synthesis.ts"
+   ],
+   "note": "stateLabel identical in both copies; BriefingV4 renders BriefingFooter. Verified what throttle actually does (synthesis.ts:300-302 swaps the draft/revise/repair model only) and that the window is a rolling 7 days (check.ts:37)."
+  },
+  {
+   "surface": "Periphery candidate reasoning (deterministic) \u2014 browser scoring + Deno mirror \u2192 PeripheryRail",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/briefing/lib/periphery/scoring.ts",
+    "supabase/functions/briefing-pipeline/periphery/_shared.ts",
+    "src/briefing/components/PeripheryRail.tsx"
+   ],
+   "note": "buildReasoning identical in both copies; rendered verbatim at PeripheryRail.tsx:67."
+  },
+  {
+   "surface": "Briefing hydration adapters and read-interface contracts",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/briefing/lib/adapters/",
+    "src/briefing/lib/contracts.ts",
+    "src/briefing/lib/hydrate.ts"
+   ],
+   "note": "All adapters are shells returning uninitializedContract with developer-facing health_reason strings; grep shows no UI renders health_reason or the hydrated context, so these are not user-visible."
+  }
+ ],
+ "findings": [
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/briefing/lib/synthesis/prompts.ts",
+   "line": 126,
+   "generation": "backend",
+   "state": "Synthesis draft prompt (also supabase/functions/briefing-pipeline/llm/synthesis-shared.ts:428) \u2192 recommended_moves[].destination \u2192 Briefing PatternCard MoveRow",
+   "current": "\"Current routed destination examples: \\\"Deal Workspace \u00b7 active deal \u00b7 review\\\", \\\"Discovery Studio \u00b7 question set \u00b7 update\\\", \\\"Cold Call Studio \u00b7 objection response \u00b7 update\\\", \\\"Outbound Studio \u00b7 hook \u00b7 new\\\", \\\"Signal Console \u00b7 watched account \u00b7 review\\\", or \\\"Getting to Signed \u00b7 security workstream \u00b7 review\\\". Do not route to retired or nonexistent product areas.\"",
+   "problem": "The prompt calls these 'routed' destinations, but the parser in src/briefing/lib/destinations.ts:47-52 only recognises Discovery Studio, Outbound Studio, Deal Workspace and Asset Builder, and only the actions new/refresh/alert. Three of the six examples the model is told to imitate (Cold Call Studio, Signal Console, Getting to Signed) return null from parseDestination, so MoveRow renders them as plain text with no link; the 'review'/'update' actions are dropped. Meanwhile 'Asset Builder' (not a shipped area) still parses. The quality gate's moves_routed check only tests that destination is non-empty, so nothing enforces the instruction. The operator sees a recommended action that names an area but cannot be opened, contrary to the prompt's own claim that these are routed.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md (Briefing-specific rule: every item must expose a recommended action); AUDIT_BRIEF \u00a75 (copy that now claims something the code does not do); CLAUDE.md \u00a74.21 (Briefing produces drafts saved to the destination area)",
+   "proposed": "Make prompt and parser agree. Smallest change: in prompts.ts:126 and synthesis-shared.ts:428 list only destinations the parser can route, with its action vocabulary: \"Destination format: '<product area> \u00b7 <section> \u00b7 new|refresh existing|alert'. Use only these product areas: Deal Workspace, Discovery Studio, Outbound Studio.\" Add a quality-gate check (both copies) that each destination's first segment is one of those areas and that the action is new|refresh existing|alert, so an unroutable move fails the gate and goes through gate repair. OWNER DECISION: whether to add Cold Call Studio, Signal Console and Getting to Signed as routable Briefing destinations (ROOM_MAP + roomPath + a draft banner in each), and whether to remove the non-shipped Asset Builder from ROOM_MAP.",
+   "testsAffected": [
+    "src/briefing/lib/synthesis/prompts.test.ts",
+    "src/briefing/lib/destinations.test.ts",
+    "src/briefing/lib/synthesis/quality-gate.test.ts"
+   ],
+   "confidence": "high",
+   "id": "BRIEFING-PIPELINE-001"
+  },
+  {
+   "category": "LANG-C",
+   "severity": 2,
+   "file": "src/briefing/lib/synthesis/voice-rules.ts",
+   "line": 9,
+   "generation": "backend",
+   "state": "Synthesis draft/critique/revise/gate-repair prompts (BANNED_LINE) and runQualityGate; same in supabase/functions/briefing-pipeline/llm/synthesis-shared.ts:12 and :365",
+   "current": "BANNED_VOCABULARY is only corporate filler (leverage, unlock, revolutionize \u2026 streamline). The prompt adds: \"Also avoid \u2026 private Antaeus ontology, and slogan-like copy.\"",
+   "problem": "The prompt tells the model to avoid 'private Antaeus ontology' without saying what it is, and the deterministic gate checks none of it. A model cannot know Antaeus's private vocabulary; worse, several of the migration-map terms are ordinary GTM jargon the model produces unprompted ('enterprise sales motion', 'hot account', 'pressure', 'the read', 'the move'). The spec requires searching prompts for and replacing instructions around heat, motion, pressure, one move, system saw/read, thread, decay, die etc. Nothing in the generation path prevents a Pattern such as 'Linear's B2B motion is coming \u2014 the read is pressure on your pipeline.' from passing the gate and rendering.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md (search list; rules 9, 11); original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows motion, heat, hottest, pressure, one move, system saw, read (noun), thread, decaying, dying",
+   "proposed": "In both prompt copies replace 'private Antaeus ontology' with an explicit list and replacements: \"Do not use these as labels or explanations: 'motion' for the sales process (say sales process, pipeline or outreach); 'heat', 'hot', 'cold' for priority (say priority or recent activity); 'pressure' (say risk, urgency or priority); 'the read' or 'the move' as nouns (say assessment or recommended action); 'dying', 'decay' (say the observable change, e.g. no activity for 21 days).\" Add a separate deterministic check (both copies) for the phrase-level items that are unambiguous in generated analysis \u2014 'the read', 'the move', 'one move', 'system saw', 'dying', 'heat score' \u2014 so they fail the gate and trigger repair; leave ordinary words such as 'motion' to the critique stage rather than a blanket ban.",
+   "testsAffected": [
+    "src/briefing/lib/synthesis/voice-rules.test.ts",
+    "src/briefing/lib/synthesis/quality-gate.test.ts",
+    "src/briefing/lib/synthesis/prompts.test.ts"
+   ],
+   "confidence": "medium",
+   "id": "BRIEFING-PIPELINE-002"
+  },
+  {
+   "category": "TOOLING",
+   "severity": 1,
+   "file": "supabase/functions/briefing-pipeline/llm/synthesis-shared.ts",
+   "line": 441,
+   "generation": "backend",
+   "state": "Production synthesis mirror (Edge Function) vs tested browser source",
+   "current": "Deno critique task: \"Critique the draft. Quote offending text. Check for unsupported claims, intent or causation that cannot be verified, banned vocabulary, indirect qualification, redundant uncertainty language, marketing filler, vague actions, invalid routes, and obvious evidence objections.\" Browser (prompts.ts:158) differs and ends \"Produce a JSON object:\"; Deno DRAFT_SYSTEM_PROMPT (line 399) lacks the browser's \"No prose preamble or markdown fences.\" (prompts.ts:78). Both copies report SYNTHESIS_PROMPT_VERSION = \"synthesis-1.1\".",
+   "problem": "The mirror header says it 'Mirrors the behavior of src/briefing/lib/synthesis/\u2026', and both declare the same prompt version, but the text sent to the model in production is not the text under test. Unlike contrarian-shared.ts (which has a describe.each parity test), nothing imports synthesis-shared.ts in a test, so future language fixes to prompts.ts can silently fail to reach production. Today's drift is wording only and not harmful.",
+   "governing": "Audit assignment: production mirrors must match the tested browser-side source where duplication is intentional",
+   "proposed": "Copy the browser wording into synthesis-shared.ts lines 399 and 441 verbatim, and add a parity test (pattern of src/briefing/lib/synthesis/contrarian.test.ts:283) that imports supabase/functions/briefing-pipeline/llm/synthesis-shared.ts and asserts DRAFT/CRITIQUE/REVISE/GATE_REPAIR system prompts, BANNED_VOCABULARY and buildDraftPrompt/buildCritiquePrompt output equal the browser versions for a fixture input.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "BRIEFING-PIPELINE-003"
+  },
+  {
+   "category": "LANG-D",
+   "severity": 2,
+   "file": "deliverables/specs/briefing/signal_console_voice_document_v0.1.md",
+   "line": 22,
+   "generation": "doctrine",
+   "state": "Active Briefing voice doctrine named as binding by CLAUDE.md \u00a74.21 'Voice' bullet (line 429), the specs naming note (00-naming-note.md:33 'binds every synthesized Pattern') and the adapter comment src/briefing/lib/adapters/voice-document.ts:10-15 ('embeds it in every Draft / Critique / Revise prompt')",
+   "current": "\u00a71 'The voice is conversational gravity \u2026 Declarative over hedged \u2026 Em-dashes, fragments where they earn the punch'; \u00a72/\u00a76.1 exemplars 'Linear hired a third-time enterprise CFO. The B2B motion is coming.', 'Notion is making the up-market move. It's not subtle anymore.', 'The floor of your TAM is being contested.'; \u00a73.2 'Name says \"the read\" not \"the event\"'; \u00a73.5 'Your trigger fired.' / 'The lead is the verdict.'; \u00a76.5 'Fragments OK when they land: \"The B2B motion is coming.\" \"Plan for it.\"'; \u00a77.3 'More than three [hedging adverbs] \u2026 fails the quality gate'; \u00a77.4 'The voice does not protect itself by hedging. The voice commits to a read'; exemplar destinations '\u2192 Call Planner \u00b7 Objection Bank \u00b7 new'.",
+   "problem": "The document is not loaded by any prompt or gate today (adapter returns an uninitialized shell; no runtime reader), so it does not regenerate copy now. But it is the doctrine canon tells future writers and the planned B.2 parser to embed in every prompt, and it instructs exactly what the remediation removed: aphoristic fragments, 'the read'/'the move'/'motion'/'verdict' nouns, forecast-as-commitment ('Expect Notion and Linear to follow within the quarter'), personified 'Your trigger fired', a hard 3-hedge-adverb gate that contradicts the owner-approved calibrated-uncertainty evolution, and routing to the retired Call Planner. Whoever wires it will reintroduce the old dialect.",
+   "governing": "original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md (active internal instructions must not regenerate private customer ontology; epistemic standard); original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md (rules 3\u20137, 13, 14; Briefing-specific rule); owner-approved evolution 'Briefing gates permitting calibrated uncertainty' (01_OWNER_REQUIREMENTS.md)",
+   "proposed": "Add a status banner at the top of the document: \"Superseded for generation by the prompts and gates in src/briefing/lib/synthesis/ (synthesis-1.1, contrarian-1.1, compose-1.1) and by COPY_STANDARD.md. The exemplars below use language the 2026-11 remediation retired ('the read', 'the move', 'motion', 'verdict', aphoristic fragments, forecasts stated as fact) and must not be loaded into a prompt. Calibrated uncertainty words are allowed; the hedge-word count is a review flag, not a gate.\" Then rewrite \u00a71, \u00a76.1, \u00a76.5 and \u00a77.3\u20137.4 to the current prompt rules and replace the five exemplars with evidence \u2192 assessment \u2192 recommended-action versions (e.g. 3.2 name: 'Linear hired a CFO with two prior enterprise IPOs.'; analysis forecast stated as 'This is consistent with Linear building an enterprise sales team; two enterprise AE postings in 30 days support that assessment.'), destinations limited to routable areas. Update CLAUDE.md \u00a74.21 'Voice' bullet (line 429) to point at the prompt modules and COPY_STANDARD rather than describing 'conversational gravity \u2026 declarative over hedged'.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "BRIEFING-PIPELINE-004"
+  },
+  {
+   "category": "LANG-C",
+   "severity": 1,
+   "file": "src/briefing/lib/synthesis/contrarian.ts",
+   "line": 161,
+   "generation": "backend",
+   "state": "Contrarian prompt output schema (identical in supabase/functions/briefing-pipeline/llm/contrarian-shared.ts:161)",
+   "current": "{ \"label\": \"<verb-led move>\", \"rationale\": \"<why the evidence supports doing it>\", \"destination\": \"<product area \u00b7 object \u00b7 action>\" }",
+   "problem": "The schema hint names the recommendation a 'move', the private label the remediation replaced with 'recommended action'; the model sees it as the field description and may echo the term. Unlike the synthesis prompt, the contrarian prompt also gives no list of routable areas, so the destination can be any free text (see the destination finding).",
+   "governing": "original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'one move'; AUDIT_BRIEF \u00a73 disputed term 'move'",
+   "proposed": "Change the placeholder in both copies to \"<recommended action, starting with a verb>\" and the destination placeholder to \"<Deal Workspace | Discovery Studio | Outbound Studio> \u00b7 <section> \u00b7 new|refresh existing|alert\". Keep the JSON field names unchanged.",
+   "testsAffected": [
+    "src/briefing/lib/synthesis/contrarian.test.ts"
+   ],
+   "confidence": "high",
+   "id": "BRIEFING-PIPELINE-005"
+  },
+  {
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/briefing/components/AddTriggerFlow.tsx",
+   "line": 124,
+   "generation": "shared",
+   "state": "Briefing \u2192 saved monitoring rules \u2192 'Review monitoring rule' when the request is vague, compound, low-confidence (<0.70) or unparseable",
+   "current": "Rendering is gated on `parse && parse.parse_succeeded && dispCopy`. For these inputs the Edge Function returns ok:true with parse_succeeded=false (parser.ts parseTriggerResponse demotes any success claim without a typed query; the prompt rule 6 tells the model not to commit a parsed_query below 0.70; rule 8 sets parse_succeeded=false for compound requests). parseDisposition returns \"clarify_only\" for every unsuccessful parse (parser.ts:549-551; triggers/_shared.ts:658-659).",
+   "problem": "When the parse does not succeed nothing renders: no error (r.ok is true), no ambiguities, no suggested_split, no parse_failure_reason, and the clarify_only copy 'This rule needs clarification before it can be enabled. Use the questions below to revise it.' never appears, because it sits inside the parse_succeeded block. The user clicks 'Review monitoring rule', the button returns to its idle label, and the screen is unchanged \u2014 exactly the cases the prompt deliberately routes to clarification (vague asks, 'X AND Y' compounds, 'soon/recently' without numbers). The user is blocked with no explanation.",
+   "governing": "AUDIT_BRIEF \u00a75 (validation/error/partial-result states must not be swallowed); CLAUDE.md Part II \u00a76 (loading/error never blank, never swallowed); comprehension principle",
+   "proposed": "Render the clarification state when the parse did not succeed: change the condition to `parse && dispCopy` and, inside, show the rephrase/meta lines only when parse.parse_succeeded; always show the ambiguities list; when parse.suggested_split is non-null show \"This asks for more than one thing. Create a separate rule for each:\" followed by the suggested_split items; when there are no ambiguities and no split, show parse.parse_failure_reason only if it is not one of the internal parser messages ('no JSON object found in response', 'JSON parse failed\u2026', 'response root is not a JSON object', 'parser returned no usable query', 'parse did not succeed'), otherwise show \"Antaeus could not turn that request into a monitoring rule. Name the company or category, the event, and a time window \u2014 for example: 'Tell me when two or more EOR competitors launch a product within 30 days.'\" Add a component test for parse_succeeded=false with ambiguities and with suggested_split.",
+   "testsAffected": [
+    "src/briefing/lib/watchlist-client.test.ts (add AddTriggerFlow component test; none exists today)"
+   ],
+   "confidence": "high",
+   "id": "BRIEFING-PIPELINE-006"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "supabase/functions/briefing-pipeline/triggers/runner.ts",
+   "line": 167,
+   "generation": "backend",
+   "state": "Briefing \u2192 saved monitoring rules \u2192 recent matches list (WatchList FireRow renders fire.summary verbatim, src/briefing/components/WatchList.tsx:22); the same string is fed to the compose prompt as fire_summary",
+   "current": "single event: `${targetLabel(q)} \u2014 ${q.event.category}` \u2192 e.g. \"Deel \u2014 exec_move: Deel names new CRO\"; adjacency (line 184): \"Deel \u2014 activity: \u2026\"; aggregation (line 211): `${count} ${q.event.category} events across the set in ${windowDays}d` \u2192 \"3 funding_round events across the set in 30d: \u2026\"; targetLabel (line 218-225) returns \"Anything\", \"company\", \"category\" or \"target\" when names are missing.",
+   "problem": "The user-visible match summary exposes internal enum keys (exec_move, funding_round, m_a_event, narrative_shift_mention), the unit shorthand '30d', and the unexplained phrase 'across the set' (the user never named a 'set'); the em dash leaves the relation between company and event implicit. A first-time user has to translate 'Deel \u2014 exec_move' into 'Deel had an executive change'. The fallback labels 'company'/'target' produce sentences like 'target \u2014 activity'.",
+   "governing": "COPY_STANDARD.md (literal nouns; no internal identifiers on the face); comprehension principle dimensions 1, 6, 7; original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md (punctuation standard: an em dash must not be required to infer the relation)",
+   "proposed": "Add a plain label map for EVENT_CATEGORIES in triggers/_shared.ts (exec_move \u2192 'executive change', pricing_change \u2192 'pricing change', product_launch \u2192 'product launch', funding_round \u2192 'funding round', m_a_event \u2192 'acquisition or merger', regulatory_action \u2192 'regulatory action', security_incident \u2192 'security incident', partnership_announcement \u2192 'partnership', integration_added \u2192 'new integration', integration_removed \u2192 'removed integration', leadership_departure \u2192 'leadership departure', layoff_event \u2192 'layoffs', geographic_expansion \u2192 'expansion into a new region', vertical_expansion \u2192 'expansion into a new industry', narrative_shift_mention \u2192 'change in how the market describes the category', press_coverage \u2192 'press coverage', patent_filing \u2192 'patent filing', trust_certification_change \u2192 'security certification change', any \u2192 'event') and build summaries as sentences: single event \"`${target}`: `${label}` \u2014 `${title}`\" becomes \"New `${label}` at `${target}`: `${title}`\"; adjacency \"New activity related to `${target}`: `${title}`\"; aggregation \"`${count}` `${label}` events among the companies you watch in the last `${windowDays}` days: `${title}`\"; targetLabel fallbacks 'company'/'category'/'target' \u2192 'a watched company', 'Anything' \u2192 'any watched company'. Stored past rows keep their old text; only new fires change.",
+   "testsAffected": [
+    "src/briefing/lib/triggers/matchers.test.ts (if it asserts summaries)"
+   ],
+   "confidence": "high",
+   "id": "BRIEFING-PIPELINE-007"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/briefing/lib/watchlist-client.ts",
+   "line": 180,
+   "generation": "shared",
+   "state": "Briefing \u2192 Review monitoring rule when the model call fails (Edge returns HTTP 502 {ok:false,error:'parser call failed: \u2026'}) or the server throws (500)",
+   "current": "`if (error) { return { ok: false, \u2026, error: error.message }; }` \u2192 AddTriggerFlow shows `r.error` verbatim (AddTriggerFlow.tsx:67). For a non-2xx response supabase-js sets error.message to its generic transport text (\"Edge Function returned a non-2xx status code\"); the server's own text, when it reaches the client, is technical (\"parser call failed: \u2026\", \"parse_trigger requires workspaceId + natural_language\", raw exception messages).",
+   "problem": "The model-unavailable fallback is a raw transport/exception string, not a statement the user can act on. A first-time user sees 'Edge Function returned a non-2xx status code' and does not know whether their wording was wrong or the service failed, or what to do.",
+   "governing": "CLAUDE.md Part II \u00a76 / Part III \u00a710 (error language: honest, calm, specific, recoverable); AUDIT_BRIEF \u00a75 (fallbacks when AI/network is unavailable)",
+   "proposed": "In parseTriggerNL keep the technical message for reportError, and return a user message: on `error` or ok!==true \u2192 error: \"Antaeus could not interpret that request right now because the language service did not respond. Your wording was not saved. Try again in a minute.\"; AddTriggerFlow keeps its existing fallback (\"The parser couldn't read that. Try rephrasing.\") only for the case where the request succeeded but produced no rule \u2014 reword it to \"Antaeus could not turn that request into a monitoring rule. Name the company or category, the event, and a time window.\"",
+   "testsAffected": [
+    "src/briefing/lib/watchlist-client.test.ts"
+   ],
+   "confidence": "medium",
+   "id": "BRIEFING-PIPELINE-008"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/briefing/lib/cost/tracker.ts",
+   "line": 138,
+   "generation": "shared",
+   "state": "Briefing default screen (v4) cost footer pill and ds footer read line when weekly spend reaches 100% / 150% of the ceiling; identical copy in supabase/functions/briefing-pipeline/cost/_shared.ts:85-86",
+   "current": "\"Approaching weekly ceiling\" / \"Throttling \u2014 Sonnet substituting for Opus\" / \"Paused \u2014 runs skip until next week\"",
+   "problem": "'Throttling \u2014 Sonnet substituting for Opus' names internal model tiers and an engineering action; a first-time user cannot tell what changed for them (the code only swaps the model used to draft, revise and repair analyses, synthesis.ts:300-302). 'Paused \u2014 runs skip until next week' is inaccurate: the spend window is a rolling 7 days (check.ts:37, tracker computeWeeklyCost), so runs resume when older runs leave the window, not at a calendar week boundary. The em-dash fragments leave the consequence implicit. ('Approaching weekly ceiling' is understandable but 'budget' is the word the ok state uses.)",
+   "governing": "COPY_STANDARD.md (literal nouns; state labels name an observable condition \u2014 \u00a717/\u00a720 as summarised in CLAUDE.md Part III \u00a710); comprehension principle dimensions 1, 6, 7, 4 (accuracy)",
+   "proposed": "In both copies: warn \u2192 \"Near the weekly budget\"; throttle \u2192 \"Over the weekly budget: new analyses use a lower-cost model\"; paused \u2192 \"Paused: no new Briefing runs until spending over the last 7 days drops below the limit\". Update the label assertion in src/briefing/lib/cost/tracker.test.ts:143.",
+   "testsAffected": [
+    "src/briefing/lib/cost/tracker.test.ts"
+   ],
+   "confidence": "high",
+   "id": "BRIEFING-PIPELINE-009"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/briefing/lib/periphery/scoring.ts",
+   "line": 113,
+   "generation": "shared",
+   "state": "Briefing World view \u2192 companies not on your watchlist (PeripheryRail 'why' line); same text in supabase/functions/briefing-pipeline/periphery/_shared.ts:119-122",
+   "current": "\"Appeared in 4 items alongside 7 watched entities. Shares 3 pain/topic tags with the watched set's items.\" (fallback when nothing is watched: \"\u2026alongside the watched set.\")",
+   "problem": "'watched entities', 'the watched set' and 'pain/topic tag' are pipeline vocabulary; the reader has to work out that 'items' are news/source items and that 'tags' are categories Antaeus assigned. Understandable with effort, so minor.",
+   "governing": "COPY_STANDARD.md (literal nouns); comprehension principle dimension 6",
+   "proposed": "In both copies: head \u2192 \"Mentioned in ${co} news item(s) alongside ${watchedSize} compan(y|ies) you watch.\" (fallback: \"\u2026alongside companies you watch.\"); tail \u2192 \"Those items share ${vocab} buyer-pain or topic label(s) with news about the companies you watch.\" Update scoring.test.ts:180 regex.",
+   "testsAffected": [
+    "src/briefing/lib/periphery/scoring.test.ts"
+   ],
+   "confidence": "medium",
+   "id": "BRIEFING-PIPELINE-010"
+  }
+ ],
+ "dispositions": [],
+ "retained": [],
+ "gaps": []
+}

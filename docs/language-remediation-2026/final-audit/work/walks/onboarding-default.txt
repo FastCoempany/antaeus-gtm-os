@@ -1,0 +1,642 @@
+[onboarding | 1 Doorway — at rest | text] ANTAEUS
+[onboarding | 1 Doorway — at rest | text] BEFORE YOU START
+[onboarding | 1 Doorway — at rest | heading 1] This setup takes real thought from you.
+[onboarding | 1 Doorway — at rest | text] It asks for things only you know: who you sell to, which companies you're going after, and where each of your open deals really stands. Most setup screens skip this work. Doing it is what lets the workspace flag deal problems before they surprise you.
+[onboarding | 1 Doorway — at rest | text] You enter it once, and you'll get it back every morning on the Dashboard: which deals have gone quiet or missed a next step, what each one is missing, and which one to work on first. The more honest your answers, the more useful it gets.
+[onboarding | 1 Doorway — at rest | button] Start →
+[onboarding | 1 Doorway — at rest | aria-label] Why we ask this
+[onboarding | 1 Doorway — at rest | text] WHY WE ASK THIS
+[onboarding | 1 Doorway — at rest | text] Each step explains how its inputs will be used. Review these notes as you enter your workspace information.
+[onboarding | 1 Doorway — at rest | button] OPEN WORKSPACE MAP · G
+[onboarding | 1 Doorway — at rest | title] Open workspace map (G)
+[onboarding | 1 Doorway — at rest | aria-label] Open workspace map
+[onboarding | 2 ICP — question 1 of 3, at rest | text] ANTAEUS
+[onboarding | 2 ICP — question 1 of 3, at rest | button] ← BACK
+[onboarding | 2 ICP — question 1 of 3, at rest | text] WHO YOU SELL TO
+[onboarding | 2 ICP — question 1 of 3, at rest | heading 1] Describe the customers you sell to.
+[onboarding | 2 ICP — question 1 of 3, at rest | text] Answer three quick questions. Your answers are combined into one sentence describing your ideal customer, which the workspace uses to judge how well each account fits. If none of the options fit, write your own.
+[onboarding | 2 ICP — question 1 of 3, at rest | text] Which role actually signs the check?
+[onboarding | 2 ICP — question 1 of 3, at rest | button] Revenue Operations
+[onboarding | 2 ICP — question 1 of 3, at rest | button] Sales Operations
+[onboarding | 2 ICP — question 1 of 3, at rest | button] The COO
+[onboarding | 2 ICP — question 1 of 3, at rest | button] The CFO
+[onboarding | 2 ICP — question 1 of 3, at rest | button] Something else…
+[onboarding | 2 ICP — question 1 of 3, at rest | aria-label] Why we ask this
+[onboarding | 2 ICP — question 1 of 3, at rest | text] WHY WE ASK THIS
+[onboarding | 2 ICP — question 1 of 3, at rest | text] Your ICP describes the companies and buyer roles you want to target. Antaeus uses it to assess account relevance; a match still needs verification.
+[onboarding | 2 ICP — question 1 of 3, at rest | button] OPEN WORKSPACE MAP · G
+[onboarding | 2 ICP — question 1 of 3, at rest | title] Open workspace map (G)
+[onboarding | 2 ICP — question 1 of 3, at rest | aria-label] Open workspace map
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | text] ANTAEUS
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | button] ← BACK
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | text] WHO YOU SELL TO
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | heading 1] Describe the customers you sell to.
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | text] Answer three quick questions. Your answers are combined into one sentence describing your ideal customer, which the workspace uses to judge how well each account fits. If none of the options fit, write your own.
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | text] Which role actually signs the check?
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | button] Revenue Operations
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | button] Sales Operations
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | button] The COO
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | button] The CFO
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | button] Something else…
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | field] In your own words…
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | placeholder] In your own words…
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | button] Use this →
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | aria-label] Why we ask this
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | text] WHY WE ASK THIS
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | text] Your ICP describes the companies and buyer roles you want to target. Antaeus uses it to assess account relevance; a match still needs verification.
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | button] OPEN WORKSPACE MAP · G
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | title] Open workspace map (G)
+[onboarding | 2 ICP — “Something else…” opened, nothing typed (validation) | aria-label] Open workspace map
+[onboarding | 2 ICP — result after three vague written-in answers | text] ANTAEUS
+[onboarding | 2 ICP — result after three vague written-in answers | button] ← BACK
+[onboarding | 2 ICP — result after three vague written-in answers | text] WHO YOU SELL TO
+[onboarding | 2 ICP — result after three vague written-in answers | heading 1] Describe the customers you sell to.
+[onboarding | 2 ICP — result after three vague written-in answers | text] Answer three quick questions. Your answers are combined into one sentence describing your ideal customer, which the workspace uses to judge how well each account fits. If none of the options fit, write your own.
+[onboarding | 2 ICP — result after three vague written-in answers | text] ✓ Anyone
+[onboarding | 2 ICP — result after three vague written-in answers | text] ✓ Any size
+[onboarding | 2 ICP — result after three vague written-in answers | text] ✓ they need it
+[onboarding | 2 ICP — result after three vague written-in answers | text] YOUR ICP — IN YOUR WORDS
+[onboarding | 2 ICP — result after three vague written-in answers | text] Anyone at Any size B2B companies that they need it. Account research will be checked against this.
+[onboarding | 2 ICP — result after three vague written-in answers | button] Looks right →
+[onboarding | 2 ICP — result after three vague written-in answers | aria-label] Why we ask this
+[onboarding | 2 ICP — result after three vague written-in answers | text] WHY WE ASK THIS
+[onboarding | 2 ICP — result after three vague written-in answers | text] Your ICP describes the companies and buyer roles you want to target. Antaeus uses it to assess account relevance; a match still needs verification.
+[onboarding | 2 ICP — result after three vague written-in answers | button] OPEN WORKSPACE MAP · G
+[onboarding | 2 ICP — result after three vague written-in answers | title] Open workspace map (G)
+[onboarding | 2 ICP — result after three vague written-in answers | aria-label] Open workspace map
+[onboarding | 2 ICP — question 2 of 3, at rest | text] ANTAEUS
+[onboarding | 2 ICP — question 2 of 3, at rest | button] ← BACK
+[onboarding | 2 ICP — question 2 of 3, at rest | text] WHO YOU SELL TO
+[onboarding | 2 ICP — question 2 of 3, at rest | heading 1] Describe the customers you sell to.
+[onboarding | 2 ICP — question 2 of 3, at rest | text] Answer three quick questions. Your answers are combined into one sentence describing your ideal customer, which the workspace uses to judge how well each account fits. If none of the options fit, write your own.
+[onboarding | 2 ICP — question 2 of 3, at rest | text] How big, really? Pick the band you actually win in.
+[onboarding | 2 ICP — question 2 of 3, at rest | button] 50–200 people
+[onboarding | 2 ICP — question 2 of 3, at rest | button] 200–800 people
+[onboarding | 2 ICP — question 2 of 3, at rest | button] 800–2,000 people
+[onboarding | 2 ICP — question 2 of 3, at rest | button] 2,000+ people
+[onboarding | 2 ICP — question 2 of 3, at rest | button] Something else…
+[onboarding | 2 ICP — question 2 of 3, at rest | text] ✓ Revenue Operations
+[onboarding | 2 ICP — question 2 of 3, at rest | aria-label] Why we ask this
+[onboarding | 2 ICP — question 2 of 3, at rest | text] WHY WE ASK THIS
+[onboarding | 2 ICP — question 2 of 3, at rest | text] Your ICP describes the companies and buyer roles you want to target. Antaeus uses it to assess account relevance; a match still needs verification.
+[onboarding | 2 ICP — question 2 of 3, at rest | button] OPEN WORKSPACE MAP · G
+[onboarding | 2 ICP — question 2 of 3, at rest | title] Open workspace map (G)
+[onboarding | 2 ICP — question 2 of 3, at rest | aria-label] Open workspace map
+[onboarding | 2 ICP — question 3 of 3, at rest | text] ANTAEUS
+[onboarding | 2 ICP — question 3 of 3, at rest | button] ← BACK
+[onboarding | 2 ICP — question 3 of 3, at rest | text] WHO YOU SELL TO
+[onboarding | 2 ICP — question 3 of 3, at rest | heading 1] Describe the customers you sell to.
+[onboarding | 2 ICP — question 3 of 3, at rest | text] Answer three quick questions. Your answers are combined into one sentence describing your ideal customer, which the workspace uses to judge how well each account fits. If none of the options fit, write your own.
+[onboarding | 2 ICP — question 3 of 3, at rest | text] What has to be true for them to need you now?
+[onboarding | 2 ICP — question 3 of 3, at rest | button] Just raised, scaling fast
+[onboarding | 2 ICP — question 3 of 3, at rest | button] A new GTM leader landed
+[onboarding | 2 ICP — question 3 of 3, at rest | button] Outgrew their spreadsheets
+[onboarding | 2 ICP — question 3 of 3, at rest | button] Hit a compliance wall
+[onboarding | 2 ICP — question 3 of 3, at rest | button] Something else…
+[onboarding | 2 ICP — question 3 of 3, at rest | text] ✓ Revenue Operations
+[onboarding | 2 ICP — question 3 of 3, at rest | text] ✓ 200–800 people
+[onboarding | 2 ICP — question 3 of 3, at rest | aria-label] Why we ask this
+[onboarding | 2 ICP — question 3 of 3, at rest | text] WHY WE ASK THIS
+[onboarding | 2 ICP — question 3 of 3, at rest | text] Your ICP describes the companies and buyer roles you want to target. Antaeus uses it to assess account relevance; a match still needs verification.
+[onboarding | 2 ICP — question 3 of 3, at rest | button] OPEN WORKSPACE MAP · G
+[onboarding | 2 ICP — question 3 of 3, at rest | title] Open workspace map (G)
+[onboarding | 2 ICP — question 3 of 3, at rest | aria-label] Open workspace map
+[onboarding | 2 ICP — result after three specific answers | text] ANTAEUS
+[onboarding | 2 ICP — result after three specific answers | button] ← BACK
+[onboarding | 2 ICP — result after three specific answers | text] WHO YOU SELL TO
+[onboarding | 2 ICP — result after three specific answers | heading 1] Describe the customers you sell to.
+[onboarding | 2 ICP — result after three specific answers | text] Answer three quick questions. Your answers are combined into one sentence describing your ideal customer, which the workspace uses to judge how well each account fits. If none of the options fit, write your own.
+[onboarding | 2 ICP — result after three specific answers | text] ✓ Revenue Operations
+[onboarding | 2 ICP — result after three specific answers | text] ✓ 200–800 people
+[onboarding | 2 ICP — result after three specific answers | text] ✓ Just raised, scaling fast
+[onboarding | 2 ICP — result after three specific answers | text] YOUR ICP — IN YOUR WORDS
+[onboarding | 2 ICP — result after three specific answers | text] Heads of Revenue Operations at 200–800-person B2B companies that are past a recent raise and scaling fast. Account research will be checked against this.
+[onboarding | 2 ICP — result after three specific answers | button] Looks right →
+[onboarding | 2 ICP — result after three specific answers | aria-label] Why we ask this
+[onboarding | 2 ICP — result after three specific answers | text] WHY WE ASK THIS
+[onboarding | 2 ICP — result after three specific answers | text] Your ICP describes the companies and buyer roles you want to target. Antaeus uses it to assess account relevance; a match still needs verification.
+[onboarding | 2 ICP — result after three specific answers | button] OPEN WORKSPACE MAP · G
+[onboarding | 2 ICP — result after three specific answers | title] Open workspace map (G)
+[onboarding | 2 ICP — result after three specific answers | aria-label] Open workspace map
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | text] ANTAEUS
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | button] ← BACK
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | text] YOUR TARGET ACCOUNTS
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | heading 1] Which companies are you going after?
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | text] Just the companies. One per line, or paste a comma-separated list. A website domain is better than a name — apex.com is one company, while “Apex” could be many — so use a domain wherever you have one. You don't need to research them; the next step looks for recent news about each one.
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | field] apex.com, northwind.io, Brightwave…
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | placeholder] apex.com, northwind.io, Brightwave…
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | text] Paste at least five companies — even a rough list.
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | button] Research these accounts →
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | aria-label] Why we ask this
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | text] WHY WE ASK THIS
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | text] Account names define which companies to research. The next step looks for recent changes with source links. If research is unavailable, you can continue with your list.
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | button] OPEN WORKSPACE MAP · G
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | title] Open workspace map (G)
+[onboarding | 3 Accounts — at rest, nothing entered (validation) | aria-label] Open workspace map
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] ANTAEUS
+[onboarding | 3 Accounts — entries that are not companies (validation) | button] ← BACK
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] YOUR TARGET ACCOUNTS
+[onboarding | 3 Accounts — entries that are not companies (validation) | heading 1] Which companies are you going after?
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] Just the companies. One per line, or paste a comma-separated list. A website domain is better than a name — apex.com is one company, while “Apex” could be many — so use a domain wherever you have one. You don't need to research them; the next step looks for recent news about each one.
+[onboarding | 3 Accounts — entries that are not companies (validation) | field] apex.com, northwind.io, Brightwave…
+[onboarding | 3 Accounts — entries that are not companies (validation) | placeholder] apex.com, northwind.io, Brightwave…
+[onboarding | 3 Accounts — entries that are not companies (validation) | title] looks like an email
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] ceo@boeing.com
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] LOOKS LIKE AN EMAIL
+[onboarding | 3 Accounts — entries that are not companies (validation) | title] just a number
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] 12345
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] JUST A NUMBER
+[onboarding | 3 Accounts — entries that are not companies (validation) | title] too short
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] B
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] TOO SHORT
+[onboarding | 3 Accounts — entries that are not companies (validation) | title] looks like a sentence, not a company
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] a note to myself about who to call next week
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] LOOKS LIKE A SENTENCE, NOT A COMPANY
+[onboarding | 3 Accounts — entries that are not companies (validation) | title] not a valid web address
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] bad_domain..com
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] NOT A VALID WEB ADDRESS
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] Paste at least five companies — even a rough list. 5 flagged below — fix or ignore; they won't be sent.
+[onboarding | 3 Accounts — entries that are not companies (validation) | button] Research these accounts →
+[onboarding | 3 Accounts — entries that are not companies (validation) | aria-label] Why we ask this
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] WHY WE ASK THIS
+[onboarding | 3 Accounts — entries that are not companies (validation) | text] Account names define which companies to research. The next step looks for recent changes with source links. If research is unavailable, you can continue with your list.
+[onboarding | 3 Accounts — entries that are not companies (validation) | button] OPEN WORKSPACE MAP · G
+[onboarding | 3 Accounts — entries that are not companies (validation) | title] Open workspace map (G)
+[onboarding | 3 Accounts — entries that are not companies (validation) | aria-label] Open workspace map
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | text] ANTAEUS
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | button] ← BACK
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | text] YOUR TARGET ACCOUNTS
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | heading 1] Which companies are you going after?
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | text] Just the companies. One per line, or paste a comma-separated list. A website domain is better than a name — apex.com is one company, while “Apex” could be many — so use a domain wherever you have one. You don't need to research them; the next step looks for recent news about each one.
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | field] apex.com, northwind.io, Brightwave…
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | placeholder] apex.com, northwind.io, Brightwave…
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | text] Boeing
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | text] Starbucks
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | text] Chipotle
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | text] 3 so far — add 2 more to continue.
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | button] Research these accounts →
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | aria-label] Why we ask this
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | text] WHY WE ASK THIS
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | text] Account names define which companies to research. The next step looks for recent changes with source links. If research is unavailable, you can continue with your list.
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | button] OPEN WORKSPACE MAP · G
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | title] Open workspace map (G)
+[onboarding | 3 Accounts — three company names entered (Boeing, Starbucks, Chipotle) | aria-label] Open workspace map
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | text] ANTAEUS
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | button] ← BACK
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | text] YOUR TARGET ACCOUNTS
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | heading 1] Which companies are you going after?
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | text] Just the companies. One per line, or paste a comma-separated list. A website domain is better than a name — apex.com is one company, while “Apex” could be many — so use a domain wherever you have one. You don't need to research them; the next step looks for recent news about each one.
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | field] apex.com, northwind.io, Brightwave…
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | placeholder] apex.com, northwind.io, Brightwave…
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | text] Boeing
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | text] Starbucks
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | text] Chipotle
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | text] delta.com
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | text] SITE
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | text] Nordstrom
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | text] 5 ready. You can add as many as you like.
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | button] Research these accounts →
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | aria-label] Why we ask this
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | text] WHY WE ASK THIS
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | text] Account names define which companies to research. The next step looks for recent changes with source links. If research is unavailable, you can continue with your list.
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | button] OPEN WORKSPACE MAP · G
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | title] Open workspace map (G)
+[onboarding | 3 Accounts — five entered (adds delta.com and Nordstrom), enough to continue | aria-label] Open workspace map
+[onboarding | 4 Research — loading | text] ANTAEUS
+[onboarding | 4 Research — loading | button] ← BACK
+[onboarding | 4 Research — loading | text] ACCOUNT RESEARCH
+[onboarding | 4 Research — loading | heading 1] Review recent changes at your target accounts.
+[onboarding | 4 Research — loading | text] Searching the web for Boeing…
+[onboarding | 4 Research — loading | text] 4%
+[onboarding | 4 Research — loading | text] Searching for source-backed company updates. The progress percentage is an estimate.
+[onboarding | 4 Research — loading | button] Continue setup →
+[onboarding | 4 Research — loading | aria-label] Why we ask this
+[onboarding | 4 Research — loading | text] WHY WE ASK THIS
+[onboarding | 4 Research — loading | text] Review the reported changes and their sources before acting. Priority reflects an assessment of recency and ICP relevance, not confirmed buying intent.
+[onboarding | 4 Research — loading | button] OPEN WORKSPACE MAP · G
+[onboarding | 4 Research — loading | title] Open workspace map (G)
+[onboarding | 4 Research — loading | aria-label] Open workspace map
+[onboarding | 4 Research — failed: research unavailable | text] ANTAEUS
+[onboarding | 4 Research — failed: research unavailable | button] ← BACK
+[onboarding | 4 Research — failed: research unavailable | text] ACCOUNT RESEARCH
+[onboarding | 4 Research — failed: research unavailable | heading 1] Review recent changes at your target accounts.
+[onboarding | 4 Research — failed: research unavailable | heading 4] YOUR ACCOUNT LIST
+[onboarding | 4 Research — failed: research unavailable | text] Boeing
+[onboarding | 4 Research — failed: research unavailable | text] Account research unavailable
+[onboarding | 4 Research — failed: research unavailable | text] Starbucks
+[onboarding | 4 Research — failed: research unavailable | text] Chipotle
+[onboarding | 4 Research — failed: research unavailable | text] delta.com
+[onboarding | 4 Research — failed: research unavailable | text] Nordstrom
+[onboarding | 4 Research — failed: research unavailable | text] We couldn't research these accounts right now. You can continue — the names are saved.
+[onboarding | 4 Research — failed: research unavailable | button] Try again
+[onboarding | 4 Research — failed: research unavailable | button] Continue setup →
+[onboarding | 4 Research — failed: research unavailable | aria-label] Why we ask this
+[onboarding | 4 Research — failed: research unavailable | text] WHY WE ASK THIS
+[onboarding | 4 Research — failed: research unavailable | text] Review the reported changes and their sources before acting. Priority reflects an assessment of recency and ICP relevance, not confirmed buying intent.
+[onboarding | 4 Research — failed: research unavailable | button] OPEN WORKSPACE MAP · G
+[onboarding | 4 Research — failed: research unavailable | title] Open workspace map (G)
+[onboarding | 4 Research — failed: research unavailable | aria-label] Open workspace map
+[onboarding | 4 Research — loading again after “Try again” | text] ANTAEUS
+[onboarding | 4 Research — loading again after “Try again” | button] ← BACK
+[onboarding | 4 Research — loading again after “Try again” | text] ACCOUNT RESEARCH
+[onboarding | 4 Research — loading again after “Try again” | heading 1] Review recent changes at your target accounts.
+[onboarding | 4 Research — loading again after “Try again” | text] Searching the web for Boeing…
+[onboarding | 4 Research — loading again after “Try again” | text] 4%
+[onboarding | 4 Research — loading again after “Try again” | text] Searching for source-backed company updates. The progress percentage is an estimate.
+[onboarding | 4 Research — loading again after “Try again” | button] Continue setup →
+[onboarding | 4 Research — loading again after “Try again” | aria-label] Why we ask this
+[onboarding | 4 Research — loading again after “Try again” | text] WHY WE ASK THIS
+[onboarding | 4 Research — loading again after “Try again” | text] Review the reported changes and their sources before acting. Priority reflects an assessment of recency and ICP relevance, not confirmed buying intent.
+[onboarding | 4 Research — loading again after “Try again” | button] OPEN WORKSPACE MAP · G
+[onboarding | 4 Research — loading again after “Try again” | title] Open workspace map (G)
+[onboarding | 4 Research — loading again after “Try again” | aria-label] Open workspace map
+[onboarding | 4 Research — after “Try again” | text] ANTAEUS
+[onboarding | 4 Research — after “Try again” | button] ← BACK
+[onboarding | 4 Research — after “Try again” | text] ACCOUNT RESEARCH
+[onboarding | 4 Research — after “Try again” | heading 1] Review recent changes at your target accounts.
+[onboarding | 4 Research — after “Try again” | heading 4] YOUR ACCOUNT LIST
+[onboarding | 4 Research — after “Try again” | text] Boeing
+[onboarding | 4 Research — after “Try again” | text] Account research unavailable
+[onboarding | 4 Research — after “Try again” | text] Starbucks
+[onboarding | 4 Research — after “Try again” | text] Chipotle
+[onboarding | 4 Research — after “Try again” | text] delta.com
+[onboarding | 4 Research — after “Try again” | text] Nordstrom
+[onboarding | 4 Research — after “Try again” | text] We couldn't research these accounts right now. You can continue — the names are saved.
+[onboarding | 4 Research — after “Try again” | button] Try again
+[onboarding | 4 Research — after “Try again” | button] Continue setup →
+[onboarding | 4 Research — after “Try again” | aria-label] Why we ask this
+[onboarding | 4 Research — after “Try again” | text] WHY WE ASK THIS
+[onboarding | 4 Research — after “Try again” | text] Review the reported changes and their sources before acting. Priority reflects an assessment of recency and ICP relevance, not confirmed buying intent.
+[onboarding | 4 Research — after “Try again” | button] OPEN WORKSPACE MAP · G
+[onboarding | 4 Research — after “Try again” | title] Open workspace map (G)
+[onboarding | 4 Research — after “Try again” | aria-label] Open workspace map
+[onboarding | 5 Deals — at rest, no deal added (validation) | text] ANTAEUS
+[onboarding | 5 Deals — at rest, no deal added (validation) | button] ← BACK
+[onboarding | 5 Deals — at rest, no deal added (validation) | text] YOUR OPEN DEALS
+[onboarding | 5 Deals — at rest, no deal added (validation) | heading 1] Only you know where each deal really stands. Fill it in once and you'll get it back every morning on the Dashboard.
+[onboarding | 5 Deals — at rest, no deal added (validation) | text] ACCOUNT
+[onboarding | 5 Deals — at rest, no deal added (validation) | field] ACCOUNT
+[onboarding | 5 Deals — at rest, no deal added (validation) | placeholder] Which company?
+[onboarding | 5 Deals — at rest, no deal added (validation) | text] VALUE ($)
+[onboarding | 5 Deals — at rest, no deal added (validation) | field] VALUE ($)
+[onboarding | 5 Deals — at rest, no deal added (validation) | placeholder] 120000
+[onboarding | 5 Deals — at rest, no deal added (validation) | text] STAGE
+[onboarding | 5 Deals — at rest, no deal added (validation) | field] STAGE
+[onboarding | 5 Deals — at rest, no deal added (validation) | option] Prospecting
+[onboarding | 5 Deals — at rest, no deal added (validation) | option] Discovery
+[onboarding | 5 Deals — at rest, no deal added (validation) | option] Proposal
+[onboarding | 5 Deals — at rest, no deal added (validation) | option] Negotiation
+[onboarding | 5 Deals — at rest, no deal added (validation) | option] Verbal yes
+[onboarding | 5 Deals — at rest, no deal added (validation) | option] Not sure yet
+[onboarding | 5 Deals — at rest, no deal added (validation) | text] CHAMPION — WHO'S FIGHTING FOR IT INSIDE
+[onboarding | 5 Deals — at rest, no deal added (validation) | field] CHAMPION — WHO'S FIGHTING FOR IT INSIDE
+[onboarding | 5 Deals — at rest, no deal added (validation) | placeholder] Name or role
+[onboarding | 5 Deals — at rest, no deal added (validation) | text] WHO SIGNS THE CHECK
+[onboarding | 5 Deals — at rest, no deal added (validation) | field] WHO SIGNS THE CHECK
+[onboarding | 5 Deals — at rest, no deal added (validation) | placeholder] The economic buyer
+[onboarding | 5 Deals — at rest, no deal added (validation) | text] WHERE IT'S STUCK
+[onboarding | 5 Deals — at rest, no deal added (validation) | field] WHERE IT'S STUCK
+[onboarding | 5 Deals — at rest, no deal added (validation) | placeholder] What's holding it up?
+[onboarding | 5 Deals — at rest, no deal added (validation) | button] Add this deal →
+[onboarding | 5 Deals — at rest, no deal added (validation) | text] DEALS ADDED
+[onboarding | 5 Deals — at rest, no deal added (validation) | text] 0 of 10 suggested
+[onboarding | 5 Deals — at rest, no deal added (validation) | text] Add your first open deal to see what's missing from it.
+[onboarding | 5 Deals — at rest, no deal added (validation) | button] Add at least one open deal to continue
+[onboarding | 5 Deals — at rest, no deal added (validation) | aria-label] Why we ask this
+[onboarding | 5 Deals — at rest, no deal added (validation) | text] WHY WE ASK THIS
+[onboarding | 5 Deals — at rest, no deal added (validation) | text] For each deal you enter the account, value, stage, champion, who signs, and where it's stuck. The first check uses the stage, champion, signer, and what's holding it up to suggest what to confirm next.
+[onboarding | 5 Deals — at rest, no deal added (validation) | button] OPEN WORKSPACE MAP · G
+[onboarding | 5 Deals — at rest, no deal added (validation) | title] Open workspace map (G)
+[onboarding | 5 Deals — at rest, no deal added (validation) | aria-label] Open workspace map
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] ANTAEUS
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | button] ← BACK
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] YOUR OPEN DEALS
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | heading 1] Only you know where each deal really stands. Fill it in once and you'll get it back every morning on the Dashboard.
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] ACCOUNT
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | field] ACCOUNT
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | placeholder] Which company?
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] VALUE ($)
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | field] VALUE ($)
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | placeholder] 120000
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] STAGE
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | field] STAGE
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | option] Prospecting
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | option] Discovery
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | option] Proposal
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | option] Negotiation
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | option] Verbal yes
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | option] Not sure yet
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] CHAMPION — WHO'S FIGHTING FOR IT INSIDE
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | field] CHAMPION — WHO'S FIGHTING FOR IT INSIDE
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | placeholder] Name or role
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] WHO SIGNS THE CHECK
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | field] WHO SIGNS THE CHECK
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | placeholder] The economic buyer
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] WHERE IT'S STUCK
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | field] WHERE IT'S STUCK
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | placeholder] What's holding it up?
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | button] Add this deal →
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] DEALS ADDED
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] 1 of 10 suggested
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] Boeing
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] AT RISK
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] This deal is in a late stage with no signer recorded. This needs review before relying on the planned close date.
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] Confirm who can sign and agree on a dated next step.
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | button] I've added them all — even if it's under ten
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] With fewer than ten deals, the workspace has less to compare and its suggestions will be limited. You can add the rest later.
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | aria-label] Why we ask this
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] WHY WE ASK THIS
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | text] For each deal you enter the account, value, stage, champion, who signs, and where it's stuck. The first check uses the stage, champion, signer, and what's holding it up to suggest what to confirm next.
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | button] OPEN WORKSPACE MAP · G
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | title] Open workspace map (G)
+[onboarding | 5 Deals — one deal added (fewer than the ten suggested) | aria-label] Open workspace map
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | text] ANTAEUS
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | button] ← BACK
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | text] YOUR SALES TARGET
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | heading 1] What is your sales target for the year?
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | text] Last step. Enter your annual target and typical deal size, and the workspace works out roughly how many open deals you need to reach it, and compares that with the deals you just added.
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | text] ANNUAL TARGET ($)
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | field] ANNUAL TARGET ($)
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | placeholder] 1,200,000
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | text] AVG DEAL ($)
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | field] AVG DEAL ($)
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | placeholder] 50,000
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | text] WIN RATE (%)
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | field] WIN RATE (%)
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | placeholder] 22
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | text] CYCLE (DAYS)
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | field] CYCLE (DAYS)
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | placeholder] 90
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | button] Finish setup →
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | aria-label] Why we ask this
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | text] WHY WE ASK THIS
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | text] Your annual target, typical deal size, win rate, and sales cycle are carried into Quota Workback. The open-deal estimate on this step uses a fixed 3.5× coverage assumption; the required pipeline in Quota Workback depends on the conversion assumptions you enter there.
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | button] OPEN WORKSPACE MAP · G
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | title] Open workspace map (G)
+[onboarding | 6 Sales target — at rest, reached with one deal (validation) | aria-label] Open workspace map
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | text] ANTAEUS
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | button] ← BACK
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | text] YOUR SALES TARGET
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | heading 1] What is your sales target for the year?
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | text] Last step. Enter your annual target and typical deal size, and the workspace works out roughly how many open deals you need to reach it, and compares that with the deals you just added.
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | text] ANNUAL TARGET ($)
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | field] ANNUAL TARGET ($)
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | placeholder] 1,200,000
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | text] AVG DEAL ($)
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | field] AVG DEAL ($)
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | placeholder] 50,000
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | text] WIN RATE (%)
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | field] WIN RATE (%)
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | placeholder] 22
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | text] CYCLE (DAYS)
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | field] CYCLE (DAYS)
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | placeholder] 90
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | text] Assuming you need about 3.5 times your target in open deals over each sales cycle, you'd want about 35 open deals at once. You added 1. That is below this estimate. Quota Workback shows how far short you are as you add deals.
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | button] Finish setup →
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | aria-label] Why we ask this
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | text] WHY WE ASK THIS
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | text] Your annual target, typical deal size, win rate, and sales cycle are carried into Quota Workback. The open-deal estimate on this step uses a fixed 3.5× coverage assumption; the required pipeline in Quota Workback depends on the conversion assumptions you enter there.
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | button] OPEN WORKSPACE MAP · G
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | title] Open workspace map (G)
+[onboarding | 6 Sales target — target and deal size entered; the estimate says one deal falls short | aria-label] Open workspace map
+[onboarding | 5 Deals — four deals added | text] ANTAEUS
+[onboarding | 5 Deals — four deals added | button] ← BACK
+[onboarding | 5 Deals — four deals added | text] YOUR OPEN DEALS
+[onboarding | 5 Deals — four deals added | heading 1] Only you know where each deal really stands. Fill it in once and you'll get it back every morning on the Dashboard.
+[onboarding | 5 Deals — four deals added | text] ACCOUNT
+[onboarding | 5 Deals — four deals added | field] ACCOUNT
+[onboarding | 5 Deals — four deals added | placeholder] Which company?
+[onboarding | 5 Deals — four deals added | text] VALUE ($)
+[onboarding | 5 Deals — four deals added | field] VALUE ($)
+[onboarding | 5 Deals — four deals added | placeholder] 120000
+[onboarding | 5 Deals — four deals added | text] STAGE
+[onboarding | 5 Deals — four deals added | field] STAGE
+[onboarding | 5 Deals — four deals added | option] Prospecting
+[onboarding | 5 Deals — four deals added | option] Discovery
+[onboarding | 5 Deals — four deals added | option] Proposal
+[onboarding | 5 Deals — four deals added | option] Negotiation
+[onboarding | 5 Deals — four deals added | option] Verbal yes
+[onboarding | 5 Deals — four deals added | option] Not sure yet
+[onboarding | 5 Deals — four deals added | text] CHAMPION — WHO'S FIGHTING FOR IT INSIDE
+[onboarding | 5 Deals — four deals added | field] CHAMPION — WHO'S FIGHTING FOR IT INSIDE
+[onboarding | 5 Deals — four deals added | placeholder] Name or role
+[onboarding | 5 Deals — four deals added | text] WHO SIGNS THE CHECK
+[onboarding | 5 Deals — four deals added | field] WHO SIGNS THE CHECK
+[onboarding | 5 Deals — four deals added | placeholder] The economic buyer
+[onboarding | 5 Deals — four deals added | text] WHERE IT'S STUCK
+[onboarding | 5 Deals — four deals added | field] WHERE IT'S STUCK
+[onboarding | 5 Deals — four deals added | placeholder] What's holding it up?
+[onboarding | 5 Deals — four deals added | button] Add this deal →
+[onboarding | 5 Deals — four deals added | text] DEALS ADDED
+[onboarding | 5 Deals — four deals added | text] 4 of 10 suggested
+[onboarding | 5 Deals — four deals added | text] delta.com
+[onboarding | 5 Deals — four deals added | text] NO CHAMPION
+[onboarding | 5 Deals — four deals added | text] No champion is recorded. The current information does not show who will advocate for the proposal internally.
+[onboarding | 5 Deals — four deals added | text] Identify an internal supporter and confirm whether they can help coordinate the buying process.
+[onboarding | 5 Deals — four deals added | text] Chipotle
+[onboarding | 5 Deals — four deals added | text] SINGLE CONTACT
+[onboarding | 5 Deals — four deals added | text] The deal is in a late stage and your notes indicate one contact. A change in that person’s availability or support could delay approval.
+[onboarding | 5 Deals — four deals added | text] Identify the other decision makers and confirm their approval requirements.
+[onboarding | 5 Deals — four deals added | text] Starbucks
+[onboarding | 5 Deals — four deals added | text] AT RISK
+[onboarding | 5 Deals — four deals added | text] This deal is in a late stage with a reported gap in buyer responses. This needs review before relying on the planned close date.
+[onboarding | 5 Deals — four deals added | text] Ask whether the buyer’s priorities or timeline have changed and agree on the next action.
+[onboarding | 5 Deals — four deals added | text] Boeing
+[onboarding | 5 Deals — four deals added | text] This deal is in a late stage with no signer recorded. This needs review before relying on the planned close date.
+[onboarding | 5 Deals — four deals added | text] Confirm who can sign and agree on a dated next step.
+[onboarding | 5 Deals — four deals added | button] I've added them all — even if it's under ten
+[onboarding | 5 Deals — four deals added | text] With fewer than ten deals, the workspace has less to compare and its suggestions will be limited. You can add the rest later.
+[onboarding | 5 Deals — four deals added | aria-label] Why we ask this
+[onboarding | 5 Deals — four deals added | text] WHY WE ASK THIS
+[onboarding | 5 Deals — four deals added | text] For each deal you enter the account, value, stage, champion, who signs, and where it's stuck. The first check uses the stage, champion, signer, and what's holding it up to suggest what to confirm next.
+[onboarding | 5 Deals — four deals added | button] OPEN WORKSPACE MAP · G
+[onboarding | 5 Deals — four deals added | title] Open workspace map (G)
+[onboarding | 5 Deals — four deals added | aria-label] Open workspace map
+[onboarding | 5 Deals — seven deals added | text] ANTAEUS
+[onboarding | 5 Deals — seven deals added | button] ← BACK
+[onboarding | 5 Deals — seven deals added | text] YOUR OPEN DEALS
+[onboarding | 5 Deals — seven deals added | heading 1] Only you know where each deal really stands. Fill it in once and you'll get it back every morning on the Dashboard.
+[onboarding | 5 Deals — seven deals added | text] ACCOUNT
+[onboarding | 5 Deals — seven deals added | field] ACCOUNT
+[onboarding | 5 Deals — seven deals added | placeholder] Which company?
+[onboarding | 5 Deals — seven deals added | text] VALUE ($)
+[onboarding | 5 Deals — seven deals added | field] VALUE ($)
+[onboarding | 5 Deals — seven deals added | placeholder] 120000
+[onboarding | 5 Deals — seven deals added | text] STAGE
+[onboarding | 5 Deals — seven deals added | field] STAGE
+[onboarding | 5 Deals — seven deals added | option] Prospecting
+[onboarding | 5 Deals — seven deals added | option] Discovery
+[onboarding | 5 Deals — seven deals added | option] Proposal
+[onboarding | 5 Deals — seven deals added | option] Negotiation
+[onboarding | 5 Deals — seven deals added | option] Verbal yes
+[onboarding | 5 Deals — seven deals added | option] Not sure yet
+[onboarding | 5 Deals — seven deals added | text] CHAMPION — WHO'S FIGHTING FOR IT INSIDE
+[onboarding | 5 Deals — seven deals added | field] CHAMPION — WHO'S FIGHTING FOR IT INSIDE
+[onboarding | 5 Deals — seven deals added | placeholder] Name or role
+[onboarding | 5 Deals — seven deals added | text] WHO SIGNS THE CHECK
+[onboarding | 5 Deals — seven deals added | field] WHO SIGNS THE CHECK
+[onboarding | 5 Deals — seven deals added | placeholder] The economic buyer
+[onboarding | 5 Deals — seven deals added | text] WHERE IT'S STUCK
+[onboarding | 5 Deals — seven deals added | field] WHERE IT'S STUCK
+[onboarding | 5 Deals — seven deals added | placeholder] What's holding it up?
+[onboarding | 5 Deals — seven deals added | button] Add this deal →
+[onboarding | 5 Deals — seven deals added | text] DEALS ADDED
+[onboarding | 5 Deals — seven deals added | text] 7 of 10 suggested
+[onboarding | 5 Deals — seven deals added | text] Walmart
+[onboarding | 5 Deals — seven deals added | text] STAGE UNCLEAR
+[onboarding | 5 Deals — seven deals added | text] No deal stage is selected. Confirm the buyer’s current decision process before assigning a stage.
+[onboarding | 5 Deals — seven deals added | text] Confirm the next buyer action, its owner, and the stage criteria it satisfies.
+[onboarding | 5 Deals — seven deals added | text] United Airlines
+[onboarding | 5 Deals — seven deals added | text] KEY CONTACTS RECORDED
+[onboarding | 5 Deals — seven deals added | text] A champion and signer are recorded, and these checks found no additional flag. This does not establish overall deal health.
+[onboarding | 5 Deals — seven deals added | text] Confirm the next buyer action, owner, and date.
+[onboarding | 5 Deals — seven deals added | text] Nordstrom
+[onboarding | 5 Deals — seven deals added | text] SIGNER NOT RECORDED
+[onboarding | 5 Deals — seven deals added | text] No signer is recorded. Confirm the approval process before planning the close.
+[onboarding | 5 Deals — seven deals added | text] Ask your champion who approves the purchase and who signs the agreement.
+[onboarding | 5 Deals — seven deals added | text] delta.com
+[onboarding | 5 Deals — seven deals added | text] NO CHAMPION
+[onboarding | 5 Deals — seven deals added | text] No champion is recorded. The current information does not show who will advocate for the proposal internally.
+[onboarding | 5 Deals — seven deals added | text] Identify an internal supporter and confirm whether they can help coordinate the buying process.
+[onboarding | 5 Deals — seven deals added | button] I've added them all — even if it's under ten
+[onboarding | 5 Deals — seven deals added | text] With fewer than ten deals, the workspace has less to compare and its suggestions will be limited. You can add the rest later.
+[onboarding | 5 Deals — seven deals added | aria-label] Why we ask this
+[onboarding | 5 Deals — seven deals added | text] WHY WE ASK THIS
+[onboarding | 5 Deals — seven deals added | text] For each deal you enter the account, value, stage, champion, who signs, and where it's stuck. The first check uses the stage, champion, signer, and what's holding it up to suggest what to confirm next.
+[onboarding | 5 Deals — seven deals added | button] OPEN WORKSPACE MAP · G
+[onboarding | 5 Deals — seven deals added | title] Open workspace map (G)
+[onboarding | 5 Deals — seven deals added | aria-label] Open workspace map
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] ANTAEUS
+[onboarding | 5 Deals — ten deals added (the suggested number) | button] ← BACK
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] YOUR OPEN DEALS
+[onboarding | 5 Deals — ten deals added (the suggested number) | heading 1] Only you know where each deal really stands. Fill it in once and you'll get it back every morning on the Dashboard.
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] ACCOUNT
+[onboarding | 5 Deals — ten deals added (the suggested number) | field] ACCOUNT
+[onboarding | 5 Deals — ten deals added (the suggested number) | placeholder] Which company?
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] VALUE ($)
+[onboarding | 5 Deals — ten deals added (the suggested number) | field] VALUE ($)
+[onboarding | 5 Deals — ten deals added (the suggested number) | placeholder] 120000
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] STAGE
+[onboarding | 5 Deals — ten deals added (the suggested number) | field] STAGE
+[onboarding | 5 Deals — ten deals added (the suggested number) | option] Prospecting
+[onboarding | 5 Deals — ten deals added (the suggested number) | option] Discovery
+[onboarding | 5 Deals — ten deals added (the suggested number) | option] Proposal
+[onboarding | 5 Deals — ten deals added (the suggested number) | option] Negotiation
+[onboarding | 5 Deals — ten deals added (the suggested number) | option] Verbal yes
+[onboarding | 5 Deals — ten deals added (the suggested number) | option] Not sure yet
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] CHAMPION — WHO'S FIGHTING FOR IT INSIDE
+[onboarding | 5 Deals — ten deals added (the suggested number) | field] CHAMPION — WHO'S FIGHTING FOR IT INSIDE
+[onboarding | 5 Deals — ten deals added (the suggested number) | placeholder] Name or role
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] WHO SIGNS THE CHECK
+[onboarding | 5 Deals — ten deals added (the suggested number) | field] WHO SIGNS THE CHECK
+[onboarding | 5 Deals — ten deals added (the suggested number) | placeholder] The economic buyer
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] WHERE IT'S STUCK
+[onboarding | 5 Deals — ten deals added (the suggested number) | field] WHERE IT'S STUCK
+[onboarding | 5 Deals — ten deals added (the suggested number) | placeholder] What's holding it up?
+[onboarding | 5 Deals — ten deals added (the suggested number) | button] Add this deal →
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] DEALS ADDED
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] 10 of 10 suggested
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] FedEx
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] KEY CONTACTS RECORDED
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] A champion and signer are recorded, and these checks found no additional flag. This does not establish overall deal health.
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] Confirm the next buyer action, owner, and date.
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] Marriott
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] Costco
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] Walmart
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] STAGE UNCLEAR
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] No deal stage is selected. Confirm the buyer’s current decision process before assigning a stage.
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] Confirm the next buyer action, its owner, and the stage criteria it satisfies.
+[onboarding | 5 Deals — ten deals added (the suggested number) | button] Next: your sales target →
+[onboarding | 5 Deals — ten deals added (the suggested number) | aria-label] Why we ask this
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] WHY WE ASK THIS
+[onboarding | 5 Deals — ten deals added (the suggested number) | text] For each deal you enter the account, value, stage, champion, who signs, and where it's stuck. The first check uses the stage, champion, signer, and what's holding it up to suggest what to confirm next.
+[onboarding | 5 Deals — ten deals added (the suggested number) | button] OPEN WORKSPACE MAP · G
+[onboarding | 5 Deals — ten deals added (the suggested number) | title] Open workspace map (G)
+[onboarding | 5 Deals — ten deals added (the suggested number) | aria-label] Open workspace map
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | text] ANTAEUS
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | button] ← BACK
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | text] YOUR SALES TARGET
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | heading 1] What is your sales target for the year?
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | text] Last step. Enter your annual target and typical deal size, and the workspace works out roughly how many open deals you need to reach it, and compares that with the deals you just added.
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | text] ANNUAL TARGET ($)
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | field] ANNUAL TARGET ($)
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | placeholder] 1,200,000
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | text] AVG DEAL ($)
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | field] AVG DEAL ($)
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | placeholder] 50,000
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | text] WIN RATE (%)
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | field] WIN RATE (%)
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | placeholder] 22
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | text] CYCLE (DAYS)
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | field] CYCLE (DAYS)
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | placeholder] 90
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | text] Assuming you need about 3.5 times your target in open deals over each sales cycle, you'd want about 6 open deals at once. You added 10. That meets this estimate. Quota Workback will show if your open deals drop below it.
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | button] Finish setup →
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | aria-label] Why we ask this
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | text] WHY WE ASK THIS
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | text] Your annual target, typical deal size, win rate, and sales cycle are carried into Quota Workback. The open-deal estimate on this step uses a fixed 3.5× coverage assumption; the required pipeline in Quota Workback depends on the conversion assumptions you enter there.
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | button] OPEN WORKSPACE MAP · G
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | title] Open workspace map (G)
+[onboarding | 6 Sales target — larger deal size entered; the estimate says ten deals are enough | aria-label] Open workspace map
+[onboarding | 7 Landing — setup complete | text] ANTAEUS
+[onboarding | 7 Landing — setup complete | text] SETUP COMPLETE
+[onboarding | 7 Landing — setup complete | heading 1] Your workspace is set up with what you entered.
+[onboarding | 7 Landing — setup complete | text] WHERE TO START
+[onboarding | 7 Landing — setup complete | text] Boeing: Confirm who can sign and agree on a dated next step.
+[onboarding | 7 Landing — setup complete | text] WHERE YOU STAND
+[onboarding | 7 Landing — setup complete | text] Most of what a new hire would need still lives in your head. The workspace now has your targets, accounts, and deals, and it flags deals that need attention. Each week of recorded work makes it easier for someone else to pick up.
+[onboarding | 7 Landing — setup complete | text] WHAT'S LEFT — LATER, NO RUSH
+[onboarding | 7 Landing — setup complete | text] Over the coming days the workspace will ask about your pilots, your advisors, and your wins and losses. Each answer fills in another part of the workspace. The hardest part is done.
+[onboarding | 7 Landing — setup complete | link] Open the Dashboard →
+[onboarding | 7 Landing — setup complete | aria-label] Why we ask this
+[onboarding | 7 Landing — setup complete | text] WHY WE ASK THIS
+[onboarding | 7 Landing — setup complete | text] Your inputs initialize the workspace. Review the resulting accounts, deals, and recommendations, and update them as you obtain new evidence.
+[onboarding | 7 Landing — setup complete | button] OPEN WORKSPACE MAP · G
+[onboarding | 7 Landing — setup complete | title] Open workspace map (G)
+[onboarding | 7 Landing — setup complete | aria-label] Open workspace map
+[onboarding | 1 Doorway — workspace map opened (G key) | text] ANTAEUS
+[onboarding | 1 Doorway — workspace map opened (G key) | text] BEFORE YOU START
+[onboarding | 1 Doorway — workspace map opened (G key) | heading 1] This setup takes real thought from you.
+[onboarding | 1 Doorway — workspace map opened (G key) | text] It asks for things only you know: who you sell to, which companies you're going after, and where each of your open deals really stands. Most setup screens skip this work. Doing it is what lets the workspace flag deal problems before they surprise you.
+[onboarding | 1 Doorway — workspace map opened (G key) | text] You enter it once, and you'll get it back every morning on the Dashboard: which deals have gone quiet or missed a next step, what each one is missing, and which one to work on first. The more honest your answers, the more useful it gets.
+[onboarding | 1 Doorway — workspace map opened (G key) | button] Start →
+[onboarding | 1 Doorway — workspace map opened (G key) | aria-label] Why we ask this
+[onboarding | 1 Doorway — workspace map opened (G key) | text] WHY WE ASK THIS
+[onboarding | 1 Doorway — workspace map opened (G key) | text] Each step explains how its inputs will be used. Review these notes as you enter your workspace information.
+[onboarding | 1 Doorway — workspace map opened (G key) | button] OPEN WORKSPACE MAP · G
+[onboarding | 1 Doorway — workspace map opened (G key) | title] Open workspace map (G)
+[onboarding | 1 Doorway — workspace map opened (G key) | aria-label] Open workspace map
+[onboarding | 1 Doorway — workspace map opened (G key) | aria-label] Workspace map
+[onboarding | 1 Doorway — workspace map opened (G key) | text] WORKSPACE MAP
+[onboarding | 1 Doorway — workspace map opened (G key) | text] Where do you want to go?
+[onboarding | 1 Doorway — workspace map opened (G key) | text] You're in Onboarding
+[onboarding | 1 Doorway — workspace map opened (G key) | field] …or start typing a workspace
+[onboarding | 1 Doorway — workspace map opened (G key) | placeholder] …or start typing a workspace
+[onboarding | 1 Doorway — workspace map opened (G key) | text] ENTER
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Welcome today's recommended starting point
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Onboarding set up the workspace
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Dashboard pipeline, priorities, activity, and deal risk
+[onboarding | 1 Doorway — workspace map opened (G key) | text] STRATEGY
+[onboarding | 1 Doorway — workspace map opened (G key) | link] ICP Studio define the companies and buyers you sell to
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Territory Architect create and prioritize territory segments
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Prospecting Desk find accounts that match your ICP
+[onboarding | 1 Doorway — workspace map opened (G key) | text] FIND & WATCH
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Signal Console monitor account signals and priority
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Briefing review changes in your accounts, deals, and market
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Outdoors Events find events where target buyers may be present
+[onboarding | 1 Doorway — workspace map opened (G key) | text] WORK THE ACCOUNT
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Outbound Studio create and manage outbound messages
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Cold Call Studio prepare and run cold calls
+[onboarding | 1 Doorway — workspace map opened (G key) | link] LinkedIn Playbook plan LinkedIn outreach
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Discovery Studio prepare and run discovery
+[onboarding | 1 Doorway — workspace map opened (G key) | text] ADVANCE THE DEAL
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Deal Workspace review open deals, next steps, and risk
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Pilot Desk plan and evaluate pilots
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Getting to Signed manage legal, security, finance, and final approval
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Call in a Favor use your network to help move a deal
+[onboarding | 1 Doorway — workspace map opened (G key) | text] DIAGNOSE · HAND OFF
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Future Autopsy identify deals with high loss risk and why
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Quota Workback calculate activity and pipeline required to hit quota
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Readiness Score can another seller run the sales process?
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Founding GTM document the sales process for another seller
+[onboarding | 1 Doorway — workspace map opened (G key) | link] Settings manage workspace data and account settings

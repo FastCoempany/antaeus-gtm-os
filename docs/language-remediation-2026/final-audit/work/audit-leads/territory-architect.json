@@ -1,0 +1,191 @@
+{
+ "area": "territory-architect",
+ "coverage": [
+  {
+   "surface": "Territory Architect default screen (v4) — at rest, six criterion tabs, create-segment form per criterion, segment cards, approaches list, accounts drawer",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/territory-architect/v4/TerritoryArchitectV4.tsx",
+    "src/territory-architect/lib/types.ts"
+   ],
+   "note": "SMB walkthrough covers at-rest + all six create forms; segment cards, approach row and accounts drawer are not reached in the walkthrough (demo has no segments) and were reviewed from source only."
+  },
+  {
+   "surface": "Territory Architect shared engine — field-read status generator, allocation, tier labels",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/territory-architect/lib/field-read.ts",
+    "src/territory-architect/lib/field-read.test.ts",
+    "src/territory-architect/state.ts",
+    "src/territory-architect/lib/types.ts"
+   ],
+   "note": "All generator branches read; empty-band output confirmed in SMB walkthrough; other bands from source only (demo never reaches them because of TA-003)."
+  },
+  {
+   "surface": "Territory Architect persistence, cloud bridge, demo seed shape, handoff helpers",
+   "generation": "backend",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/territory-architect/lib/persistence.ts",
+    "src/territory-architect/lib/territory-bridge.ts",
+    "src/territory-architect/lib/cloud-persistence.ts",
+    "src/territory-architect/lib/handoff.ts",
+    "src/territory-architect/main.tsx",
+    "js/demo-seed-data-smb.js",
+    "js/demo-seed-data-ent.js",
+    "src/prospecting-desk/lib/research-context.ts"
+   ],
+   "note": "Read only; no live Supabase. axis loss and seed-shape loss deduced from code and confirmed by walkthrough output (no segments, all accounts Core)."
+  }
+ ],
+ "findings": [
+  {
+   "id": "TA-001",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/territory-architect/lib/types.ts",
+   "line": 15,
+   "generation": "shared",
+   "state": "v4 allocation scale under the bar, Priority tier select in the create-segment form, tier chip on each segment card, tier select in the accounts drawer; ds tier meters/kickers/select; legacy tier stats and selects",
+   "current": "TIER_LABELS = { t1: \"Strategic (must-win)\", t2: \"Core (recurring focus)\", t3: \"Develop (research-led)\", t4: \"Watch (monitor only)\" } — renders as \"Strategic (must-win) 0/30\", \"Core (recurring focus) 30/90\", \"Develop (research-led) 0/120\", \"Watch (monitor only) 0/60\" (SMB walkthrough, area at rest)",
+   "problem": "The approved Batch 02 replacements were never applied to the shared label map. The parenthetical glosses compress private meaning (\"must-win\" is an absolute judgment, \"research-led\" does not say what the tier commits the seller to) and \"Watch\" is the old tier name the batch replaced with \"Monitor\". The counts are also rendered \"0/30\" with no unit, so a newcomer cannot tell 30 is the recommended target, not a cap. Dimensions 1 (semantic compression) and 6 (high-context).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md exact replacements B2-X-009, B2-X-010, B2-X-011, B2-X-012",
+   "proposed": "In src/territory-architect/lib/types.ts set TIER_LABELS to { t1: \"Strategic\", t2: \"Core\", t3: \"Develop\", t4: \"Monitor\" } (keys t1–t4 unchanged). In src/territory-architect/v4/TerritoryArchitectV4.tsx:227 render the count as `{p.count} / {TIER_DEFAULTS[p.tier]}` so the scale reads \"Strategic 0 / 30\" … \"Monitor 0 / 60\"; optionally add title={t(\"accounts in this tier / recommended target\")} on the span so the target meaning is available on hover. Update src/territory-architect/ds/lib/adapters.ts:31 comment and the adapters.test.ts:47 test name only if desired (they do not assert the label).",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TA-002",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/territory-architect/lib/territory-bridge.ts",
+   "line": 95,
+   "generation": "backend",
+   "state": "v4: create a segment on any criterion other than Company size / stage (e.g. Geography) while signed in or in demo-local mode; then reload",
+   "current": "rowToThesis (line 95–124), focusToInsert (126–141) and focusToUpdate (143–155) neither write nor read Focus.axis. saveThesis (src/territory-architect/lib/cloud-persistence.ts:203–226) replaces the just-created local focus with rowToThesis(row), and bootCloudPersistence (cloud-persistence.ts:80–83) replaces local state with cloud rows.",
+   "problem": "The criterion a segment was created on is lost on the cloud round-trip. v4 filters segments by the selected criterion (TerritoryArchitectV4.tsx:154 axisOf(f) defaults to \"segment\"), so a Geography / Industry / Named accounts / Buying signals / Combined segment disappears from the tab it was created on as soon as the insert resolves and reappears under Company size / stage. A Buying-signals segment also loses its required-why-now treatment (line 339–341). The user sees their segment vanish.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md Structural requirements · Territory Architect (segment criteria are geography, industry, company size/stage, named accounts, buying signals, or combined criteria); 01_OWNER_REQUIREMENTS.md Required work 7 (persisted state, cross-room handoffs)",
+   "proposed": "In territory-bridge.ts: import isCarveAxis from ./types; in rowToThesis add `...(isCarveAxis(data[\"axis\"]) ? { axis: data[\"axis\"] } : {})`; in focusToInsert and focusToUpdate add `...(focus.axis ? { axis: focus.axis } : {})` inside data. Add a round-trip test in lib/territory-bridge.test.ts (focusToInsert → rowToThesis preserves axis \"geo\"; absent axis stays absent).",
+   "testsAffected": [
+    "src/territory-architect/lib/territory-bridge.test.ts (new case)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TA-003",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/territory-architect/lib/persistence.ts",
+   "line": 84,
+   "generation": "seed",
+   "state": "Both demo books (SMB and enterprise) at rest, and any workspace whose localStorage holds the legacy territory shape",
+   "current": "parseFocus requires `title` (line 88–89) and parseAccount's asTier (line 63–67) accepts only \"t1\"–\"t4\". The demo seeds write focuses as {id, name, pressure, segment, leverage, fullStatement, status} (js/demo-seed-data-smb.js:328–329, js/demo-seed-data-ent.js:501) and accounts with numeric tier 1/2/3 (smb.js:342, ent.js:518). Result in the SMB walkthrough: \"No segments yet.\", \"NO ACTIVE TERRITORY\", \"Core (recurring focus) 30/90\" while the seed defines four segments (Fast-casual expansion, DTC & CPG velocity, Software scale-ups, Cost-focused operators) and puts accounts in tiers 1–3.",
+   "problem": "All four seeded segments are silently dropped and every seeded account is forced into the Core tier, so the demo (the tester pathway the remediation is certified on) shows an empty, misleading territory: the status label says there is no active territory while 30 accounts are counted, the tier allocation is wrong, and no segment card, approach list or accounts drawer can be reached. Any real user data in the pre-rename shape is lost the same way.",
+   "governing": "01_OWNER_REQUIREMENTS.md Required work 7 (legacy compatibility paths, persisted state) and 8 (regenerate the actual demo-seeded tester pathway); brief §5 Generation (demo/sample content, legacy compatibility translators)",
+   "proposed": "In persistence.ts parseFocus: `const title = asString(r[\"title\"]) || asString(r[\"name\"]);` and `pressure: asString(r[\"pressure\"])`, `whyUs: asString(r[\"whyUs\"]) || asString(r[\"leverage\"])`. Make asTier accept numbers: `if (v === 1 || v === 2 || v === 3 || v === 4) return (\"t\" + v) as TierId;` before the string check. Add persistence.test.ts cases for the legacy {name, leverage} focus and numeric tier. (Alternative or additionally: change the two seed files to write title/whyUs/\"t1\"; the translator is preferred because it also recovers real legacy data.)",
+   "testsAffected": [
+    "src/territory-architect/lib/persistence.test.ts (new cases)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TA-004",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/territory-architect/lib/field-read.ts",
+   "line": 40,
+   "generation": "shared",
+   "state": "v4 status row and ds 'WHERE THE TERRITORY STANDS' chip whenever there are no segments (or no active accounts) — e.g. SMB walkthrough at rest",
+   "current": "\"NO ACTIVE TERRITORY\" (band \"empty\" → BAND_LABELS.empty = \"No active territory\") shown directly under \"30 / 300 account capacity used\" and \"Core (recurring focus) 30/90\"",
+   "problem": "scoreToBand returns \"empty\" when focusCount === 0 OR activeCount === 0, so the label claims there is no active territory while the same screen counts 30 active accounts. Declarative statement contradicted by adjacent data (dimension 4); a first-time user cannot tell which is true.",
+   "governing": "COPY_STANDARD.md §17 (state names an observable condition) and §21 (claims discipline); comprehension principle",
+   "proposed": "In computeFieldRead set bandLabel by the actual condition when band is \"empty\": `focuses.length === 0 ? t(\"No segments yet\") : t(\"No active accounts\")`; keep BAND_LABELS for the other bands and keep the band key \"empty\".",
+   "testsAffected": [
+    "src/territory-architect/lib/field-read.test.ts (asserts band only; add a bandLabel assertion)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TA-005",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/territory-architect/lib/field-read.ts",
+   "line": 33,
+   "generation": "shared",
+   "state": "v4 status row and ds status chip once segments and active accounts exist",
+   "current": "BAND_LABELS = { runnable: \"Operating\", tight: \"Well prioritized\", loose: \"Needs prioritization\", empty: … }",
+   "problem": "\"Operating\" is a retired primary state label that names no condition; \"Well prioritized\" / \"Needs prioritization\" claim a judgment about prioritization quality, but computeScore (line 87–99) only counts segments, approaches, active and won accounts and the cap status. The label states more than the code measures (dimensions 4 and 6), and the order of the two positive labels is not readable (which is better, Operating or Well prioritized?).",
+   "governing": "CLAUDE.md Part III §10 (\"Operating\" retired as a primary label, 2026-11-05); COPY_STANDARD.md §17, §21",
+   "proposed": "BAND_LABELS: runnable → \"Set up and in use\", tight → \"Mostly set up\", loose → \"Partly set up\" (each name what computeScore counts: segments, approaches, active accounts). Keep keys.",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "TA-006",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/territory-architect/v4/TerritoryArchitectV4.tsx",
+   "line": 254,
+   "generation": "v4",
+   "state": "v4 create-segment form, every criterion",
+   "current": "First field labelled by criterion (\"REGION / METRO\", \"INDUSTRY\", \"COMPANY SIZE / STAGE BAND\", \"LIST NAME\", \"BUYING SIGNAL — SOMETHING YOU CAN DETECT\", \"PRIMARY CRITERIA\") stores the segment's name (d.title, shown as the card title); a second field \"SEGMENT DETAIL\" (line 291) stores d.segment and shows the identical placeholder (both use A.placeholder, lines 257 and 294, e.g. \"e.g. West Coast tech hub\" twice).",
+   "problem": "The header says \"Name the segment\" but no field is called name, and two fields ask for the same example, so a first-time user cannot tell which input becomes the segment name and what the second one is for (dimensions 6 and 9). Batch 02 requires every segment to have a plain name.",
+   "governing": "07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md Structural requirements · Territory Architect (\"Every segment should have a plain name, priority tier, fit rationale, and optional current reason\")",
+   "proposed": "Label the first input t(\"Segment name\") (keep A.placeholder). Relabel the second input with the criterion label (A.carveField, e.g. \"Region / metro\") and give AXES a second, distinct placeholder field for it (e.g. geo \"e.g. CA, OR, WA\"; vertical \"e.g. Payments and lending\"; segment \"e.g. 200–999 employees, Series B+\"; named \"e.g. Top 25 by fit\"; trigger \"e.g. New CRO in the last 90 days\"; blend \"e.g. West Coast · FinTech · Series B+\").",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "TA-007",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/territory-architect/v4/TerritoryArchitectV4.tsx",
+   "line": 441,
+   "generation": "v4",
+   "state": "v4 accounts drawer (Open accounts on a segment card)",
+   "current": "\"Changes to the account's priority tier update the allocation above. Segment assignments are also used by Prospecting Desk and Signal Console.\"",
+   "problem": "No code outside Territory Architect reads account-to-segment assignments: Signal Console has no reference to gtmos_ta_* data, and Prospecting Desk reads only a segment statement (src/prospecting-desk/lib/research-context.ts:73–84), not account assignments. The second sentence asserts a downstream effect the code does not have.",
+   "governing": "COPY_STANDARD.md §21 (claims discipline); brief §5 ('copy that now claims something the code does not do')",
+   "proposed": "\"Changing an account's priority tier updates the allocation above.\" (drop the second sentence). OWNER DECISION: if segment assignments should feed Signal Console and Prospecting Desk, that is new wiring.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TA-008",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/prospecting-desk/lib/research-context.ts",
+   "line": 81,
+   "generation": "shared",
+   "state": "Prospecting Desk 'Describe who you're after' prefill after the user creates a segment in Territory Architect",
+   "current": "readActiveFocus reads `str(o[\"fullStatement\"]) || str(o[\"name\"])` from gtmos_ta_focuses",
+   "problem": "Territory Architect now saves focuses as {title, pressure, segment, whyUs} (src/territory-architect/state.ts:151–162), with no fullStatement or name, so a segment created in Territory Architect never reaches Prospecting Desk; the handoff only works for the old seed shape. Breaks the Territory → Prospecting flow the drawer and canon describe.",
+   "governing": "CLAUDE.md Part I §6 (Territory feeds Sourcing/Prospecting); 01_OWNER_REQUIREMENTS.md Required work 7 (cross-room handoffs)",
+   "proposed": "In readActiveFocus: `const text = str(o[\"fullStatement\"]) || [str(o[\"title\"]) || str(o[\"name\"]), str(o[\"segment\"]), str(o[\"whyUs\"])].filter(Boolean).join(\" — \");` and add a research-context test with the current Territory Architect focus shape.",
+   "testsAffected": [
+    "src/prospecting-desk/lib/research-context test (new case)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TA-009",
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "src/territory-architect/v4/TerritoryArchitectV4.tsx",
+   "line": 355,
+   "generation": "v4",
+   "state": "v4 approaches section (shown once any segment exists)",
+   "current": "\"Sales approaches by segment\" followed by rows of ap.name and ap.trigger",
+   "problem": "The list is not grouped or labelled by segment (each row shows the approach name and an always-empty trigger for approaches created here), so the heading promises a structure the list does not show.",
+   "governing": "comprehension principle",
+   "proposed": "Render the segment title in each row instead of ap.trigger: `<span class=\"ta4-u\">{allFocuses.find((f) => f.id === ap.focusId)?.title ?? \"\"}</span>`; keep the heading. Alternatively retitle to t(\"Sales approaches\").",
+   "testsAffected": [],
+   "confidence": "medium"
+  }
+ ],
+ "dispositions": [],
+ "retained": [],
+ "gaps": []
+}

@@ -1,0 +1,254 @@
+{
+ "area": "deal-workspace",
+ "coverage": [
+  {
+   "surface": "Deal Workspace default screen (Focus/Timeline/List, hero, filters, handoff strip, closed counts, CSV button)",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+    "src/deal-workspace/v4/lib/views.ts",
+    "src/deal-workspace/lib/recovery.ts",
+    "src/deal-workspace/ds/lib/adapters.ts"
+   ],
+   "note": "Read source in full; cross-checked against the SMB walkthrough generated today. Follow peek, Ground map and Live Edge render here but are shared organs outside this area; only noted where Deal Workspace data feeds them."
+  },
+  {
+   "surface": "Deal editor drawer + loss-reason modal (shared by v4 and ds)",
+   "generation": "shared",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/deal-workspace/ds/components/DealDrawer.tsx",
+    "src/deal-workspace/ds/components/DealHealthFormDS.tsx",
+    "src/deal-workspace/ds/components/LossReasonModalDS.tsx",
+    "src/deal-workspace/lib/persistence.ts"
+   ],
+   "note": "Drawer and save were executed in the SMB walkthrough; the loss-reason modal was not triggered in any walkthrough (requires changing stage to Closed Lost) \u2014 reviewed from source only."
+  }
+ ],
+ "findings": [
+  {
+   "id": "DW-001",
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/deal-workspace/ds/lib/adapters.ts",
+   "line": 66,
+   "generation": "shared",
+   "state": "v4 default and ds: filter chip 'No recent activity' (v4) / 'Stalled' (ds); any open deal with 30+ days since last update",
+   "current": "const STALE_PHRASE = /(stalled|days since)/i; \u2014 but lib/recovery.ts:59 now emits `No recorded activity for ${days} days` for deals idle 30+ days (was `Stalled ${days} days` before #324).",
+   "problem": "Language work broke the filter: the most-inactive deals (30+ days, the score-100 inactivity band) no longer contain 'stalled' or 'days since', so the 'No recent activity' filter silently drops exactly the deals it is named for. Observable: give a deal updated_at 40 days ago and click 'No recent activity' \u2014 it is missing. Unit test adapters.test.ts:27,71-86 still feeds the old hand-written cause 'Stalled 42 days', so the regression is not caught.",
+   "governing": "comprehension principle; AUDIT_BRIEF \u00a75 Function (copy change altering behavior); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md (no regressions)",
+   "proposed": "Stop matching display text. Add a stable factor list to RecoveryAssessment in lib/recovery.ts (e.g. `factors: ReadonlyArray<'inactive'|'next-step-missing'|'next-step-undated'|'next-step-overdue'|'next-step-due'|'close-overdue'|'close-this-quarter'>`) set alongside each cause, and make applyFilter test factors: stalled = factors.includes('inactive'); this-quarter = factors includes 'close-this-quarter' or 'close-overdue'. Minimum change if factors are deferred: STALE_PHRASE = /(no recorded activity|days since)/i. Update adapters.test.ts fixtures to use real assessDeal() output instead of hand-written cause strings.",
+   "testsAffected": [
+    "src/deal-workspace/ds/lib/adapters.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "DW-002",
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 135,
+   "generation": "v4",
+   "state": "v4 Focus view, focal deal header (at rest and after clicking any queue row)",
+   "current": "{focal.lane === \"healthy\" ? t(\"Lower risk\") : t(\"Highest-risk deal\")}{focal.deal.value >= 100 ? t(\" \u00b7 largest value\") : \"\"} \u2014 renders 'Highest-risk deal \u00b7 largest value' over Liquid Death $48k while Sweetgreen $88k is open (SMB walkthrough, area at rest); after clicking Notion $72k it renders 'Lower risk \u00b7 largest value' (SMB walkthrough).",
+   "problem": "Declarative certainty / false claim: '\u00b7 largest value' is shown for any deal worth $100 or more, not the largest deal. 'Highest-risk deal' is also shown for any deal the user clicks from the queue, even a lower-ranked one (focal = focusedDealId if set). A first-time user is told the wrong deal is the biggest and riskiest.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md row 'Slipping now \u00b7 your biggest deal' \u2192 'Highest-risk deal \u00b7 largest value' (B3-X-062) \u2014 the replacement only holds when both facts are true; COPY_STANDARD \u00a721 (claims discipline)",
+   "proposed": "Compute the labels from data: isTop = focal.deal.id === items[0].deal.id (the head of the risk ranking) and isLargest = focal.deal.value === Math.max(...items.map(a=>a.deal.value)). Render: lane==='healthy' ? 'Lower risk' : isTop ? 'Highest-risk deal' : (lane==='critical' ? 'High risk' : 'Elevated risk'); append ' \u00b7 largest value' only when isLargest.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "DW-003",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/deal-workspace/ds/components/DealHealthFormDS.tsx",
+   "line": 113,
+   "generation": "shared",
+   "state": "Deal editor drawer (opened from any action button / 'Open full deal' / 'edit all 9 \u2192' in v4, 'Open the deal' in ds) \u2014 section kicker",
+   "current": "NEXT MOVE",
+   "problem": "Private recommendation label 'move' used as a noun for the next step; the section's own field is 'Next step'. Rendered in the default screen's drawer (SMB walkthrough: 'NEXT MOVE').",
+   "governing": "AUDIT_BRIEF \u00a73 disputed terms (move / next move \u2192 next step); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'move'; COPY_STANDARD \u00a73",
+   "proposed": "NEXT STEP & FORECAST",
+   "testsAffected": [
+    "src/deal-workspace/ds/forms.test.tsx (check for 'NEXT MOVE' assertion)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "DW-004",
+   "category": "A11Y",
+   "severity": 2,
+   "file": "src/deal-workspace/ds/components/DealHealthFormDS.tsx",
+   "line": 212,
+   "generation": "shared",
+   "state": "Deal editor drawer \u2192 Stakeholders \u2192 'Add one' row",
+   "current": "<TextInput value={s.name} \u2026 placeholder={t(\"Name\")} /> and an unlabeled <Select> for role; SMB walkthrough reports '(unlabelled field)' and 'field Name'.",
+   "problem": "The stakeholder name and role controls have no accessible name (placeholder only; select has none). Screen-reader users hear an unlabeled edit box and combo box per row.",
+   "governing": "comprehension principle (A11Y); AUDIT_BRIEF \u00a75 States (aria-label)",
+   "proposed": "Add an optional `ariaLabel` prop to TextInput and Select in src/components/input.tsx (rendered as aria-label), then pass ariaLabel={t(\"Stakeholder name\")} and ariaLabel={t(\"Stakeholder role\")} here.",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "DW-005",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/deal-workspace/lib/persistence.ts",
+   "line": 157,
+   "generation": "shared",
+   "state": "Save a deal whose id is not a UUID (deals loaded from the gtmos_deal_workspaces mirror as legacy_N, i.e. demo books / empty-cloud fallback) while a data client is booted",
+   "current": "isUpdate = looksLikePersistedId(deal.id) \u2192 false \u2192 clientRef.deals.insert(write) \u2192 upsertDeal(saved) with the new UUID; the legacy_N copy is never removed. SMB walkthrough: after 'Save the deal' on Liquid Death the top bar goes from '12 live \u00b7 $803k pipeline' to '13 live \u00b7 $851k pipeline' and the hero from 4 to 5 at-risk deals.",
+   "problem": "Saving duplicates the deal: counts, pipeline value, risk hero and CSV export all double-count it. A first-time user editing a demo deal sees pipeline jump by the deal's value. (Likely pre-dates the language work.)",
+   "governing": "comprehension principle; AUDIT_BRIEF \u00a75 Function (dedupe/upsert)",
+   "proposed": "In saveDealEdit, after an insert returns a row whose id differs from deal.id, call removeDeal(deal.id) before upsertDeal(saved) (and publishExternalState once). Add a persistence.test.ts case: legacy_0 deal saved with a stub insert returning a UUID \u2192 allDeals length unchanged.",
+   "testsAffected": [
+    "src/deal-workspace/lib/persistence.test.ts"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "DW-006",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 303,
+   "generation": "v4",
+   "state": "v4 default, bottom handoff strip 'CONTINUE WORKING THIS DEAL'",
+   "current": "<div class=\"dw4-hoh\">{t(\"Continue working this deal\")}</div> followed by hrefToFutureAutopsy(), hrefToPocFramework(), hrefToAdvisorDeploy(), discoveryHref(\"\"), hrefToNegotiation() \u2014 all called with no deal.",
+   "problem": "The heading (approved replacement B3-X-068) promises 'this deal', but none of the five links carries the focused deal (no focusObject / ?deal= / account), and 'Prep the next call' sends account= empty. The ds generation passes focusName; v4 regressed it. The user lands in the next area with nothing selected.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md B3-X-068; CLAUDE.md Part I \u00a72 continuity params",
+   "proposed": "Use the focused deal: const focus = focusedDeal.value; pass focus?.accountName to hrefToFutureAutopsy / hrefToPocFramework / hrefToAdvisorDeploy, hrefToNegotiation(focus?.id, focus?.accountName), and discoveryHref(focus?.accountName ?? \"\"). Keep the heading text. If no deal is open, render 'Continue with a deal' instead.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "DW-007",
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/dashboard/today/lib/adapters.ts",
+   "line": 47,
+   "generation": "shared",
+   "state": "Dashboard 'today' surface Queue read, GONE QUIET zone, fed by gtmos_deal_workspace_health.top_pressure[].cause from Deal Workspace",
+   "current": "const QUIET_PHRASE = /(stalled|stale|days since|gone quiet|no reply|no activity|drift|dark|silent)/i; \u2014 Deal Workspace now publishes 'No recorded activity for 41 days' as the cause for deals idle 30+ days (src/deal-workspace/lib/recovery.ts:59, published by lib/health-snapshot.ts:66).",
+   "problem": "Same text-matching regression as DW-001 one hop downstream: 'No recorded activity' matches none of the alternatives ('no activity' needs the words adjacent), so the longest-idle deals fall out of GONE QUIET. Routed here because Deal Workspace is the source of the changed string.",
+   "governing": "AUDIT_BRIEF \u00a75 Function (copy change altering downstream behavior)",
+   "proposed": "Publish a stable factor/flag on each top_pressure entry from lib/health-snapshot.ts (e.g. inactiveDays: number, or factors[] from DW-001) and have isQuiet read it; minimum change: add 'no recorded activity|since last recorded activity' to QUIET_PHRASE.",
+   "testsAffected": [
+    "src/dashboard/today/lib/adapters.test.ts (if present)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "DW-008",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/deal-workspace/lib/recovery.ts",
+   "line": 75,
+   "generation": "shared",
+   "state": "Any open deal whose next step is due tomorrow \u2014 List view cause line, queue row, Focus 'why' text, Dashboard via health snapshot",
+   "current": "`Next step is due in ${days} days` \u2192 'Next step is due in 1 days' (SMB walkthrough, Notion); days === 0 gives 'due in 0 days'.",
+   "problem": "Grammar error in a generated status line; '0 days' reads as an error rather than 'today'.",
+   "governing": "COPY_STANDARD \u00a717 (state names an observable condition); comprehension principle",
+   "proposed": "days === 0 ? 'Next step is due today' : days === 1 ? 'Next step is due tomorrow' : `Next step is due in ${days} days`. (Same pluralization check for the overdue branch at line 74 and close-date overdue at line 83: '1 days overdue'.)",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "DW-009",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 138,
+   "generation": "v4",
+   "state": "v4 Focus header stage line, List row stage tag (line 99), Timeline review row (line 220)",
+   "current": "{focal.deal.stage} \u2192 'EVALUATION', 'PROSPECT', 'evaluation' (SMB walkthrough), and would render 'POC' / 'VERBAL' \u2014 while the editor, the follow peek and the ds cards show the product labels 'Solution Fit', 'PoC / Pilot', 'Verbal Commit'.",
+   "problem": "The stage id is shown instead of the stage label, so the same deal is 'evaluation' on the board and 'Solution Fit' in the editor; a newcomer cannot tell they are the same stage.",
+   "governing": "comprehension principle (high-context dependence); CLAUDE.md \u00a74.13",
+   "proposed": "Render STAGE_LABELS[deal.stage] (import from ../lib/deal-shape) at lines 99, 138 and 220.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "DW-010",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 155,
+   "generation": "v4",
+   "state": "v4 Focus view, 'Deal health' block",
+   "current": "'edit all 9 \u2192' above an eight-field grid whose empty values read 'not named' (e.g. 'PAIN not named', 'MOMENTUM not named') and whose Next step value is the bare word 'set'.",
+   "problem": "'9' refers to an internal 9-field count the user cannot see (eight fields shown, the editor has 14); 'not named' is wrong for Pain/Use case/Competition/Momentum; 'set' hides the actual next step and date.",
+   "governing": "comprehension principle (high-context dependence, semantic compression); COPY_STANDARD \u00a717",
+   "proposed": "Button: 'Edit deal details \u2192'. Empty value: 'not recorded'. Next step value: the recorded next step text plus its date when present (e.g. 'Send pricing to Sarah \u00b7 Nov 20'), else 'not recorded'.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "DW-011",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 276,
+   "generation": "v4",
+   "state": "v4 view toggle 'Timeline' and the Timeline track (zones + 'RISK' marker)",
+   "current": "Toggle label 'Timeline'; track places each deal by horizonPercent(a) = risk score (v4/lib/views.ts:412-415), zone captions 'High risk \u00b7 review this week' / 'Elevated risk' / 'Lower risk', and the marker label 'risk'.",
+   "problem": "The horizontal axis is the risk score, not time (the code comment says 'Position is not a time-to-loss estimate'), but the view is named 'Timeline' and nothing on the track says what left-to-right means, so a first-time user reads distance as days until loss \u2014 the forecast certainty the rewrite removed elsewhere.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md (risk score is not a loss-date forecast; B3-X-060); COPY_STANDARD \u00a721",
+   "proposed": "Rename the toggle to 'Risk spread' and label the track ends: left 'Higher risk score', right 'Lower risk score' (replace the lone 'risk' marker). OWNER DECISION: whether the settled 'Timeline' design name should change or the axis should become a real time axis (e.g. days to expected close date).",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "DW-012",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 247,
+   "generation": "v4",
+   "state": "v4 top bar",
+   "current": "'12 live \u00b7 $803k pipeline'",
+   "problem": "'live' alone is a casual stand-in noun; the number is open (not closed) deals.",
+   "governing": "COPY_STANDARD \u00a726 (name the thing instead of a stand-in noun)",
+   "proposed": "'12 open deals \u00b7 $803k open pipeline'",
+   "testsAffected": [],
+   "confidence": "medium"
+  },
+  {
+   "id": "DW-013",
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/deal-workspace/state.ts",
+   "line": 203,
+   "generation": "shared",
+   "state": "'Export pipeline (CSV) \u2193' (v4) / 'Export pipeline (CSV)' (legacy) \u2192 downloaded antaeus-deals-<iso>.csv",
+   "current": "DEAL_CSV_COLUMNS exports raw keys: Stage = 'evaluation' / 'poc' / 'closed-won', Forecast category = 'best_case', Loss reason = 'champion_left' / 'no_decision', Momentum = 'stalling'; stakeholders are omitted. A labelled builder (src/deal-workspace/lib/export-csv.ts buildDealsCsv, which uses STAGE_LABELS and includes Stakeholders) exists but nothing imports it.",
+   "problem": "The file a founder hands to a hire carries code identifiers instead of the labels shown in the product (the stage the editor calls 'Solution Fit' exports as 'evaluation').",
+   "governing": "AUDIT_BRIEF \u00a75 States (exports and downloaded files); comprehension principle",
+   "proposed": "Map values to labels in DEAL_CSV_COLUMNS: Stage \u2192 STAGE_LABELS[d.stage]; Loss reason \u2192 LOSS_LABELS[d.lossReason]; Forecast category \u2192 {commit:'Commit',best_case:'Best case',pipeline:'Pipeline',omitted:'Omitted'}; Momentum \u2192 capitalized label; add a 'Stakeholders' column as in lib/export-csv.ts. Then delete the unused lib/export-csv.ts (or switch state.exportDealsCsv to it).",
+   "testsAffected": [
+    "src/deal-workspace/state.test.ts (CSV assertions, if any)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "DW-014",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/deal-workspace/ds/components/LossReasonModalDS.tsx",
+   "line": 318,
+   "generation": "shared",
+   "state": "Loss-reason modal after saving a deal as Closed Lost (v4 and ds; same text in legacy components/LossReasonModal.tsx:76)",
+   "current": "Pick the closest reason. Loss patterns feed the founding-GTM win/loss section and Future Autopsy.",
+   "problem": "'founding-GTM win/loss section' is an internal path name (the area is Founding GTM; its section is 'Loss patterns'); 'feed' is mild metaphor.",
+   "governing": "COPY_STANDARD \u00a74 (branded name with literal description); comprehension principle",
+   "proposed": "Pick the closest reason. Loss reasons are used in the Founding GTM loss-patterns section and in Future Autopsy.",
+   "testsAffected": [],
+   "confidence": "medium"
+  }
+ ],
+ "dispositions": [],
+ "retained": [],
+ "gaps": []
+}

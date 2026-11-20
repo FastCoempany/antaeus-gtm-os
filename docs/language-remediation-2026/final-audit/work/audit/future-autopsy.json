@@ -1,0 +1,393 @@
+{
+ "area": "future-autopsy",
+ "coverage": [
+  {
+   "surface": "Future Autopsy default screen (v4) — populated, deal stepper, suggested-message drawers, copy toasts, hover titles",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/future-autopsy/v4/FutureAutopsyV4.tsx",
+    "src/future-autopsy/main.tsx",
+    "src/future-autopsy/state.ts"
+   ],
+   "note": "Read the component in full and compared every string with the SMB walkthrough generated today (all six deals, both arrows, five suggested-message drawers, both copy toasts, hover titles) and with the enterprise walkthrough of 2026-11-06 (stale where a later copy pass changed the headline). Not executed: the 'all actions checked' headline/track state, the clipboard-unavailable and clipboard-failure toasts, the zero-risk-factor state, and the empty state — these were reviewed from source and, for the generator output, reproduced with a node probe of the pure lib (fa2-work/probe.ts)."
+  },
+  {
+   "surface": "Risk-factor rules, evidence sentences, pattern/advice text, win conditions, corrective-action list, when-to-close text, review-window projection, deal ordering",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/future-autopsy/lib/causes.ts",
+    "src/future-autopsy/lib/autopsy-data.ts",
+    "src/future-autopsy/lib/autopsy.ts",
+    "src/future-autopsy/lib/vitals.ts",
+    "src/future-autopsy/lib/types.ts",
+    "src/future-autopsy/lib/autopsy.test.ts",
+    "src/future-autopsy/lib/causes.test.ts",
+    "src/future-autopsy/lib/vitals.test.ts"
+   ],
+   "note": "Read every rule and string. Ran one node probe (esbuild bundle of the pure lib, TZ=America/Chicago, 11 synthetic deals) to see generated text for states the demo books do not contain: zero and one risk factor, named-but-short champion / economic buyer, canonical 'verbal' vs onboarding 'verbal-yes' stage ids, the kill-switch branch, 30-day stale deal, and biz() date output. No vitest run (machine note); tests were read."
+  },
+  {
+   "surface": "Action-plan routes (labels, reasons, destinations) and continuity params",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/future-autopsy/lib/action-plan.ts",
+    "src/future-autopsy/lib/handoff.ts",
+    "src/future-autopsy/lib/action-plan.test.ts",
+    "src/future-autopsy/lib/handoff.test.ts",
+    "tests/e2e/new-surface-seam-walk.spec.ts"
+   ],
+   "note": "Labels seen in the SMB walkthrough ('Open the deal', 'Run discovery again', 'Prepare the next call', 'Rehearse the negotiation'). hrefs and reasons reproduced in the probe. Destinations' opening screens read from today's SMB walkthrough of Getting to Signed, Discovery Studio and Pilot Desk. Continuity params (returnTo, returnLabel, focusObject, focusRoom, fromMode, fromSurface, plus deal/account) are intact."
+  }
+ ],
+ "findings": [
+  {
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/future-autopsy/lib/autopsy-data.ts",
+   "line": 125,
+   "generation": "shared",
+   "state": "Any open deal whose top-ranked risk factor is the champion or economic-buyer rule while that field holds a short name. Rendered in today's SMB walkthrough, state 'After clicking ‹' (Sweetgreen, Negotiation): the 'What usually happens next' paragraph, the copied risk summary, and the previous/oldest screens' second sheet.",
+   "current": "\"No champion is recorded. In negotiation, deals without someone inside defending the business case often stall in procurement when pushback comes. Find who will fight for this internally before the next approval round.\" — shown on the same screen as CHAMPION \"Rafael Ibanez\" and ECONOMIC BUYER \"Whitney Cole\". The same hard-coded opener is at autopsy-data.ts:123 (discovery), and \"No economic buyer is recorded.\" opens the leads at :129 and :131.",
+   "problem": "The sentence is false. stageLead() returns these leads whenever the top risk factor is no_champion / no_eb, and those rules fire when the field is empty OR shorter than 20 characters (vitals.ts:88-93 gate(); causes.ts:36 and :48 use v.missing.*, which is true for 'weak'). A person's name is almost always shorter than 20 characters, so a deal with a named champion is told 'No champion is recorded' and 'Find who will fight for this internally' directly under a row that shows the champion's name. Node probe confirms the same for the economic buyer in negotiation and pilot stages ('No economic buyer is recorded…' with economicBuyer = 'Whitney Cole'). A first-time user is misled about their own record, and the false line travels into 'Copy risk summary' (the text a seller pastes into email or Slack). The literal rewrite created this: the old line ('No real champion carried this inside') was a judgment; the new one is a factual claim that the code does not check.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — Future Autopsy structural rule (item 1 'Observed facts'; 'Do not infer…') and exact row 'No real champion carried this inside.' → 'No confirmed champion is recorded.' (05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[75]); COPY_STANDARD.md §21 Claims discipline; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md 'Approved product evolution' (Future Autopsy generation that avoids false causation/forecast certainty).",
+   "proposed": "1) src/future-autopsy/lib/autopsy-data.ts: delete the hard-coded opening sentence from all eight CAUSE_LEADS strings (lines 123, 125 'No champion is recorded. '; 129, 131 'No economic buyer is recorded. '; 135, 137 'Fewer than three stakeholders are recorded. '; 141, 143 'The deal hasn't been updated recently. ') so each lead is only the pattern and the advice. 2) src/future-autopsy/lib/autopsy.ts lines 79-82: open the paragraph with the evidence sentence the cause engine already computed for this deal, and use the champion / economic-buyer lead only when that field is actually empty:\n\nconst top = causes[0];\nconst namedButBrief =\n    (top?.id === \"no_champion\" && vitals.gates.champion !== \"missing\") ||\n    (top?.id === \"no_eb\" && vitals.gates.eb !== \"missing\");\nconst riskLead = top\n    ? `${top.label} ${stageLead(vitals.stageRaw, namedButBrief ? \"\" : top.id)}`\n    : \"Nothing in the deal record matches a known risk pattern right now. Keep a dated next step on the calendar so it stays that way.\";\n\n(top.label is 'No champion is recorded.' only when the field is empty — causes.ts:112.) Add a regression test in autopsy.test.ts: champion 'Rafael Ibanez', stage negotiation → loseStory does not contain 'No champion is recorded'. OWNER DECISION: stop treating a named champion or economic buyer as missing at all — fire no_champion / no_eb only when the field is empty, or drop the 20-character test in vitals.ts gate(). That changes risk scores, which risk factors and corrective actions are listed, and the order of deals, so it is a product decision.",
+   "testsAffected": [
+    "src/future-autopsy/lib/autopsy.test.ts (\"varies the risk assessment by stage + top cause\", \"lose story carries the pattern lead and states the caveat once\")"
+   ],
+   "confidence": "high",
+   "id": "FA-001"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/causes.ts",
+   "line": 35,
+   "generation": "shared",
+   "state": "'Risk factors · evidence' rows on the default screen (and the first sheet on the previous/oldest screens) for a deal whose champion or economic buyer is a short name. SMB walkthrough: 'After clicking Warby Parker' (champion Marcus Bell), 'Portillo's' (Gus Kaminski), 'Liquid Death' (Jesse Varga), '‹' Sweetgreen (Rafael Ibanez / Whitney Cole).",
+   "current": "\"Champion details are missing or brief. Deals without someone inside carrying them often stall in committee. Find who will own this internally before the next step.\" (causes.ts:35 + autopsy-data.ts:25-26) and \"Economic-buyer details are missing or brief. When the budget owner stays out of view, the deal often stalls late, when they finally show up with questions. Get them into a conversation now, not at contract time.\" (causes.ts:47 + autopsy-data.ts:29-30). On Sweetgreen a second row with the same title 'Champion' follows: \"Champion details are brief; confirm their role and agreed actions. A contact who likes you but can't win over the rest of the buying group usually can't get a deal through approval. Confirm what they can actually decide, and who they need on side.\"",
+   "problem": "The evidence sentence says 'missing or brief' although the code knows which one applies (gates.champion is 'weak' here), and the pattern and advice that follow are written for a deal with nobody inside: the seller has named an owner and is told to find one. For a named champion both no_champion and champion_weak fire, so one condition appears as two 'Champion' rows with different advice, and the 'that means' list repeats itself ('Champion role and agreed internal actions are explicit.' / 'Champion authority and agreed internal actions are documented.'). Dimension 4 (the pattern is asserted about a condition that was not observed), dimension 6, and a recommendation/logic mismatch (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md item 10).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — Future Autopsy structural rule ('Observed facts' first; 'Why risk is high' must follow from them); COPY_STANDARD.md §7 (evidence → interpretation → action) and §20 (if the product knows the specific fact, name it).",
+   "proposed": "Generation-only change; which rules fire and all scores stay as they are. a) causes.ts evidenceFor(): after the two existing 'missing' returns (lines 112-113) add\n    if (rule.id === \"no_champion\") return `A champion is named (${vitals.champion}), but the record does not say what their role is or what they have agreed to do.`;\n    if (rule.id === \"no_eb\") return `An economic buyer is named (${vitals.economicBuyer}), but the record does not say how they are involved in the decision.`;\nb) autopsy.ts generateAutopsy(): build `chapters` and `winConditions` from `causes.filter((c) => !(c.id === \"no_champion\" && vitals.gates.champion === \"weak\"))` so the named-champion case shows one Champion row (the champion_weak row, whose pattern fits) and one win condition; leave `causes` itself untouched for task scoring and routing. c) autopsy-data.ts: give chapterFor a second economic-buyer pattern used when gates.eb === \"weak\": \"A budget owner who is named but has not been part of the conversation often shows up late with new questions. Confirm that this person controls the budget and get them into a conversation before contract time.\" OWNER DECISION: same as the previous finding (whether a short name should count as a risk factor at all).",
+   "testsAffected": [
+    "src/future-autopsy/lib/causes.test.ts",
+    "src/future-autopsy/lib/autopsy.test.ts (\"chapters pair the observed condition with the common pattern and corrective advice\")"
+   ],
+   "confidence": "high",
+   "id": "FA-002"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/causes.ts",
+   "line": 110,
+   "generation": "shared",
+   "state": "'Next step' risk-factor row when the deal has a dated next step whose description is under 20 characters. Enterprise walkthrough of 2026-11-06, state 'After clicking Marriott International' (source unchanged since); previous-screen walkthrough rendered today, same deal.",
+   "current": "\"A dated next step is recorded, but its description is brief. Confirm the action and owner. When no date is on the calendar, every follow-up tends to become a maybe. Get a dated next step agreed before you end the next conversation.\" — and the first recommended action for the same deal is \"Set a dated next step\".",
+   "problem": "The paragraph contradicts itself: the first sentence says a dated next step exists; the next two describe a deal with no date and tell the seller to get one. The no_nextstep rule fires for three different record states (no description, no date, dated but short — causes.ts:24, 107-110) but autopsy-data.ts:21-22 has one pattern, written for the no-date state. Dimension 4 and a recommendation/logic mismatch.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — Future Autopsy structural rule (observed facts → why risk is high → corrective actions must agree); exact row 'Calendar ambiguity turned every follow-up into a maybe.' → 'Follow-up timing is not tied to a confirmed buyer commitment.'; COPY_STANDARD.md §21.",
+   "proposed": "autopsy-data.ts: let chapterFor(cause, evidence, vitals) choose a second pattern when `cause === \"no_nextstep\" && vitals.hasNextStep && vitals.nextStepHasDate`: \"A next step that does not name the action and its owner is easy for both sides to let pass. Rewrite it so it says what will happen, who owns it, and when.\" (causes.ts:110 already supplies the accurate first sentence; shorten it to \"A dated next step is recorded, but its description is brief.\" so the advice is not given twice.) OWNER DECISION: whether 'Set a dated next step' should still be listed first for a deal that already has a dated next step — that is a change to which corrective actions are recommended (chooseTasks).",
+   "testsAffected": [
+    "src/future-autopsy/lib/causes.test.ts"
+   ],
+   "confidence": "high",
+   "id": "FA-003"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/autopsy.ts",
+   "line": 89,
+   "generation": "shared",
+   "state": "'What usually happens next' paragraph (default screen), copied risk summary, second sheet on the previous/oldest screens. SMB walkthrough, area at rest (Grammarly, Prospect) and 'After clicking 1Password'; also every 'proposal'-stage deal.",
+   "current": "\"Deals often lose momentum when a result worth acting on doesn't land early enough to start a real buying process. Get one concrete result in front of the decision owner soon. These are conditions in the deal record; they don't tell you for certain what would cause a loss.\" (autopsy-data.ts:115 `_default` lead + autopsy.ts:89 tail)",
+   "problem": "Two problems in one generated paragraph. (a) 'These are conditions in the deal record' refers to nothing: the sentences before it are a general pattern and an instruction, not conditions from the record. The code comment at autopsy.ts:85-86 assumes the lead names the observed condition, but only the cause-specific leads do, and the most common top factor (no next step) has none. (b) For every stage without its own lead — Prospect, 'proposal', 'verbal-yes'; three of the six deals in each demo book — the paragraph is unrelated to the risk factors listed above it and says 'a result worth acting on' / 'one concrete result' without saying what kind of result is meant. On a Prospect deal with no champion or economic buyer recorded, 'Get one concrete result in front of the decision owner' cannot be acted on. Dimensions 1, 6 and 7.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/15_HIGH_SEVERITY_INTERACTION_PATCH.md rows for the six story strings (14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[66]-[72]: 'The record shows … Treat these as contributing risk factors, not proven causes.' — the caveat is attached to named record facts); COPY_STANDARD.md §6 and §8; comprehension principle.",
+   "proposed": "1) autopsy.ts: start the paragraph with the top factor's evidence sentence (see the first finding's code) so the conditions are named before the pattern. 2) autopsy.ts:89 → \" The risk factors listed for this deal are conditions in its record; they don't tell you for certain what would cause a loss.\" 3) autopsy-data.ts:115 → \"Deals often lose momentum when the buyer has not seen a specific result they could expect — a quantified saving, a pilot outcome, a reference customer's numbers — early enough to start a buying process. Put one specific result in front of the person who owns the decision soon.\" Resulting text for Grammarly: \"No next-step description is recorded. Deals often lose momentum when the buyer has not seen a specific result they could expect — … soon. The risk factors listed for this deal are conditions in its record; they don't tell you for certain what would cause a loss.\"",
+   "testsAffected": [
+    "src/future-autopsy/lib/autopsy.test.ts (\"lose story carries the pattern lead and states the caveat once\" — asserts /often/ and exactly one 'for certain'; still true)"
+   ],
+   "confidence": "high",
+   "id": "FA-004"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/autopsy-data.ts",
+   "line": 202,
+   "generation": "shared",
+   "state": "Second paragraph of 'What usually happens next' / 'What turns it around' on the default screen, the copied summary, and the win-condition rows on the previous/oldest screens, for any open deal with fewer than three distinct risk factors. Not in the demo books (every demo deal has three or more); reproduced with the node probe.",
+   "current": "One risk factor: \"… For this deal, that means: The economic buyer is identified and the budget path is confirmed. A named owner, recent activity, and a dated next step are recorded. A named owner, recent activity, and a dated next step are recorded. Fixing these lowers the risk; it doesn't guarantee a close.\" No risk factor: the sentence \"A named owner, recent activity, and a dated next step are recorded.\" is printed three times.",
+   "problem": "winConditionsFor() pads its list to five entries with one identical sentence (autopsy-data.ts:197-204) and generateAutopsy() prints the first three (autopsy.ts:92-98). The reader sees the same sentence two or three times, and 'Fixing these' points at statements that describe a finished state (and, with no risk factor, at nothing). With the stale-record and time-in-stage factors together the three sentences also repeat each other ('Recent buyer activity is recorded. Recent buyer activity and a dated next step are recorded. …'). Duplicate explanation (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md item 10) and dimension 7.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md item 10 (semantic damage: duplicate explanations, recommendation/logic mismatch); comprehension principle.",
+   "proposed": "autopsy.ts lines 92-98: print only real, distinct conditions and drop the tail when there are none:\n\nconst real = winConditions.filter((w) => !w.id.startsWith(\"momentum_\")).slice(0, 3);\nconst correctedTail = real.length > 0\n    ? \" For this deal, that means: \" + real.map((w) => w.story).join(\" \") + \" Getting these in place lowers the risk; it doesn't guarantee a close.\"\n    : \"\";\n\n(AutopsyDoc.winConditions keeps its five entries — autopsy.test.ts:43 asserts length >= 5.) Also autopsy-data.ts:82 momentum_restored → \"The buyer has confirmed what has to happen for the deal to move forward, and by when.\" (it mirrors the advice given for that factor and no longer repeats thread_reactivated at :89, 'Recent buyer activity is recorded.').",
+   "testsAffected": [
+    "src/future-autopsy/lib/autopsy.test.ts (winStory /doesn't guarantee a close/ — keep the phrase)"
+   ],
+   "confidence": "high",
+   "id": "FA-005"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/future-autopsy/v4/FutureAutopsyV4.tsx",
+   "line": 79,
+   "generation": "v4",
+   "state": "Reason line under a recommended corrective action on the default screen. SMB walkthrough: 'Identify and engage the economic buyer' (area at rest) and 'Confirm champion' (Warby Parker, Portillo's, Liquid Death, Sweetgreen).",
+   "current": "bring_eb_in: \"The record does not yet show a confirmed economic buyer who is engaged in the decision.\" (line 79); confirm_champion: \"The record does not yet show a confirmed internal owner driving the purchase.\" (line 80)",
+   "problem": "These two lines state something about this deal's record, but they are fixed strings shown whenever the action is listed — and chooseTasks lists actions for reasons other than the matching risk factor: a stage boost or the deal-value boost alone gives an action a positive score (autopsy-data.ts:367-403). Node probe: a deal with a fully described champion and economic buyer, no risk factor, $120k → five actions listed, including 'Identify and engage the economic buyer — The record does not yet show a confirmed economic buyer…'. The line is then false. The other nine entries give a general rationale and cannot be wrong this way. 'yet' is also one of the reader-judgment words in COPY_STANDARD.md §26.",
+   "governing": "COPY_STANDARD.md §21 (claims discipline) and §26 (judgment words); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md exact row 'No internal driver, no motion.' → 'A confirmed champion gives the deal an internal owner.' (the approved wording is a rationale, not a statement about the record).",
+   "proposed": "FutureAutopsyV4.tsx line 79 → bring_eb_in: \"A confirmed economic buyer makes budget ownership and final approval clear.\"; line 80 → confirm_champion: \"A confirmed champion gives the deal an internal owner.\" (the approved Batch 01 sentence). OWNER DECISION: stop listing corrective actions that match no recorded risk factor (chooseTasks: keep only actions whose matching-factor score is above zero and use the stage/value boosts for ordering only). Today an open deal over $75k with a complete record shows five 'recommended corrective actions'.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "FA-006"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/future-autopsy/v4/FutureAutopsyV4.tsx",
+   "line": 213,
+   "generation": "v4",
+   "state": "Default screen for an open deal with no recorded risk factor (a workspace with six or fewer open deals shows every open deal, including complete ones). Not in the demo books; states derived from source and the probe.",
+   "current": "Headline \"If nothing changes, {name} is at low risk of stalling or being lost within the next 45 days.\"; a \"Risk factors · evidence\" block with a heading and no rows (lines 212-220); \"Recommended corrective actions\" + \"Complete each action as it happens. Open an action to view the suggested message.\" followed by no rows (deal under $75k in Prospect) or by three to five actions that match no risk factor; then \"Nothing in the deal record matches a known risk pattern right now. Keep a dated next step on the calendar so it stays that way.\" followed by the triple-repeated padding sentence.",
+   "problem": "The partial state is not handled: two headings promise content that is not there, the hint tells the reader to open actions that do not exist, and 'recommended corrective actions' appear beside a statement that nothing matches a risk pattern. A first-time user with a healthy deal cannot tell whether the area is broken or the deal is fine.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — Future Autopsy structural rule (every case uses the same five-part structure, which needs a defined 'nothing recorded' form); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md item 4 (empty and partial states).",
+   "proposed": "FutureAutopsyV4.tsx: when doc.causes.length === 0 — (a) render one row under 'Risk factors · evidence': t(\"No risk factors are recorded for this deal.\", { class: \"body\" }); (b) when doc.countermeasures.length === 0 hide the 'Recommended corrective actions' block (lines 222-252); when actions are listed with no risk factor replace the hint at line 224 with t(\"No risk factor is recorded for this deal. These are general checks for a deal at this stage and size.\", { class: \"body\" }). The repeated sentence is fixed by the win-condition finding. OWNER DECISION: whether a deal with no risk factor should list corrective actions at all (see the previous finding).",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "FA-007"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/future-autopsy/v4/FutureAutopsyV4.tsx",
+   "line": 291,
+   "generation": "v4",
+   "state": "Default screen with at least one open deal.",
+   "current": "The populated return ends with `<GroundLine />` only (line 291). The empty-state return mounts `<GroundLine />` and `<LiveEdge />` (lines 115-116).",
+   "problem": "The Recent activity panel is mounted on Future Autopsy only when there is nothing to review; as soon as one open deal exists the panel is gone. Every other default screen mounts it in its working state (20 v4 files mount `<LiveEdge />`; today's SMB walkthrough of all 20 other areas contains the Recent activity text, Future Autopsy's contains none). Settings → 'Show recent activity' therefore has no effect on this screen. Came in with the panel itself (commit 2f33945, PR #308: one `<LiveEdge />` inserted after the first `<GroundLine />` in the file), not with the language work.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md item 7 (functional review) and item 4 (shared surfaces render on every area); CLAUDE.md session log 2026-07-16 ('mounted beside the Ground on 20 v4 rooms').",
+   "proposed": "Add `<LiveEdge />` after `<GroundLine />` at FutureAutopsyV4.tsx:291 (inside the closing `</div>` of the populated return). The same slip exists in src/discovery-studio/v4/DiscoveryStudioV4.tsx (LiveEdge at line 196 in the first return only; the main return's GroundLine at line 531 has none) — route to that area.",
+   "testsAffected": [
+    "tests/e2e/new-surface-smoke.spec.ts (boots /future-autopsy/; should still pass)"
+   ],
+   "confidence": "high",
+   "id": "FA-008"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/action-plan.ts",
+   "line": 139,
+   "generation": "shared",
+   "state": "Action links at the foot of the default screen, the 'Intervene' strip on the previous screen, and the route rack on the oldest screen. SMB walkthrough, area at rest: links 'Run discovery again' and 'Prepare the next call'.",
+   "current": "Targets \"call\" (label \"Prepare the next call\", lines 60-67) and \"discovery\" (label \"Run discovery again\", lines 76-83) both resolve to hrefToDiscoveryStudio(accountName) — the identical URL. Tertiary is always \"call\" unless there is a pilot concern (lines 139-144). Probe: when the top factor is economic buyer / decision process / stakeholders in a non-negotiation stage, the plan is 'Prepare the next call' → Discovery Studio, 'Open the deal', 'Prepare the next call' → the same Discovery Studio URL again.",
+   "problem": "Since Call Planner was retired into Discovery Studio, two of the three links lead to the same page with the same parameters for every deal that is not in a negotiation, verbal-yes or pilot stage: either under two different labels (the reader expects two different tools) or as the same link twice. FutureAutopsyV4.tsx:276 and components/RouteRack.tsx:28 key the links by href, so the pair also has duplicate keys. 'Run discovery again' is offered on Prospect-stage deals where no discovery has been recorded.",
+   "governing": "AUDIT_BRIEF §4 (Call Planner is retired; its routes redirect to Discovery Studio); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md item 7 (cross-room handoffs); COPY_STANDARD.md §12 (labels name destinations).",
+   "proposed": "action-plan.ts buildActionPlan(): after choosing the three targets, drop the tertiary route when its href equals the primary's or the secondary's (`tertiary: tertiaryRoute.href === primaryRoute.href || tertiaryRoute.href === secondaryRoute.href ? null : tertiaryRoute` — ActionPlan.tertiary is already nullable and all three screens filter null routes). Give the one Discovery Studio route a label that fits both cases: \"Prepare the next discovery call\" (lines 62 and 78). Update action-plan.test.ts (\"returns three populated routes\" → allows a null tertiary; line 69 label) and tests/e2e/new-surface-seam-walk.spec.ts lines 57-59.",
+   "testsAffected": [
+    "src/future-autopsy/lib/action-plan.test.ts:24-34, :69",
+    "tests/e2e/new-surface-seam-walk.spec.ts:54-60"
+   ],
+   "confidence": "high",
+   "id": "FA-009"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/action-plan.ts",
+   "line": 86,
+   "generation": "shared",
+   "state": "Primary action for a deal in Negotiation or 'verbal-yes' stage, all three screen versions. SMB walkthrough 'After clicking ‹' (Sweetgreen): link 'Rehearse the negotiation'.",
+   "current": "label: \"Rehearse the negotiation\" → /getting-to-signed/",
+   "problem": "The destination's default screen has no rehearsal: Getting to Signed opens on 'a verbal yes still requires legal, security, finance, and final approval', a current blocking issue, the customer's request and the seller's proposed position (today's SMB walkthrough of that area). Rehearsal wording survives only in that area's previous and oldest screens. The label promises something the page the user lands on does not offer.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md navigation table ('Getting to Signed — Manage legal, security, finance, and final approval'); CLAUDE.md §4.16b ('not a rehearsal booth'); COPY_STANDARD.md §12.",
+   "proposed": "action-plan.ts:86 → label: \"Work on approvals and terms\" (roomLabel stays \"Getting to Signed\"). The same label is used toward the same destination in other areas' previous/oldest screens (src/call-in-a-favor/components/SecondaryStack.tsx:376, src/call-in-a-favor/ds/components/AskDesk.tsx:211) — route to those areas.",
+   "testsAffected": [
+    "tests/e2e/new-surface-seam-walk.spec.ts:50 (Deal Workspace's own 'Rehearse the negotiation' route — different area)"
+   ],
+   "confidence": "medium",
+   "id": "FA-010"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/vitals.ts",
+   "line": 53,
+   "generation": "shared",
+   "state": "Stage text on every screen version; routing and ranking for deals in a verbal stage. SMB walkthrough 'After clicking Warby Parker': '$78k · proposal · no deal updates…' and STAGE 'proposal'. Previous-screen walkthrough: 'United Airlines proposal · $380k Risk 75'.",
+   "current": "STAGE_LABELS (vitals.ts:53-62) has no entry for 'proposal' or 'verbal-yes', so the raw id is shown. action-plan.ts:108 and :111 test `stageRaw === \"verbal-yes\"`; autopsy.ts:143, autopsy-data.ts:377 and the lead maps (autopsy-data.ts:112, :156) test or key on \"verbal\".",
+   "problem": "Two stage vocabularies reach this area: Deal Workspace's canonical ids (… 'negotiation', 'verbal') and the ids onboarding and both demo books write ('proposal', 'verbal-yes' — src/onboarding/seeding/draft.ts:21-36, js/demo-seed-data-*.js). Future Autopsy handles each id in some places only. Result (probe): a 'proposal' deal shows the lower-case id as its stage (the original interaction patch explicitly corrected '· proposal ·' to '· Proposal ·'); a 'verbal-yes' deal shows 'verbal-yes', gets the generic lead instead of the verbal-stage lead, no late-stage ranking boost and no stage boost for its corrective actions; a canonical 'verbal' deal is not routed to Getting to Signed and gets 'Prepare the next call' twice.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/15_HIGH_SEVERITY_INTERACTION_PATCH.md row '$380k · proposal · quiet 16d — …' → '$380k · Proposal · no recorded buyer activity for 16 days · …' (14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[10]); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md item 7 (routing, scoring thresholds, recommendation selection).",
+   "proposed": "No id is renamed. vitals.ts:53-62 add `proposal: \"Proposal\"` and `\"verbal-yes\": \"Verbal yes\"` (the labels onboarding shows). Add `export function isVerbalStage(s: string): boolean { return s === \"verbal\" || s === \"verbal-yes\"; }` in vitals.ts and use it at action-plan.ts:108/:111, autopsy.ts:143 and autopsy-data.ts:377; in stageLead()/stageWinLead() (autopsy-data.ts:162-173) look up `isVerbalStage(stageRaw) ? \"verbal\" : stageRaw`. Root cause is outside this area: src/deal-workspace/lib/deal-shape.ts STAGE_IDS/STAGE_LABELS do not include the ids that src/onboarding/seeding/draft.ts roomStage() and the demo seeds write, and src/deal-workspace/v4/DealWorkspaceV4.tsx:99/:138/:220 and Call in a Favor also print the raw id — route to those areas.",
+   "testsAffected": [
+    "src/future-autopsy/lib/action-plan.test.ts",
+    "src/future-autopsy/lib/autopsy.test.ts (\"amplifies on negotiation/verbal stage\")",
+    "src/future-autopsy/lib/vitals.test.ts"
+   ],
+   "confidence": "high",
+   "id": "FA-011"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/autopsy-data.ts",
+   "line": 229,
+   "generation": "shared",
+   "state": "Suggested message for 'Set a dated next step' (default screen drawer; printed inline on the oldest screen), opened in the evening in any time zone behind UTC.",
+   "current": "biz() advances the date and tests the weekday in UTC (lines 225-226) but formats it with a formatter that has no timeZone option, so it prints the local date (lines 211-215, 229). Probe with TZ=America/Chicago: Friday 7:00 pm → \"Sun, Nov 22\" and \"Mon, Nov 23\"; Thursday 7:00 pm → \"Sun, Nov 22\" and \"Mon, Nov 23\".",
+   "problem": "The message a seller is meant to send — \"If this is still a priority, can we schedule Sun, Nov 22 or Mon, Nov 23 for the next step?\" — proposes a Sunday, and on a Thursday evening skips Friday. The app's operating time zone is America/Chicago, where this happens on Thursday, Friday and Saturday evenings (after 6 pm in winter, 7 pm in summer); Monday to Wednesday evenings come out right only by coincidence. Not caused by the language work; no test covers biz().",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md item 7 (functional review of generated recommendations); CLAUDE.md session log 2026-06-01 (the app operates on Central time).",
+   "proposed": "autopsy-data.ts biz(): do the arithmetic in the same zone as the output. Smallest change: `d.setDate(d.getDate() + 1); const day = d.getDay();` (lines 225-226) so the weekday test and the printed date are both local. Add a unit test that fixes TZ-independent input (e.g. pass a `now` at 01:00Z on a Saturday and assert the result is not 'Sat'/'Sun' for the formatter's zone).",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "FA-012"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/causes.ts",
+   "line": 77,
+   "generation": "shared",
+   "state": "'Time in stage' risk-factor row (default), first sheet (previous/oldest). Previous-screen walkthrough rendered today, Nordstrom; probe case I.",
+   "current": "\"The deal has remained in the current stage longer than the configured stage-age threshold. A deal that sits in one stage for too long is often a quiet no that nobody has said yet. Ask plainly what has to happen to move forward, and by when.\"",
+   "problem": "'the configured stage-age threshold' is system vocabulary for two numbers the code holds: how long the deal has been in the stage (vitals.stageAgeDays) and the limit (prefs.stageStuckDays = 21, which the user cannot configure anywhere). The reader is told a threshold was crossed but not what it is or by how much. Dimensions 1 and 6; COPY_STANDARD §20 (name the measure).",
+   "governing": "COPY_STANDARD.md §14 (number + unit) and §20; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md Future Autopsy structural rule item 1 (observed facts).",
+   "proposed": "causes.ts: pass `prefs` into evidenceFor() and add\n    if (rule.id === \"stage_stuck\") return `The deal has been in ${vitals.stage} for ${vitals.stageAgeDays} days; deals are flagged after ${prefs.stageStuckDays} days in one stage.`;\n(keep line 77 as the fallback text but reword it: \"The deal has been in its current stage for more than three weeks.\")",
+   "testsAffected": [
+    "src/future-autopsy/lib/causes.test.ts"
+   ],
+   "confidence": "high",
+   "id": "FA-013"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/future-autopsy/lib/causes.ts",
+   "line": 115,
+   "generation": "shared",
+   "state": "'Stakeholders' risk-factor row on deals of $50k or more with fewer than three engaged stakeholders (enterprise walkthrough; probe case K), and the lead paragraph when this is the top factor.",
+   "current": "\"The stakeholder-coverage count is 0, below the target of three. This count includes named champion and economic-buyer fields.\" (causes.ts:115; fallback :91 \"The recorded stakeholder-coverage count is below three.\") and, as the paragraph opener, \"Fewer than three stakeholders are recorded.\" (autopsy-data.ts:135, :137)",
+   "problem": "'Stakeholder-coverage count' is a coined metric name the reader has to decode; what is counted is stakeholders marked as engaged plus the champion and the economic buyer when those fields are filled (vitals.ts:163-182). The paragraph opener is also inaccurate: probe case K has five stakeholders recorded, none marked engaged, and the text says fewer than three are recorded. Dimension 2 and dimension 4.",
+   "governing": "COPY_STANDARD.md §2 (literal nouns), §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md exact row 'Single-threaded deals die when your one contact gets busy.' → 'A deal that depends on one contact is more vulnerable if that contact disengages.'",
+   "proposed": "causes.ts:115 → `${vitals.threading.engaged} engaged ${vitals.threading.engaged === 1 ? \"stakeholder is\" : \"stakeholders are\"} recorded, counting the champion and economic buyer when they are named. The target is three.`; causes.ts:91 → \"Fewer than three engaged stakeholders are recorded.\"; autopsy-data.ts:135 and :137 — the opener is removed by the first finding (the evidence sentence above takes its place).",
+   "testsAffected": [
+    "src/future-autopsy/lib/causes.test.ts"
+   ],
+   "confidence": "high",
+   "id": "FA-014"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/future-autopsy/v4/FutureAutopsyV4.tsx",
+   "line": 200,
+   "generation": "v4",
+   "state": "Default screen headline and the track under it, every deal. SMB walkthrough, area at rest: 'If nothing changes, Grammarly is at high risk of stalling or being lost within the next 17 days.' / 'risk review window · 17d'.",
+   "current": "Headline \"… within the next {days} days.\" (lines 145, 187); track end label `${t(\"risk review window\")} · ${horizon}d` (line 200).",
+   "problem": "The day count reads as a forecast, but it is a display rule: 90 minus the risk score, limited to 7–90 days and shortened to the close date (autopsy.ts:44-60; the code comment says it 'is not a prediction that the deal will be lost on that date'). Nothing on the screen says where the number comes from or that it is an estimate, and the same number has a second, undefined name on the track ('risk review window'). The reader cannot tell what the number means or how certain it is (the brief's first three questions; dimension 4 and dimension 2). The headline form itself is owner-approved (CLAUDE.md §4.14 and session log 2026-07-10) and is not in question.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — Future Autopsy structural rule ('Do not say a deal … will definitely be lost'; risk level is an assessment) and exact row 'inside 7d · close-lost' → 'near-term risk · high'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md 'Approved product evolution' (forecast certainty); COPY_STANDARD.md §21.",
+   "proposed": "FutureAutopsyV4.tsx line 200: replace the track label with `${horizon} ${t(\"days · estimated from the risk score and close date\", { class: \"body\" })}` and add to the `.fa4-track` element (line 198) `title={t(\"The window is an estimate. A higher risk score or a nearer close date shortens it. It is not a predicted loss date.\", { class: \"body\" })}`. Keep the headline.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "FA-015"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/future-autopsy/v4/FutureAutopsyV4.tsx",
+   "line": 46,
+   "generation": "v4",
+   "state": "Vitals row on the default screen. SMB walkthrough: 'QUALIFICATION limited' (Grammarly), 'workable' (Sweetgreen, Warby Parker, Portillo's, Liquid Death).",
+   "current": "qualWord(): \"solid\" (score ≥ 14), \"workable\" (≥ 8), \"limited\" (> 0), \"none yet\" (0) — lines 44-49; and at lines 208-209 an empty champion reads \"none recorded\" while an empty economic buyer reads \"unknown\".",
+   "problem": "The value words judge something without naming it. The score behind them counts how many of nine deal details are filled in and how fully (vitals.ts:34-44, 115-121); 'workable' tells a first-time user neither what was measured nor what is missing. CLAUDE.md Part III §10 retired 'Workable' as a state label for exactly this reason. 'none yet' carries the reader-judgment word 'yet'. Two empty fields in the same row use different words for the same state.",
+   "governing": "COPY_STANDARD.md §17 and §20 (a state names an observable condition); §26 (judgment words); CLAUDE.md Part III §10 (retired labels) and §4.15 (the approved completeness labels 'Mostly complete / Partly complete / Incomplete').",
+   "proposed": "FutureAutopsyV4.tsx lines 45-48 → t(\"mostly complete\") / t(\"partly complete\") / t(\"incomplete\") / t(\"not recorded\"); add to the Qualification cell (line 205) `title={t(\"How completely nine deal details are filled in: champion, economic buyer, use case, business impact, decision process, close date, competition, notes and next step.\", { class: \"body\" })}`; line 209 `t(\"unknown\")` → `t(\"none recorded\")`.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "FA-016"
+  },
+  {
+   "category": "A11Y",
+   "severity": 2,
+   "file": "src/future-autopsy/v4/FutureAutopsyV4.tsx",
+   "line": 232,
+   "generation": "v4",
+   "state": "Check control on each recommended corrective action; deal stepper arrows and tick buttons.",
+   "current": "`<button type=\"button\" class=\"fa4-chk\" onClick={…}>{isDone ? \"✓\" : \"\"}</button>` — no accessible name while unchecked, no checked state (line 232). Arrows are named only by title=\"previous\" / title=\"next\" (lines 169, 179). Tick buttons are named only by `title={v.name}` and do not expose which one is selected (lines 172-176).",
+   "problem": "A screen-reader user reaches five unnamed buttons and cannot tell that they mark an action done or whether it is done (today's SMB walkthrough lists no control for them at all, because they have no name). 'previous' / 'next' do not say previous or next what.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md item 4 (hover/accessibility text); AUDIT_BRIEF §5 'States' (aria-label, title).",
+   "proposed": "Line 232: `<button type=\"button\" role=\"checkbox\" aria-checked={isDone} aria-label={t(\"Mark done: {label}\", { class: \"body\" }).replace(\"{label}\", cut.label)} class=\"fa4-chk\" …>`. Lines 169/179: `aria-label={t(\"Previous deal\")}` / `aria-label={t(\"Next deal\")}` and the same text in title. Lines 172-176: add `aria-label={v.name}` and `aria-current={i === idx ? \"true\" : undefined}`.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "FA-017"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/future-autopsy/lib/autopsy-data.ts",
+   "line": 46,
+   "generation": "shared",
+   "state": "'Overdue next step' risk-factor row.",
+   "current": "\"An overdue step left alone often means the deal has already started to slip. Replace it with a new date this week.\"",
+   "problem": "'slip' without saying what slips (COPY_STANDARD §3: 'slip — miss a target date, lose momentum, fall below plan; specify which'). The 2026-11-06 pass removed 'slip' from this area's headline but not from this pattern.",
+   "governing": "COPY_STANDARD.md §3; CLAUDE.md session log 2026-11-06 ('\"Slip\" is gone from default screens').",
+   "proposed": "\"An overdue step left alone often means the deal has already started to lose momentum. Replace it with a new date this week.\"",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "FA-018"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/future-autopsy/lib/autopsy-data.ts",
+   "line": 24,
+   "generation": "shared",
+   "state": "'Recent updates' risk-factor row, every deal not updated for seven or more days. SMB walkthrough, area at rest.",
+   "current": "\"The deal record was last updated 8 days ago; this is not a measure of buyer activity. Long silence often means the deal has slipped down the buyer's priority list. Reach out this week with a specific reason to talk, not a check-in.\"",
+   "problem": "The first sentence says the measure is not buyer activity; the second treats it as buyer silence. The reader has to work out that the pattern applies only if the buyer has also been quiet. Dimension 7 (implicit logical relation). The judgment itself is owner-approved and should stay.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — Future Autopsy structural rule ('Do not infer internal buyer priority as fact. Phrase it as a risk assessment supported by observable inactivity.'); COPY_STANDARD.md §6.",
+   "proposed": "autopsy-data.ts:24 → \"If the buyer has been silent for as long, the deal has often slipped down their priority list. Reach out this week with a specific reason to talk, not a check-in.\"",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "FA-019"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/future-autopsy/lib/autopsy.ts",
+   "line": 129,
+   "generation": "shared",
+   "state": "'When to consider closing the deal' when the close recommendation fires (value ≤ $25k, no update for 30+ days, qualification score ≤ 6, risk score ≥ 70). Probe case J.",
+   "current": "\"Consider closing this opportunity: low value, prolonged inactivity, weak qualification, and high modeled risk are all present.\"",
+   "problem": "Four abstract labels where the code holds four numbers; 'prolonged inactivity' is the age of the deal record, which the screen says elsewhere is not a measure of buyer activity; 'high modeled risk' is the only place the screen calls the risk 'modeled'. Dimension 1; COPY_STANDARD §20.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md exact row 'WHEN TO WALK AWAY' → 'WHEN TO CONSIDER CLOSING THE DEAL' and structural item 5; COPY_STANDARD.md §20.",
+   "proposed": "autopsy.ts:129 → `Consider closing this opportunity. Its value is low, the deal record has not been updated for ${vitals.staleDays} days, few qualification details are recorded, and its risk score is ${vitals.riskScore} out of 100.`",
+   "testsAffected": [
+    "src/future-autopsy/lib/autopsy.test.ts (\"recommends considering close…\" asserts /consider closing/i — still matches)"
+   ],
+   "confidence": "medium",
+   "id": "FA-020"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/future-autopsy/v4/FutureAutopsyV4.tsx",
+   "line": 163,
+   "generation": "v4",
+   "state": "Top of the default screen, populated and empty.",
+   "current": "Populated: \"Future Autopsy\" + \"6 deals reviewed · highest risk first\" + \"Deal risk · highest risk first\" (lines 163-168). Empty: \"Future Autopsy\" + \"No open deals currently require a risk review.\" (lines 108-110).",
+   "problem": "The original structural requirement — a literal subtitle if the name stays — is not present as a subtitle. The two approved labels and the headline do make the function clear (so the owner's condition for keeping the name is met), but the first thing under the name is a count, and 'highest risk first' appears twice in adjacent lines.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md — 'If the room name remains Future Autopsy, add a literal subtitle: Identify deals with high loss risk and the specific factors driving that risk.'; COPY_STANDARD.md §4.",
+   "proposed": "Add under the name in both returns (after lines 108 and 163): `<span class=\"fa4-what\">{t(\"Identify deals with high loss risk and the specific factors driving that risk.\", { class: \"body\" })}</span>`. Leave the two approved labels as they are.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "FA-021"
+  }
+ ],
+ "dispositions": [],
+ "retained": [],
+ "gaps": []
+}
