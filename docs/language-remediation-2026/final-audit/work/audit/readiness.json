@@ -2,16 +2,143 @@
  "area": "readiness",
  "coverage": [
   {
-   "surface": "Readiness on the default Dashboard: masthead (five-state strip, 'Current readiness: …', 'What would improve readiness') and the readiness panel opened by 'Review readiness →' (IN PROGRESS — first save)",
+   "surface": "Readiness on the default Dashboard: heading block (five-state strip, 'Current readiness: …', 'What would improve readiness', 'Review readiness →') and the readiness panel it opens (state, sentence, progression list, 'To become …' list, area chips, two export buttons)",
    "generation": "v4",
    "how": "executed-in-walkthrough",
    "files": [
     "src/dashboard/v4/DashboardV4.tsx",
     "src/dashboard/v4/ClimbDrawer.tsx",
     "src/dashboard/v4/lib/cockpit.ts",
-    "src/dashboard/v4/lib/area-chip.ts"
+    "src/dashboard/v4/lib/area-chip.ts",
+    "src/dashboard/v4/climb-drawer.css"
    ],
-   "note": "Read in full; compared with the SMB walkthrough generated today and with the enterprise text captured from the built app earlier today. Further rows are added as each surface is finished."
+   "note": "All five files read in full. Rendered text taken from the SMB walkthrough generated today and compared with the 2026-11-06 enterprise walkthrough (three state names there are stale, as expected). Only the 'Partially documented' state is rendered; the other states of this panel were produced by running the engine (next row). Export buttons were not pressed in a browser. State names are the owner's COPY_STANDARD §17 names in all three places they are declared. Against the original structural rule for Readiness: the sentence under the state name says what another seller could do and that some decisions still depend on the founder, in general terms fixed per state; the 'To become …' list gives the missing evidence and the action (one to three lines); per-area evidence is not shown on this version (finding on the area chips)."
+  },
+  {
+   "surface": "Readiness engine: the five states and their gates, selection of the lines shown under 'To become …', the evidence and gap text for the five areas, state labels",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/lib/readiness/types.ts",
+    "src/lib/readiness/verdict.ts",
+    "src/lib/readiness/dimensions.ts",
+    "src/lib/readiness/index.ts",
+    "src/lib/readiness/verdict.test.ts",
+    "src/lib/readiness/dimensions.test.ts"
+   ],
+   "note": "Read in full. Compared with the version before the remediation (git diff 6d11561^..HEAD): thresholds and gate rules are unchanged and the approved change (each line names the area and its first missing item) is in place; verdict.test.ts (14) and dimensions.test.ts (15) pass when run. The engine was also executed in Node on about thirty hand-built inputs and on both sample-data files (scratchpad final-audit/readiness-fable/run_cases.cjs, run_mine1.cjs, run_mine2.cjs, run_disc.cjs, run_poc.cjs, h2/run_demo.cjs); every line quoted in the findings as engine output comes from those runs. The 600,000-input random sweep (run_sweep.cjs, fixed seed) was re-run in this session and reproduced the counts quoted in the findings (1,627 repeated lines; 4,864 'two readiness actions' lines that list one action; 22,707 and 4,864 generic fallback lines; no case of an empty list below the highest state)."
+  },
+  {
+   "surface": "Readiness input reader and the stored shapes it depends on, checked against what each owning area writes today (ICP Studio, Territory Architect, Prospecting Desk, Signal Console, Outbound Studio, Cold Call Studio, LinkedIn Playbook, Discovery Studio, Deal Workspace, Pilot Desk, Future Autopsy, Call in a Favor, Founding GTM, setup, sample data)",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/dashboard/lib/readiness-aggregator.ts",
+    "src/dashboard/lib/readiness-aggregator.test.ts",
+    "src/pilot-desk/lib/persistence.ts",
+    "src/icp-studio/state.ts",
+    "src/icp-studio/lib/persistence.ts",
+    "src/icp-studio/lib/quality.ts",
+    "src/onboarding/seeding/lib/seed-writer.ts",
+    "src/cold-call-studio/lib/persistence.ts",
+    "src/discovery-studio/lib/call-log.ts",
+    "src/future-autopsy/lib/task-log.ts",
+    "src/deal-workspace/lib/legacy-mirror.ts",
+    "src/territory-architect/lib/persistence.ts",
+    "src/prospecting-desk/lib/persistence.ts",
+    "src/call-in-a-favor/lib/persistence.ts",
+    "js/demo-seed-data-ent.js",
+    "js/demo-seed-data-smb.js",
+    "js/demo-seed-runtime.js"
+   ],
+   "note": "Each of the fourteen keys was traced to its writer. Shapes match for territory accounts, prospects, outbound messages, cold calls, LinkedIn actions, the discovery call log, deals, the Future Autopsy log, Call in a Favor requests and handoff sections. Three do not: pilots (object written, array read), ICP quality (stored field is a constant after setup and absent in the sample data), and the discovery counts (written only by Cold Call Studio). All three were confirmed by running the reader. readiness-aggregator.test.ts passes (17) but its pilot and ICP fixtures use shapes the app does not write."
+  },
+  {
+   "surface": "Readiness history writer, the downloaded export file, and the readiness summary published for the Dashboard's recommendation engine",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/dashboard/lib/readiness-history.ts",
+    "src/dashboard/lib/readiness-history.test.ts",
+    "src/dashboard/lib/readiness-export.ts",
+    "src/dashboard/lib/readiness-snapshot-publisher.ts",
+    "src/dashboard/lib/readiness-snapshot-publisher.test.ts",
+    "src/dashboard/main.tsx",
+    "src/dashboard/state.ts",
+    "src/dashboard/lib/signal-profile.ts",
+    "src/lib/file-download.ts",
+    "supabase/migrations/20260424170003_new_noun_tables.sql"
+   ],
+   "note": "Read in full (signal-profile.ts and main.tsx: the readiness parts). The export's summary block was reproduced in Node; its history block and the history writer were checked by reading the two against each other and against the table definition. Not run against a database. The published summary uses the same 14-point boundary as the engine and feeds only the Dashboard's recommendation reasons, which the Dashboard reviewer covers."
+  },
+  {
+   "surface": "Handoffs out of readiness: the Founding GTM announcement trigger, the readiness sentence in Founding GTM and in its read-only share link, the workspace-map entry, the `?readiness=1` link and the old /app/readiness/ redirect page",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/founding-gtm/lib/ceremony.ts",
+    "src/founding-gtm/lib/ceremony.test.ts",
+    "src/founding-gtm/main.tsx",
+    "src/founding-gtm/state.ts",
+    "src/founding-gtm/v4/FoundingGtmV4.tsx",
+    "src/founding-gtm/components/SharePanel.tsx",
+    "src/founding-gtm/lib/sections-ready.ts",
+    "src/lib/ground/motion.ts",
+    "app/readiness/index.html"
+   ],
+   "note": "Trigger logic and its tests read in full; the other files read where they touch readiness. The workspace map entry ('Readiness Score · can another seller run the sales process?') and the redirect are correct. The announcement was not triggered in a browser (no workspace can currently reach the state that triggers it)."
+  },
+  {
+   "surface": "Readiness panel and readiness chip on the previous Dashboard screen (?v4=0)",
+   "generation": "ds",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/dashboard/today/components/ReadinessPanel.tsx",
+    "src/dashboard/today/TodaySurface.tsx",
+    "src/components/system.tsx"
+   ],
+   "note": "ReadinessPanel.tsx read in full; rendered text from the previous-version walkthrough generated today (enterprise sample workspace, 'Partially documented'). The other four sentences under the state name were read from source."
+  },
+  {
+   "surface": "Readiness button and panel on the oldest Dashboard screen (?v4=0&today=0)",
+   "generation": "legacy",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/dashboard/components/ReadinessDrawer.tsx",
+    "src/dashboard/components/ReadinessAnchor.tsx",
+    "src/dashboard/components/Topbar.tsx",
+    "src/dashboard/Dashboard.tsx"
+   ],
+   "note": "corpus-legacy/readiness.txt did not exist, so this screen was reviewed from source. The text agrees with the Dashboard reviewer's capture of the same screen made today (scratchpad final-audit/dash-work/fable/legacy-dashboard.txt lines 159-173, including the two hover texts)."
+  },
+  {
+   "surface": "Readiness Score capability map (internal doctrine, printed to testers as section 4 of the Readiness Score walkthrough page)",
+   "generation": "doctrine",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html"
+   ],
+   "note": "Whole page read as text and each statement compared with the code. Source comments in the readiness files that still use the old vocabulary were classified as comments (see the retained list)."
+  },
+  {
+   "surface": "Original obligations for readiness: 19 doctrine-line records needing judgment (no automatically matched or watch records in this slice)",
+   "generation": "tooling",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html"
+   ],
+   "note": "Every record has a disposition with the current text and its location: 12 implemented or implemented differently, 3 superseded by the owner's state names, 2 still missing (each with a finding), 2 implemented with the text unchanged (a retained feature name and a file name). The rendered readiness strings from the original inventory are in the Dashboard slice and were dispositioned by the Dashboard reviewer; this review read those dispositions and disagrees with none, but adds findings on the chips' basis and boundaries."
+  },
+  {
+   "surface": "Walkthrough generator and language check, as they apply to readiness",
+   "generation": "tooling",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "tools/preview/build-transcript.js",
+    "tools/language-remediation/copy-audit.js",
+    "tools/language-remediation/copy-allowlist.json"
+   ],
+   "note": "Read the area list, the capability-map embedding and the two phrase lists; listed the three reviewed exceptions recorded for readiness files. Neither tool was run."
   }
  ],
  "findings": [
@@ -59,7 +186,7 @@
    "line": 177,
    "generation": "shared",
    "state": "The Discovery area of readiness everywhere it is shown or used: the 'Discovery — …' chip in the default readiness panel, the Discovery evidence and gap lines in the two older readiness panels, any 'Discovery: …' line under 'To become …' and on the Dashboard masthead, the export, and the state itself.",
-   "current": "readDiscoveryStats() takes `advancedCalls` and `totalCalls` from `gtmos_discovery_stats` and the scorer (src/lib/readiness/dimensions.ts:178-202) presents them as \"{n} discovery calls recorded with outcome 'advanced'\" and \"{n} Discovery Studio sessions\" (gaps: \"Record 6+ discovery calls with outcome 'advanced'\", \"Run 5+ Discovery Studio sessions\"). The only code that writes that key is Cold Call Studio: incrementDiscoveryStats() adds 1 to totalCalls for every logged cold call and 1 to advancedCalls when the cold-call outcome is \"meeting booked\" (src/cold-call-studio/lib/persistence.ts:186-199). Discovery Studio never writes it; the result a seller records under 'How did the call end?' goes to `gtmos_discovery_call_log` (src/discovery-studio/lib/call-log.ts:236-285), which readCallPlanner() (line 166) counts as \"{n} discovery calls prepared\" (gap: \"Prepare 8+ discovery calls in Discovery Studio\").",
+   "current": "readDiscoveryStats() takes `advancedCalls` and `totalCalls` from `gtmos_discovery_stats` and the scorer (src/lib/readiness/dimensions.ts:178-202) presents them as \"{n} discovery calls recorded with outcome 'advanced'\" and \"{n} Discovery Studio sessions\" (gaps: \"Record 6+ discovery calls with outcome 'advanced'\", \"Run 5+ Discovery Studio sessions\"). The only screen that adds to those counts is Cold Call Studio: incrementDiscoveryStats() adds 1 to totalCalls for every logged cold call and 1 to advancedCalls when the cold-call outcome is \"meeting booked\" (src/cold-call-studio/lib/persistence.ts:186-199). The other writers only copy or seed the key: the sign-in pages' older cloud sync restores it from its cloud copy (js/supabase-config.js:1554), and the sample data sets fixed values (js/demo-seed-runtime.js:210; js/onboarding.js:386). Discovery Studio never writes it; the result a seller records under 'How did the call end?' goes to `gtmos_discovery_call_log` (src/discovery-studio/lib/call-log.ts:236-285), which readCallPlanner() (line 166) counts as \"{n} discovery calls prepared\" (gap: \"Prepare 8+ discovery calls in Discovery Studio\").",
    "problem": "All three Discovery lines name something other than what is counted, and two of the three actions cannot change the number. Executed with the engine (scratchpad script readiness-fable/run_disc.cjs): a workspace with 10 discovery calls run in Discovery Studio, each recorded as 'Advanced — dated next step set', and no cold calls scores 6 of 20, shows 'Discovery — limited', lists \"10 discovery calls prepared\" and still asks to \"Record 6+ discovery calls with outcome 'advanced'\" and \"Run 5+ Discovery Studio sessions\". A workspace that never opened Discovery Studio but logged 12 cold calls with 6 meetings booked scores 14, shows 'Discovery — solid', and lists \"6 discovery calls recorded with outcome 'advanced'\" and \"12 Discovery Studio sessions\". Because 'Usable with founder support' needs every area at 10 or more, a seller who does discovery only in Discovery Studio can never reach it, and nothing on screen says cold calls are what moves this area. Cold calls are also counted a second time under Outreach (\"{n} cold calls logged\"). The cause is the Call Planner retirement (owner decision, AUDIT_BRIEF.md section 4): Call Planner was the screen that recorded discovery outcomes into this key; the aggregator comment still calls the key a 'Cold Call + Discovery aggregate' (line 28).",
    "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md, Required work item 7 (functional review: persisted state, scoring/thresholds/recommendation selection, cross-room handoffs) and 'Approved product evolution' (readiness recommendation/blocker selection must work); COPY_STANDARD.md §21 (claims discipline) and §20 (name the specific fact the product knows); AUDIT_BRIEF.md section 5 'copy that now claims something the code does not do'.",
    "proposed": "Smallest change that makes the screen accurate today, in src/lib/readiness/dimensions.ts scoreDiscovery(): evidence \"{n} discovery calls with a recorded result\" and gap \"Record how 8+ discovery calls ended in Discovery Studio (After the call)\" for the call-log count; evidence \"{n} cold calls that booked a meeting\" and gap \"Book 6+ meetings from calls logged in Cold Call Studio\" for advancedCalls; evidence \"{n} calls logged in Cold Call Studio\" and gap \"Log 5+ calls in Cold Call Studio\" for totalCalls. Update the matching expectations in src/lib/readiness/dimensions.test.ts and the header comment at readiness-aggregator.ts:26-28. OWNER DECISION: the better fix is to feed the Discovery area from Discovery Studio's own call log, which needs a decision about what the area should measure. One consistent option: 'discovery calls that advanced' = call-log records whose result is 'Advanced — dated next step set' or 'Won' (optionally plus cold-call meetings booked, as today); 'Discovery Studio sessions' = call-log records of any result; and drop the cold-call total from this area because Outreach already counts it. That changes the readiness state of existing workspaces and of both demo books (they seed gtmos_discovery_stats directly: enterprise {totalCalls:14, advancedCalls:7}, SMB {totalCalls:11, advancedCalls:6}), so it should not be done without the owner. With that option the current strings (\"discovery calls recorded with outcome 'advanced'\", \"Discovery Studio sessions\") become true and only 'prepared' needs rewording.",
@@ -114,7 +241,7 @@
    "current": "gateBuilding() (lines 183-205) takes the two highest-scoring areas, takes the first listed gap of each, and prints `Complete two readiness actions: {a}; {b}` with no closing period. Engine output (run_cases.cjs cases 1, 2, 4; run_sweep.cjs): empty workspace → \"Complete two readiness actions: Define your first ICP in ICP Studio; Record 30+ outbound touches\"; after doing exactly those two things (one ICP at quality 30, 30 touches to 3 accounts; scores 8 and 7) the state is still Founder-dependent and the line becomes \"Complete two readiness actions: Complete the missing ICP criteria; current quality is below 75/100; Log 15+ cold calls\"; with Discovery already at 12 → \"Complete two readiness actions: Prepare 8+ discovery calls in Discovery Studio; Record a next step on every active deal\"; when one of the two areas has no listed gap → \"Complete two readiness actions: Record results from 3+ pilots\" (4,864 of 600,000 random inputs).",
    "problem": "The sentence states a rule the code does not apply. The gate is 'two of the five areas score 8 or more of 20', not 'two actions done': (1) completing the two named actions can leave the state unchanged and the line then asks for two different actions; (2) it can list a single action after the words 'two readiness actions'; (3) it names an action for an area that already meets the threshold when only one more area is needed; (4) the ICP gap contains a semicolon, so with the semicolon separator one action reads as two ('Complete the missing ICP criteria; current quality is below 75/100; Log 15+ cold calls' looks like three items); (5) 'readiness actions' is a label the reader has not met, and the line has no end punctuation. For a first-time user this is the first instruction the Dashboard gives.",
    "governing": "COPY_STANDARD.md §21 (claims discipline), §18 (punctuation must not hide the relationship), §6 (state the relation between evidence and conclusion); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, Readiness structural rule 'what specific action moves readiness forward'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md 'Approved product evolution' (blocker selection).",
-   "proposed": "Say what the gate checks, name the area in front of each action, and end with a period. In gateBuilding(): `const steps = [...dimensions].sort((a, b) => b.score - a.score).slice(0, 2).filter((d) => d.gaps.length > 0).map((d) => `${d.label} — ${d.gaps[0]}`);` then `t(\"Readiness changes when two of the five areas have enough recorded activity. Next: {steps}.\").replace(\"{steps}\", steps.join(\"; \"))`, keeping the existing sentence at line 198 for the case with no listed step. Remove the semicolon from the ICP gap at src/lib/readiness/dimensions.ts:58 so the separator is unambiguous: \"Complete the missing ICP criteria (quality is below 75/100)\". Example result: \"Readiness changes when two of the five areas have enough recorded activity. Next: ICP & targeting — Define your first ICP in ICP Studio; Outreach — Log 30+ outbound messages in Outbound Studio.\" Add a test that the line ends with a period and never contains the word 'two' followed by one step. OWNER DECISION: list steps only for areas still under the threshold and say how many more areas are needed (one or two), so an area that already counts is not given an action. That changes which actions are shown for some workspaces.",
+   "proposed": "Say what the gate checks, name the area in front of each action, and end with a period. In gateBuilding(): `const steps = [...dimensions].sort((a, b) => b.score - a.score).slice(0, 2).filter((d) => d.gaps.length > 0).map((d) => `${d.label} — ${d.gaps[0]}`);` then `t(\"Readiness changes when two of the five areas have enough recorded activity. Next: {steps}.\").replace(\"{steps}\", steps.join(\"; \"))`, keeping the existing sentence at line 198 for the case with no listed step. Remove the semicolon from the ICP gap at src/lib/readiness/dimensions.ts:58 so the separator is unambiguous; the finding on that line gives its replacement text (\"Complete the missing ICP criteria in ICP Studio (it lists which of the 8 are missing)\"). Example result: \"Readiness changes when two of the five areas have enough recorded activity. Next: ICP & targeting — Define your first ICP in ICP Studio; Outreach — Log 30+ outbound messages in Outbound Studio.\" Add a test that the line ends with a period and never contains the word 'two' followed by one step. OWNER DECISION: list steps only for areas still under the threshold and say how many more areas are needed (one or two), so an area that already counts is not given an action. That changes which actions are shown for some workspaces.",
    "testsAffected": [
     "src/lib/readiness/verdict.test.ts > \"returns 'you_are_the_system' on empty input\" (asserts only that a blocker exists; add text assertions)"
    ],
@@ -253,9 +380,731 @@
    "testsAffected": [],
    "confidence": "high",
    "id": "READINESS-014"
+  },
+  {
+   "category": "FUNC",
+   "severity": 3,
+   "file": "src/dashboard/lib/readiness-aggregator.ts",
+   "line": 94,
+   "generation": "shared",
+   "state": "The ICP & targeting area of readiness everywhere it is shown or used (state, area chip, the lines under 'To become …', the Dashboard line under 'What would improve readiness', the two older readiness panels, the export, the stored history). Rendered today in the enterprise sample workspace on the previous Dashboard screen (?v4=0): \"ICP & targeting — 11/20 … Complete the missing ICP criteria; current quality is below 75/100\", while ICP Studio shows the same workspace's ICP as \"ICP quality: highly specific\" with \"WHY THIS ICP IS SPECIFIC · 6 OF 8 CRITERIA\" (enterprise walkthrough) and \"7 OF 8 CRITERIA\" (SMB walkthrough). Also every workspace that has just finished setup.",
+   "current": "readIcpAnalytics() (lines 85-98) takes `asNumber(o.qualityScore)` from each saved ICP in `gtmos_icp_analytics` and keeps the largest. That stored field is produced three different ways. (1) ICP Studio's Save stores the score its own function computes (src/icp-studio/state.ts:242-267). (2) Setup writes an ICP that has only a name and a statement and stores the constants `qualityScore: 78, qualityBand: \"ready\"` (src/onboarding/seeding/lib/seed-writer.ts:66-75); the older setup flow stores 60 (src/onboarding/lib/seed.ts:164). (3) Both sample workspaces store no score on their ICPs (js/demo-seed-data-ent.js:478-481, written by js/demo-seed-runtime.js:191; same in js/demo-seed-data-smb.js), so the read returns 0. ICP Studio itself never shows the stored field on its default screen: it recomputes the rating from the saved record every time (src/icp-studio/v4/IcpStudioV4.tsx:48-58, buildIcpQuality in src/icp-studio/lib/quality.ts).",
+   "problem": "Readiness and ICP Studio give different answers about the same ICP, and readiness is the one that is wrong. Executed with the engine and ICP Studio's own function (scratchpad readiness-fable/h2/run_icp.cjs and run_demo.cjs, which load the two sample-data files): (a) Setup-created ICP: ICP Studio's function returns 0 of 100, 'ICP quality: too broad', 0 of 8 criteria; readiness reads 78, lists the evidence \"Best ICP quality: 78/100\", gives the area 11 of 20 and withholds the action 'Complete the missing ICP criteria', so the first ICP action a new user is given is \"Build the territory to 30+ accounts\". The 78 is a constant; nothing measured it. (b) Sample workspaces: ICP Studio's function returns 86-88 for every saved ICP ('highly specific'); readiness reads 0, shows \"Complete the missing ICP criteria; current quality is below 75/100\" and scores the area 11 (enterprise) and 12 (SMB) instead of 17. (c) Combined effect in the sample workspaces, which are what testers walk: as shipped both evaluate to 'Partially documented'. With only the pilot read repaired (the readProofs finding) both become 'Usable with founder support' and the Dashboard's line under 'What would improve readiness' becomes \"ICP & targeting: Complete the missing ICP criteria; current quality is below 75/100.\" — a false statement about an ICP the product itself rates 'highly specific'. With both reads repaired both sample workspaces evaluate to 'Hire-ready and repeatable' with no blockers (enterprise scores 17/15/19/19/18, SMB 17/14/19/20/17). So the state every tester currently sees is produced by two reading errors, not by the sample data. The owner's rule that a number shown in more than one area comes from the area that owns it is not met for ICP quality.",
+   "governing": "AUDIT_BRIEF.md section 4, owner decision 'Numbers shown in more than one area come from the area that owns them'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md, Required work item 7 (persisted-state shapes, scoring/thresholds/recommendation selection, cross-room handoffs) and 'Approved product evolution' (readiness recommendation/blocker selection must be intact); COPY_STANDARD.md §21 (claims discipline).",
+   "proposed": "In readIcpAnalytics() compute the quality with ICP Studio's function instead of trusting the stored field: for each saved ICP that has any of `industry`, `size` or `buyer` (the three fields ICP Studio requires before it will save), use `buildIcpQuality({ role: o.role === \"firstae\" ? \"firstae\" : \"founder\", industry, size, geo, buyer, pain, trigger, proofWindow, activeAccounts: asNumber(o.engineActive ?? o.activeAccounts) }).score` (import from @/icp-studio/lib/quality; the field names are the ones parseSavedIcp reads in src/icp-studio/lib/persistence.ts:53-70); otherwise keep the stored `qualityScore`. This makes the sample workspaces and every ICP saved in ICP Studio agree with ICP Studio, and leaves a setup-created ICP as it is today. Add tests to src/dashboard/lib/readiness-aggregator.test.ts: a record in the sample-data shape (no qualityScore, all criteria present) yields bestQuality >= 85; a record saved by ICP Studio yields its stored score. Regenerate the walkthrough afterwards: with this and the pilot read repaired, both sample workspaces move to the highest readiness state (Founding GTM shows no announcement for it, because the announcement is limited to a change that ends at 'Usable with founder support'). OWNER DECISION: (1) The ICP that setup writes has a statement and no criteria. Either score it like every other ICP (a new workspace then starts at 'Founder-dependent' instead of 'Partially documented' until the criteria are entered, and its first ICP action becomes 'Complete the missing ICP criteria'), or keep the 78 credit and stop printing \"Best ICP quality: 78/100\" for an ICP nobody rated. (2) Whether the sample workspaces are meant to open at the highest readiness state; if not, the sample data (for example fewer closed-won deals or fewer handoff sections) has to change, because the two reading errors are the only thing holding them at 'Partially documented'.",
+   "testsAffected": [
+    "src/dashboard/lib/readiness-aggregator.test.ts (ICP cases seed `qualityScore` directly; add the two shapes above)",
+    "tests/e2e walks or snapshots that assert the sample Dashboard's readiness state or the 'Run a pilot…' line, if any",
+    "src/onboarding/seeding/lib/seed-writer tests, only if the owner chooses to change what setup stores"
+   ],
+   "confidence": "high",
+   "id": "READINESS-015"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 2,
+   "file": "src/dashboard/v4/lib/area-chip.ts",
+   "line": 15,
+   "generation": "v4",
+   "state": "Readiness panel on the default Dashboard (opened with 'Review readiness →'), row under 'CURRENT READINESS BY AREA'.",
+   "current": "SMB walkthrough: \"ICP & targeting — workable\" · \"Outreach — solid\" · \"Discovery — solid\" · \"Deal management — solid\" · \"Pilots, reviews and handoff records — workable, but few pilot results are recorded\". chipFor() (lines 14-21) maps the area's internal score to a word: 14 or more \"solid\", 8-13 \"workable\", 1-7 \"limited\", 0 \"none yet\". 'solid' and 'workable' share the green style (`is-ok`), 'limited' and 'none yet' the amber style (`is-thin`; src/dashboard/v4/climb-drawer.css:42-43).",
+   "problem": "(1) A rating with nothing under it. For every area the engine already holds the recorded items and the missing items (DimensionScore.evidence and .gaps), and the two older panels print them; the default panel prints only the one to three lines under 'To become …'. In the SMB sample today that list is one line about pilots, so the user is told ICP & targeting is 'workable' and cannot find out what is recorded, what is missing, or what would make it 'solid'. The original structural rule for Readiness asks for the missing evidence and the action for each state. (2) The colour disagrees with the list above it. 'Usable with founder support' needs every area at 10 or more, but the chip turns green at 8. Executed with the engine (scratchpad readiness-fable/run_mine1.cjs case D): ICP & targeting at 9 shows the green chip 'workable' while the list above it names \"ICP & targeting: Complete the missing ICP criteria…\" as what stands between the workspace and the next state. (3) 'none yet' does not say none of what. (4) The sentence under the state name is fixed per state (\"Another seller could run parts of the process, but several routine decisions still depend on your judgment.\", src/dashboard/v4/ClimbDrawer.tsx:53); it does not say which parts, although the engine knows which areas meet the per-area requirement and the chips are the only place that shows it. The words 'solid', 'workable' and 'limited' are not defined anywhere on the panel.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, 'Structural rules' → Readiness (for each state show what evidence is missing and what specific action moves readiness forward); COPY_STANDARD.md §7 (evidence → interpretation → action) and §20 (if the product knows the measure, name it); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md, Required work item 10 (recommendation/logic mismatch).",
+   "proposed": "Keep the four words and the quiet row; the interaction patch approved the form 'Deal management · solid'. (a) Make each chip open its own evidence: render `<details class=\"clmb-area\">` with the chip as `<summary>` and inside it two lines built from data the engine already returns — `Recorded: ${d.evidence.join(\" · \")}` and `Missing: ${d.gaps.join(\" · \")}` (leave a line out when its list is empty). The only new copy is the two labels \"Recorded:\" and \"Missing:\". (b) In chipFor() make 10 the lower bound of 'workable' (the value gateInheritable() uses), so a green chip is never the area the list names as blocking; 8 and 9 then read 'limited'. This changes the chip only; the readiness state and the lines under 'To become …' are unchanged. (c) \"none yet\" → \"nothing recorded\". (d) With the boundaries at 14 and 10 each word has an exact meaning in the engine's own rules, so say it once under the row: \"solid: meets the Hire-ready requirement for this area · workable: meets the requirement for Usable with founder support · limited: below both\". That line also tells the reader which 'parts of the process' the sentence under the state name refers to, in the state names already on the panel. Add a case to src/dashboard/v4/lib/area-chip.test.ts: an area scoring 9 is not given the `ok` class.",
+   "testsAffected": [
+    "src/dashboard/v4/lib/area-chip.test.ts (asserts \"solid, but few pilot results are recorded\" and \"solid\"; unaffected by (a) and (c), add the boundary case for (b))"
+   ],
+   "confidence": "medium",
+   "id": "READINESS-016"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "src/dashboard/v4/ClimbDrawer.tsx",
+   "line": 43,
+   "generation": "v4",
+   "state": "Readiness panel on the default Dashboard, last row of 'READINESS PROGRESSION' (the description under 'Hire-ready and repeatable'). It is tagged 'HIGHEST READINESS STATE' until the workspace reaches that state and 'CURRENT STATE' once it does — which is where both sample workspaces land once the two reading defects are repaired.",
+   "current": "\"Win and loss patterns are documented, and the sales handoff documentation is complete.\"",
+   "problem": "This is the approved replacement word for word, but it says more than the rule checks, and the same screen can contradict it. The state is reached with 5 of the 7 handoff sections ready (src/lib/readiness/verdict.ts:95) and with at least as many closed-won deals as closed-lost deals that have a loss reason (verdict.ts:78-84); nothing checks that win or loss patterns are written down. A workspace in this state can show 'SALES HANDOFF 5 / 7' in the status row directly behind a panel that says the handoff documentation is complete.",
+   "governing": "COPY_STANDARD.md §21 (do not make the copy more precise than the product evidence permits); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, exact replacement 'Wins and losses both feed the machine; the handoff kit is written.' → 'Win and loss patterns are documented, and the sales handoff documentation is complete.' (the accuracy problem is the reason for departing from the approved sentence).",
+   "proposed": "\"Closed-won and closed-lost deals are recorded with loss reasons, and at least 5 of the 7 sales handoff sections are ready.\"",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "READINESS-017"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "src/dashboard/v4/ClimbDrawer.tsx",
+   "line": 145,
+   "generation": "v4",
+   "state": "Not rendered. Four fallback sentences for 'a next state exists but nothing is listed as missing': default panel (this line), default Dashboard line under 'What would improve readiness' (src/dashboard/v4/lib/cockpit.ts:53), previous panel (src/dashboard/today/components/ReadinessPanel.tsx:118) and oldest panel (src/dashboard/components/ReadinessDrawer.tsx:185).",
+   "current": "ClimbDrawer.tsx:145 \"The evidence required for the next state is present. The readiness assessment will update after the next saved workspace change.\" · cockpit.ts:53 \"The evidence required for the next readiness state is present. The assessment will update after the next saved workspace change.\" · ReadinessPanel.tsx:118 and ReadinessDrawer.tsx:185 \"Everything the next gate needs is in place. This will refresh the next time you save a change anywhere in the app.\"",
+   "problem": "The condition cannot occur: pickVerdict() (src/lib/readiness/verdict.ts:207-244) returns an empty list only for the highest state, where there is no next state, and every lower state carries the list from the gate that just failed, which is never empty. The sentences also describe a delay that does not exist — readiness is recalculated from stored data each time the Dashboard loads, regains focus or receives a storage event (src/dashboard/main.tsx:122, 141-151) — and the two older ones use the internal word 'gate'. They are declared through t(), so they count as checked product copy while describing behaviour the product does not have.",
+   "governing": "COPY_STANDARD.md §21; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md ('Review these layers' → Generation: fallbacks and unavailable/error output); comprehension principle.",
+   "proposed": "Delete the four branches (render nothing when the list is empty; at the highest state the existing sentence at cockpit.ts:54 already covers the Dashboard line). If a guard is wanted, use one accurate sentence in all four places: \"Nothing further is listed for the next state.\"",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "READINESS-018"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/dashboard/v4/ClimbDrawer.tsx",
+   "line": 180,
+   "generation": "v4",
+   "state": "Footer of the readiness panel on the default Dashboard (two buttons). Same second button on the previous panel (src/dashboard/today/components/ReadinessPanel.tsx:145) and the oldest panel (src/dashboard/components/ReadinessDrawer.tsx:220).",
+   "current": "\"Export readiness + history\" and \"Export today's snapshot\". On the default panel the second button is disabled with no explanation when there are no recommendations (ClimbDrawer.tsx:175).",
+   "problem": "'Today's snapshot' does not say what is exported, and the button sits in a panel about readiness next to a readiness export. It downloads the Dashboard's list of recommended actions with their scores and reasons (buildCommandExport, src/dashboard/lib/command-export.ts), nothing about readiness. Neither label says the result is a JSON file. A first-time user cannot tell the two downloads apart without trying both.",
+   "governing": "COPY_STANDARD.md §14 (verb + object) and §8 (placeholder test); comprehension principle (high-context dependence).",
+   "proposed": "\"Export readiness and its history (JSON)\" and \"Export today's recommended actions (JSON)\" on all three panels; on the default panel add `title={rankedCount === 0 ? t(\"No recommended actions to export\") : undefined}` to the disabled button. (The Dashboard reviewer proposes the same second label as DASH-024.)",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "READINESS-019"
+  },
+  {
+   "category": "TOOLING",
+   "severity": 2,
+   "file": "tools/preview/build-transcript.js",
+   "line": 57,
+   "generation": "tooling",
+   "state": "The tester walkthrough's 'Readiness Score' area and the corpus scored from it.",
+   "current": "The generator opens `/dashboard/?readiness=1` in the sample workspace and records one state, '1. The area at rest'. Both sample workspaces are 'Partially documented' with one line under 'To become …' (the pilot line). No step presses either export button.",
+   "problem": "Readiness has five states, and most of its text is produced by the engine for states the sample workspace is not in: the 'Founder-dependent' sentence every new workspace sees first (\"Complete two readiness actions: …\"), the per-area lines, the three generic fallbacks, the win/loss sentence, the Call in a Favor and handoff lines, the hero sentence and 'CURRENT STATE' tag for four other states, the chips 'limited' and 'none yet'. None of these are in the corpus that was read and scored, so the defects in them (the findings on verdict.ts and dimensions.ts) could not have been seen in the walkthrough; this review reached them by running the engine directly. The exported file is not inspected either, which is why its empty history fields went unnoticed. Once the two reading defects are repaired both sample workspaces move to the highest state and the walkthrough will show no 'To become …' list at all.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md, Required work items 4 (all rendered rooms and interactions, including recommendation explanations and persisted-state labels) and 8 (regenerate the actual tester pathway and inspect it); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md ('Audit from requirements through runtime': enumerate states; mark each executed, source-and-test reviewed or not verified).",
+   "proposed": "Add a readiness-states section to the walkthrough generator, produced by the real engine: for a fixed list of inputs (empty workspace; just after setup; one for each of the five states; the cases where an area has no listed gap; more losses than wins) print the state name, the panel's hero sentence, every line under 'To become …', and the five chips. The simplest form is a small script that imports evaluateReadiness, HERO_READ/LADDER and chipFor and writes `preview-transcript/readiness-states.txt` next to the transcript, so that the scoring corpus includes it. Add a walkthrough step that presses 'Export readiness + history' and records the downloaded JSON.",
+   "testsAffected": [
+    "tools/language-remediation/validate-transcript.js (expects the current list of areas; add the new section)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-020"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/dashboard/lib/readiness-export.ts",
+   "line": 122,
+   "generation": "shared",
+   "state": "The file downloaded by 'Export readiness + history' (button in the readiness panel on all three Dashboard versions): the `history` array.",
+   "current": "loadVerdictHistory() (lines 104-133) builds each history entry as `verdict: row.verdict ?? \"\"`, `direction: data[\"direction\"]`, `from: data[\"from\"]`, `to: data[\"to\"]`. The writer, buildSnapshotPayload() in src/dashboard/lib/readiness-history.ts:107-135, stores the change as `data.transition = { from, to, direction, at }` and the five-level state as `data.verdict`; the `verdict` column holds a three-value approximation (`thin` for both Founder-dependent and Partially documented, `partial`, `hire_ready`; readiness-history.ts:46-57, constrained by supabase/migrations/20260424170003_new_noun_tables.sql:108).",
+   "problem": "The export reads fields the writer never sets. Every history entry in the downloaded file therefore has `\"direction\": null, \"from\": null, \"to\": null`, and its `verdict` is `thin`, `partial` or `hire_ready` — a word the product retired, and one that cannot tell the first two states apart. The button promises readiness history; the file contains a list of timestamps with no usable state and no change. The only other reader of these rows reads the right place (`data.transition`, src/founding-gtm/lib/ceremony.ts:104-106). There is no test for this file (no readiness-export.test.ts), and the walkthrough never opens the download. The language check's exception list records the stored value `return \"thin\";` in readiness-history.ts as an internal identifier that is 'not rendered to users' (tools/language-remediation/copy-allowlist.json, entry for src/dashboard/lib/readiness-history.ts); this file is where it reaches a user.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md, Required work item 7 (output/API schemas, persisted state, translators) and item 4 (exports); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md ('States … exports and downloaded files' in the audit layers); COPY_STANDARD.md §21.",
+   "proposed": "In loadVerdictHistory() read what the writer stores: `const tr = data ? asObject(data[\"transition\"]) : null; const key = (data ? asString(data[\"verdict\"]) : null) ?? \"\";` and push `{ id: row.id, atIso: row.created_at ?? \"\", verdict: key, verdictLabel: labelFor(key), direction: tr ? asString(tr[\"direction\"]) : null, from: tr ? asString(tr[\"from\"]) : null, fromLabel: labelFor(tr ? asString(tr[\"from\"]) : null), to: tr ? asString(tr[\"to\"]) : null, toLabel: labelFor(tr ? asString(tr[\"to\"]) : null) }`, where `labelFor(k)` returns `VERDICT_LABEL[k]` when k is one of the five known keys and null otherwise. Take the names from the keys, not from the stored `data.verdict_label`: rows written before 2026-11-06 store the names in use at the time ('Building', 'Inheritable with guardrails', 'Runnable with founder support'). Add `verdictLabel`, `fromLabel`, `toLabel` to HistoryEntry (additive; the file's `schemaVersion` can stay 1). Add src/dashboard/lib/readiness-export.test.ts: a row shaped exactly as buildSnapshotPayload() writes it yields the from/to/direction and the current names.",
+   "testsAffected": [
+    "none exist for this file; add src/dashboard/lib/readiness-export.test.ts"
+   ],
+   "confidence": "high",
+   "id": "READINESS-021"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/dashboard/lib/readiness-export.ts",
+   "line": 65,
+   "generation": "shared",
+   "state": "The same downloaded file, `summary` block. The source comment says the file is meant to be opened by the founder and shared with advisors (lines 13-17).",
+   "current": "Engine output (scratchpad readiness-fable/run_mine1.cjs): `\"verdict\": \"building\"`, `\"verdictLabel\": \"Partially documented\"`, `\"totalScore\": 83`, `\"nextVerdict\": \"inheritable_with_guardrails\"`, and for each area `\"id\": \"proof\"`, `\"label\": \"Pilots, reviews and handoff records\"`, `\"score\": 15`.",
+   "problem": "A person reading the file meets the retired state names as the only name for the next state (`inheritable_with_guardrails`; `you_are_the_system` once history is repaired) and cannot match them to the names on screen. `totalScore` and each area's `score` are numbers the default panel deliberately does not show, with no scale in the file (83 of what; 15 of what).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows `Inheritable with guardrails`, `You are the system`, `Building` (retired state names) as superseded by COPY_STANDARD.md §17; COPY_STANDARD.md §13 (state units); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `heat` ('if a score is shown, explain inputs') by analogy.",
+   "proposed": "Keep every existing key and value (they are stable identifiers) and add the readable fields beside them in buildReadinessExport(): `nextVerdictLabel: summary.nextVerdict ? VERDICT_LABEL[summary.nextVerdict] : null`, `totalScoreOutOf: 100`, and per area `scoreOutOf: 20`.",
+   "testsAffected": [
+    "none exist; cover in the new readiness-export.test.ts"
+   ],
+   "confidence": "high",
+   "id": "READINESS-022"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/dashboard/lib/readiness-history.ts",
+   "line": 216,
+   "generation": "shared",
+   "state": "Readiness history rows and the Founding GTM announcement that readiness reached 'Usable with founder support', for anyone who opens the Dashboard in a browser that has no saved copy of the last state (a second computer, a new browser profile, a private window, or after the local copy is cleared in Settings).",
+   "current": "bootReadinessHistory() takes the previous state only from localStorage (`gtmos_readiness_last_verdict`, lines 72-92, 189). When that key is absent, `previous` is null, so `transition` is null (lines 216-218) and a row is inserted with no `transition` (lines 234, 124-133) even if the workspace already has history in the cloud. The announcement reads only the single newest row (`limit: 1`, src/founding-gtm/lib/ceremony.ts:99-102) and returns nothing when that row has no transition (ceremony.ts:105-106; the test 'returns null when latest row lacks a transition (initial baseline)' at src/founding-gtm/lib/ceremony.test.ts:118 fixes this behaviour). The 'already shown' marker is also per browser (`gtmos_founding_gtm_ceremony_fired`, ceremony.ts:27).",
+   "problem": "Four results, all from reading the code paths end to end (not executed against a live database). (1) Every additional browser adds a row with no from/to to the history, so the history shows changes that did not happen and loses the ones that did: a real change first seen by a browser with no saved copy is recorded without its direction. (2) The announcement can be lost for good: the workspace reaches 'Usable with founder support' on one computer (row with the change), the Dashboard is then opened anywhere without the saved copy (row with no change) or the state changes again, and Founding GTM, opened afterwards, finds a newest row that does not qualify. (3) It can also repeat: on a second browser the marker is missing, so if the qualifying row is still the newest the announcement shows again although it is described as once per workspace. (4) A write that fails (for example offline) is dropped on purpose (readiness-history.ts:158-166) after the saved copy of the state has already been advanced (lines 220-223), so that change is never recorded and can never be announced. Separately, the rule requires the change to end exactly at 'Usable with founder support' (ceremony.ts:69-73), so a workspace that goes from 'Partially documented' straight to a higher state — which is what both sample workspaces will do once the two reading defects are repaired — is never announced.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md, Required work item 7 (persisted-state/localStorage shapes, cross-room handoffs, dedupe behaviour); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md ('Function' layer: localStorage and persisted state, cross-workflow handoffs).",
+   "proposed": "(a) In bootReadinessHistory(), when the saved copy is missing, read the newest cloud row first and use its `data.verdict` as the previous state: insert nothing when it equals the current state, and record a real from/to when it differs; only a workspace with no rows gets a row without a change. (b) In loadLatestTransition(), list the most recent rows (for example `limit: 50`) and return the newest one whose `transition` is an upward change ending at `inheritable_with_guardrails`, instead of only inspecting the newest row. Update ceremony.test.ts line 118 to the new rule (a later row without a change must not hide an earlier qualifying one) and add a readiness-history test for a browser with no saved copy and existing cloud rows. OWNER DECISION: (1) whether 'shown once per workspace' should be remembered in the workspace (cloud) rather than in each browser; (2) whether a change that skips past 'Usable with founder support' to a higher state should also be announced.",
+   "testsAffected": [
+    "src/founding-gtm/lib/ceremony.test.ts > \"returns null when latest row lacks a transition (initial baseline)\" (line 118; encodes the newest-row-only rule)",
+    "src/dashboard/lib/readiness-history.test.ts (no case for a missing saved copy with existing cloud rows)"
+   ],
+   "confidence": "medium",
+   "id": "READINESS-023"
+  },
+  {
+   "category": "FUNC",
+   "severity": 2,
+   "file": "src/founding-gtm/main.tsx",
+   "line": 37,
+   "generation": "shared",
+   "state": "Founding GTM, sentence under 'Documented sales process' (\"Current readiness: {state}.\", src/founding-gtm/v4/FoundingGtmV4.tsx:58), the same value in the two older Founding GTM screens' header, and the readiness state stored in a read-only share link when it is created (src/founding-gtm/components/SharePanel.tsx:90-94, 140).",
+   "current": "readReadinessVerdictLabel() (lines 33-43) returns the name for the key stored in `gtmos_readiness_last_verdict`. That key is written only by the Dashboard's history effect when the Dashboard is open (src/dashboard/lib/readiness-history.ts:94-104, 223). Founding GTM re-reads the key on storage and visibility events (lines 82-93) but never recalculates readiness.",
+   "problem": "Founding GTM shows, and a share link records for the new seller, the readiness state as it was the last time the Dashboard was open in this browser. A seller who records the pilot or closes the deal that changes the state and then opens Founding GTM sees the old state; a share link created at that moment carries the old state permanently. In a browser where the Dashboard has not been opened the sentence is missing altogether. The handoff-section count on the same screen was already moved to a live calculation for this reason (src/founding-gtm/lib/sections-ready.ts:9-14: 'Every consumer now derives the number through this one function').",
+   "governing": "AUDIT_BRIEF.md section 4, owner decision 'Numbers shown in more than one area come from the area that owns them'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md, Required work item 7 (cross-room handoffs, persisted state).",
+   "proposed": "In readReadinessVerdictLabel() calculate the state with the same two functions the Dashboard uses: `return evaluateReadiness(aggregateReadinessInput()).verdictLabel;` (imports from @/lib/readiness and @/dashboard/lib/readiness-aggregator), keeping the existing storage/visibility refresh. Remove the read of `gtmos_readiness_last_verdict` here; the key stays as the Dashboard's own change detector. Add a test that a workspace whose stored data evaluates to a different state than the saved key shows the calculated state.",
+   "testsAffected": [
+    "src/founding-gtm tests that seed `gtmos_readiness_last_verdict` to drive the header, if any (none found by search for the key in *.test.* files)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-024"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 97,
+   "generation": "shared",
+   "state": "Readiness panel 'To become Hire-ready and repeatable' and the Dashboard line under 'What would improve readiness' in a 'Hire-ready' workspace with fewer than 5 handoff sections ready (engine run, scratchpad readiness-fable/run_mine1.cjs case E: \"Complete at least 5 of 7 Founding GTM handoff sections (currently 4/7).\"); the handoff gap line in the two older panels and the export.",
+   "current": "verdict.ts:97 \"Complete at least 5 of 7 Founding GTM handoff sections (currently {n}/7).\" · src/lib/readiness/dimensions.ts:343 \"Complete 5+ Founding GTM handoff sections\".",
+   "problem": "A seller cannot complete a handoff section. The seven sections are written by the product from activity recorded elsewhere: computeHandoffSectionsReady() runs authorAllSections() over the stored deals, outreach, calls, pilots and quota (src/founding-gtm/lib/sections-ready.ts:16-22), and Founding GTM says so on a section with nothing in it: \"No workspace evidence is available for this section yet. It will update as the relevant sales activity is recorded.\" (src/founding-gtm/v4/FoundingGtmV4.tsx:108). The line sends the reader to Founding GTM to do something that has no control there.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, Readiness structural rule 'what specific action moves readiness forward'; COPY_STANDARD.md §21 and §14.",
+   "proposed": "verdict.ts:97 \"At least 5 of the 7 sales handoff sections must be ready (currently {n}). Each section fills in from recorded sales activity; Founding GTM shows which sections are not ready.\" · dimensions.ts:343 \"Record the activity that 5+ of the 7 sales handoff sections draw on (Founding GTM shows which are not ready)\". Keep the words 'Founding GTM' in the gap line: src/lib/readiness/dimensions.test.ts:150-153 asserts them.",
+   "testsAffected": [
+    "src/lib/readiness/dimensions.test.ts > \"flags handoff gap with prescriptive copy\" (expects the gap to include \"Founding GTM\"; still true)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-025"
+  },
+  {
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/lib/readiness/dimensions.ts",
+   "line": 86,
+   "generation": "shared",
+   "state": "ICP & targeting evidence and gap lines (two older readiness panels, the export; rendered in the previous version today: \"Confirm 10+ qualified prospects in Prospecting Desk\"), and the ICP line under 'To become …' when it is the area's first listed gap.",
+   "current": "dimensions.ts:79 \"{n} qualified prospects confirmed\" · :86 \"Confirm 10+ qualified prospects in Prospecting Desk\". The number is the count of Prospecting Desk records in stage `ready` or `pushed` (src/dashboard/lib/readiness-aggregator.ts:105-115), which Prospecting Desk shows under the headings 'Confirmed accounts' and the sent list (src/prospecting-desk/v4/ProspectingDeskV4.tsx:120-121, 371).",
+   "problem": "Prospecting Desk calls these 'accounts' and its step 'Confirmed accounts'; readiness calls the same records 'qualified prospects'. A first-time user sent to Prospecting Desk to 'confirm qualified prospects' finds no such label there. Minor, but it is the instruction's only link to the place where the action is done.",
+   "governing": "COPY_STANDARD.md §2 (literal noun) and §8; comprehension principle (the same thing has one name).",
+   "proposed": ":79 \"{n} accounts confirmed in Prospecting Desk\" · :86 \"Confirm 10+ accounts in Prospecting Desk\".",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "READINESS-026"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/dashboard/today/components/ReadinessPanel.tsx",
+   "line": 24,
+   "generation": "ds",
+   "state": "Readiness panel on the previous Dashboard screen (?v4=0 or the `room_dashboard_v4_off` switch), sentence under the state name. Rendered today in the enterprise sample workspace: \"Activity is real, but a hire would still be improvising the system on day one.\" (previous-version walkthrough).",
+   "current": "VERDICT_SUBTITLE, lines 22-42: \"Right now the system only lives in your head. A new hire would have nothing to inherit on day one.\" (line 24) · \"Activity is real, but a hire would still be improvising the system on day one.\" (28) · \"A hire could run this if you're around for sanity-checks.\" (32) · \"The sales process would keep running through a 2-week founder vacation.\" (35) · \"This system holds up to repetition — multiple wins on the board, multiple losses worth learning from, advisors lit up, and the handoff kit is composed.\" (39).",
+   "problem": "These are the sentences the remediation replaced on the default panel, still shown on a reachable screen. 'Lives in your head' is the readiness metaphor the original work named for replacement. 'The system', 'this' and 'this system' never say what is meant (the sales process). 'Nothing to inherit', 'a hire', 'sanity-checks', 'wins on the board', 'advisors lit up' and 'the handoff kit is composed' are private shorthand a first-time user has to translate; 'Activity is real' reads as a judgment on the reader. The same workspace gets two different descriptions of the same state depending on which Dashboard version it is served.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[34] ('It all lived in your head — nothing to inherit.' → 'The sales process was not yet documented for another seller.'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows `inheritable`, `handoff kit`, `the machine`; COPY_STANDARD.md §3 ('in your head' → undocumented founder knowledge), §8, §26 (judgment words); AUDIT_BRIEF.md disputed-term row 'in your head'.",
+   "proposed": "Use the five sentences the default panel already shows (HERO_READ in src/dashboard/v4/ClimbDrawer.tsx:47-68): Founder-dependent — \"Another seller would still depend on you to understand and run the sales process.\" · Partially documented — \"Another seller could run parts of the process, but several routine decisions still depend on your judgment.\" · Usable with founder support — \"Another seller could run the process with you available to answer questions and resolve gaps.\" · Hire-ready — \"Another seller can run the documented process independently for routine work.\" · Hire-ready and repeatable — \"The sales process, win and loss patterns, and handoff documentation are complete enough to repeat with another seller.\" Move HERO_READ to one shared module (for example src/lib/readiness/state-text.ts, exported through src/lib/readiness/index.ts) and import it in all three panels so the sentence cannot differ between versions again.",
+   "testsAffected": [
+    "src/components/library.test.tsx (ReadinessReadout renders whatever `read` it is given; unaffected)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-027"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/dashboard/components/ReadinessDrawer.tsx",
+   "line": 27,
+   "generation": "legacy",
+   "state": "Readiness panel on the oldest Dashboard screen (?v4=0&today=0, or the `room_dashboard_today_legacy` switch with the default switched off), sentence under the state name. Reviewed from source; the Dashboard reviewer's capture of this screen made today shows \"Activity is real, but a hire would still be improvising the system on day one.\" (scratchpad dash-work/fable/legacy-dashboard.txt line 162).",
+   "current": "VERDICT_SUBTITLE, lines 25-45: the same five sentences as the previous version — \"Right now the system only lives in your head. A new hire would have nothing to inherit on day one.\" (line 27) · \"Activity is real, but a hire would still be improvising the system on day one.\" (31) · \"A hire could run this if you're around for sanity-checks.\" (35) · \"The sales process would keep running through a 2-week founder vacation.\" (38) · \"This system holds up to repetition — multiple wins on the board, multiple losses worth learning from, advisors lit up, and the handoff kit is composed.\" (42).",
+   "problem": "Same as the previous-version panel: the replaced readiness dialect ('lives in your head', 'nothing to inherit', 'sanity-checks', 'advisors lit up', 'the handoff kit is composed') is still served on a reachable screen, and it describes the state differently from the default panel.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[34]; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md rows `inheritable`, `handoff kit`; COPY_STANDARD.md §3 and §8; AUDIT_BRIEF.md disputed-term row 'in your head' and section 5 ('ALL THREE are in scope').",
+   "proposed": "Use the five sentences the default panel already shows (HERO_READ in src/dashboard/v4/ClimbDrawer.tsx:47-68): Founder-dependent — \"Another seller would still depend on you to understand and run the sales process.\" · Partially documented — \"Another seller could run parts of the process, but several routine decisions still depend on your judgment.\" · Usable with founder support — \"Another seller could run the process with you available to answer questions and resolve gaps.\" · Hire-ready — \"Another seller can run the documented process independently for routine work.\" · Hire-ready and repeatable — \"The sales process, win and loss patterns, and handoff documentation are complete enough to repeat with another seller.\" Move HERO_READ to one shared module (for example src/lib/readiness/state-text.ts, exported through src/lib/readiness/index.ts) and import it in all three panels so the sentence cannot differ between versions again.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "READINESS-028"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/dashboard/today/components/ReadinessPanel.tsx",
+   "line": 113,
+   "generation": "ds",
+   "state": "Heading above the list of missing items in the readiness panel on the previous Dashboard screen (rendered today: \"WHAT WOULD MOVE THIS NEXT\") and on the oldest screen (src/dashboard/components/ReadinessDrawer.tsx:180).",
+   "current": "\"What would move this next\" (ReadinessPanel.tsx:113; ReadinessDrawer.tsx:180).",
+   "problem": "'This' has nothing to point at and 'move' stands in for 'improve the readiness state'. The default screens use the approved heading for the same list.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, exact replacement 'WHAT GETS YOU TO THE NEXT STAGE' → 'WHAT WOULD IMPROVE READINESS'; COPY_STANDARD.md §8 (pronoun test) and §3 (`move`).",
+   "proposed": "\"What would improve readiness\" in both files.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "READINESS-029"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/dashboard/today/components/ReadinessPanel.tsx",
+   "line": 90,
+   "generation": "ds",
+   "state": "Per-area rows in the readiness panel on the previous Dashboard screen (rendered today: \"ICP & targeting — 11/20\", \"Outreach — 15/20\", \"Discovery — 19/20\", \"Deal management — 19/20\", \"Pilots, reviews and handoff records — 15/20\") and on the oldest screen (src/dashboard/components/ReadinessDrawer.tsx:137-142, \"11/20\" beside each label with a bar).",
+   "current": "ReadinessPanel.tsx:90 `read={`${d.label} — ${d.score}/20`}` · ReadinessDrawer.tsx:138-141 `{d.score}` followed by `/20`.",
+   "problem": "A score with no stated meaning: nothing on either panel says what the 20 points are or how many are needed for the next state (10 in every area for 'Usable with founder support', 14 for 'Hire-ready'). The default panel replaced these numbers with words, so the same area reads '11/20' on one version and 'workable' on another. The bar on the oldest panel is exposed as `role=\"progressbar\"` with values and no name (ReadinessDrawer.tsx:144-150), so assistive technology announces a number with no area.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `heat` ('if a score is shown, explain inputs') by analogy; COPY_STANDARD.md §13 (state units) and §20; deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html (internal doctrine for this area: the five parts are shown as words, without bars or scores).",
+   "proposed": "Show the same word as the default panel and keep the meter or bar as decoration: ReadinessPanel.tsx:90 `read={`${d.label} — ${chipFor(d).word}`}`; ReadinessDrawer.tsx:137-142 render `chipFor(d).word` in place of the number and `/20`, and give the bar `aria-label={`${d.label}: ${chipFor(d).word}`}` (or `aria-hidden=\"true\"`, since the word carries the state). Move chipFor() from src/dashboard/v4/lib/area-chip.ts to a shared location (for example src/dashboard/lib/area-chip.ts) so all three panels use one rule.",
+   "testsAffected": [],
+   "confidence": "medium",
+   "id": "READINESS-030"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/dashboard/components/ReadinessDrawer.tsx",
+   "line": 212,
+   "generation": "legacy",
+   "state": "Hover text on the two export buttons in the readiness panel on the oldest Dashboard screen (the Dashboard reviewer's capture made today shows: hover “Export 11 ranked objects as JSON” and “Download the readiness state, dimensions, and history as JSON”), and the disabled-button reason on the previous screen (src/dashboard/today/components/ReadinessPanel.tsx:139).",
+   "current": "ReadinessDrawer.tsx:212 \"No ranked objects to export yet\" · :215-217 `Export ${rankedCount} ranked object${rankedCount === 1 ? \"\" : \"s\"} as JSON` (built outside t(), so the language check does not see it) · :226 \"Download the readiness state, dimensions, and history as JSON\" · ReadinessPanel.tsx:139 \"Nothing ranked to export yet\".",
+   "problem": "'Ranked objects' is the engine's name for the Dashboard's recommended actions; a user has never seen the word 'object' for them. 'Dimensions' is the engine's name for the five areas of the sales process and appears nowhere else on screen. 'Nothing ranked' leaves out what is ranked.",
+   "governing": "AUDIT_BRIEF.md disputed-term row 'rank' (\"Internal-architecture phrasing such as … 'ranked object' is not plain language\"); COPY_STANDARD.md §26 ('Rank' describes what the product does and says what is ordered) and §2; deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html (internal doctrine: do not show the bare word 'dimension').",
+   "proposed": "ReadinessDrawer.tsx:212 \"No recommended actions to export\" · :215-217 t(\"Download today's {n} recommended actions as JSON\") with a singular form for one · :226 \"Download the readiness state, the five areas and the history as JSON\" · ReadinessPanel.tsx:139 \"No recommended actions to export\".",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "READINESS-031"
+  },
+  {
+   "category": "A11Y",
+   "severity": 2,
+   "file": "src/dashboard/today/TodaySurface.tsx",
+   "line": 79,
+   "generation": "ds",
+   "state": "Top of the previous Dashboard screen (?v4=0): the control that opens the readiness panel. Rendered today as a button whose whole text is \"Partially documented\".",
+   "current": "`<button class=\"dbt-verdict\" onClick={openReadinessDrawer}><StatusChip label={verdict.verdictLabel} …/></button>` (lines 79-88). No visible word and no accessible name says that the chip is readiness or that it opens a panel.",
+   "problem": "A first-time user sees the words 'Partially documented' alone at the top of the page and cannot tell what is partially documented or that the chip can be opened. A screen reader announces 'Partially documented, button'. On this version it is the only readiness element on the page at rest; the default screen labels the same value ('Current readiness: …') and the oldest screen prefixes it with 'READINESS'.",
+   "governing": "COPY_STANDARD.md §14 (noun + state) and §11 (a label must be understandable alone); comprehension principle (high-context dependence).",
+   "proposed": "Label the chip and name the button: `<StatusChip label={`${t(\"Readiness:\")} ${verdict.verdictLabel}`} …/>` and `aria-label={`${t(\"Readiness:\")} ${verdict.verdictLabel}. ${t(\"Open the readiness panel.\")}`}` on the button.",
+   "testsAffected": [
+    "tests/e2e or component tests that find the chip by the exact text of the state name, if any (none found)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-032"
+  },
+  {
+   "category": "A11Y",
+   "severity": 1,
+   "file": "src/dashboard/components/ReadinessAnchor.tsx",
+   "line": 44,
+   "generation": "legacy",
+   "state": "Readiness button in the header of the oldest Dashboard screen (visible text \"READINESS Partially documented ›\"), accessible name.",
+   "current": "aria-label={`Readiness: ${props.verdictLabel}. Open drawer.`} — a template outside t().",
+   "problem": "'Drawer' is a developer's word for the panel; the same panel's close button calls it 'readiness panel' (src/dashboard/components/ReadinessDrawer.tsx:120). The sentence is not declared through t(), so the language check never sees it.",
+   "governing": "COPY_STANDARD.md §2 (literal noun); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md ('Rendered experience': hover/accessibility text).",
+   "proposed": "aria-label={`${t(\"Readiness:\")} ${props.verdictLabel}. ${t(\"Open the readiness panel.\")}`}",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "READINESS-033"
+  },
+  {
+   "category": "FUNC",
+   "severity": 1,
+   "file": "src/dashboard/lib/readiness-export.ts",
+   "line": 129,
+   "generation": "shared",
+   "state": "'Export readiness + history' on all three Dashboard versions when the history cannot be read (no connection, signed out, or the data service not configured), and in every case after the click.",
+   "current": "loadVerdictHistory() catches any error, reports it to error tracking and returns an empty list (lines 129-132); exportReadinessJson() then downloads the file with `\"history\": []`. Nothing is shown on screen before or after the download (the Dashboard reviewer's capture of the oldest screen records 'no visible change' after the click).",
+   "problem": "A file with an empty history looks the same whether the workspace has no history or the history could not be loaded, and the user is not told which. The click itself gives no confirmation that a file was produced.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md, Required work item 7 (response/error behaviour, fallbacks); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md ('Function' layer: error handling; 'Rendered experience': success/error states, exports).",
+   "proposed": "Have loadVerdictHistory() return `{ entries, loaded: boolean }` and write `historyLoaded: false` plus `historyNote: \"Readiness history could not be loaded when this file was created.\"` into the payload when the read fails. In the three panels, after the promise settles, show the button's own short status for a few seconds: \"File downloaded.\" or \"File downloaded without history; the history could not be loaded.\"",
+   "testsAffected": [
+    "none exist; cover in the new readiness-export.test.ts"
+   ],
+   "confidence": "medium",
+   "id": "READINESS-034"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/lib/readiness/types.ts",
+   "line": 61,
+   "generation": "shared",
+   "state": "Name of the fifth area wherever the five areas are listed: chip in the default panel (\"Pilots, reviews and handoff records — workable, but few pilot results are recorded\"), row label in the two older panels, prefix of the lines under 'To become …', the export.",
+   "current": "\"Pilots, reviews and handoff records\". The area adds up four things (src/lib/readiness/dimensions.ts:286-353): pilots, deals with a corrective action marked in Future Autopsy, Call in a Favor requests, and handoff sections. The comment above the label says it 'names all four' (types.ts:58-60).",
+   "problem": "It names three, and two of the three loosely. 'Reviews' does not say reviews of what (the other lines call them 'deal-risk reviews'), and Call in a Favor is not named at all, so a line such as \"Pilots, reviews and handoff records: Use Call in a Favor on 3+ deals and record the outcomes.\" names an action that seems to belong to no part of the label.",
+   "governing": "COPY_STANDARD.md §2 (most literal noun) and §11 (a label must be understandable alone); comprehension principle.",
+   "proposed": "\"Pilots, deal-risk reviews, favors and handoff\" (and correct the comment). Update the expectation in src/dashboard/v4/lib/area-chip.test.ts:17.",
+   "testsAffected": [
+    "src/dashboard/v4/lib/area-chip.test.ts:17 (expects the current label)"
+   ],
+   "confidence": "medium",
+   "id": "READINESS-035"
+  },
+  {
+   "category": "FUNC",
+   "severity": 1,
+   "file": "src/dashboard/v4/lib/cockpit.ts",
+   "line": 24,
+   "generation": "v4",
+   "state": "No visible defect today. The five state names are typed out in three places that must agree: the engine's labels (src/lib/readiness/types.ts:30-36), the Dashboard's five-state strip (cockpit.ts:24-30) and the panel's progression list (src/dashboard/v4/ClimbDrawer.tsx:19-45).",
+   "current": "GATE_LABELS = [t(\"Founder-dependent\"), t(\"Partially documented\"), t(\"Usable with founder support\"), t(\"Hire-ready\"), t(\"Hire-ready and repeatable\")]; LADDER[i].name repeats the same five strings; VERDICT_LABEL holds them a third time.",
+   "problem": "The owner changed these names once already (2026-11-05/06) and the shipped app lagged because one copy was missed (recorded in CLAUDE.md, session log 2026-11-05: 'Still open in the app … VERDICT_LABEL'). With three copies the heading, the strip and the panel can show different names for the same state after the next change, and no test compares them.",
+   "governing": "AUDIT_BRIEF.md section 4 (owner decision on readiness state names, COPY_STANDARD.md §17); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md, Required work item 7 (display label versus stable key).",
+   "proposed": "Build both lists from the engine's map: in cockpit.ts `const GATE_LABELS = VERDICT_ORDER.map((v) => VERDICT_LABEL[v])`, and in ClimbDrawer.tsx `name: VERDICT_LABEL[v]`, with `VERDICT_ORDER` exported from src/lib/readiness/types.ts as the five keys in rank order. Add one test that the strip and the list equal Object.values(VERDICT_LABEL) in rank order.",
+   "testsAffected": [
+    "src/dashboard/v4/lib/cockpit.test.ts (asserts five gates and their done/on/next/todo states, not their text; unaffected)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-036"
+  },
+  {
+   "category": "LANG-D",
+   "severity": 2,
+   "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+   "line": 41,
+   "generation": "doctrine",
+   "state": "The Readiness Score capability map. It is internal doctrine, and the walkthrough generator prints it to testers as section 4 of the Readiness Score page, 'What this area is for and how it works' (tools/preview/build-transcript.js:505, 530). Section '3 · What it offers', row 'Readiness progression'.",
+   "current": "\"Readiness progression | The five levels as a vertical ladder — passed levels sit behind in forest green (“left behind 3 weeks ago”), the current level is “you are here,” the next is the goal + “what it takes.”\"",
+   "problem": "The row title was changed from 'The climb' but the row still presents the replaced labels as what the screen says. The remediation replaced 'LEFT BEHIND' with 'PREVIOUS STATE' and 'YOU ARE HERE' with 'CURRENT STATE', and the panel shows 'To become {state}', not 'what it takes'. '3 weeks ago' describes a date the panel has never shown (src/dashboard/v4/ClimbDrawer.tsx:107-128 has no dates). A writer or model working from this page would restore the old labels; a tester reading it looks for text and a feature that are not there.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/06_INTERNAL_DOCTRINE_HITS.json records[37] (this line); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, exact replacements 'LEFT BEHIND' → 'PREVIOUS STATE', 'YOU ARE HERE' → 'CURRENT STATE', 'To reach Inheritable with guardrails' → 'To become …'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md ('Internal architecture names … must not be used as a source of customer-facing language').",
+   "proposed": "\"Readiness progression | The five states in order, each with a one-sentence description. States before the current one are tagged ‘Previous state’, the current one ‘Current state’, the one after it ‘Next state’, later ones ‘Later state’, and the last ‘Highest readiness state’. Below the list, ‘To become {next state}’ names what is still missing. The panel does not show when a state was reached.\"",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "READINESS-037"
+  },
+  {
+   "category": "LANG-D",
+   "severity": 2,
+   "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+   "line": 41,
+   "generation": "doctrine",
+   "state": "The Readiness Score capability map. It is internal doctrine, and the walkthrough generator prints it to testers as section 4 of the Readiness Score page, 'What this area is for and how it works' (tools/preview/build-transcript.js:505, 530). Section '3 · What it offers', row 'The read-only “share with a hire”'.",
+   "current": "\"The read-only “share with a hire” | The persistent sharing control — read-mode workspace access for an external email.\"",
+   "problem": "Listed under 'Everything Readiness Score does', but no readiness panel has a sharing control: the default panel's footer has two export buttons and nothing else (src/dashboard/v4/ClimbDrawer.tsx:164-182), and the same is true of the two older panels. The sharing control that exists is in Founding GTM, is labelled 'Share read-only with a seller' (src/founding-gtm/v4/FoundingGtmV4.tsx:86) and creates a link to a frozen copy of the seven handoff sections, not 'read-mode workspace access for an external email'. The quoted label is the one the interaction patch replaced.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/06_INTERNAL_DOCTRINE_HITS.json records[39] (this line); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/15_HIGH_SEVERITY_INTERACTION_PATCH.md ('Share with a hire — read-only' → 'Share read-only with a seller'); COPY_STANDARD.md §21; the page's own header note (capabilities the source does not implement are not authorized by earlier design references).",
+   "proposed": "Replace the row with what the panel offers: \"Exports | ‘Export readiness + history’ downloads the current state, the five areas and the recorded state changes as a JSON file. ‘Export today's snapshot’ downloads the Dashboard's recommended actions. Read-only sharing with another seller is in Founding GTM (‘Share read-only with a seller’), not here.\" If the export buttons are relabelled (the export-label finding), use the new labels here.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "READINESS-038"
+  },
+  {
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+   "line": 41,
+   "generation": "doctrine",
+   "state": "The Readiness Score capability map. It is internal doctrine, and the walkthrough generator prints it to testers as section 4 of the Readiness Score page, 'What this area is for and how it works' (tools/preview/build-transcript.js:505, 530). Sections 2 (the level table), 3, 4 and 5.",
+   "current": "(a) \"Founder-dependent | Founder-led, no transferable surface yet | any part at 0\" and \"Partially documented | … | ≥2 parts ≥8, none ≥16\". (b) \"Never bars, never scores.\" · \"Internal dimension scoring | 5 parts × 20 = 100, kept for the gate math only — never surfaced as a number.\" · \"The shipped Phase-5.A drawer leaked internal scoring language + retired nouns — all scrubbed.\" (c) \"The topbar anchor + single-fold drawer | Readiness level label + chevron on the Dashboard topbar → opens an overlay drawer\". (d) Flows in: \"summaries from every detailed product area (cloud-synced via data-client.ts, not the legacy snapshot key)\" · \"Pilot Desk outcomes\" · \"Future Autopsy run history\". (e) Flows out: \"readiness level + the evidence behind it into the Welcome read\". (f) \"Ceremony hooks | Triggers the Founding GTM visual transition on an upward readiness-state transition.\" (g) The five areas are listed as \"your targeting · your outreach · your discovery · your open deals · your pilot evidence\".",
+   "problem": "Each statement differs from what the code does. (a) The engine has no 'any part at 0' rule and no 'none ≥16' rule: a workspace is Founder-dependent while fewer than two areas score 8 or more, and Partially documented from then until it meets the next gate (src/lib/readiness/verdict.ts:183-205, 140-181). 'No transferable surface' is not plain language. (b) True of the default panel only: both older, reachable panels show a bar and 'n/20' for every area and the sentence with 'sanity-checks' (src/dashboard/today/components/ReadinessPanel.tsx:32, 90; src/dashboard/components/ReadinessDrawer.tsx:35, 137-157), the oldest panel's hover text says 'dimensions', and the export file contains the scores. (c) Describes the oldest screen; the default Dashboard shows 'Current readiness: {state}' with a 'Review readiness →' button. (d) Readiness reads this browser's stored copies of each area's data (src/dashboard/lib/readiness-aggregator.ts:6-36), not the data client; pilots are currently not counted at all (the readProofs finding); the Future Autopsy number is the count of deals with a corrective action marked. (e) Welcome shows no readiness state (no reference in src/welcome/v4). (f) Only a change that ends at 'Usable with founder support' is announced (src/founding-gtm/lib/ceremony.ts:69-73). (g) The screen names the areas 'ICP & targeting · Outreach · Discovery · Deal management · Pilots, reviews and handoff records' (src/lib/readiness/types.ts:53-62).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md, Required work item 6 (internal doctrine) and item 12 (documentation must match the actual implementation); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md ('Current code shows what the product does'; doctrine claims are verified against source); COPY_STANDARD.md §21.",
+   "proposed": "Rewrite the affected cells to match the code: (a) \"Founder-dependent | The sales process is not documented for another seller | fewer than two areas at 8 or more\" and \"Partially documented | Sales activity is recorded; another seller would still improvise parts of the process | two or more areas at 8 or more, and the next state's requirements not met\". (b) \"The default panel shows each area as a word (solid · workable · limited · nothing recorded). The two earlier Dashboard versions still show a bar and a score out of 20 for each area, and the export file includes the scores.\" and delete 'all scrubbed'. (c) \"On the default Dashboard: the heading ‘Current readiness: {state}’ and the button ‘Review readiness →’, which opens the readiness panel over the Dashboard (no page change). The oldest Dashboard version has a ‘READINESS {state}’ button in its header.\" (d) \"counts read from this browser's stored copy of each area's data\" · \"pilots saved in Pilot Desk\" · \"deals with a corrective action marked in Future Autopsy\". (e) Delete the Welcome line. (f) \"Founding GTM shows a one-time announcement when readiness first rises to ‘Usable with founder support’.\" (g) Use the five on-screen names.",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "READINESS-039"
+  },
+  {
+   "category": "LANG-D",
+   "severity": 1,
+   "file": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html",
+   "line": 40,
+   "generation": "doctrine",
+   "state": "The Readiness Score capability map. It is internal doctrine, and the walkthrough generator prints it to testers as section 4 of the Readiness Score page, 'What this area is for and how it works' (tools/preview/build-transcript.js:505, 530). Header (line 40), section 3 (line 41) and section 4 'Flows out' (line 41).",
+   "current": "\"a summary that combines evidence from across the workspace into one read\" · \"readiness level + the evidence behind it into the Welcome read\" · \"Plain, prescriptive unlocks — the exact things that flip the next gate.\" · \"deal-health vitals from Deal Workspace\" · \"Bars are decoration — the verdict is the value\".",
+   "problem": "Leftover doctrine shorthand in a page testers read: 'read' as a noun for an assessment, 'unlocks' and 'flip the next gate' for the missing items, 'vitals' for deal status, 'the verdict is the value'. Each is listed for replacement in the doctrine rewrite or the migration map, and each invites the same words back into product copy.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `read` ('analysis / assessment / summary'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md (deprecated doctrine language table; 'Acceptance test for every new string'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/06_INTERNAL_DOCTRINE_HITS.json records[29] and records[36] (the lines these phrases sit in).",
+   "proposed": "\"a summary that combines evidence from across the workspace into one assessment\" · (Welcome line deleted by the previous finding) · \"The specific items still missing for the next state.\" · \"deal status from Deal Workspace\" · \"Bars are decoration; the state name is what the user reads.\"",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "READINESS-040"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/founding-gtm/components/SharePanel.tsx",
+   "line": 213,
+   "generation": "shared",
+   "state": "Outside this area's files; found while tracing the 'share with a hire' capability the readiness doctrine describes. Founding GTM, panel opened by 'Share read-only with a seller', signed-in state (the walkthrough runs signed out and shows only the sign-in message, so this text is not in the scored corpus).",
+   "current": "aria-label \"Share this kit\" (line 209) · \"SHARE THIS KIT\" (211) · \"Send the kit to a hire as a read-only link\" (213) · \"The recipient sees a frozen snapshot of all seven sections. They can't edit anything; you can revoke the link or refresh the snapshot whenever the kit changes.\" (215-219). The heading and paragraph are plain JSX text outside t(), so the language check does not see them.",
+   "problem": "'The kit' is the retired name for the sales handoff document; the button that opens this panel and the signed-out version of the same panel already say 'handoff document' and 'seller'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row `handoff kit` → 'sales handoff documentation'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/15_HIGH_SEVERITY_INTERACTION_PATCH.md ('Founding GTM the handoff kit' → 'Founding GTM · sales handoff documentation'; 'Share with a hire — read-only' → 'Share read-only with a seller').",
+   "proposed": "aria-label \"Share the handoff document\" · \"SHARE THE HANDOFF DOCUMENT\" · \"Send the handoff document to another seller as a read-only link\" · \"The recipient sees a fixed copy of all seven sections and cannot edit it. You can revoke the link, or refresh the copy when the document changes.\" Wrap the heading and paragraph in t(). Route to the Founding GTM reviewer for the rest of this file.",
+   "testsAffected": [
+    "src/founding-gtm component tests that match 'SHARE THIS KIT' or the heading, if any"
+   ],
+   "confidence": "medium",
+   "id": "READINESS-041"
+  },
+  {
+   "category": "TOOLING",
+   "severity": 1,
+   "file": "tools/language-remediation/copy-audit.js",
+   "line": 10,
+   "generation": "tooling",
+   "state": "`npm run copy:audit` over src/ (which includes the two older readiness panels).",
+   "current": "The automatic list (TIER1, line 9) and the review list (TIER2, line 10) contain none of: \"in your head\", \"sanity-check\", \"handoff kit\" / \"the kit\", \"ranked object\", \"nothing to inherit\". The check passes while src/dashboard/today/components/ReadinessPanel.tsx:22-42 and src/dashboard/components/ReadinessDrawer.tsx:25-45 still hold \"Right now the system only lives in your head. A new hire would have nothing to inherit on day one.\", \"…sanity-checks.\" and \"…the handoff kit is composed.\"",
+   "problem": "The readiness sentences the original work replaced by name are still shipped on two reachable screens and nothing in the check points a reviewer at them. The lists are meant to be short, and a missing phrase is not permission to keep the text; but 'in your head' is one of the five phrases the control document singles out, and its exact replacement is on record, so it belongs on the review list.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/12_COPY_LINTER_AND_CI_SPEC.md (Tier 2 = contextual review list); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md ('The disputed terms' → `in your head`; 'Absence from Tier1 is not permission to retain opaque copy'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[34].",
+   "proposed": "Add to TIER2 (review, not automatic failure): \"in your head\", \"sanity-check\", \"handoff kit\", \"the kit\", \"ranked object\", \"nothing to inherit\". Record a reviewed exception for any occurrence that stays (for example comments).",
+   "testsAffected": [
+    "tools/language-remediation/copy-audit.test.js (asserts list behaviour; add a case for one new phrase)"
+   ],
+   "confidence": "medium",
+   "id": "READINESS-042"
+  },
+  {
+   "category": "TOOLING",
+   "severity": 2,
+   "file": "src/lib/readiness/verdict.test.ts",
+   "line": 57,
+   "generation": "tooling",
+   "state": "Unit tests that protect the approved readiness change (each line under 'To become …' names the area and its first missing item).",
+   "current": "verdict.test.ts (14 tests, all passing when run on 2026-11-17) checks the state for six hand-built inputs, that some line matches /closed[ -]?won/ (lines 85-97 and 126-132), and the win/loss sentence (lines 111-124). No test looks at a line produced by dimensionBlocker(), at the 'Complete two readiness actions' sentence, at the three generic fallbacks, or at the order or number of lines. src/dashboard/lib/readiness-aggregator.test.ts feeds pilots and ICP quality in shapes the app does not write (lines 34-48 and 188-204).",
+   "problem": "The approved selection logic is intact in the source (compared with the pre-remediation version: gate rules and thresholds unchanged; lines now built as '{area}: {first missing item}.'), but nothing would fail if it were reverted to a generic sentence, and nothing caught the defects found by running the engine: the same line twice, lines with no closing period, a 'two actions' line that lists one, and two stored shapes that read as zero.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md, 'Approved product evolution' (readiness recommendation/blocker selection must be preserved) and Required work item 11 ('targeted discovered-defect regressions'; 'Do not weaken tests').",
+   "proposed": "Add to verdict.test.ts: (1) for a 'Partially documented' input with Outreach at 0, the first line equals `Outreach: ${scoreOutreach(input).gaps[0]}.`; (2) for every state reached by a table of about twenty inputs, no line repeats and every line ends with a period; (3) the empty workspace's line names two areas; (4) each of the three fallback cases (an area below the gate with no listed gap) produces a line that contains a number. Add to readiness-aggregator.test.ts the stored shapes the owning areas write: `gtmos_poc_data` as `{ pocs: [...] }` from saveProofs(), an ICP record as saved by ICP Studio and one as written by setup, and the two sample-data ICP records. These are additions; no existing assertion needs to be relaxed.",
+   "testsAffected": [
+    "src/lib/readiness/verdict.test.ts (additions)",
+    "src/dashboard/lib/readiness-aggregator.test.ts (additions; the bare-array pilot fixture at lines 188-204 should be kept as the legacy case)"
+   ],
+   "confidence": "high",
+   "id": "READINESS-043"
+  },
+  {
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/design-system/ProofSheet.tsx",
+   "line": 589,
+   "generation": "shared",
+   "state": "Internal component sample page (/design-system/), readiness sample under the state name 'Usable with founder support'. Outside this area's files; the terms reviewer covers the rest of the page (TERMS-089).",
+   "current": "\"A hire could run this if you're around for sanity-checks.\"",
+   "problem": "The sample pairs the current state name with the replaced sentence, so the component library's own example teaches the old wording to whoever copies it.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md, exact replacement 'A hire could run it with you there to answer questions.' → 'Another seller could run the process with you available to answer questions.'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/03_INTERNAL_LANGUAGE_DOCTRINE_REWRITE.md (internal examples are imitated by later copy).",
+   "proposed": "\"Another seller could run the process with you available to answer questions and resolve gaps.\" (the sentence the default panel shows for this state).",
+   "testsAffected": [],
+   "confidence": "high",
+   "id": "READINESS-044"
   }
  ],
- "dispositions": [],
- "retained": [],
- "gaps": []
+ "dispositions": [
+  {
+   "recordId": "DOC-029",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Readiness Score · workspace summary · capability map — Could another seller run this sales process? — Type of area: a summary that combines evidence from across the workspace into one read · design settled 2026-07-07 (readiness progression)",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:40",
+   "note": "The heading no longer says 'run the motion', 'System Ledger' or 'the climb'; the question is the approved one. One leftover in the same line, 'into one read', is filed as a minor doctrine finding (file deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html, line 40)."
+  },
+  {
+   "recordId": "DOC-030",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Readiness assesses operating independence from the recorded evidence. Present the current state, the evidence required for the next state, and practical actions that address missing information. Sourced from: canon §4.17 + the readiness engine (verdict.ts · dimensions.ts · dashboard readiness-aggregator). Settled design: readiness-score-climb-2026-07-07.html.",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:40",
+   "note": "'Inheritable', 'verdict, not a number', 'pressure rail' and 'what's decaying' are gone; the paragraph states what the area does. 'climb' survives only inside the name of the design file, which exists on disk (deliverables/mockups/readiness-score-climb-2026-07-07.html)."
+  },
+  {
+   "recordId": "DOC-031",
+   "status": "IMPLEMENTED",
+   "currentText": "Founder-dependent | Founder-led, no transferable surface yet | any part at 0",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 2, level table)",
+   "note": "The aphorism 'You are the system' is replaced by the state name 'Founder-dependent' (migration map row `You are the system`; COPY_STANDARD §17). The rest of the row is inaccurate ('any part at 0' is not the engine's rule) and uses 'no transferable surface'; both are in the capability-map accuracy finding."
+  },
+  {
+   "recordId": "DOC-032",
+   "status": "IMPLEMENTED",
+   "currentText": "Partially documented | Activity exists but a hire would still be improvising | ≥2 parts ≥8, none ≥16",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 2, level table)",
+   "note": "'Building' is replaced by 'Partially documented' (migration map row `Building`; COPY_STANDARD §17). The gate cell ('none ≥16') does not match src/lib/readiness/verdict.ts:140-205 and is in the capability-map accuracy finding."
+  },
+  {
+   "recordId": "DOC-033",
+   "status": "SUPERSEDED BY APPROVED PRODUCT EVOLUTION",
+   "currentText": "Usable with founder support | A hire could run it with you there to answer questions | every part ≥10 AND ≥1 part ≥16 AND first pilot evidence exists",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 2, level table)",
+   "note": "Owner decision on readiness state names (COPY_STANDARD.md §17, directed 2026-11-05/06; AUDIT_BRIEF.md section 4). The migration map's 'Runnable with founder support' was replaced by the owner's 'Usable with founder support'; 'Inheritable with guardrails' no longer appears. The gate cell matches src/lib/readiness/verdict.ts:146-178."
+  },
+  {
+   "recordId": "DOC-034",
+   "status": "SUPERSEDED BY APPROVED PRODUCT EVOLUTION",
+   "currentText": "Hire-ready | Another seller can run routine work without the founder for two weeks | every part ≥14 AND closed-won exists AND Future Autopsy run AND ≥1 actionable pilot",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 2, level table)",
+   "note": "Owner decision on readiness state names (COPY_STANDARD.md §17, directed 2026-11-05/06; AUDIT_BRIEF.md section 4). The owner kept 'Hire-ready' (the map proposed 'Runnable independently'). 'The motion would survive a 2-week founder vacation' was rewritten without 'motion'. 'Future Autopsy run' is not what the engine counts (a deal with a corrective action marked); see the deal-risk-review finding on src/lib/readiness/verdict.ts:131."
+  },
+  {
+   "recordId": "DOC-035",
+   "status": "SUPERSEDED BY APPROVED PRODUCT EVOLUTION",
+   "currentText": "Hire-ready and repeatable | Wins and losses recorded, advisors available, and handoff documentation prepared | all Hire-ready + win/loss ≥1 AND advisors ≥1 AND handoff ≥5/7 ready",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 2, level table)",
+   "note": "Owner decision on readiness state names (COPY_STANDARD.md §17, directed 2026-11-05/06; AUDIT_BRIEF.md section 4). 'Hire-ready, repeatable' became 'Hire-ready and repeatable' (the map proposed 'Documented and repeatable'). 'Advisors lit, kit composed' was rewritten in plain words. The gate cell matches src/lib/readiness/verdict.ts:70-101."
+  },
+  {
+   "recordId": "DOC-036",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "The readiness level | The dominant serif state name + a concise assessment of which work another seller could perform today.",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 3)",
+   "note": "'The verdict' is now 'The readiness level' and 'a plain one-line read' is 'a concise assessment'. Matches the panel: state name plus one sentence (src/dashboard/v4/ClimbDrawer.tsx:95-96)."
+  },
+  {
+   "recordId": "DOC-037",
+   "status": "STILL MISSING",
+   "currentText": "Readiness progression | The five levels as a vertical ladder — passed levels sit behind in forest green (“left behind 3 weeks ago”), the current level is “you are here,” the next is the goal + “what it takes.”",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 3)",
+   "note": "Only the row title changed ('The climb' → 'Readiness progression'). The row still gives the replaced labels 'left behind' and 'you are here' as the screen's text and describes a date the panel does not show. Filed as a doctrine finding with replacement text."
+  },
+  {
+   "recordId": "DOC-038",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "The five assessed areas | Demoted to quiet readiness labels (forest = solid, amber = limited evidence) — your targeting · your outreach · your discovery · your open deals · your pilot evidence. Never bars, never scores.",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 3)",
+   "note": "'The five parts of the motion' and 'thin' are gone ('limited evidence' is the interaction patch's replacement for 'thin'). Two accuracy points remain and are in the capability-map accuracy finding: the area names differ from the screen's, and 'Never bars, never scores' holds for the default panel only."
+  },
+  {
+   "recordId": "DOC-039",
+   "status": "STILL MISSING",
+   "currentText": "The read-only “share with a hire” | The persistent sharing control — read-mode workspace access for an external email.",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 3)",
+   "note": "'The one durable move' was reworded, but the row keeps the replaced label 'share with a hire' and lists a control no readiness panel has (src/dashboard/v4/ClimbDrawer.tsx:164-182 has two export buttons only). Filed as a doctrine finding with replacement text."
+  },
+  {
+   "recordId": "DOC-040",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Ceremony hooks | Triggers the Founding GTM visual transition on an upward readiness-state transition.",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 3)",
+   "note": "'Fires the … set-piece on a verdict transition UP' is now 'Triggers the … visual transition on an upward readiness-state transition'. Slightly broader than the code, which announces only a change ending at 'Usable with founder support' (src/founding-gtm/lib/ceremony.ts:69-73); noted in the capability-map accuracy finding."
+  },
+  {
+   "recordId": "DOC-041",
+   "status": "IMPLEMENTED",
+   "currentText": "Future Autopsy run history",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 4, 'Flows in' list)",
+   "note": "Text unchanged. 'Future Autopsy' stays as the feature's name by owner decision (AUDIT_BRIEF.md section 4), and the name is explained where users meet it (workspace map entry and the area's own heading). A list item in a data-flow list may be a fragment. What flows in is the count of deals with a corrective action marked, not a 'run history'; that wording is in the capability-map accuracy finding."
+  },
+  {
+   "recordId": "DOC-042",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "a readiness level change UP triggers the visual transition in Founding GTM",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 4, 'Flows out' list)",
+   "note": "'A verdict transition UP fires the ceremony moment' is restated without 'verdict', 'fires' or 'ceremony moment'."
+  },
+  {
+   "recordId": "DOC-043",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "naked “dimension” | name the actual part of the sales process (your targeting / outreach / discovery / open deals / pilot evidence)",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 5 table)",
+   "note": "'The actual part of the motion' is now 'the actual part of the sales process'. The rule the row states is met on the default panel; the oldest panel's hover text still says 'dimensions' (src/dashboard/components/ReadinessDrawer.tsx:226), filed as a finding."
+  },
+  {
+   "recordId": "DOC-044",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "The central question: can another seller run the process?",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 6)",
+   "note": "'The singular question (hire-ready or not)' is replaced by the question the panel shows ('Readiness · could another seller run this process?', src/dashboard/v4/ClimbDrawer.tsx:94)."
+  },
+  {
+   "recordId": "DOC-045",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Readiness progression based on accumulated evidence",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 6)",
+   "note": "'The climb — readiness felt as an integral over time' is restated without the metaphor."
+  },
+  {
+   "recordId": "DOC-046",
+   "status": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY",
+   "currentText": "Not a ranking of today’s urgent actions",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:41 (section 6, 'What it is NOT')",
+   "note": "'Not a pressure rail' is restated in plain words; it says what is ranked (today's urgent actions) and that readiness is not that list."
+  },
+  {
+   "recordId": "DOC-047",
+   "status": "IMPLEMENTED",
+   "currentText": "REFERENCE · Readiness Score capability map · compiled from canon §4.17 + shipped src/lib/readiness + reconciled to current doctrine (2026-07-07). Settled design: readiness-score-climb-2026-07-07.html",
+   "where": "deliverables/room-capability-maps/readiness-score-capability-map-2026-07-07.html:42",
+   "note": "Text unchanged. The only flagged word, 'climb', is part of the file name of the design file, which exists (deliverables/mockups/readiness-score-climb-2026-07-07.html); the page's prose uses 'readiness progression' as the doctrine rewrite requires, and file names are not to be renamed."
+  }
+ ],
+ "retained": [
+  {
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 134,
+   "text": "Run a pilot whose result the buyer's boss could act on without you in the room.",
+   "term": "room",
+   "why": "'Without you in the room' is the meeting-presence idiom (AUDIT_BRIEF.md disputed-term row 'room': ordinary English, stays). The same sentence at line 177. The sentence has a separate accuracy problem (what counts as a pilot), filed as a finding; the word 'room' is not the problem."
+  },
+  {
+   "file": "src/dashboard/v4/ClimbDrawer.tsx",
+   "line": 23,
+   "text": "The sales process is not yet documented for another seller.",
+   "term": "yet",
+   "why": "Approved replacement (Batch 01 manifest exact_replacements[34]) with 'is' for 'was'. It defines the first state in a progression of five; 'yet' marks the order of the states and is not a judgment on the reader (COPY_STANDARD §26 applied in context)."
+  },
+  {
+   "file": "src/dashboard/v4/ClimbDrawer.tsx",
+   "line": 38,
+   "text": "Another seller can run the documented process for two weeks without routine help from you.",
+   "term": "two weeks",
+   "why": "Approved replacement word for word (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/04_REWRITE_BATCH_01_SHARED_AND_CORE.md: 'The motion survives you taking two weeks off.'). It describes what the Hire-ready state is meant to stand for; nothing measures two weeks, and the sentence does not claim a measurement of this workspace."
+  },
+  {
+   "file": "src/lib/readiness/types.ts",
+   "line": 34,
+   "text": "Hire-ready · Hire-ready and repeatable (state names; also 'Usable with founder support' at line 33)",
+   "term": "Hire-ready",
+   "why": "Owner decision: readiness state names are COPY_STANDARD §17 (AUDIT_BRIEF.md section 4). Not to be changed back to the migration map's names."
+  },
+  {
+   "file": "src/lib/readiness/types.ts",
+   "line": 42,
+   "text": "DimensionId \"proof\"; ReadinessInput.castProofs (line 110); scoreProof(); PILOT_RESULTS_GAP",
+   "term": "proof",
+   "why": "Stable internal identifiers (area id stored in history rows and the export; input field names). Not rendered as words; the on-screen name is 'Pilots, reviews and handoff records'. Renaming identifiers is out of scope."
+  },
+  {
+   "file": "src/dashboard/lib/readiness-history.ts",
+   "line": 50,
+   "text": "return \"thin\";",
+   "term": "thin",
+   "why": "Value required by the database column's check constraint (supabase/migrations/20260424170003_new_noun_tables.sql:108). It stays as a stored value. It does reach a user through the readiness export, which is filed as a finding against the export, not against this line."
+  },
+  {
+   "file": "src/dashboard/v4/lib/area-chip.ts",
+   "line": 20,
+   "text": "cls: \"thin\"",
+   "term": "thin",
+   "why": "CSS class name (`is-thin` in src/dashboard/v4/climb-drawer.css:43). The visible word is 'limited'."
+  },
+  {
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 131,
+   "text": "Complete at least one deal-risk review in Future Autopsy.",
+   "term": "Future Autopsy",
+   "why": "The branded name appears with its plain description ('deal-risk review'), as the owner's decision requires. The action it names is inaccurate (finding on this line); the name is not the problem."
+  },
+  {
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 97,
+   "text": "Complete at least 5 of 7 Founding GTM handoff sections (currently {n}/7).",
+   "term": "Founding GTM",
+   "why": "Area name used as a place, followed by the literal noun 'handoff sections'. The verb 'Complete' is the problem and is filed separately."
+  },
+  {
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 72,
+   "text": "Use Call in a Favor on a real deal and record the outcome.",
+   "term": "Call in a Favor",
+   "why": "Area name used as the name of the feature to use (migration map navigation table: 'Call in a Favor — Use your network to help move a deal'). The rest of the sentence is filed as a finding."
+  },
+  {
+   "file": "src/dashboard/v4/ClimbDrawer.tsx",
+   "line": 157,
+   "text": "{area} — solid",
+   "term": "solid",
+   "why": "The interaction patch approved 'Deal management · solid' (ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/15_HIGH_SEVERITY_INTERACTION_PATCH.md). The word stays; the finding on the chips adds the basis and a one-line definition."
+  },
+  {
+   "file": "src/dashboard/components/ReadinessAnchor.tsx",
+   "line": 34,
+   "text": "// Lifted = the motion still lives in your head; grounded once the workspace would survive a hire taking it over.",
+   "term": "in your head",
+   "why": "Source comment about the logo's lifted/grounded drawing; not rendered and not an instruction for copy. Category E (comments). Same class: ReadinessDrawer.tsx:81-82 ('the state of the motion on day X') and readiness-export.ts:16-17 ('the motion's maturation')."
+  },
+  {
+   "file": "src/lib/readiness/types.ts",
+   "line": 13,
+   "text": "Verdict keys: you_are_the_system · building · inheritable_with_guardrails · hire_ready · hire_ready_repeatable",
+   "term": "inheritable",
+   "why": "Stable engine ids kept so stored history loads (owner decision: 'engine ids unchanged'). They are written into history rows, the local change marker and the export file; the export finding adds readable names beside them without renaming them."
+  }
+ ],
+ "gaps": [
+  "Oldest Dashboard screen (?v4=0&today=0): not rendered by this reviewer. corpus-legacy/readiness.txt did not exist when the oldest screens were reviewed, so src/dashboard/components/ReadinessDrawer.tsx and ReadinessAnchor.tsx were reviewed from source and compared with the Dashboard reviewer's capture of that screen made today (scratchpad final-audit/dash-work/fable/legacy-dashboard.txt, lines 159-173).",
+  "Only one of the five readiness states is rendered anywhere (both sample workspaces are 'Partially documented'). The other four states, the Founder-dependent sentence, the generic fallbacks, the win/loss sentence and the chips 'limited' and 'none yet' were produced by running the engine functions in Node (scratchpad final-audit/readiness-fable/harness.cjs with run_cases.cjs, run_mine1.cjs, run_mine2.cjs, run_disc.cjs, run_poc.cjs; and h2/harness2.cjs with run_icp.cjs, run_demo.cjs). They were not seen in a browser.",
+  "The sample-workspace results after the two reading defects are repaired (both evaluate to 'Hire-ready and repeatable') come from loading js/demo-seed-data-ent.js and js/demo-seed-data-smb.js in Node and writing the same keys the seed runtime writes; the as-shipped scores from that emulation match the rendered panels exactly, but the repaired case was not run in the app.",
+  "Readiness history and the Founding GTM announcement were not executed against a database. The cross-browser scenarios (a second browser adds a row without a change; the announcement is lost or repeated) are read from src/dashboard/lib/readiness-history.ts, src/founding-gtm/lib/ceremony.ts and their unit tests.",
+  "The 'Export readiness + history' download was not triggered in a browser. The `summary` block was reproduced with buildReadinessExport() in Node; the `history` defect is from reading loadVerdictHistory() against the writer.",
+  "Unit tests run by this reviewer (one file at a time): src/lib/readiness/verdict.test.ts (14 passed), src/lib/readiness/dimensions.test.ts (15), src/dashboard/lib/readiness-aggregator.test.ts (17), src/dashboard/v4/lib/area-chip.test.ts (2). Read but not run: readiness-history.test.ts, readiness-snapshot-publisher.test.ts, src/founding-gtm/lib/ceremony.test.ts.",
+  "Whether a second device shows a lower readiness state until each area has been opened there (readiness is calculated from this browser's stored copies, src/dashboard/lib/readiness-aggregator.ts:6-36) was not tested; it needs a signed-in workspace on two browsers.",
+  "Not re-audited here because other reviewers own them: the Dashboard recommendation reasons that use the published readiness summary ('below the readiness bar'; DASH-016, WELCOME-009), the Settings download and deletion of readiness history rows, and the text of the Founding GTM announcement itself.",
+  "The readiness lines were checked against the default screens of the areas they point to (ICP Studio, Territory Architect, Prospecting Desk, Outbound Studio, Cold Call Studio, Discovery Studio, Pilot Desk, Future Autopsy, Call in a Favor, Founding GTM). The older versions of those areas were not opened to check that the named actions exist there too."
+ ]
 }

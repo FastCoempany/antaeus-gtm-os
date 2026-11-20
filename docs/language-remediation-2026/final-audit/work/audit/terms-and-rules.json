@@ -188,6 +188,89 @@
     "COPY_STANDARD.md"
    ],
    "note": "Checked only the four records that ask for an internal rewrite (seeding, heavy-seeding, wake-up, run-to-signed) and the instruction not to use deprecated copy as a style reference. A full review of internal doctrine against the 169 original doctrine lines belongs to the doctrine reviewer and was not done here."
+  },
+  {
+   "surface": "Preserved standard sales terms (20 records) — default screens, both sample books",
+   "generation": "v4",
+   "how": "executed-in-walkthrough",
+   "files": [
+    "src/deal-workspace/ds/components/DealHealthFormDS.tsx",
+    "src/deal-workspace/lib/deal-shape.ts",
+    "src/deal-workspace/v4/lib/views.ts",
+    "src/future-autopsy/v4/FutureAutopsyV4.tsx",
+    "src/quota-workback/v4/QuotaWorkbackV4.tsx",
+    "src/dashboard/v4/lib/cockpit.ts",
+    "src/onboarding/seeding/components/DealsStep.tsx"
+   ],
+   "note": "Counted each of the 20 terms in the rendered text of both sample books (enterprise: 5,879 lines; SMB: 5,334 lines) and found the source line that renders each label. Then searched every string the default screens reach for the stand-ins that used to replace them ('your number', 'in flight', 'the circle', 'names', 'carrier', 'signer'). The walkthrough was run by the orchestrator, not by me; I read its output."
+  },
+  {
+   "surface": "Manifest rule records (31): semantic migrations, implementation rules, instructions, epistemic output schema — checked against the default screens and the code behind them",
+   "generation": "shared",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/signal-console/v4/SignalConsoleV4.tsx",
+    "src/signal-console/v4/lib/attention.ts",
+    "src/signal-console/lib/heat.ts",
+    "src/signal-console/lib/execution-context.ts",
+    "src/founding-gtm/lib/sections.ts",
+    "src/founding-gtm/lib/priors.ts",
+    "src/future-autopsy/lib/autopsy.ts",
+    "src/quota-workback/v4/QuotaWorkbackV4.tsx",
+    "src/cold-call-studio/lib/threads.ts",
+    "src/cold-call-studio/lib/personalize.ts",
+    "src/lib/follow/FollowPeek.tsx",
+    "src/lib/follow/follow-data.ts",
+    "supabase/functions/briefing-pipeline/llm/synthesis-shared.ts",
+    "supabase/functions/briefing-pipeline/llm/compose-shared.ts",
+    "supabase/functions/briefing-pipeline/llm/contrarian-shared.ts"
+   ],
+   "note": "For each rule I read the place it applies (rendered text of Territory Architect, Signal Console, Briefing, Getting to Signed, Pilot Desk, Founding GTM, Call in a Favor, Quota Workback, Settings, Deal Workspace, Future Autopsy) and the generator or prompt behind it, and scanned every default-reachable string for causal verbs, temperature words, 'room', 'proof' and 'rank'. Default-screen findings from this pass: the Signal Console score and chip line, the handoff's customer-profile and win-pattern sentences, Settings statements, the Territory tier labels, the leftover display-time translator. Prompts were read; no model was called."
+  },
+  {
+   "surface": "Settings default screen — statements about storage, restore, delete and capture, compared with the code",
+   "generation": "v4",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/settings/v4/SettingsV4.tsx",
+    "src/settings/state.ts",
+    "src/settings/lib/workspace-tables.ts",
+    "src/settings/lib/cloud-sync.ts",
+    "supabase/functions/inbound-email/index.ts",
+    "supabase/functions/calendar-sync/index.ts",
+    "src/cold-call-studio/lib/handoff.ts",
+    "src/deal-workspace/lib/persistence.ts",
+    "src/deal-workspace/lib/legacy-mirror.ts"
+   ],
+   "note": "Read every rendered Settings sentence in the SMB walkthrough and checked the factual ones against source: what restore skips, what delete covers, what email and calendar capture store, and whether a booked cold-call meeting reaches Deal Workspace. Signed-in behavior was read, not run; the walkthrough shows the signed-out sample workspace only."
+  },
+  {
+   "surface": "Territory Architect previous screen and Signal Console previous and oldest screens — vocabulary of the Batch 02 semantic migrations",
+   "generation": "ds",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/territory-architect/ds/components/TerritoryBuilder.tsx",
+    "src/territory-architect/ds/components/TerritoryObject.tsx",
+    "src/territory-architect/ds/lib/adapters.ts",
+    "src/signal-console/ds/components/HealthStrip.tsx",
+    "src/signal-console/components/HeatBandBanner.tsx"
+   ],
+   "note": "Listed every visible string on these fallback screens from the string extraction and read them against the migration. The previous Territory screen had not been covered by the term scan because its retired noun ('focus') is not one of the 63 map terms. Not rendered in a browser."
+  },
+  {
+   "surface": "Scoring and banding code compared with its state before the remediation; deprecated-term scan run; transcript freshness",
+   "generation": "tooling",
+   "how": "source-and-test-reviewed",
+   "files": [
+    "src/deal-workspace/lib/recovery.ts",
+    "src/dashboard/lib/scoring.ts",
+    "src/icp-studio/lib/quality.ts",
+    "src/pilot-desk/lib/quality.ts",
+    "src/signal-console/v4/lib/attention.ts",
+    "tools/language-remediation/copy-audit.js",
+    "tools/deploy/build-cloudflare-assets.js"
+   ],
+   "note": "git diff f641612..HEAD on six engine files, non-string lines only: thresholds and point values unchanged. Ran node tools/language-remediation/copy-audit.js (1,222 files; Tier-1 failures 0; Tier-2 warnings 21, all in the transcript). Confirmed from git that only js/demo-seed-runtime.js and a removed script changed in application source after the transcript was last regenerated, and that the deploy list still publishes the 17 mockups."
   }
  ],
  "findings": [
@@ -988,7 +1071,7 @@
    "file": "src/getting-to-signed/ds/NegotiationDS.tsx",
    "line": 77,
    "generation": "ds",
-   "state": "Getting to Signed previous screen (?v4=0, or the room's *_v4_off flag) → floating helper mounted here and on the previous Quota Workback and Territory Architect screens (src/quota-workback/ds/QuotaWorkbackDS.tsx:68, src/territory-architect/ds/TerritoryArchitectDS.tsx); its panel heading is src/birdseye/BirdseyeFloat.tsx:133",
+   "state": "Getting to Signed previous screen (?v4=0, or the room's *_v4_off flag) → floating helper mounted here and on the previous Quota Workback and Territory Architect screens (src/quota-workback/ds/QuotaWorkbackDS.tsx:68, src/territory-architect/ds/TerritoryArchitectDS.tsx); its panel heading is src/birdseye/BirdseyeFloat.tsx:133. The default Briefing screen mounts the same page header (src/briefing/v4/BriefingV4.tsx:311 → src/lib/room-chrome.tsx:68), so the heading also renders there: SMB walkthrough, briefing, after clicking 'Open current analysis'",
    "current": "L133: \"(BirdseyeFloat.tsx) BIRDSEYE · CURRENT ANALYSIS\"",
    "problem": "'Birdseye' is an internal component name shown as a heading (dimension 2); the panel holds one recommended next step.",
    "governing": "comprehension principle; COPY_STANDARD.md §4 (no additional capitalized concepts)",
@@ -1651,6 +1734,237 @@
    "proposed": "No change is needed for the screens. To meet the original records literally: L1052 \"## 12. Comprehensive onboarding — asking for the judgment only the seller holds\"; in §4.3 use \"onboarding data collection\" for \"seeding flow\" and \"enrichment completion\" for \"wake-up\"; in §4.16b use \"the signature-process mind\" for \"the run-to-signed mind\". OWNER DECISION: canon is the founder's working contract and changes to it are founder-approved; the founder decides whether the internal names are renamed or stay with their 'never copy' notes.",
    "testsAffected": [],
    "confidence": "medium"
+  },
+  {
+   "id": "TERMS-092",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/signal-console/v4/SignalConsoleV4.tsx",
+   "line": 107,
+   "generation": "v4",
+   "state": "Signal Console default screen → every account chip (the number at the top right, e.g. 26) and the opened account (lines 121-131, the 'Signals' list)",
+   "current": "Chip: a bare number (26) whose only name is hover text — title \"Account priority score\" (lines 104 and 107). Opened account: \"Signals\" followed by each signal as headline — source (\"New COO arrived from Chipotle in 2025 — operations leadership rebuilt mid-expansion — Trade press\"), with no date and nothing about how the number was reached.",
+   "problem": "The score is kept, but the screen does not say what it measures or why this account has it (dimensions 1 and 6). Its name is a tooltip, so it is not visible, not available on a touch screen and not announced as a name; its scale (0 to 99) appears nowhere on this screen; and the opened account lists signals without their dates, although the score is the sum of the account's signals with older signals counting for less (src/signal-console/lib/heat.ts:30-66). The page promises 'Open an account to see the signals and activity driving its ranking', and the reader then has no way to connect two undated headlines to '26'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json implementation_rules[3] (record B2-RULE-3: keep numeric scores only if the UI shows what the score represents and why an account received it); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room → Signal Console' (account priority, the signals that drive it, and the age of those signals); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'heat' ('if a score is shown, explain inputs')",
+   "proposed": "In the opened account replace the label at line 121, t(\"Signals\"), with a sentence built from the values already in scope: `Priority score ${heat} out of 99, from ${account.signals.length} ${account.signals.length === 1 ? \"signal\" : \"signals\"}. A signal from the last 14 days counts in full; older signals count for less.` On each signal row (line 129) add the signal's date after the source: `{s.source ? ` — ${s.source}` : \"\"}{signalDate ? ` · ${signalDate}` : \"\"}`, where signalDate formats s.published_date ?? s.fetched_at as a short date. On the number (line 107) add aria-label={`Account priority score ${heat} out of 99`} and keep the title. No change to the score or the bands.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-093",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/signal-console/v4/SignalConsoleV4.tsx",
+   "line": 115,
+   "generation": "v4",
+   "state": "Signal Console default screen → the last line of every account chip (rendered in the SMB walkthrough as '● replied · 1h ago' on Sweetgreen and '1h ago' on the others)",
+   "current": "{replied ? `● ${t(\"replied\")} · ` : \"\"}{ageLabel} — where replied is true for the states 'Replied' and 'In deal' (TDOT at line 76 maps both hot and warm to \"live\"), and ageLabel is the time since the newest signal date or since the account was added to the watchlist, whichever is more recent (src/signal-console/v4/lib/attention.ts:63-75, 112-120).",
+   "problem": "Two statements the code does not support. (1) '● replied' is printed for every account that has an open deal, whether or not a reply is recorded: src/signal-console/lib/execution-context.ts:119-127 sets 'hot' for any open deal past Prospect and 'warm' for a recorded reply OR any open deal, and the hover label for 'warm' is 'Replied' in both cases. (2) The age has no noun. Under a headline such as 'New COO arrived from Chipotle in 2025' it reads as the age of that event, and after 'replied ·' it reads as when the buyer replied; it is neither. In the sample workspace every chip says '1h ago' because the accounts were added an hour ago.",
+   "governing": "COPY_STANDARD.md §21 (claims discipline: do not state more than the product knows); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room → Signal Console' (show the age of the signals); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.signal_console (record B2-SEM-1)",
+   "proposed": "src/signal-console/lib/execution-context.ts:133 — choose the label from the facts, leaving the temperature key as it is: `temperatureLabel: activeDeal ? \"In deal\" : hasReplies ? \"Replied\" : acctTouches.length > 0 ? \"Touched\" : \"Untouched\"`. src/signal-console/v4/SignalConsoleV4.tsx:115 — print that label instead of a fixed word: `{tdot === \"live\" ? `● ${exec.temperatureLabel.toLowerCase()} · ` : \"\"}`. src/signal-console/v4/lib/attention.ts:112-120 — make the age say what it measures: return `newest signal ${n}d ago` when the most recent date is a signal's and `added ${n}d ago` when it is the watchlist date (freshestDays can return which one won). The chip then reads '● in deal · added 1h ago' or 'newest signal 3d ago'.",
+   "testsAffected": [
+    "src/signal-console/v4/lib/attention.test.ts (age-label expectations)",
+    "src/signal-console/lib/execution-context.test.ts (label for an open deal with no reply)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-094",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/settings/state.ts",
+   "line": 520,
+   "generation": "shared",
+   "state": "Settings default screen → Preferences → Explanation level → after pressing 'Show me how' or 'Step back' (src/settings/v4/SettingsV4.tsx:444-445 call setDensity; the message shows in the toast at SettingsV4.tsx:513). Same function on the previous and oldest Settings.",
+   "current": "The system will walk you through every surface. / The system will step back and trust your way around.",
+   "problem": "The confirmation personifies the software ('the system will walk you through', 'will step back and trust') and uses the builder's word 'surface' for a screen (dimensions 2 and 8). The control's own description was rewritten to say what changes; the message that confirms the change still uses the sentence that rewrite replaced.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md row 'Show me how walks you through everything. Step back trusts you and gets dense.' → 'Show me how includes more explanation. Step back uses a more compact interface.'; COPY_STANDARD.md §9 (do not personify the software)",
+   "proposed": "Line 520: \"Saved. Screens now include more explanation.\" Line 521: \"Saved. Screens now use a more compact layout.\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-095",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/settings/lib/workspace-tables.ts",
+   "line": 98,
+   "generation": "shared",
+   "state": "Settings default screen → Your data → the list of what Download my workspace and Delete everything cover (rendered in the SMB walkthrough: 'Suggestions and scheduled skills — suggestions the system made, suggestions you accepted for skills, suggestions you accepted for observations, scheduled skills, times a scheduled skill ran'); the same labels head the sections of the downloaded file",
+   "current": "Suggestions and scheduled skills (line 98) / Suggestions the system made (175) / Suggestions you accepted for skills (176) / Scheduled skills (178) / Times a scheduled skill ran (179)",
+   "problem": "'Skill' is the internal name for a saved shortcut that opens a page with the right deal or account selected. Outside the Briefing's schedule dialog no default screen shows anything called a skill, and the panel that lists them is headed 'SCHEDULED ACTIONS' (src/skills/ScheduleFloat.tsx:290), so a reader deciding what to download or delete cannot tell what these rows are (dimensions 2 and 6). 'The system made' is the same narration as the row above it.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md manifest rule 'Settings language must describe actual storage/integration behavior directly' (record B3-RULE-5); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md row 'SCHEDULED SKILLS' → 'SCHEDULED CHECKS' (the original rewrite already retired 'skills' as a visible name); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'system saw'",
+   "proposed": "Line 98: \"Suggestions and scheduled actions\". Line 175: \"Suggestions Antaeus made\". Line 176: \"Suggestions you accepted for scheduled actions\". Line 178: \"Scheduled actions\". Line 179: \"Times a scheduled action ran\". Table names and section keys unchanged. The schedule dialog and the page directory, which render on the default Briefing screen (SMB walkthrough, briefing, after clicking '⌘K JUMP' then '⏰' → 'SCHEDULE SKILL') and on every previous-generation screen, should use the same noun: src/skills/ScheduleModal.tsx:107 aria-label \"Schedule action\" and :111 \"SCHEDULE ACTION\"; src/lib/palette/Palette.tsx:185-186 \"Try part of a page or action name, or what you're trying to do.\"",
+   "testsAffected": [
+    "src/settings/lib/workspace-export-formats.test.ts and src/settings/lib/cloud-sync.test.ts (if they assert section names)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "TERMS-096",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/briefing/components/AddTriggerFlow.tsx",
+   "line": 91,
+   "generation": "shared",
+   "state": "Briefing default screen → Saved monitoring rules → 'Add monitoring rule' → label of the text box (line 91); and the load error for 'Your work' at src/briefing/v4/lib/reads.ts:131",
+   "current": "What should the system watch for? / Couldn't load your reads.",
+   "problem": "The rule form asks about 'the system' where the rest of the section says 'monitoring rule' (dimension 8, minor), and the error for the 'Changes in your deals and accounts' section calls its rows 'your reads' — the noun the Briefing rewrite removed (dimension 2). The error is the fallback used when the thrown value is not an Error; the section header it appears under is 'inside your deals and accounts'.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.briefing (record B2-SEM-2); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room → Briefing' ('Remove read as the generic noun for analysis and remove system-personification language'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'read' (record B1-TERM-56)",
+   "proposed": "src/briefing/components/AddTriggerFlow.tsx:91: \"What event should this rule watch for?\" src/briefing/v4/lib/reads.ts:131: \"Couldn't load the changes in your deals and accounts.\"",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-097",
+   "category": "LANG-A",
+   "severity": 2,
+   "file": "src/territory-architect/ds/components/TerritoryBuilder.tsx",
+   "line": 67,
+   "generation": "ds",
+   "state": "Territory Architect previous screen (?v4=0, or the area's *_v4_off flag) → builder column (TerritoryBuilder.tsx 39, 67-109, 116, 154; the disabled-button reason at 107) and the territory column (TerritoryObject.tsx 27, 52, 69, 102-118, 173-182); the next-step cell in the top bar (src/territory-architect/ds/lib/adapters.ts:82)",
+   "current": "TerritoryBuilder.tsx:39 \"Choose a focus…\" · :67 \"NAME A FOCUS\" · :68 \"Focus\" · :82 \"Segment\" (placeholder \"Industry / size / geo\") · :107 \"Name the focus first.\" · :109 \"Save the focus\" · :116 and :154 \"For which focus\" — TerritoryObject.tsx:27 \"Reroute\" · :52 \"WHERE THE TERRITORY STANDS\" · :69 \"THE 300-CAP\" · :102 \"NO FOCUSES YET\" · :105 \"Name the first strategic bet — a group of buyers with a reason to act now.\" · :111 \"A focus is who you're going after and why you're the right team to win them. The territory organizes around focuses, not a flat account list.\" · :118 \"FOCUSES\" · :173 \"RUN THE TERRITORY\" · :174 \"Push these focuses into prospects\" · :177 \"Source prospects\" · :182 \"Watch the radar\"",
+   "problem": "The previous screen never received the territory rewrite. The thing the default screen calls a territory segment is a 'focus' here (and a 'strategic bet'), while 'Segment' on the same form is a different field, so the two generations use one word for two things (dimensions 2 and 6). 'The 300-cap', 'Watch the radar' (the link to Signal Console) and 'Push these focuses into prospects' (the link to Prospecting Desk) need translating, and the account status reads 'Reroute' where the default screen already says 'Reassign' for the same status (src/territory-architect/v4/TerritoryArchitectV4.tsx:138).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.territory (record B2-SEM-0); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room → Territory Architect' (the user creates territory segments, each with a plain name, priority tier and fit rationale) and rows 'EMPTY' → 'NO SEGMENTS YET', 'Carve your first division.' → 'Create your first territory segment.'",
+   "proposed": "TerritoryBuilder.tsx:39 \"Choose a segment…\" · :67 \"CREATE A SEGMENT\" · :68 \"Segment name\" · :82 \"Criteria\" · :107 \"Name the segment first.\" · :109 \"Save segment\" · :116 and :154 \"For which segment\" — TerritoryObject.tsx:27 \"Reassign\" · :52 \"TERRITORY STATUS\" · :69 \"ACCOUNT CAPACITY\" · :102 \"NO SEGMENTS YET\" · :105 \"Create your first territory segment.\" · :111 \"A segment is a group of accounts you want to cover and the reason you can win them. Accounts are organized by segment instead of in one flat list.\" · :118 \"SEGMENTS\" · :173 \"USE THESE SEGMENTS\" · :174 \"Find accounts for these segments\" · :177 \"Find accounts in Prospecting Desk\" · :182 \"Open Signal Console\" — adapters.ts:82 verb \"Find accounts\". State fields, storage keys and the Focus type are unchanged.",
+   "testsAffected": [
+    "src/territory-architect/ds/ds-components.test.tsx"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-098",
+   "category": "CLAIM",
+   "severity": 3,
+   "file": "src/founding-gtm/lib/sections.ts",
+   "line": 169,
+   "generation": "shared",
+   "state": "Founding GTM default screen at rest → section 1 'Target customers and disqualification criteria' (rendered in both sample books: enterprise 'Across 3 wins and 2 losses…', SMB 'Across 6 wins and 3 losses…'); same text on the previous and oldest screens and on the read-only page a recipient opens",
+   "current": "Across 6 wins and 3 losses, the deals you won fall into 1 distinct customer profile (by ICP, buyer, and trigger). Point the new hire's prospecting at those first. / The deals you lost fall into 1 distinct profile. Teach the new hire to screen for these at intake and qualify out early when one shows up. … — with the evidence rows directly below: \"6 wins with no ICP, buyer, or trigger recorded\" / \"3 losses with no ICP, buyer, or trigger recorded\"",
+   "problem": "The generator counts 'nothing recorded' as a customer profile. dealKey (line 69) turns a deal with no ICP, buyer or trigger into the key '— · — · —', and lines 165-166 count distinct keys, so a workspace whose closed deals carry none of the three fields is told that its wins share one profile and that the new hire should prospect for it — and, in the next sentence, that its losses share one profile the new hire should screen out. Both 'profiles' are the same empty record. The handoff document therefore gives a new seller a targeting instruction and a disqualification instruction that the data does not contain (dimension 4, and a recommendation that does not follow from its evidence). This is not limited to the sample data: the section reads icpLabel / icp / segment, persona / buyerPersona and trigger from each deal (src/founding-gtm/lib/cross-room.ts:136-138), and no workflow writes any of them — the deal form has no such fields (src/deal-workspace/ds/components/DealHealthFormDS.tsx:95-161), nor do the closed-deal import (src/settings/lib/backfill.ts), onboarding or the cold-call deal. So every workspace with one saved ICP and two closed deals gets this sentence. The section is also returned as 'ready' (line 211), which is counted in '7 of 7 sections ready'.",
+   "governing": "COPY_STANDARD.md §21 ('Do not make the copy more precise than the underlying product evidence permits'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rule 6 ('Give the evidence immediately next to an assessment'). Nearest manifest rules, both written about causal claims: ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json implementation_rules[4] (record B2-RULE-4: 'For Founding GTM, avoid causal wording unless the underlying data establishes causality') and ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json rules[2] (record B3-RULE-2: 'Do not imply causality from correlation'). This sentence states a pattern the data does not contain and bases an instruction on it.",
+   "proposed": "In authorSection1 (src/founding-gtm/lib/sections.ts:163-176) build the profile counts only from deals that record at least one of the three fields: `const described = (d: DealRecord) => !!(d.icpLabel.trim() || d.persona.trim() || d.trigger.trim()); const wonDescribed = input.closedWon.filter(described); const lostDescribed = input.closedLost.filter(described); const wonPatterns = uniq(wonDescribed.map(dealKey)); const lostPatterns = uniq(lostDescribed.map(dealKey));`. When wonDescribed is empty, replace the first sentence with: `${plural(input.closedWon.length, \"win\", \"wins\")} and ${plural(input.closedLost.length, \"loss\", \"losses\")} are recorded, but none of them has an ICP, buyer, or trigger recorded, so they cannot show which customers to target or avoid. Until they do, have the new hire work from the ICP saved in ICP Studio.` and omit the losses sentence unless lostDescribed is non-empty. When some deals are described, keep the current sentences with the filtered counts and say how many deals were left out (`${n} closed deals have none of the three recorded and are not counted.`). The evidence rows stay as they are. OWNER DECISION: (1) whether to add ICP, buyer role and trigger to the deal record (for example on the deal form or when a deal is closed) — without that, sections 1 and 6 can never show a customer pattern for any workspace; (2) whether section 1 should drop from 'ready' to 'partially complete' when no closed deal records those fields, which changes the 'N of 7 sections ready' count on Founding GTM and the Dashboard and the count the top readiness state requires (5 of 7). The wording fix above depends on neither.",
+   "testsAffected": [
+    "src/founding-gtm/lib/sections.test.ts:535-541 (the four-profile case still passes: every deal there has an ICP label; add a case for closed deals with nothing recorded)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-099",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/pilot-desk/lib/quality.ts",
+   "line": 115,
+   "generation": "shared",
+   "state": "Pilot Desk previous screen (?v4=0) quality panel (src/pilot-desk/ds/components/ProofObject.tsx) and oldest screen (src/pilot-desk/components/CastPanel.tsx) → 'least complete part' callout and the five-part grid. The default screen does not render these strings.",
+   "current": "L115: \"Name the readout owner before the pilot starts.\" · L129: title \"Readout\" · L130: \"Carry the evidence into the decision meeting.\" · L249: \"No readout owner\"",
+   "problem": "The shared quality builder was mostly rewritten ('Success criterion', 'Criteria detail', '… is recorded'), but four strings still use 'readout / readout owner' and 'carry the evidence' — the pilot vocabulary the original rewrite replaced with 'who approves the result' and 'results summary' (dimensions 2 and 3).",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json semantic_migrations.pilot (record B2-SEM-4); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md 'Structural requirements by room → Pilot Desk' (approver, results summary; do not use 'carry' as the primary explanation) and row 'WHO SIGNS OFF' → 'WHO APPROVES THE RESULT'",
+   "proposed": "L115: \"Name who approves the result before the pilot starts.\" · L129: title \"Results meeting\" · L130: \"Present the results at the buyer's decision meeting.\" · L249: \"No result approver named\". Ids (owner, readout) unchanged.",
+   "testsAffected": [
+    "src/pilot-desk/lib/quality.test.ts (if it asserts the copy strings)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-100",
+   "category": "LANG-A",
+   "severity": 1,
+   "file": "src/territory-architect/lib/types.ts",
+   "line": 16,
+   "generation": "shared",
+   "state": "Territory Architect default screen at rest → tier allocation row ('Strategic (must-win) 0/30', 'Core (recurring focus) 30/90', 'Develop (research-led) 0/120', 'Watch (monitor only) 0/60'), the PRIORITY TIER select in the create-segment form, and the tier chip on each segment (src/territory-architect/v4/TerritoryArchitectV4.tsx:227, 265, 326, 411); same labels on the previous and oldest screens",
+   "current": "Strategic (must-win) / Core (recurring focus) / Develop (research-led) / Watch (monitor only)",
+   "problem": "These four labels are the original strings: the approved replacements were not applied although the literal source string exists (lines 16-19). The parentheticals are the shorthand the rewrite removed — 'recurring focus' reuses 'focus', the retired name for a segment, and the fourth tier is called 'Watch' here while the Signal Console group for the same idea is 'Monitor' (dimension 2, minor). The walkthrough still renders all four originals.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json exact replacements 'Strategic (must-win) 0/30' → 'Strategic 0 / 30', 'Core (recurring focus) 29/90' → 'Core 29 / 90', 'Develop (research-led) 0/120' → 'Develop 0 / 120', 'Watch (monitor only) 0/60' → 'Monitor 0 / 60' (records B2-X-009 to B2-X-012); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json instructions[0] (record B1-INSTR-0)",
+   "proposed": "Lines 16-19: t1: \"Strategic\", t2: \"Core\", t3: \"Develop\", t4: \"Monitor\". Tier ids (t1–t4) and targets unchanged.",
+   "testsAffected": [
+    "src/territory-architect/ds/ds-components.test.tsx and the Territory Architect v4 tests (if they select a tier by its label)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-101",
+   "category": "CLAIM",
+   "severity": 1,
+   "file": "src/settings/v4/SettingsV4.tsx",
+   "line": 240,
+   "generation": "v4",
+   "state": "Settings default screen → Data controls → 'Restore from an export' description",
+   "current": "Puts back what's in a JSON file from Download my workspace. Things the system records on its own, like observations and search history, rebuild themselves and aren't put back.",
+   "problem": "The sentence says the records that are not restored 'rebuild themselves'. That is true for observations and calendar meetings, which the next scheduled check or calendar sync creates again. It is not true for search history: the tables marked restore 'none' (src/settings/lib/workspace-tables.ts:83, 118, 145, 159, 179) include the log of account searches and event searches Antaeus ran, quality checks and the log of scheduled runs, and nothing recreates past entries. A user restoring a backup is told their search history comes back when it does not.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json rules[5] (record B3-RULE-5: Settings language must describe actual storage behavior directly); COPY_STANDARD.md §21",
+   "proposed": "Puts back what's in a JSON file from Download my workspace. Records Antaeus creates automatically are not put back. Observations and calendar meetings are created again by the next checks; past search history and run logs are not.",
+   "testsAffected": [],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-102",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/settings/v4/SettingsV4.tsx",
+   "line": 415,
+   "generation": "v4",
+   "state": "Settings default screen → Automatic activity capture → 'Calls with your existing tools' → first bullet",
+   "current": "Cold calls: review the plan in Cold Call Studio before dialing, then record the outcome after the call. A booked meeting creates a deal automatically.",
+   "problem": "The statement holds only for the copy of the deal list kept in this browser. Logging 'meeting booked' calls createDealFromCall (src/cold-call-studio/state.ts:187), which appends the deal to the browser key gtmos_deal_workspaces and nowhere else (src/cold-call-studio/lib/handoff.ts:136-176). For a signed-in workspace with at least one deal in the cloud, Deal Workspace loads the cloud rows and then writes them over that browser key (src/deal-workspace/lib/persistence.ts:84-90 → src/deal-workspace/lib/legacy-mirror.ts:67-71), so the new deal does not appear and its browser copy is replaced. In the sample workspace there are no cloud rows, so the sentence is true there. The root defect is in the backend-contracts reviewer's file at src/cold-call-studio/lib/handoff.ts:170; this entry records that a Settings sentence depends on it.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json rules[5] (record B3-RULE-5); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md row '…A booked meeting creates the deal by itself.' → '…A booked meeting creates a deal automatically.' (the approved sentence assumes the behavior)",
+   "proposed": "Keep the approved sentence and make it true at the source: when a meeting is booked and a signed-in workspace is available, also insert the deal through the cloud deals accessor (the pattern onboarding uses at src/onboarding/seeding/lib/cloud-mirror.ts:125, data.deals.insert with the account name and the Prospect stage), keeping the browser write for the sample workspace. No copy change is needed once the deal reaches the cloud. Signed-in behavior was read in source, not executed.",
+   "testsAffected": [
+    "src/cold-call-studio/lib/handoff.test.ts and src/cold-call-studio/state.test.ts (add a case for the cloud insert)"
+   ],
+   "confidence": "medium"
+  },
+  {
+   "id": "TERMS-103",
+   "category": "LANG-B",
+   "severity": 1,
+   "file": "src/founding-gtm/lib/sections.ts",
+   "line": 785,
+   "generation": "shared",
+   "state": "Founding GTM default screen → section 7 'First-week operating cadence' → first paragraph (when a quota plan is set)",
+   "current": "To hit the number at the current Quota Workback assumptions, you need 15 closed-won deals a year (about 3.8 a quarter), which means about …",
+   "problem": "'The number' stands in for the annual quota (COPY_STANDARD.md §26, name the thing). The document is written for a new hire, who has not been shown the quota at this point in the page; the evidence row below names it ('Annual quota: $800,000').",
+   "governing": "COPY_STANDARD.md §26 'Name the thing'; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md row 'WHAT YOUR NUMBER NEEDS' → 'ACTIVITY AND PIPELINE REQUIRED' (the same stand-in was removed from Quota Workback)",
+   "proposed": "`To reach the $${plan.quota.toLocaleString()} annual quota at the current Quota Workback assumptions, you need …` (rest of the sentence unchanged).",
+   "testsAffected": [
+    "src/founding-gtm/lib/sections.test.ts (if it asserts the opening words of section 7)"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-104",
+   "category": "FUNC",
+   "severity": 1,
+   "file": "src/lib/follow/FollowPeek.tsx",
+   "line": 33,
+   "generation": "v4",
+   "state": "Default Dashboard, Deal Workspace and Signal Console → click an account or deal name → the related-activity card and its 'See related activity across the workspace' list. Every sentence in the card passes through displayText() (lines 31-47; used at 128-145 and 179).",
+   "current": "displayText(value) applies fourteen text substitutions at display time, e.g. .replace(/\\bheat\\s+(\\d+)/gi, \"priority score $1\"), .replace(/\\s*\\((hot|warm|cool|cold)\\)/gi, \"\"), .replace(/Nothing pulling right now\\.?/gi, \"No current prioritization factor is recorded.\")",
+   "problem": "This is a translator left over from the rewrite: it turned old sentences from the card's data builder into plain ones on screen. The builder itself has since been rewritten (src/lib/follow/follow-data.ts:272-420 now writes 'account priority score N/99', 'No risk condition or account signal is available to explain a priority.' and so on), so twelve of the fourteen patterns can no longer match anything. The two general ones still run on text the user or the research entered: a signal headline or a next step containing 'heat 3' is shown as 'priority score 3', and a trailing '(cold)' or '(warm)' is deleted — the card silently changes the user's own words. It also keeps fourteen old-dialect sentences in a default-screen file as if they were still produced.",
+   "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json instructions[1] (record B1-INSTR-1: change the generator, not the output) and instructions[4] (record B1-INSTR-4: preserve data semantics)",
+   "proposed": "Delete displayText() (src/lib/follow/FollowPeek.tsx:25-47) and render the builder's strings directly at lines 128, 132, 136, 140, 144, 145 and 179 (for example `<span>{read.stands}</span>`). The builder already produces the plain wording, so no visible text changes for current data.",
+   "testsAffected": [
+    "none found: src/lib/follow/follow-data.test.ts covers the builder, and the card has no component test"
+   ],
+   "confidence": "high"
+  },
+  {
+   "id": "TERMS-105",
+   "category": "CLAIM",
+   "severity": 2,
+   "file": "src/founding-gtm/lib/sections.ts",
+   "line": 719,
+   "generation": "shared",
+   "state": "Founding GTM default screen → '6 · Win patterns' (enterprise sample book, with two or more closed-won deals); same text on the previous and oldest screens and on the read-only page a recipient opens",
+   "current": "3 closed-won deals are recorded. Below is what they have in common; the new hire should look for the same things when choosing accounts. This describes traits the wins share; it does not claim those traits caused the outcomes. — followed only by: \"Chipotle: no ICP, buyer, or trigger recorded\" / \"Deel: no ICP, buyer, or trigger recorded\" / \"Dayforce: no ICP, buyer, or trigger recorded\"",
+   "problem": "The paragraph announces what the wins have in common and tells the new hire to look for 'the same things', and then nothing is named. The two sentences that state a shared buyer or trigger are added only when one appears on at least two wins (lines 721-730); here the rows underneath say that no trait is recorded on any win. A new seller is given an instruction with no content, and an assessment ('traits the wins share') with no evidence next to it (dimension 6). The cause is the same as for section 1 (TERMS-098): no workflow records a buyer or a trigger on a deal, so every workspace with two or more wins gets this paragraph. The section is returned as 'ready' (line 765).",
+   "governing": "COPY_STANDARD.md §21 ('Do not make the copy more precise than the underlying product evidence permits'); ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/11_AI_PROMPT_AND_GENERATOR_REWRITE_SPEC.md rule 6 ('Give the evidence immediately next to an assessment'). Nearest manifest rules, both written about causal claims: ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/08_COPY_IMPLEMENTATION_MANIFEST_BATCH_02.json implementation_rules[4] (record B2-RULE-4: 'For Founding GTM, avoid causal wording unless the underlying data establishes causality') and ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/10_COPY_IMPLEMENTATION_MANIFEST_BATCH_03.json rules[2] (record B3-RULE-2: 'Do not imply causality from correlation').",
+   "proposed": "In authorSection6, choose the first paragraph (line 719) by whether a shared trait was found: `const shared = Boolean((topPersona && topPersona[1] >= 2) || (topTrigger && topTrigger[1] >= 2));`. When shared is true, keep the current paragraph. When it is false, use: `${plural(input.closedWon.length, \"closed-won deal is\", \"closed-won deals are\")} recorded. No buyer or trigger is recorded on two or more of them, so there is no shared trait to report yet. The won accounts are listed below.` The evidence rows stay as they are. OWNER DECISION: the same two decisions as for section 1 (TERMS-098): whether to record ICP, buyer role and trigger on the deal, and whether this section should count as 'partially complete' instead of 'ready' when no shared trait is recorded.",
+   "testsAffected": [
+    "src/founding-gtm/lib/sections.test.ts (add a case for two or more wins with no buyer or trigger recorded)"
+   ],
+   "confidence": "high"
   }
  ],
  "dispositions": [
@@ -1687,7 +2001,7 @@
    "status": "STILL MISSING",
    "currentText": "Default: \"Ranked first. Reasons: account priority score 26 out of 99 and multiple recent signals are recorded.\"; \"Account priority score\". Remaining: the account picker option `${a.name} · ${a.heat}` (a bare number after the name); the meter caption `${m.band} · ${m.heat} — ${signalPhrase}${recentPhrase}` (for a 92-score account: Hot · 92 — 3 signals, 2 recent); \"91+ Hot\" \"— act this week, the window is now\"",
    "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) welcome and dashboard at rest, signal-console at rest (hover text); src/cold-call-studio/ds/components/AccountBar.tsx:29; src/signal-console/ds/lib/adapters.ts:58; src/signal-console/components/HeatBandBanner.tsx:58-60",
-   "note": "Default screens name the metric (account priority score, out of 99) and give its inputs. The previous and oldest screens still show the bare number or the temperature word: TERMS-037, TERMS-064, TERMS-081, TERMS-075; mockups TERMS-088. 'heat' in supabase/functions/seeding-enrichment/index.ts:56-57 is a JSON field the prompt defines literally (retained)."
+   "note": "Welcome, the Dashboard and LinkedIn Playbook name the metric (account priority score, out of 99) and give its inputs. The screen that owns the score does not: the default Signal Console shows the bare number with the name only in hover text and no explanation of inputs (TERMS-092). The previous and oldest screens still show the bare number or the temperature word: TERMS-037, TERMS-064, TERMS-081, TERMS-075; mockups TERMS-088. 'heat' in supabase/functions/seeding-enrichment/index.ts:56-57 is a JSON field the prompt defines literally (retained)."
   },
   {
    "recordId": "B1-TERM-05",
@@ -2030,7 +2344,7 @@
    "status": "STILL MISSING",
    "currentText": "Default: \"Things the system noticed — observations about your work\" (Settings data list). Remaining: \"What the system noticed about your work\"; \"The system has nothing to flag in your work right now.\"; \"What I noticed:\"; \"The system reads your product category and finds offline gatherings…\"",
    "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) settings at rest; src/settings/lib/workspace-tables.ts:97; src/dashboard/today/components/WeekReads.tsx:105; src/briefing/components/WorkspaceReads.tsx:155; src/briefing/components/SuggestionsSection.tsx:56; src/outdoors-events/components/Topbar.tsx:12",
-   "note": "Narration of system perception remains on one default screen (TERMS-005) and its one-word form 'NOTICED' (TERMS-020), on previous screens (TERMS-039, TERMS-030, TERMS-031, TERMS-032, TERMS-058), oldest screens (TERMS-076, TERMS-080) and mockups (TERMS-088). 'The app knows enough to rank what to work on.' (src/welcome/components/LaunchFolio.tsx:182) is in the Welcome reviewer's file."
+   "note": "Narration of system perception remains on one default screen (TERMS-005) and its one-word form 'NOTICED' (TERMS-020), on previous screens (TERMS-039, TERMS-030, TERMS-031, TERMS-032, TERMS-058), oldest screens (TERMS-076, TERMS-080) and mockups (TERMS-088). Three more default-screen strings narrate the system: the Settings confirmation 'The system will walk you through every surface.' (TERMS-094), the data-list label 'Suggestions the system made' (TERMS-095) and the rule-form label 'What should the system watch for?' (TERMS-096). 'The app knows enough to rank what to work on.' (src/welcome/components/LaunchFolio.tsx:182) is in the Welcome reviewer's file."
   },
   {
    "recordId": "B1-TERM-54",
@@ -2051,7 +2365,7 @@
    "status": "STILL MISSING",
    "currentText": "Default Briefing: \"The read this week\"; \"There are no market reads for this week yet.\"; \"No source record is saved for this read. Reads created from now on will include one.\"; default Settings: \"Briefing reads\"",
    "where": "src/briefing/components/BriefingLead.tsx:29; src/briefing/components/EmptyState.tsx:21; src/briefing/components/ShowYourWork.tsx:56; src/settings/lib/workspace-tables.ts:153; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) briefing after 'SHOW SOURCES AND REASONING'",
-   "note": "'Read' as a noun for an analysis is still on the default Briefing and Settings (TERMS-006, TERMS-007, TERMS-008, TERMS-009, TERMS-010, TERMS-011, TERMS-012), in a generated suggestion (TERMS-017), on previous screens (TERMS-028, TERMS-029, TERMS-030, TERMS-039, TERMS-035), oldest screens (TERMS-073, TERMS-074, TERMS-067, TERMS-078, TERMS-079) and mockups (TERMS-088). The verb is kept: \"Read the post and identify one specific point…\" (src/linkedin-playbook/lib/cues.ts:20), \"Share read-only with a seller\"."
+   "note": "'Read' as a noun for an analysis is still on the default Briefing and Settings (TERMS-006, TERMS-007, TERMS-008, TERMS-009, TERMS-010, TERMS-011, TERMS-012), in a generated suggestion (TERMS-017), on previous screens (TERMS-028, TERMS-029, TERMS-030, TERMS-039, TERMS-035), oldest screens (TERMS-073, TERMS-074, TERMS-067, TERMS-078, TERMS-079) and mockups (TERMS-088). The default Briefing's load error also says 'Couldn't load your reads.' (src/briefing/v4/lib/reads.ts:131, filed with TERMS-096). The verb is kept: \"Read the post and identify one specific point…\" (src/linkedin-playbook/lib/cues.ts:20), \"Share read-only with a seller\"."
   },
   {
    "recordId": "B1-TERM-57",
@@ -2094,6 +2408,363 @@
    "currentText": "\"TODAY · 26 MESSAGES & CALLS RECORDED\" / \"26\" \"/ 33 TODAY\" \"messages & calls — logged or captured\"",
    "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) every area (recent-activity panel)",
    "note": "The actual status is named. 'On the wire' does not occur in any served file."
+  },
+  {
+   "recordId": "B2-SEM-0",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"+ Create segment\"; \"No territory segments have been created yet\". Previous screen: \"NAME A FOCUS\" / \"NO FOCUSES YET\" / \"Name the first strategic bet — a group of buyers with a reason to act now.\" Oldest screen: \"THESES\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) territory-architect at rest; src/territory-architect/ds/components/TerritoryBuilder.tsx:67; src/territory-architect/ds/components/TerritoryObject.tsx:102,105; src/territory-architect/TerritoryArchitect.tsx:200",
+   "note": "The default screen makes the migration: the user creates territory segments by geography, industry, company size or stage, named accounts, buying signals or combined criteria, and no form of 'carve' or 'division' is left in any product file (the only 'carve' is the contract term 'carve-out'). The two fallback screens were never migrated — they call the same object a 'focus', a 'strategic bet' or a 'thesis': TERMS-097 (previous) and TERMS-082 (oldest)."
+  },
+  {
+   "recordId": "B2-SEM-1",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"high priority\" / \"priority declining\" / \"new signal or newly watched\" / \"monitor\"; \"Review accounts by current priority. Open an account to see the signals and activity driving its ranking.\"; the score itself is a bare number named only by the tooltip \"Account priority score\". Previous screen: \"HOT ≥ 75\". Oldest screen: \"91+ Hot\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) signal-console at rest; src/signal-console/v4/lib/attention.ts:20-45; src/signal-console/v4/SignalConsoleV4.tsx:104-107,121-131; src/signal-console/ds/components/HealthStrip.tsx:28; src/signal-console/components/HeatBandBanner.tsx:58",
+   "note": "The temperature model is gone from the default screen: the four groups are named by priority and no warm / hot / cool / cold word carries meaning there (the internal band ids now / warm / emerging / cold are never shown). Two parts of the migration are incomplete on the default screen — the evidence and signal age: the score is not explained and signals are listed without dates (TERMS-092), and the one age shown is unlabelled and sits beside a reply marker the code cannot support (TERMS-093). The fallback screens keep the temperature words: TERMS-064, TERMS-081, TERMS-037, TERMS-057."
+  },
+  {
+   "recordId": "B2-SEM-2",
+   "status": "STILL MISSING",
+   "currentText": "Default market card: \"WHAT CHANGED\" / \"EVIDENCE\" / \"WHY THIS CONFIDENCE\" / \"WHY IT MATTERS\" / \"WHO NEEDS TO KNOW\" / \"WHAT NEXT\" / \"RECOMMENDED MOVES\"; section intro \"Briefing summarizes changes in your deals and accounts, along with relevant developments in your market.\" Remaining: \"The read this week\"; \"There are no market reads for this week yet.\"; \"NOTICED\"; \"What should the system watch for?\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) briefing at rest; src/briefing/components/PatternCard.tsx:117; src/briefing/components/BriefingLead.tsx:29; src/briefing/components/EmptyState.tsx:21; src/briefing/v4/BriefingV4.tsx:335; src/briefing/components/AddTriggerFlow.tsx:91",
+   "note": "Each market analysis on the default screen is laid out as observation → evidence → interpretation → action, as the migration asks, and the five sections are the ones the rewrite names. What is left is the vocabulary: 'read' as the noun for an analysis (TERMS-006, TERMS-007, TERMS-008, TERMS-009, TERMS-010, TERMS-011), 'moves' for the recommended actions (TERMS-001), and narration of the system (TERMS-020, TERMS-096; the hover text 'I acted on this — the system was right.' at src/briefing/components/MarksBar.tsx:31 is in the Briefing reviewer's file). Previous and oldest screens: TERMS-028, TERMS-029, TERMS-030, TERMS-031, TERMS-032."
+  },
+  {
+   "recordId": "B2-SEM-3",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"ALL FOUR WORKSTREAMS · CUSTOMER REQUEST → YOUR PROPOSED POSITION\" / \"CURRENT BLOCKING ISSUE\" / \"YOUR PROPOSED POSITION\". Remaining: \"The line you won't cross. Below this, you walk.\" / \"The line we won't cross. Below this we walk.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) getting-to-signed at rest; src/getting-to-signed/ds/components/RouteControls.tsx:163; src/getting-to-signed/components/PositionRack.tsx:44",
+   "note": "Complete on the default screen: four workstreams (Legal, Security, Finance, Business approval), a current blocking issue and a proposed position; no 'front', 'face-off', 'fight' or 'your line' is left in any file the default screen reaches, including the sample data. The negotiation-position sense of 'line' and the 'counterparty / concession ladder' vocabulary remain on the previous screen (TERMS-051, TERMS-052) and on the oldest screen's walk-away field (src/getting-to-signed/components/PositionRack.tsx:44, in the Getting to Signed reviewer's file)."
+  },
+  {
+   "recordId": "B2-SEM-4",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"pilot plan and execution\" / \"Define the pilot's success criteria before the pilot begins.\" / \"SUCCESS CRITERIA\" / \"WHO APPROVES THE RESULT\" / \"PILOT LENGTH\" / \"Save pilot setup →\" / \"Identify pilot participants\" / \"Monitor pilot engagement\" / \"Review adoption\" / \"Summarize pilot results for the buyer\". Remaining, in the documents every saved pilot generates: \"Readout owner:\" / \"Boundaries / kill rules:\" / \"the PoC does not count as decision proof\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) pilot-desk at rest; src/pilot-desk/v4/PilotDeskV4.tsx; src/pilot-desk/lib/docs.ts:84-159",
+   "note": "The default screen uses standard pilot planning and evaluation language throughout, and 'finish line', 'hold their hand' and 'guided pilot' occur nowhere in the product. The migration is not complete in what the screen produces: the four documents built for every saved pilot still use readout / kill rules / proof (TERMS-018), and the scheduled check describes a pilot as a 'proof' past its 'readout window' (TERMS-014). Fallback screens keep the foundry model: TERMS-059, TERMS-060, TERMS-061, TERMS-099, TERMS-077. The page title still says 'PoC Framework' (TERMS-024)."
+  },
+  {
+   "recordId": "B2-SEM-5",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"SALES HANDOFF\" / \"Documented sales process\" / \"The information another seller needs to understand and run this sales process without having it re-explained. Current readiness: Partially documented.\" / \"2 · Outreach patterns associated with responses\" / \"3 · Discovery questions used on calls that progressed\". Remaining: \"SHARE THIS KIT\" / \"Send the kit to a hire as a read-only link\"; shared page \"SHARED GTM KIT · READ-ONLY\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) founding-gtm at rest; src/founding-gtm/lib/types.ts:53; src/founding-gtm/components/SharePanel.tsx:175,213; src/founding-gtm-share/FoundingGtmShare.tsx:68",
+   "note": "The default document is explicit sales handoff documentation with literal section titles, and no 'motion' is left in it. Two things remain. The object is still called a 'kit' in the share panel and on the page the recipient opens (TERMS-003, TERMS-004, TERMS-066, TERMS-084), and on the fallback screens (TERMS-047, TERMS-071, TERMS-079, TERMS-038). And section 1 states a customer pattern its data does not contain (TERMS-098). One maxim is left in a section-7 observation, shown only when no outreach is logged: \"The plan is only on paper until it happens daily.\" (src/founding-gtm/lib/sections.ts:823) — the sentence after it says what to do, so it is recorded here rather than filed."
+  },
+  {
+   "recordId": "B2-SEM-6",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"network-assisted deal support\" / \"MESSAGE TO YOUR CONTACT\" / \"NOTE YOUR CONTACT CAN FORWARD\" / \"OPEN REQUESTS · TRACK OUTCOMES\"; outcome states \"waiting to hear\" / \"contact is helping\" / \"deal activity increased\" / \"no response\" / \"declined\". Remaining: the note saved with every request, \"Ask sent from Backchannel Desk.\" / \"Held before spending advisor trust.\"; previous screen \"SPEND THE TRUST\" / \"Choose a carrier…\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) call-in-a-favor at rest; src/call-in-a-favor/v4/CallInAFavorV4.tsx:57; src/call-in-a-favor/state.ts:236,238; src/call-in-a-favor/ds/components/AskDesk.tsx:107,174",
+   "note": "The default screen is network assistance with a trackable request and outcome, and 'relay' occurs nowhere. The older model survives in the note the default screen saves on each request (TERMS-019), in the placeholder the handoff link carries (TERMS-027), in the page title 'Advisor Deploy' (TERMS-023), and across the fallback screens (TERMS-033, TERMS-034, TERMS-035, TERMS-067)."
+  },
+  {
+   "recordId": "B2-RULE-0",
+   "status": "IMPLEMENTED",
+   "currentText": "Wording changed, numbers did not: \"No recorded activity for ${days} days\" still scores 100 at 30 days or more; \"No next step is recorded\" still scores 60; \"multiple recent signals are recorded\" still requires two recent signals; the Signal Console groups keep their thresholds (score 78 with a signal in the last 2 days; 60; a signal in the last 7 days).",
+   "where": "src/deal-workspace/lib/recovery.ts:59-67; src/dashboard/lib/scoring.ts:59-60; src/signal-console/v4/lib/attention.ts:76-87; src/signal-console/lib/heat.ts:57-66; compared with commit f641612 (2026-10-28, the last commit before the remediation)",
+   "note": "I compared the scoring code for Deal Workspace risk, Dashboard reasons, ICP quality, Pilot quality and the Signal Console groups with its state before the remediation (git diff f641612..HEAD, non-string lines only): every threshold and point value is the same and only the sentences changed. The calculations that did change are the ones the owner approved (readiness blocker selection, Outbound scoring nextQuestion +6, Quota Workback's exact-deal rounding) and belong to the approved-evolution reviewer. Not every calculation in the app was diffed."
+  },
+  {
+   "recordId": "B2-RULE-1",
+   "status": "IMPLEMENTED",
+   "currentText": "Stored keys kept, labels changed: readiness id you_are_the_system is shown as \"Founder-dependent\" and inheritable_with_guardrails as \"Usable with founder support\"; outreach-stage key ice_cold is shown as \"First outreach\"; Discovery section key opening-frame is titled \"Opening\"; Signal Console group ids now / warm / emerging / cold are shown as \"High priority\" / \"Priority declining\" / \"New signal or newly watched\" / \"Monitor\".",
+   "where": "src/lib/readiness/types.ts:14-18,31-35; src/outbound-studio/v4/OutboundStudioV4.tsx:54-60; js/discovery-segment-runtime.js:104; src/signal-console/v4/lib/attention.ts:20-45",
+   "note": "Renamed states keep their stored keys, so saved history and links still load; no data migration was needed. The opposite slip exists in four places, where a stored key is printed as if it were a label: TERMS-015 (deal stage), TERMS-016 and TERMS-017 (shortcut and area ids), TERMS-049 (win-condition ids)."
+  },
+  {
+   "recordId": "B2-RULE-2",
+   "status": "IMPLEMENTED",
+   "currentText": "Pattern prompt: \"Use normal sentences with subjects and verbs. Do not use aphoristic fragments, synthetic symmetry, personification, rhetorical mini-headlines, or em-dashes as substitutes for logical connective tissue.\" and \"private Antaeus ontology, and slogan-like copy\". Weekly lead prompt: \"slogans, aphoristic fragments, or private Antaeus terminology\". Conflicting-evidence prompt: \"Use plain business language. Avoid slogans, aphoristic fragments, personification, startup jargon, and decorative compound nouns.\"",
+   "where": "supabase/functions/briefing-pipeline/llm/synthesis-shared.ts:354-365; supabase/functions/briefing-pipeline/llm/compose-shared.ts:40; supabase/functions/briefing-pipeline/llm/contrarian-shared.ts:87",
+   "note": "Every Briefing generation prompt and the critique prompt carry instructions against the old dialect. The output check rejects a list of marketing words (synthesis-shared.ts:12-19, 311-312); it has no list of the retired Antaeus metaphors and relies on the instruction for those. One residue: the prompts' own schema and context labels still hand the model the nouns 'move' and 'fired' (TERMS-021). Prompts were read; no live model output was produced in this audit."
+  },
+  {
+   "recordId": "B2-RULE-3",
+   "status": "STILL MISSING",
+   "currentText": "Default Signal Console: each account shows a bare number whose only name is the tooltip \"Account priority score\"; the group caption says \"priority score below 60\"; the opened account lists \"Signals\" as headline and source, with no dates. Elsewhere the same score is explained: \"Ranked first. Reasons: account priority score 26 out of 99 and multiple recent signals are recorded.\"",
+   "where": "src/signal-console/v4/SignalConsoleV4.tsx:104-107,121-131; src/signal-console/v4/lib/attention.ts:39; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) signal-console at rest and after opening an account; dashboard at rest",
+   "note": "The score is kept, but the screen that owns it does not say what it is on screen (hover text only, no scale) or why an account received it: TERMS-092. Welcome, the Dashboard and LinkedIn Playbook (\"Priority score N out of 99.\", src/linkedin-playbook/lib/motion.ts:92) do name it with its scale. Fallback screens show the number bare or with a temperature word: TERMS-037, TERMS-064, TERMS-081."
+  },
+  {
+   "recordId": "B2-RULE-4",
+   "status": "IMPLEMENTED",
+   "currentText": "\"It's a pattern in your calls so far; it does not show that the question caused the advance.\" / \"This describes traits the wins share; it does not claim those traits caused the outcomes.\" / section titles \"Outreach patterns associated with responses\" and \"Discovery questions used on calls that progressed\"",
+   "where": "src/founding-gtm/lib/sections.ts:44,359,719; src/founding-gtm/lib/types.ts:53; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) founding-gtm sections 2 and 3",
+   "note": "Causal wording is avoided and the generator says so where a reader could infer cause; 'N% of logged calls led to a next meeting' reports a recorded sequence. A different fault sits in section 1, which states a customer pattern when no closed deal records an ICP, buyer or trigger (TERMS-098) — an unsupported pattern rather than a causal claim. Section 6 has the related fault: it announces what the wins have in common when no trait is recorded on them (TERMS-105)."
+  },
+  {
+   "recordId": "B3-RULE-0",
+   "status": "STILL MISSING",
+   "currentText": "Default deal form: \"Account\" / \"Stage\" / \"Value (USD)\" / \"Close date\" / \"Next step\" / \"Forecast\" / \"Momentum\" / \"Champion\" / \"Economic buyer\" / \"Use case\" / \"Pain\" / \"Competition\" / \"Decision process\" / \"Notes\". Remaining on the same form: the section heading \"NEXT MOVE\" above the \"Next step\" field.",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:97-161,113; src/deal-workspace/lib/deal-shape.ts:30-39; records B3-PRES-00 to B3-PRES-19 in this file",
+   "note": "All twenty listed terms keep their standard names on the default screens. One branded word still sits on top of a standard one there (TERMS-002), and the fallback screens rename several standard concepts for voice: accounts as 'names' (TERMS-078), contacts as 'carriers' (TERMS-034), call steps as 'threads' (TERMS-036, TERMS-068), territory segments as 'focuses' and 'theses' (TERMS-097, TERMS-082)."
+  },
+  {
+   "recordId": "B3-RULE-1",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Understood. Is the timing bad, am I speaking with the wrong person, or is this simply not a priority?\" / \"I will. What is the right time to follow up, and what should I reference so you have the context?\" / buyer line kept as spoken: \"Nothing formal kills it. It just loses oxygen.\"",
+   "where": "src/cold-call-studio/lib/threads.ts:145,157,176; js/discovery-segment-runtime-data-intelligence.js:503; src/cold-call-studio/lib/personalize.ts:32-45; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) cold-call-studio and discovery-studio",
+   "note": "Lines the seller says are natural speech and buyer quotes keep their idiom. The private vocabulary was taken out of the scripts themselves: the internal [pressure] token is filled with the account's newest signal or the placeholder '[specific business issue to verify]'. One coaching note in the product's own voice still says 'kill switch' (TERMS-086). The loom labels on the previous and oldest Cold Call screens are labels around the scripts, not script lines."
+  },
+  {
+   "recordId": "B3-RULE-2",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"These are conditions in the deal record; they don't tell you for certain what would cause a loss.\" / \"Fixing these lowers the risk; it doesn't guarantee a close.\" / \"it does not show that the question caused the advance\". Remaining: \"What kills this in {days} days.\" (previous Future Autopsy); \"the deals you won fall into 1 distinct customer profile (by ICP, buyer, and trigger). Point the new hire's prospecting at those first.\" (default sales handoff, section 1)",
+   "where": "src/future-autopsy/lib/autopsy.ts:89,98; src/founding-gtm/lib/sections.ts:359,169; src/future-autopsy/ds/components/PinnedCaseDS.tsx:83; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) future-autopsy at rest, founding-gtm at rest",
+   "note": "Generated sentences on the default screens are hedged ('often', 'tend to', 'usually') and state their limits; a scan of every visible string the default screens reach found no sentence saying a behavior won, caused or proved an outcome. Two places still draw a conclusion the data does not support: the fallback Future Autopsy screens present the listed conditions as what will kill the deal (TERMS-048, TERMS-072), and handoff section 1 reads a customer profile out of closed deals that record none (TERMS-098); section 6 then announces shared traits of the wins when none is recorded (TERMS-105)."
+  },
+  {
+   "recordId": "B3-RULE-3",
+   "status": "STILL MISSING",
+   "currentText": "Default Deal Workspace: \"4 deals have elevated risk based on recorded inactivity, next-step, or close-date factors.\" / \"WHY RISK IS HIGH\" \"14 days since last recorded activity · No next step is recorded · Expected close date is in the current quarter.\" Default Future Autopsy: \"RISK FACTORS · EVIDENCE\" \"The deal record was last updated 8 days ago; this is not a measure of buyer activity.\" Remaining: Dashboard tile \"HIGHEST DEAL RISK Liquid Death · 14d highest-risk open deal\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace at rest, future-autopsy at rest, dashboard at rest; src/deal-workspace/v4/DealWorkspaceV4.tsx:141,256; src/deal-workspace/lib/recovery.ts:59-67; src/future-autopsy/v4/FutureAutopsyV4.tsx:213; src/dashboard/v4/lib/cockpit.ts:269",
+   "note": "The two screens that make the assessment put the recorded evidence beside it. The Dashboard's status tile compresses the evidence to a bare '14d' taken from the reason text (in the Dashboard reviewer's file at src/dashboard/v4/lib/cockpit.ts:269), and the previous Deal Workspace counts deals under 'NEED A MOVE' with no reason shown (TERMS-042)."
+  },
+  {
+   "recordId": "B3-RULE-4",
+   "status": "IMPLEMENTED",
+   "currentText": "\"ACTIVITY AND PIPELINE REQUIRED BY CURRENT ASSUMPTIONS\" / \"Assumption above benchmark: 28% of qualified opportunities close won. The benchmark for this typical deal size is 20%.\" / \"Using the 3.5× coverage benchmark for this ACV band, the modeled target is $2.8M.\" / \"Closed-won revenue plus stage-weighted open pipeline currently totals $598k, which is about $202k below the annual target.\" / handoff section 7: \"Win-rate assumption: 28%\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) quota-workback at rest and after 'Change the target or assumptions'; founding-gtm section 7; src/quota-workback/v4/QuotaWorkbackV4.tsx:120-132; src/quota-workback/v4/lib/pace.ts:213; src/founding-gtm/lib/sections.ts:785-793",
+   "note": "The projection says what it is made of (closed revenue plus stage-weighted open pipeline), lists the editable assumptions (annual target, typical deal size, win rate, first meetings that become qualified opportunities, working days per month), flags the one above its benchmark and names the coverage multiple it uses. The oldest screen also ties its plan to the assumptions ('one conversion assumption is optimistic enough to put the quarter at risk', src/quota-workback/components/PlanReadout.tsx:26). The arithmetic behind the displayed numbers was not recomputed here."
+  },
+  {
+   "recordId": "B3-RULE-5",
+   "status": "STILL MISSING",
+   "currentText": "Default Settings: \"Downloads every record in this workspace, grouped by part of the app. If any part can't be read, the file says which.\" / \"Some workflows keep a local browser copy. Exporting or clearing this device copy does not delete the cloud records covered by the cloud workspace controls above.\" / \"The current capture flow stores message metadata rather than the message body.\" / \"A direct read-only inbox connection is not available in this workflow today.\" Remaining: \"Things the system records on its own, like observations and search history, rebuild themselves and aren't put back.\" / \"A booked meeting creates a deal automatically.\" / \"Suggestions and scheduled skills\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) settings at rest; src/settings/v4/SettingsV4.tsx:240,415; src/settings/lib/workspace-tables.ts:97-98; supabase/functions/inbound-email/index.ts:12,144",
+   "note": "Storage and capture are described directly, and the statements checked against code hold: the email capture function saves the subject line, recipient and time, not the body; calendar capture saves only meetings matched to watched accounts; delete runs a server-side wipe of the listed tables. Three statements do not match what the code does or names things the reader cannot identify: TERMS-101 (search history does not rebuild itself), TERMS-102 (the deal from a booked meeting is saved only in the browser copy), and the data-list names TERMS-005, TERMS-095, TERMS-012. The explanation-level confirmation also still personifies the software (TERMS-094). Cloud, calendar and email paths were read in source, not executed."
+  },
+  {
+   "recordId": "B1-INSTR-0",
+   "status": "STILL MISSING",
+   "currentText": "Of the 342 exact-replacement rows in the three manifests, 189 are matched word for word in the walkthrough or the source (Batch 01: 57 of 90; Batch 02: 79 of 145; Batch 03: 53 of 107). Originals that still render on default screens although the literal source string exists: \"Strategic (must-win)\" / \"Core (recurring focus)\" / \"Develop (research-led)\" / \"Watch (monitor only)\"; \"inside your deals and accounts\"; \"Your market, in full\"; \"Rising\"",
+   "where": "final-audit obligations slices (automatic comparison of every manifest row with the rendered walkthrough and the source, 2026-11-16); src/territory-architect/lib/types.ts:16-19; src/briefing/v4/BriefingV4.tsx:387,563,177; src/briefing/components/PatternCard.tsx:40",
+   "note": "Most literal replacements are in place. Eight rows were not applied where the literal string exists: four Territory tier labels (TERMS-100; records B2-X-009 to B2-X-012) and four Briefing strings — 'inside your deals and accounts', 'pattern', 'Your market, in full', 'RISING' (records B2-X-043, B2-X-046, B2-X-048, B2-X-051; in the Briefing reviewer's file at the lines cited). The other 145 unmatched rows are dynamic sentences, superseded readiness names or reworded strings and are judged row by row in each area's file. Rows whose original and replacement are identical ('TOO BROAD', 'confirmed accounts') are not misses; 'YOU ARE HERE' still renders only as the position marker in the related-activity list, which the rows did not cover."
+  },
+  {
+   "recordId": "B1-INSTR-1",
+   "status": "IMPLEMENTED",
+   "currentText": "Builders, not samples: `return \"Ranked first. Reasons: \" + because + \".\";` renders \"Ranked first. Reasons: account priority score 26 out of 99 and multiple recent signals are recorded.\"; `${days} days since last recorded activity`; Signal Console status line built from counts (\"No current high-priority accounts; continue monitoring for new signals\").",
+   "where": "src/dashboard/lib/command-intelligence.ts:445; src/deal-workspace/lib/recovery.ts:59-61; src/signal-console/v4/lib/attention.ts:158-163; sample-only modules src/briefing/lib/demo-patterns.ts:17 and src/lib/edge/demo-stream.ts:23",
+   "note": "Dynamic sentences were changed in the code that builds them. No approved sample sentence is hardcoded: a search of every string in src/ finds the sample company names (Boeing, Nordstrom, Chipotle and the rest) only in modules that run in the sample workspace and in the seed files. Four builders still assemble text from retired vocabulary or internal ids and are filed separately: TERMS-014, TERMS-015, TERMS-016, TERMS-018. One place still rewrites text at display time instead of in the builder: the related-activity card's translator, left over from before its builder was rewritten (TERMS-104)."
+  },
+  {
+   "recordId": "B1-INSTR-2",
+   "status": "IMPLEMENTED",
+   "currentText": "One shared navigation component (title \"Open workspace map (G)\", aria-label \"Open workspace map\") and one shared activity panel (aria-label \"Recent activity\"); shared readiness labels (\"Founder-dependent\" … \"Hire-ready and repeatable\").",
+   "where": "src/lib/ground/GroundLine.tsx:142-143 (imported by 21 screen files); src/lib/edge/LiveEdge.tsx:254 (imported by 20); src/lib/readiness/types.ts:31-35; fresh walkthrough of the default screens (SMB book, generated 2026-11-16), every area",
+   "note": "Repeated strings that come from one shared component were changed once there, and every default screen shows the new wording. Where a string still exists twice it is because each screen generation has its own copy of a component (for example src/dashboard/today/components/WeekReads.tsx and src/dashboard/components/WeekReadsCard.tsx) or a server prompt has a browser-side mirror (supabase/functions/briefing-pipeline/llm/contrarian-shared.ts and src/briefing/lib/synthesis/contrarian.ts); those pairs are listed line by line in the findings so they are changed together."
+  },
+  {
+   "recordId": "B1-INSTR-3",
+   "status": "STILL MISSING",
+   "currentText": "Component reference page examples: \"The system noticed three reads since yesterday.\" / \"Handoff kit\" / \"Pre-mortem it\". Capability map: \"the run-to-signed reconceive + rename\". Canon: \"## 12. Earned Depth — the doctrine of heavy seeding\"",
+   "where": "src/design-system/ProofSheet.tsx:145,300,540; deliverables/room-capability-maps/getting-to-signed-capability-map-2026-07-07.html:40; CLAUDE.md:1052",
+   "note": "New default-screen copy does not imitate the old dialect, no model prompt under supabase/functions contains example text in it, and the voice check's approved state list was aligned to the current names (src/lib/voice/blessed-labels.ts:25-45). The material a writer or a model would copy from still shows the retired copy as the example: the built component reference page (TERMS-089), the capability maps embedded in the tester walkthrough (TERMS-090) and canon's working names (TERMS-091)."
+  },
+  {
+   "recordId": "B1-INSTR-4",
+   "status": "IMPLEMENTED",
+   "currentText": "Engine ids, thresholds and stored shapes are unchanged under the new labels: readiness ids (you_are_the_system … hire_ready_repeatable) with labels \"Founder-dependent\" … \"Hire-ready and repeatable\"; deal-risk scores 100 / 70 / 35 at 30 / 14 / 7 days; account-priority formula \"(base + conf) * recency\" capped at 99.",
+   "where": "src/lib/readiness/types.ts:14-35; src/deal-workspace/lib/recovery.ts:59-61; src/signal-console/lib/heat.ts:57-66; compared with commit f641612",
+   "note": "Within what I checked (the scoring engines named under B2-RULE-0 and the enum keys under B2-RULE-1) the remediation changed labels and sentences, not behavior or stored data. Behavior changes that were made are the owner-approved ones. Two label defects I found do state more than the code knows — the Signal Console reply marker and age (TERMS-093) and the handoff's customer profile (TERMS-098); neither changes a calculation. One display-time substitution can alter words the user or the research entered, for example a signal headline containing 'heat 3' (TERMS-104). Visual hierarchy was not checked by rendering, and functional regressions elsewhere are recorded in the backend-contracts and approved-evolution reviewers' files."
+  },
+  {
+   "recordId": "B1-INSTR-5",
+   "status": "IMPLEMENTED",
+   "currentText": "Scan output today: \"Tier-1 failures: 0\" / \"Tier-2 review warnings: 21\" / \"copy:audit passed Tier 1.\" The committed tester transcript was last regenerated in commit 275784c (2026-11-09).",
+   "where": "tools/language-remediation/copy-audit.js, run 2026-11-17 during this audit (1,222 files scanned; all 21 warnings are ordinary English in the transcript); preview-transcript/ (21 areas); git log -- preview-transcript",
+   "note": "Both steps were carried out, and the scan is clean on the files it reads. The two commits that touched application source after the last regeneration changed only js/demo-seed-runtime.js and removed the methodology script, neither of which the transcript covers. The scan's file list leaves out files the app serves — the eleven Discovery script files that pages load and the published mockups — so a clean Tier 1 does not yet mean that no served page holds a Tier-1 phrase (TERMS-022)."
+  },
+  {
+   "recordId": "B1-EPI-0",
+   "status": "IMPLEMENTED",
+   "currentText": "\"HIGHEST-PRIORITY ACTION\" \"Outbound to Chomps\"; \"If nothing changes, Grammarly is at high risk of stalling or being lost within the next 17 days.\"; \"Highest-risk deal · largest value\" \"Liquid Death $48k\"; \"Scheduled check: no new signals recorded in more than 14 days for OLIPOP.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) dashboard, future-autopsy, deal-workspace at rest and the recent-activity panel; src/future-autopsy/v4/FutureAutopsyV4.tsx:187; src/dashboard/lib/command-intelligence.ts:445",
+   "note": "Every analytical output on the default screens names the account, deal or plan it is about before it says anything else; the Briefing's market cards name the accounts in the first sentence of the analysis."
+  },
+  {
+   "recordId": "B1-EPI-1",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"14 days since last recorded activity · No next step is recorded · Expected close date is in the current quarter.\"; \"The deal record was last updated 8 days ago; this is not a measure of buyer activity.\"; \"WHAT CHANGED\" \"Four watched accounts announced expansions with hiring activity attached.\" Not supported by the record: \"● replied · 1h ago\"; \"the deals you won fall into 1 distinct customer profile (by ICP, buyer, and trigger)\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace, future-autopsy, briefing, signal-console and founding-gtm at rest; src/deal-workspace/lib/recovery.ts:59-67; src/future-autopsy/v4/FutureAutopsyV4.tsx:207; src/signal-console/v4/SignalConsoleV4.tsx:115; src/founding-gtm/lib/sections.ts:169",
+   "note": "Observations are generally stated as recorded facts, with their limits where needed. Two default-screen observations are not supported by the stored data: the reply marker and unlabelled age on Signal Console accounts (TERMS-093) and the customer profile in handoff section 1 (TERMS-098)."
+  },
+  {
+   "recordId": "B1-EPI-2",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"Ranked first. Reasons: account priority score 26 out of 99 and multiple recent signals are recorded.\"; \"RISK FACTORS · EVIDENCE\"; \"RECORDED EVIDENCE\" \"LinkedIn: 6 responses from 12 attempts (50%)\"; Briefing \"EVIDENCE\" and \"SHOW SOURCES AND REASONING\". Missing: the Signal Console score has no stated inputs; the Dashboard tile gives \"Liquid Death · 14d\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) dashboard, future-autopsy, founding-gtm, briefing and signal-console at rest; src/dashboard/lib/command-intelligence.ts:445; src/future-autopsy/v4/FutureAutopsyV4.tsx:213; src/founding-gtm/v4/FoundingGtmV4.tsx:131; src/signal-console/v4/SignalConsoleV4.tsx:107; src/dashboard/v4/lib/cockpit.ts:269",
+   "note": "Evidence sits beside the assessment on Welcome, the Dashboard recommendation, Deal Workspace, Future Autopsy, Founding GTM, Quota Workback and the Briefing. Two default-screen numbers are shown without it: the Signal Console priority score (TERMS-092) and the Dashboard's highest-deal-risk tile (in the Dashboard reviewer's file at src/dashboard/v4/lib/cockpit.ts:269)."
+  },
+  {
+   "recordId": "B1-EPI-3",
+   "status": "IMPLEMENTED",
+   "currentText": "\"is at high risk of stalling or being lost\" followed by \"These are conditions in the deal record; they don't tell you for certain what would cause a loss.\"; \"Assumption above benchmark: 28% of qualified opportunities close won.\"; Briefing \"Confidence 88%\" with \"WHY THIS CONFIDENCE\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) future-autopsy, quota-workback and briefing at rest; src/future-autopsy/v4/FutureAutopsyV4.tsx:187; src/future-autopsy/lib/autopsy.ts:89; src/quota-workback/v4/lib/pace.ts:213",
+   "note": "Interpretations are worded as assessments (risk level, comparison with a benchmark, a confidence figure with its reason) and are kept apart from the recorded facts they rest on. The one-word qualification grade on Future Autopsy ('limited' / 'workable' / 'solid', src/future-autopsy/v4/FutureAutopsyV4.tsx:44-49) is in the Future Autopsy reviewer's file."
+  },
+  {
+   "recordId": "B1-EPI-4",
+   "status": "STILL MISSING",
+   "currentText": "Default: \"If nothing changes, Grammarly is at high risk of stalling or being lost within the next 17 days.\" with \"risk review window · 17d\"; \"projection · $800k annual target\" with \"Closed-won revenue plus stage-weighted open pipeline currently totals $598k\". Remaining on fallback screens: \"What kills this in {days} days.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) future-autopsy and quota-workback at rest; src/future-autopsy/v4/FutureAutopsyV4.tsx:145,187,200; src/quota-workback/v4/QuotaWorkbackV4.tsx:88,120; src/future-autopsy/ds/components/PinnedCaseDS.tsx:83",
+   "note": "On the default screens a statement about the future is conditional and labelled (a risk within a review window; a projection built from named inputs), never a fact. The previous and oldest Future Autopsy screens still state the forecast as certain: TERMS-048, TERMS-072."
+  },
+  {
+   "recordId": "B1-EPI-5",
+   "status": "IMPLEMENTED",
+   "currentText": "\"RECOMMENDED CORRECTIVE ACTIONS\" \"Set a dated next step\"; \"Set a dated next step with the buyer.\"; \"ACTIONS TO INCREASE COVERAGE\"; Briefing \"WHAT NEXT\" and the action list headed \"RECOMMENDED MOVES\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) future-autopsy, deal-workspace, quota-workback and briefing at rest; src/future-autopsy/v4/FutureAutopsyV4.tsx:223; src/briefing/components/PatternCard.tsx:117",
+   "note": "Each analysis ends in a specific action, separated from the assessment. The element is present everywhere; its label on the Briefing market card still uses the retired noun (TERMS-001), which is recorded under B1-TERM-14."
+  },
+  {
+   "recordId": "B1-EPI-6",
+   "status": "IMPLEMENTED",
+   "currentText": "\"A dated next step creates a specific buyer commitment.\" / \"Fixing these lowers the risk; it doesn't guarantee a close.\" / \"Using the benchmark win rate, the model requires about 12 additional messages and calls per working day to support the same quota target.\" / prompt rule: \"Recommended actions must be concrete, routed to a current Antaeus product area by its name, and must not promise an outcome.\"",
+   "where": "fresh walkthrough of the default screens (SMB book, generated 2026-11-16) future-autopsy and quota-workback at rest; src/future-autopsy/lib/autopsy.ts:98; supabase/functions/briefing-pipeline/llm/synthesis-shared.ts:362",
+   "note": "The element is optional. Where an effect is stated it is described as what the action is meant to improve, with an explicit statement that it is not guaranteed, and the Briefing prompt forbids promising an outcome."
+  },
+  {
+   "recordId": "B3-PRES-00",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Account\" (deal form field); \"ACCOUNT & STAGE\"; \"Account and contact\" (Cold Call Studio); \"29 watched accounts\"; \"Prospecting Desk find accounts that match your ICP\"",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:95,97; src/cold-call-studio/v4/ColdCallStudioV4.tsx:120; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) — 496 rendered uses across 18 areas",
+   "note": "The standard term is used everywhere a company being sold to is meant. The stand-in 'names' (for accounts) survives only on the oldest Prospecting Desk screen (TERMS-078)."
+  },
+  {
+   "recordId": "B3-PRES-01",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Contact\" (Outbound Studio field); \"Contact name · role\" (Cold Call Studio); \"MESSAGE TO YOUR CONTACT\" / \"NOTE YOUR CONTACT CAN FORWARD\" (Call in a Favor)",
+   "where": "src/outbound-studio/v4/OutboundStudioV4.tsx:146; src/cold-call-studio/v4/ColdCallStudioV4.tsx:137; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) — 70 rendered uses across 7 areas",
+   "note": "Used for the person at the account and for the helper in Call in a Favor (the original rewrite's own wording, 'your contact'). The stand-in 'carrier' survives only on the previous and oldest Call in a Favor screens (TERMS-034, TERMS-035, TERMS-067)."
+  },
+  {
+   "recordId": "B3-PRES-02",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Stage\" (deal form field, Future Autopsy fact row, onboarding deal card); stage names \"Prospect\", \"Discovery\", \"Solution Fit\", \"PoC / Pilot\", \"Negotiation\", \"Verbal Commit\", \"Closed Won\", \"Closed Lost\"",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:100; src/future-autopsy/v4/FutureAutopsyV4.tsx:206; src/onboarding/seeding/components/DealsStep.tsx:91; src/deal-workspace/lib/deal-shape.ts:30-39; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace, after opening a deal",
+   "note": "The deal stage keeps its standard name. Outbound Studio's 'Current outreach stage' is a different, clearly named thing (how far outreach to one contact has got). One generated sentence prints the stored stage key instead of the stage name (TERMS-015)."
+  },
+  {
+   "recordId": "B3-PRES-03",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Value (USD)\" (deal form); \"Value ($)\" (onboarding deal card); \"Highest-risk deal · largest value\"",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:103; src/onboarding/seeding/components/DealsStep.tsx:86; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace at rest and after opening a deal",
+   "note": "Deal value keeps its standard name; no invented substitute found on any generation."
+  },
+  {
+   "recordId": "B3-PRES-04",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Close date\" (deal form field); \"Expected close date is in the current quarter\" (risk reason)",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:106; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace at rest — 47 rendered uses",
+   "note": "Standard term kept, and the risk reason names it in full rather than the earlier 'Closing this quarter'."
+  },
+  {
+   "recordId": "B3-PRES-05",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Next step\" / \"Next step date\" (deal form fields); \"No next step is recorded\"; \"Set a dated next step with the buyer.\"; Discovery section \"Next step\"",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:114,122; src/discovery-studio/v4/DiscoveryStudioV4.tsx:82; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) — 533 rendered uses across 12 areas",
+   "note": "The standard term is the field name and the risk vocabulary. One residue: the section kicker directly above the field still reads 'NEXT MOVE' (TERMS-002), so the same thing has two names in one drawer."
+  },
+  {
+   "recordId": "B3-PRES-06",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Forecast\" (deal form field) with the options \"Commit\", \"Best case\", \"Pipeline\", \"Omitted\" (rendered as \"Forecast Unset Commit Best case Pipeline Omitted\")",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:125; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace, after opening a deal",
+   "note": "Standard forecast-category field with standard category names. Other rendered uses are the weather forecast on Briefing and buyers talking about their own forecast in Discovery questions — ordinary English."
+  },
+  {
+   "recordId": "B3-PRES-07",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Momentum\" (deal form field) with the options \"Strong\", \"Neutral\", \"Stalling\" (rendered as \"Momentum Unset Strong Neutral Stalling\"); \"MOMENTUM\" (deal summary)",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:128; src/deal-workspace/v4/lib/views.ts:117; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace at rest",
+   "note": "Standard term kept as a seller-entered field. It is not used as a system verdict anywhere on the default screens."
+  },
+  {
+   "recordId": "B3-PRES-08",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Champion\" (deal form field and deal summary); \"No champion is recorded.\"; \"Champion details are missing or brief.\"; \"Ask your champion who approves the purchase and who signs the agreement.\"",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:137; src/deal-workspace/v4/lib/views.ts:110; src/onboarding/seeding/lib/diagnose.ts:78; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) — 68 rendered uses across 8 areas",
+   "note": "Standard term kept in Deal Workspace, Future Autopsy, Pilot Desk, Getting to Signed and onboarding."
+  },
+  {
+   "recordId": "B3-PRES-09",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Economic buyer\" (deal form field, deal summary, Future Autopsy risk factor); \"No economic buyer is recorded.\"",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:140; src/deal-workspace/v4/lib/views.ts:111; src/future-autopsy/v4/FutureAutopsyV4.tsx:64,209; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace and future-autopsy at rest — 20 rendered uses",
+   "note": "Standard term kept wherever the field is shown. Onboarding asks the same thing in plain words — 'Who signs the check' (src/onboarding/seeding/components/DealsStep.tsx:104), 'Signer not recorded' (src/onboarding/seeding/lib/diagnose.ts:76) — and saves the answer to this field; that is a plain-language gloss, not invented vocabulary (COPY_STANDARD.md §26 uses 'who signs' in its own approved example). The previous-generation Future Autopsy prints the internal id as 'eb engaged' (TERMS-049)."
+  },
+  {
+   "recordId": "B3-PRES-10",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Stakeholders\" (deal form section); \"No stakeholders mapped yet.\"; \"Engage 3+ stakeholders\"",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:198; src/future-autopsy/v4/FutureAutopsyV4.tsx:69; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace after opening a deal; future-autopsy at rest",
+   "note": "Standard term kept. Future Autopsy's risk factor for a deal that depends on one contact is titled 'Stakeholders', not the older 'single-threaded'."
+  },
+  {
+   "recordId": "B3-PRES-11",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Use case\" (deal form field, deal summary, Future Autopsy risk factor); \"Pin down the use case, a number, and who owns the decision now, before interest fades.\"",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:149; src/deal-workspace/v4/lib/views.ts:112; src/future-autopsy/v4/FutureAutopsyV4.tsx:66; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace at rest",
+   "note": "Standard term kept."
+  },
+  {
+   "recordId": "B3-PRES-12",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Pain\" (deal form field and deal summary)",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:152; src/deal-workspace/v4/lib/views.ts:113; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace at rest",
+   "note": "Standard term kept on the deal. The Discovery section that collects it is titled 'The problem and its cost' by owner decision (AUDIT_BRIEF §4), which describes the section's questions and does not rename the deal field."
+  },
+  {
+   "recordId": "B3-PRES-13",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Competition\" (deal form field, deal summary, Future Autopsy risk factor)",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:155; src/deal-workspace/v4/lib/views.ts:114; src/future-autopsy/v4/FutureAutopsyV4.tsx:68; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace at rest",
+   "note": "Standard term kept. Discovery's 'Current vendor' section title is the owner's decision and names the section, not the field."
+  },
+  {
+   "recordId": "B3-PRES-14",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Decision process\" (deal form field, deal summary, Future Autopsy risk factor)",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:158; src/deal-workspace/v4/lib/views.ts:116; src/future-autopsy/v4/FutureAutopsyV4.tsx:65; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace at rest",
+   "note": "Standard term kept. Discovery's 'How they'll decide' section title is the owner's decision."
+  },
+  {
+   "recordId": "B3-PRES-15",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Notes\" (deal form field; CSV column)",
+   "where": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:161; src/deal-workspace/state.ts:217; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace after opening a deal",
+   "note": "Standard term kept."
+  },
+  {
+   "recordId": "B3-PRES-16",
+   "status": "IMPLEMENTED",
+   "currentText": "\"12 live · $803k pipeline\"; \"Export pipeline (CSV) ↓\"; \"Pipeline coverage\"; \"open pipeline: $803k\"; \"$298k stage-weighted open pipeline ($803k unweighted)\"",
+   "where": "src/deal-workspace/v4/DealWorkspaceV4.tsx:247,299; src/dashboard/v4/lib/cockpit.ts:236,251; src/quota-workback/v4/QuotaWorkbackV4.tsx:242; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) — 68 rendered uses across 10 areas",
+   "note": "Standard term kept and qualified where needed (open, stage-weighted, unweighted). The older stand-in 'in flight' does not appear in any product screen."
+  },
+  {
+   "recordId": "B3-PRES-17",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Quota Workback\" (area name) with the description \"calculate activity and pipeline required to hit quota\"; \"Annual quota: $800,000\" (sales handoff, section 7); on the Quota Workback screen the number itself is labelled \"annual target\" / \"ANNUAL TARGET ($)\"",
+   "where": "src/quota-workback/v4/QuotaWorkbackV4.tsx:86,88; src/lib/ground/motion.ts:50; src/founding-gtm/lib/sections.ts:790; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) quota-workback at rest and after 'Change the target or assumptions'",
+   "note": "The Batch 03 document lists this class as 'Quota / target' and its own replacement row turns 'pace · $2M by year-end' into 'target · $2M by year-end', so 'annual target' on the screen is the approved wording. The stand-in 'your number' does not appear in any product screen."
+  },
+  {
+   "recordId": "B3-PRES-18",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Closed Won\" (stage name); \"closed-won deals per year · 3.8 a quarter\"; \"Closed-won deals needed per year: 15\"",
+   "where": "src/deal-workspace/lib/deal-shape.ts:37; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) quota-workback at rest; founding-gtm section 7 — 10 rendered uses",
+   "note": "Standard term kept as the stage name and as the adjective in planning copy."
+  },
+  {
+   "recordId": "B3-PRES-19",
+   "status": "IMPLEMENTED",
+   "currentText": "\"Closed Lost\" (stage name, stage filter and stage select)",
+   "where": "src/deal-workspace/lib/deal-shape.ts:38; fresh walkthrough of the default screens (SMB book, generated 2026-11-16) deal-workspace after opening a deal (stage select) — 3 rendered uses",
+   "note": "Standard term kept. Choosing it opens the loss-reason step; the reason labels are recorded outcomes ('Budget Killed' etc.), not a renamed stage."
   }
  ],
  "retained": [
@@ -2327,7 +2998,73 @@
    "text": "id: cast-proof-for-hottest-deal / sources: source=hottest-signal-console-account / id: triage-week-reads",
    "term": "hottest",
    "why": "Recipe ids and source keys — identifiers stored in schedules and dispatched by name. The label and description shown to the user are plain ('Plan a pilot for the highest-risk deal'). The one place an id is shown as a name is finding TERMS-016."
+  },
+  {
+   "file": "src/lib/readiness/verdict.ts",
+   "line": 134,
+   "text": "Run a pilot whose result the buyer's boss could act on without you in the room.",
+   "term": "room",
+   "why": "Meeting-presence idiom, not the app-as-a-place metaphor (final-audit AUDIT_BRIEF.md §3 row 'room'). Same reading for 'the budget owner was never in the room' (src/future-autopsy/lib/autopsy-data.ts:129) and 'for when you're not in the room' (src/pilot-desk/v4/PilotDeskV4.tsx:149)."
+  },
+  {
+   "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+   "line": 168,
+   "text": "Other open deals · ranked by risk",
+   "term": "rank",
+   "why": "Describes what the product does to the user's deals and says what is ordered and by what (COPY_STANDARD.md §26; the original Batch 03 replacement, verbatim)."
+  },
+  {
+   "file": "src/onboarding/seeding/components/DealsStep.tsx",
+   "line": 104,
+   "text": "Who signs the check",
+   "term": "economic buyer",
+   "why": "A plain-language question for the economic buyer in the setup flow; the answer is saved to the Economic buyer field, which keeps its standard name in Deal Workspace. COPY_STANDARD.md §26 uses 'who signs' in its own approved example."
+  },
+  {
+   "file": "src/founding-gtm/lib/sections.ts",
+   "line": 309,
+   "text": "All three channels have recorded activity, so the new hire inherits a real comparison of what gets responses instead of a guess.",
+   "term": "causal wording",
+   "why": "Describes a comparison of response rates by channel; the rates sit directly above it and no cause is claimed. 'N% of logged calls led to a next meeting' (lines 397-457) reports a recorded sequence in the same way."
+  },
+  {
+   "file": "src/founding-gtm/lib/sections.ts",
+   "line": 823,
+   "text": "The plan is only on paper until it happens daily. Log one full week of real outreach before handing the plan to a new hire, so they inherit a real week, not a target.",
+   "term": "aphorism",
+   "why": "A short maxim, but the heading above it states the fact ('The plan calls for N outreach actions a day, but none are logged recently.') and the next sentence says what to do, so nothing has to be decoded. Shown only when no outreach is logged."
+  },
+  {
+   "file": "src/future-autopsy/lib/autopsy-data.ts",
+   "line": 143,
+   "text": "The deal hasn't been updated recently. Deals often go cold when nobody on either side books the next conversation, and silence turns into the decision.",
+   "term": "cold",
+   "why": "Ordinary English in an explanatory sentence that follows the recorded fact and is hedged ('often'); it is not a state label or a score band."
+  },
+  {
+   "file": "src/lib/follow/follow-data.ts",
+   "line": 339,
+   "text": "1 touch logged / 2 touches logged",
+   "term": "touch",
+   "why": "'Touch' for one logged outreach action is common sales usage and is counted with a number; the same card names the kinds of outreach in its Outbound Studio row."
+  },
+  {
+   "file": "src/cold-call-studio/lib/personalize.ts",
+   "line": 32,
+   "text": "[specific business issue to verify]",
+   "term": "pressure",
+   "why": "The fallback shown where the internal [pressure] token has no signal to fill it: a bracketed prompt telling the seller what to supply, not the retired noun."
   }
  ],
- "gaps": []
+ "gaps": [
+  "No browser was run in this pass. Default screens were judged from the orchestrator's rendered walkthrough text (enterprise and SMB sample books) and the previous-generation walkthrough; the oldest-generation screens (?v4=0&ds=0) were read in source only, so hover, focus and layout-dependent text on them is unverified.",
+  "Signed-in and cloud behavior was read, not executed: Supabase reads and writes, the edge functions (briefing pipeline, scheduled check, email and calendar capture, prospecting and event search), cron schedules and the server-side delete. The sample workspace in the walkthrough is signed out. Findings that depend on signed-in behavior (the Settings sentence about a booked meeting; restore) say so.",
+  "No model was called. Briefing, prospecting, event-search and onboarding-enrichment prompts and their output checks were read; what a live model returns under them is unverified.",
+  "The 91 findings inherited from the interrupted reviewer of this area were re-checked mechanically (every cited file and line still contains the quoted text) and read in full, but each proposed rewrite was not re-derived from scratch.",
+  "Exact-replacement rows (342 across the three manifests) are disposed row by row in each area's file. When this file was written several area files held no dispositions yet (briefing, icp-studio, deal-workspace, future-autopsy, getting-to-signed, readiness, discovery, outdoors-events) and others did not exist (signal-console, territory-architect, settings, quota-workback, founding-gtm, cold-call-studio, linkedin-playbook, outbound-studio, pilot-desk, prospecting-desk, call-in-a-favor). The B1-INSTR-0 count therefore rests on the automatic comparison plus my own reading of the 15 rows flagged as still rendering the original.",
+  "For the areas that had no reviewer file, this audit covered the 63 map terms, the seven semantic migrations and the manifest rules — not a full nine-question read of every string. Example of what was seen and left for the area reviewer: the oldest Quota Workback screen's funnel shorthand ('Touches / week', 'Opps / quarter', 'touch→meeting', 'meeting pushes'), filed here only for its handoff strip.",
+  "The 17 published design mockups were counted by term and filed as one finding with an owner decision; they were not reviewed sentence by sentence.",
+  "The calculation comparison with the pre-remediation commit covered six engine files (deal risk, Dashboard reasons, ICP quality, Pilot quality, Signal Console groups and score). Quota Workback arithmetic, readiness gates and the Outbound scorer changed by owner approval and were left to the approved-evolution reviewer.",
+  "Visual hierarchy (rule B1-INSTR-4) cannot be judged from text and was not checked."
+ ]
 }

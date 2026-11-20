@@ -1,0 +1,597 @@
+{
+  "area": "deal-workspace",
+  "verdicts": [
+    {
+      "findingId": "DW-001",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Read the code: line 134 shows 'Highest-risk deal' for any focused deal outside the lower-risk band, and the focused deal is whichever row was clicked (line 123); line 135 adds ' · largest value' to every deal worth $100 or more. The SMB walkthrough shows 'Highest-risk deal · largest value' over Liquid Death $48k while Sweetgreen $88k is open, and 'Lower risk · largest value' after clicking Bombas $42k (corpus-smb/deal-workspace.txt lines 13, 308). Both halves are stated as facts and neither is computed, so severity 3 stands. The fix keeps the approved wording (Batch 03 'Highest-risk deal · largest value') and shows each half only when it is true: top-ranked across all open deals, and equal to the largest open value. Falling back to the band name ('High risk' / 'Elevated risk') for other deals is accurate and uses words already on the screen. A tie on value marks more than one deal as largest, which is acceptable.",
+      "checked": "src/deal-workspace/v4/DealWorkspaceV4.tsx:123-135; corpus-smb/deal-workspace.txt:13,235-308"
+    },
+    {
+      "findingId": "DW-002",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "wonDeals is every closed-won deal with no date test (src/deal-workspace/state.ts:42-44), and line 297 labels the count 'this quarter'. The SMB seed's six wins closed 50 to 160 days ago (js/demo-seed-data-smb.js:230-252), so on 17 November none is in the quarter that began 1 October; the walkthrough still prints '6 won this quarter'. The count beside it ('3 lost') has no period. Dropping the period and writing 'closed won' / 'closed lost' is accurate, short, and uses the terms the original Batch 03 list says to keep (Closed won / closed lost). Filtering both counts to the current quarter is a product choice and is rightly left to the owner, since deals with no close date would need a rule.",
+      "checked": "src/deal-workspace/v4/DealWorkspaceV4.tsx:296-298; src/deal-workspace/state.ts:42-49; js/demo-seed-data-smb.js:229-252"
+    },
+    {
+      "findingId": "DW-003",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Lines 99, 138 and 220 print the stored key (deal.stage). The walkthrough shows 'EVALUATION' on the board for a deal the editor calls 'Solution Fit' (STAGE_LABELS in src/deal-workspace/lib/deal-shape.ts:30-39); 'verbal' would print for 'Verbal Commit'. The same deal carries two stage names on one page, so this is more than a word match. Rendering STAGE_LABELS[deal.stage] ?? deal.stage is the smallest correct change and matches what the previous version already does (ds/components/DealCard.tsx:28). Note for the fixer: until DW-025 is fixed, a stored 'proposal' still arrives as 'prospect' and will show 'Prospect'.",
+      "checked": "src/deal-workspace/v4/DealWorkspaceV4.tsx:99,138,220; src/deal-workspace/lib/deal-shape.ts:30-39; corpus-smb/deal-workspace.txt:15"
+    },
+    {
+      "findingId": "DW-004",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "All five builders are called with no argument (lines 305-309), so none of the links carries focusObject or ?deal=, and discoveryHref(\"\") produces ?account= with an empty value. The builders already accept the account (src/deal-workspace/lib/handoff.ts:60-111) and the previous version passes it (src/deal-workspace/ds/DealWorkspaceDS.tsx:85-98), so the default screen lost context that its heading still promises. Passing the focused deal (the clicked one, else the first row) matches how FocusView picks its deal. Naming the account in the heading ('Continue working Liquid Death') is a justified departure from the approved 'CONTINUE WORKING THIS DEAL': in Timeline and List no single deal is on screen for 'this' to point at, and the name tells the user which deal will open. 'Continue in another area' for the empty state is plain and accurate.",
+      "checked": "src/deal-workspace/v4/DealWorkspaceV4.tsx:57-60,302-311; src/deal-workspace/lib/handoff.ts:60-111; src/deal-workspace/ds/DealWorkspaceDS.tsx:82-99"
+    },
+    {
+      "findingId": "DW-005",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "discoveryHref (lines 57-60) is hand-built: returnLabel is 'Deal Workspace' where the shared builder sends 'Back to Deal Workspace', and it sends no focusRoom or focusObject. hrefToDiscoveryStudio exists at src/deal-workspace/lib/handoff.ts:85-91 and nothing on the default screen uses it. Minor, as filed. Replacing the local function with the shared builder is correct and touches no stored data.",
+      "checked": "src/deal-workspace/v4/DealWorkspaceV4.tsx:57-60,308; src/deal-workspace/lib/handoff.ts:34-58,85-91"
+    },
+    {
+      "findingId": "DW-006",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The view is called Timeline, but nothing in it is placed by time: horizonPercent maps the risk score to a horizontal position (src/deal-workspace/v4/lib/views.ts:91-94) and the only caption on the track is the single word 'risk' (line 197). The three column headings do name risk bands, which is why I leave this at medium, but the view's name still tells a newcomer that left-to-right is time. The proposed caption needs two changes. (1) Placement: the marker it would replace sits at top:6px, left:20px inside the track (deal-workspace-v4.css:119) and the deal labels start at top:14px, so a full sentence there would run under the labels; it belongs under the band headings. (2) Wording: 'Position is not a date' describes the axis by what it is not (COPY_STANDARD.md §26, describing by absence); say what the position is. Renaming the button stays an owner decision because Focus / Timeline / List is the settled design.",
+      "finalProposed": "Remove the word 'risk' beside the red rule (line 197 keeps the rule only) and add one line under the three band headings, outside the track: <div class=\"dw4-tlcap\">{t(\"Deals are placed by risk score: the higher the score, the further left.\", { class: \"body\" })}</div> (new small style, 11px, muted). OWNER DECISION, unchanged from the finding: 'Timeline' is the settled design's name for this view; either rename the button to say what the view shows (for example 'Risk bands') or give the view a real time axis such as days to the expected close date.",
+      "checked": "src/deal-workspace/v4/DealWorkspaceV4.tsx:183-211,273-278; src/deal-workspace/v4/lib/views.ts:87-105; src/deal-workspace/v4/deal-workspace-v4.css:104-123"
+    },
+    {
+      "findingId": "DW-007",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Recomputed from the formula and the stylesheet. The dividers sit at 29.7% and 56.7% (deal-workspace-v4.css:116-117, matching the 1.1fr/1fr/1.6fr heading grid at line 105). round(4 + (1 - score/160) * 88) gives 29 for a score of 114 and 10 for 149, so every elevated-band deal scoring 114-149 starts in the High-risk column; reachable sums include 125 (35+60+30), 130 and 145. A lower-band deal scoring 65-79 starts at 49-56%, left of the second divider. High-band deals (150+) always land in the first column. The per-band mapping is correct: I checked the end points (150→24, 230→2; 80→50, 149→32; 0→90, 79→59), 230 is the true maximum (100+80+50), and higher scores stay further left, so the existing ordering test still passes. One limit to state plainly when fixing: a label is roughly a third of the track wide and cannot fit inside one column, so what the change guarantees is that each label starts in its own band's column.",
+      "checked": "src/deal-workspace/v4/lib/views.ts:91-94; src/deal-workspace/v4/deal-workspace-v4.css:105,115-120; src/deal-workspace/lib/recovery.ts:57-94; src/deal-workspace/v4/lib/views.test.ts:77-84; ran the real modules in dwv-work/probe/v1.cjs (mid-band deal scoring 125 placed at 23%)"
+    },
+    {
+      "findingId": "DW-008",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Line 155 reads 'edit all 9 →' above a block that shows eight values (nineFields returns eight rows, and src/deal-workspace/v4/lib/views.test.ts:69 asserts the length is 8); the editor it opens has fifteen fields plus stakeholders. '9' is the design notes' count of deal-health fields and means nothing to the reader. 'Edit deal details →' is verb plus object, accurate, and matches the wording proposed for the same button on the oldest version (DW-050).",
+      "checked": "src/deal-workspace/v4/DealWorkspaceV4.tsx:152-156; src/deal-workspace/v4/lib/views.ts:108-119; corpus-smb/deal-workspace.txt:22"
+    },
+    {
+      "findingId": "DW-009",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Line 161 prints 'not named' for every empty field, including Pain, Use case, Competition, Decision process and Momentum, where nothing is named; views.ts:115 turns the next step into the bare word 'set'. The SMB walkthrough shows 'set' under NEXT STEP for Notion, OLIPOP, Lemonade and Bombas (corpus-smb/deal-workspace.txt:245, 288, 303, 316). 'not recorded' matches the wording already used for the same condition elsewhere ('No next step is recorded', 'Use case not recorded'). Showing the next step and its date is accurate to the stored fields and is the fact this screen ranks on; the other cells in the grid already hold full sentences, so the longer value fits. The existing test only checks the empty case, which is unchanged.",
+      "checked": "src/deal-workspace/v4/DealWorkspaceV4.tsx:157-164; src/deal-workspace/v4/lib/views.ts:108-119; src/deal-workspace/v4/deal-workspace-v4.css:88-93; corpus-smb/deal-workspace.txt:26,245"
+    },
+    {
+      "findingId": "DW-010",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Checked that no version of Deal Workspace can add a deal: emptyDeal() (src/deal-workspace/lib/deal-shape.ts:145) is never called and a search of src for an add-deal control finds only the closed-deal import in Settings and the setup step. So 'Add one' points at nothing. The second copy at line 121 cannot render because FocusView is only reached when the list is not empty (line 283). The proposed sentence is accurate but calls the same thing 'open deals' and 'live deals' in one line; setup itself says 'Your open deals' (src/onboarding/seeding/components/DealsStep.tsx:65). Sending the user back into /onboarding/ from an empty page is also a bigger step than this line should take; one link to Cold Call Studio is enough. Dependency to record: until DW-024 is fixed, a deal created by a booked cold call can be removed the next time Deal Workspace loads cloud rows, so this sentence is only reliably true after that fix.",
+      "finalProposed": "Line 285: t(\"No open deals. A deal is created when you log a booked meeting in Cold Call Studio. Deals you enter during workspace setup also appear here.\", { class: \"body\" }), with 'Cold Call Studio' linked through buildDealWorkspaceHref({ href: \"/cold-call-studio/\", roomLabel: \"Cold Call Studio\" }). Delete the unreachable branch at lines 120-122. OWNER DECISION, unchanged: whether to add an 'Add a deal' button (it needs a required-account check and a generated id, because emptyDeal() returns an empty id).",
+      "checked": "src/deal-workspace/v4/DealWorkspaceV4.tsx:119-122,282-286; src/deal-workspace/lib/deal-shape.ts:145-152; src/onboarding/seeding/components/DealsStep.tsx:65; src/cold-call-studio/lib/handoff.ts:136-170"
+    },
+    {
+      "findingId": "DW-011",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Line 247 prints '12 live · $803k pipeline'. On its own '12 live' is close to clear in a deals page header, so this stays minor; what makes it worth fixing is that the same page uses three words for the same set: 'live' here, 'open deals' in the list heading (line 168) and 'active deal' in the calm headline (line 254). 'Open deals' is the word this page and workspace setup already use. The proposal's '$803k open pipeline' repeats 'open' twice in five words; '$803k pipeline' is already a number plus a unit and needs no change.",
+      "finalProposed": "<b>{hero.liveCount}</b> {hero.liveCount === 1 ? t(\"open deal\") : t(\"open deals\")} · <b>{money(hero.pipelineValue)}</b> {t(\"pipeline\")} → '12 open deals · $803k pipeline'.",
+      "checked": "src/deal-workspace/v4/DealWorkspaceV4.tsx:246-248,168,254; corpus-smb/deal-workspace.txt:2"
+    },
+    {
+      "findingId": "DW-012",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The headline counts every deal outside the lower-risk band as having 'elevated risk' (buildHero, views.ts:57-67), and the middle band alone is titled 'Elevated risk' (views.ts:35, 103). The SMB walkthrough shows '4 deals have elevated risk' above 'ELEVATED RISK 3'. Other areas use the phrase in the headline's sense: the Dashboard prints 'N at elevated risk' from critical plus at-risk counts (src/dashboard/v4/lib/cockpit.ts:177-179, 233) and Future Autopsy says 'When Deal Workspace identifies elevated risk'. So the band name is the odd one out and renaming it is the right repair; the approved headline stays. For the new band name, the neighbouring risk review already uses High / Moderate / Low (src/future-autopsy/v4/FutureAutopsyV4.tsx:51-55), so 'Moderate risk' keeps one set of words for deal risk across the two areas; 'Medium risk' would add a second.",
+      "finalProposed": "Keep the headline. Change title at src/deal-workspace/v4/lib/views.ts:35 and zt at :103 from \"Elevated risk\" to \"Moderate risk\" (bands read High risk / Moderate risk / Lower risk). 'Elevated risk' then always means High plus Moderate, which is what the headline, the 'At risk' chip, the dollar figure and the Dashboard count.",
+      "checked": "src/deal-workspace/v4/lib/views.ts:25-44,57-67,96-105; src/dashboard/v4/lib/cockpit.ts:174-179,233; src/future-autopsy/v4/FutureAutopsyV4.tsx:51-55; corpus-smb/deal-workspace.txt:3"
+    },
+    {
+      "findingId": "DW-013",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Line 141 shows 'Why risk is high' for any focused deal outside the lower-risk band, including a middle-band deal whose own band is not called high. Small, as filed. The three-way label keeps the approved 'Why risk is high' for the band it was written for and uses 'Risk factors' for the middle band, which matches that band's caption ('review risk factors').",
+      "checked": "src/deal-workspace/v4/DealWorkspaceV4.tsx:140-146; src/deal-workspace/v4/lib/views.ts:32-37"
+    },
+    {
+      "findingId": "DW-014",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Line 254 says the same thing twice, the second time in terms of 'the at-risk threshold', which the screen never explains; 'the current ranking' narrates the system. Minor, and only seen when every open deal is in the lower band. The proposed second sentence ('do not put any open deal in the high or medium band') depends on a band name that does not exist yet and is longer than the state needs. The populated headline is already approved wording; the calm state can be the same sentence with 'No open deals have', so the two states read as one statement about the same three factors.",
+      "finalProposed": "<><b>{t(\"No open deals have\")}</b> {t(\"elevated risk based on recorded inactivity, next-step, or close-date factors.\", { class: \"body\" })}</> — one sentence, reusing the string at line 256. (If the inactivity wording changes under DW-019, both headlines change together because they share that string.)",
+      "checked": "src/deal-workspace/v4/DealWorkspaceV4.tsx:251-263"
+    },
+    {
+      "findingId": "DW-015",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "items is the filtered list (line 236), so with a chip on, the heading 'Other open deals · ranked by risk' sits over only the matching deals; the walkthrough shows a count of 5 while 11 other deals are open. The approved wording is correct for the unfiltered list and is kept there. 'Other matching deals · ranked by risk' is accurate for the filtered state and keeps the stated basis for the order (COPY_STANDARD.md §26).",
+      "checked": "src/deal-workspace/v4/DealWorkspaceV4.tsx:126,168,236"
+    },
+    {
+      "findingId": "DW-016",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Verified in the source: the filter chips are <span onClick> (line 268), 'Open' is an <a> with no href (line 108), the queue rows and Timeline labels are <div onClick> (lines 170, 203), and account names are clickable <div>/<span> (lines 97, 137, 172, 204, 219). None can be reached or operated from the keyboard, and neither the chips nor the view switch (line 275) expose which option is selected. The changes proposed are standard and safe. Two notes for the fixer: the elements turned into buttons need the usual reset (font, background, border, padding, text-align) so they look the same, since .dw4-a and .fo-obj are styled as text; and the hidden 'Show {account}' button is needed because a button cannot sit inside another button, so the row itself cannot be made one.",
+      "checked": "src/deal-workspace/v4/DealWorkspaceV4.tsx:97,108,137,170-172,203-204,219,266-279; src/deal-workspace/v4/deal-workspace-v4.css:35-40,57,66-67,82,97"
+    },
+    {
+      "findingId": "DW-017",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Confirmed in the code and in history. applyFilter keeps a deal for the 'stalled' filter only when a risk-factor sentence matches /(stalled|days since)/i (src/deal-workspace/ds/lib/adapters.ts:66, 81). Commit 6d11561 changed the 30-day sentence from `Stalled ${days} days` to `No recorded activity for ${days} days` (src/deal-workspace/lib/recovery.ts:59), which matches neither word, so the 'No recent activity' chip now drops exactly the deals idle longest while keeping those idle 7 to 29 days. Running the real filter on three deals idle 45, 12 and 10 days returned the 12- and 10-day deals and left out the 45-day one. The unit test still feeds the hand-written 'Stalled 42 days' (adapters.test.ts:27, 71, 86), which is why it passes. This is a behavior change caused by the language work. Publishing the factors as data and filtering on them is the right repair, because two Dashboard readers also match words in these sentences (src/dashboard/today/lib/adapters.ts:47; src/dashboard/v4/lib/cockpit.ts:188) and will break again the next time a sentence is reworded. Order matters: land this before any further rewording of the sentences (DW-019, DW-020). The only hand-built assessment fixture is in adapters.test.ts, which the proposal already rewrites; the engine has no test file of its own, so add one with the new fields.",
+      "checked": "src/deal-workspace/ds/lib/adapters.ts:64-83; src/deal-workspace/lib/recovery.ts:57-63; src/deal-workspace/ds/lib/adapters.test.ts:22-93; git log -p 6d11561 -- src/deal-workspace/lib/recovery.ts; src/dashboard/today/lib/adapters.ts:47; src/dashboard/v4/lib/cockpit.ts:188; ran the real modules in dwv-work/probe/v1.cjs (filter returned the 10- and 12-day deals and dropped the 45-day deal)"
+    },
+    {
+      "findingId": "DW-018",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "QUARTER_PHRASE is /(quarter|overdue)/i (adapters.ts:67), so the 'This quarter' chip also keeps any deal with an overdue next step, whatever its close date, and deals whose close date passed in an earlier quarter; the test asserts that match (adapters.test.ts:88-93). The first version of this filter tested the date itself: 'this-quarter → close date falls inside the current quarter' (src/deal-workspace/lib/filters.ts in commit b1a8ec1), so filtering on isThisQuarter(closeDate) restores the original behavior and is safe. 'Closing this quarter' is ordinary sales wording and says what is in the quarter. One correction to the proposal: the oldest version has no 'This quarter' label to rename. InterventionRail.tsx reuses the key for its 'Reserve' button (lines 240-250), which is DW-045's subject.",
+      "finalProposed": "Export isThisQuarter from src/deal-workspace/lib/recovery.ts and in applyFilter use ranked.filter((a) => isThisQuarter(a.deal.closeDate)) for 'this-quarter'. Rename the chip to t(\"Closing this quarter\") at src/deal-workspace/v4/DealWorkspaceV4.tsx:54 and src/deal-workspace/ds/components/FilterChips.tsx:15. No label change in src/deal-workspace/components/InterventionRail.tsx. Rewrite the adapters.test.ts case with real deals: one with a close date in the current quarter (kept), one with only an overdue next step and a close date next year (dropped).",
+      "checked": "src/deal-workspace/ds/lib/adapters.ts:67,82; src/deal-workspace/lib/recovery.ts:48-55,72-88; src/deal-workspace/ds/lib/adapters.test.ts:88-93; git show b1a8ec1:src/deal-workspace/lib/filters.ts; src/deal-workspace/components/InterventionRail.tsx:240-250; ran the real modules in dwv-work/probe/v1.cjs (filter kept a deal with an overdue next step and a close date next year)"
+    },
+    {
+      "findingId": "DW-019",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The inactivity factor is daysBetween(deal.updated_at ?? deal.created_at) (recovery.ts:58): time since the deal record changed. I checked the areas that log work against a deal: Cold Call Studio sets the time only when it creates the deal (src/cold-call-studio/lib/handoff.ts:155-156), and Pilot Desk and Call in a Favor write onto the deal without touching it (src/pilot-desk/lib/deal-sync.ts:132; src/call-in-a-favor/lib/sync-back.ts:143-161). So 'days since last recorded activity' reports a call logged yesterday as 14 days of nothing, on a product that does record activity elsewhere; the related-activity card for the same deal shows '1 touch logged'. The approved Batch 03 wording assumed activity was what is counted, so this is the case where the exact replacement is inaccurate to current behavior. The owner has already approved the accurate phrasing next door: Future Autopsy says 'The deal record has not been updated for N days' and 'this is not a measure of buyer activity' (src/future-autopsy/ds/lib/adapters.ts:71; src/future-autopsy/lib/causes.ts:29, 105), and the Dashboard says 'deal record has not been updated recently' (src/dashboard/lib/engine-helpers.ts:192). The proposal's 'this deal … updated' is accurate but introduces a third phrasing and two sentence shapes; use 'deal record' and one shape. I would leave the approved headline alone: 'recorded inactivity' names the factor family and does not claim buyer silence once the factor line under it is exact. Sequence after DW-017, because Dashboard readers match 'days since' and pull the day count out of this sentence, and src/lib/follow/follow-data.test.ts:156 asserts 'No recorded activity'.",
+      "finalProposed": "src/deal-workspace/lib/recovery.ts:59-61, all three tiers: cause: `Deal record last updated ${days} days ago` (scores unchanged). Filter chip (src/deal-workspace/v4/DealWorkspaceV4.tsx:53, and src/deal-workspace/ds/components/FilterChips.tsx:14 per DW-040): t(\"No recent updates\"). Headline at DealWorkspaceV4.tsx:256 unchanged. Apply after DW-017's structured factors; update src/lib/follow/follow-data.test.ts:156. OWNER DECISION, unchanged from the finding: keep the approved 'activity' wording and make it true instead by taking the most recent of the deal's update time and the newest logged outreach, call or captured meeting for the account. That changes which deals are flagged.",
+      "checked": "src/deal-workspace/lib/recovery.ts:34-39,57-63; src/cold-call-studio/lib/handoff.ts:136-170; src/pilot-desk/lib/deal-sync.ts:112-136; src/call-in-a-favor/lib/sync-back.ts:106-167; src/future-autopsy/lib/causes.ts:29,105; src/future-autopsy/ds/lib/adapters.ts:71,85; src/dashboard/lib/engine-helpers.ts:192; src/lib/follow/follow-data.test.ts:156"
+    },
+    {
+      "findingId": "DW-020",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "recovery.ts:75 builds `Next step is due in ${days} days` for 0 to 3 days, and lines 74 and 83 do the same for overdue counts. The SMB walkthrough shows 'Next step is due in 1 days' on the page at rest (corpus-smb/deal-workspace.txt:51) and again upper-cased in List (line 133). I checked the day arithmetic: a step dated today gives 0 and tomorrow gives 1 (daysUntil uses the end of the day), so 'due today' / 'due tomorrow' are correct, and a step dated yesterday gives -1, so the singular 'day overdue' is needed. Minor and safe. As the finding says, 'today' and 'tomorrow' carry no number for the Dashboard's day-count pattern, which is acceptable only once the numbers are published as data (DW-017, DW-063).",
+      "checked": "src/deal-workspace/lib/recovery.ts:41-46,72-76,81-83; corpus-smb/deal-workspace.txt:51,133; ran the real modules in dwv-work/probe/v1.cjs (printed 'Next step is due in 0 days' and 'due in 1 days')"
+    },
+    {
+      "findingId": "DW-021",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "suggestedNextMove's lower-risk branch (recovery.ts:108-111) never looks at whether a next step exists, and the List row for that band prints the fixed line 'No immediate risk action is required. Review the next step when the deal changes.' (DealWorkspaceV4.tsx:103) under whatever factors the deal has. The SMB walkthrough's List shows the result for 1Password: 'NO NEXT STEP IS RECORDED' followed by that line (corpus-smb/deal-workspace.txt:130, 135). The evidence says there is no next step and the advice says to review it. Lines 98 and 104 also test the untrimmed value while the factor at line 66 trims, so a next step of spaces is 'not recorded' and 'current' at once. Using one trimmed test in all three bands, recommending 'Set a dated next step with the buyer.' when none exists, and showing the fixed line only for a deal with no factors is correct and changes no score. Whether a deal with no next step may sit in the lower band is a scoring question and is correctly left to the owner.",
+      "checked": "src/deal-workspace/lib/recovery.ts:65-68,96-112; src/deal-workspace/v4/DealWorkspaceV4.tsx:101-104; corpus-smb/deal-workspace.txt:127-135; ran the real modules in dwv-work/probe/v1.cjs (a Solution Fit deal with no next step got 'Review the current next step and keep it dated.')"
+    },
+    {
+      "findingId": "DW-022",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "recovery.ts:105 returns 'Identify the internal champion and confirm their role.' for a middle-band deal with a next step and an empty champion field; it is printed after factors that are all about updates, next step and close date. In Focus the empty Champion cell is on screen, so the reason can be found there; in List and Timeline it is not. Minor, as filed. Two problems with the proposed text. First, the same string is the label of the action button (DealWorkspaceV4.tsx:72, a single-line button), so a statement followed by an instruction makes a two-sentence button. Second, 'No champion is recorded' is only checked against the champion text field; a deal can have a stakeholder whose role is Champion (src/deal-workspace/lib/deal-shape.ts:80-97) with that field empty, and the sentence would then be false.",
+      "finalProposed": "In suggestedNextMove: const hasChampion = !!deal.champion?.trim() || (deal.stakeholders ?? []).some((s) => s.role === \"champion\"); if (!hasChampion) return \"No champion is recorded; identify one and confirm their role.\"; (one sentence, evidence then action, usable as the button label).",
+      "checked": "src/deal-workspace/lib/recovery.ts:103-107; src/deal-workspace/v4/DealWorkspaceV4.tsx:68-75,140-146; src/deal-workspace/lib/deal-shape.ts:80-105; ran the real modules in dwv-work/probe/v1.cjs (a deal with a Champion stakeholder and an empty champion field got the champion instruction)"
+    },
+    {
+      "findingId": "DW-023",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Reproduced. Reading: saveDealEdit keeps the edited deal under its old id (line 148), inserts when the id is not a database id (lines 156-159) and then adds the returned row under its new id (line 161); loadDeals treats one table row as the whole pipeline (lines 84-90). Both walkthroughs show the duplicate after 'Save the deal' ('12 live' becomes '13 live', corpus-smb/deal-workspace.txt:554; '17 DEALS' becomes '18 DEALS', corpus-ds/deal-workspace.txt:189). Re-running the reviewer's read-only probe (dw3-work/probe/p1.cjs) gives: 3 deals loaded, 4 after one save, and after a reload 'count 1' with the shared list reduced to that one deal. Severity 3 stands. The proposed repair has one unsafe effect: replacing the local copy with the inserted row changes the deal's id, and other areas hold deals by id. In the demo books Getting to Signed's state, Future Autopsy's task log and saved reviews, and the stage history are all keyed by the seed id (js/demo-seed-data-smb.js:272-277, 444-448, 473), so after one save those links stop resolving, and part (2), inserting every loaded deal on the first save, would do that to all deals at once. The demo does not need the table copy: the seeded deals live in the browser list, and the only other readers of the demo's deals table are the Settings download and the closed-deal import's duplicate check (src/settings/lib/cloud-sync.ts:160; src/settings/lib/backfill.ts:261).",
+      "finalProposed": "In saveDealEdit (src/deal-workspace/lib/persistence.ts): (a) Demo workspace: if isDemoModeActive() (src/lib/data-client-demo-local.ts:235), return after upsertDeal(deal) and publishExternalState(), exactly as the no-client branch does at lines 150-153. Ids stay as seeded, nothing is duplicated, and a reload still reads the browser list. In every save that stays in the browser (demo, no client, or a failed cloud write) stamp the deal first: deal = { ...deal, updated_at: new Date().toISOString() }. Today only the table sets that time, so without the stamp a deal edited locally would keep showing as not updated. (b) Signed-in workspace, first save of a deal whose id is not a database id: after the insert returns, call removeDeal(deal.id) before upsertDeal(saved), and move focusedDealId and editingDeal to saved.id. (c) Do not bulk-insert on the first save. The other browser-list deals are kept by making the load merge instead of replace, which is DW-024's change. Tests in persistence.test.ts: a 'legacy_0' deal saved through a stub insert leaves allDeals the same length; in demo mode a save leaves the id unchanged and a second bootPersistence still yields every deal. Residual risk to record: in a signed-in workspace the first cloud write of a browser-only deal still gives it a new id, so a pilot, favor or signature plan linked to the old id needs re-linking; other areas already fall back to the account name in some handoffs (src/deal-workspace/main.tsx:133-138).",
+      "checked": "src/deal-workspace/lib/persistence.ts:81-107,147-173,194-213; corpus-smb/deal-workspace.txt:554-555; corpus-ds/deal-workspace.txt:189; re-ran dw3-work/probe/p1.cjs; src/lib/data-client-demo-local.ts:166-183,235-243; js/demo-seed-data-smb.js:272-277,444-448,473"
+    },
+    {
+      "findingId": "DW-024",
+      "real": "AMENDED",
+      "fix": "AMENDED",
+      "reason": "Reproduced. loadDeals replaces the browser list whenever the table returns a row (persistence.ts:87-90 → mirrorToLegacyStorage, legacy-mirror.ts:67-71), and the copy it writes holds only Deal Workspace's own fields (legacy-mirror.ts:27-54). Other areas write to that list and nowhere else: a booked cold call appends the deal there (src/cold-call-studio/lib/handoff.ts:136-170; no other code inserts into the deals table except setup, the closed-deal import and Deal Workspace), Pilot Desk stores the pilot summary on the entry (src/pilot-desk/lib/deal-sync.ts:132) and Call in a Favor stores the favor history and next step (src/call-in-a-favor/lib/sync-back.ts:143-161). Re-running dw3-work/probe/p2.cjs: two table rows plus a list-only cold-call deal load as two deals, and the list afterwards has no cold-call deal, 'poc=dropped', 'adv=dropped', and the next step Call in a Favor set is gone. The description needs one addition, which is why this is marked amended: the closed-deal import in Settings is a third writer and a quicker way to reach the same loss. It inserts each imported deal into the table through the same client (src/settings/lib/backfill.ts:306) and appends it to the browser list (lines 322-327). In the demo, and in any workspace whose open deals exist only in the browser list, importing history and then opening Deal Workspace makes the table non-empty with closed deals only, so the load replaces the whole list with them and every open deal is gone from Deal Workspace, the Dashboard and the other readers. Severity 3 stands. Merging is the right repair, with three corrections. (1) { ...existing, ...dealToLegacyItem(deal) } keeps stale values: dealToLegacyItem omits a field that is now empty, so a next step the user cleared would survive in the list from the old entry. Deal Workspace's own fields must replace, including removals. (2) In the demo, inserting list-only deals into the local table would give them new ids (see DW-023); skip that insert there. (3) A next step written to the list by Call in a Favor is still lost on load unless it is taken over when the table row has none.",
+      "finalProposed": "loadDeals: when the table returns rows, read the current browser list first; append legacyDealToDeal(entry) for every list entry whose id is neither in the table result nor a database id (deals created by other areas). In a signed-in workspace insert those through the booted client and replace each with its returned row; when isDemoModeActive(), keep them in memory only. For a table deal whose list entry has a next step or next-step date and whose row has none, take the list's value and save it. mirrorToLegacyStorage: for each deal, start from the existing list entry with Deal Workspace's own keys removed (the keys dealToLegacyItem writes, lines 29-52), then spread dealToLegacyItem(deal) over it, so fields other areas own (poc, advisorHistory, lastAdvisor…, createdAt, source) survive and fields the user cleared do not. Add legacy-mirror.test.ts cases (foreign field kept; cleared next step removed) and persistence.test.ts cases (list-only deal kept after a load that finds table rows; open deals in the list kept when the table holds only imported closed deals).",
+      "checked": "src/deal-workspace/lib/persistence.ts:22-25,81-107; src/deal-workspace/lib/legacy-mirror.ts:27-75; src/cold-call-studio/lib/handoff.ts:136-170; src/pilot-desk/lib/deal-sync.ts:112-136; src/call-in-a-favor/lib/sync-back.ts:106-167; re-ran dw3-work/probe/p2.cjs; grep of src for deals.insert; src/settings/lib/backfill.ts:248-330"
+    },
+    {
+      "findingId": "DW-025",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "asStage returns 'prospect' for any value not in STAGE_IDS (deal-bridge.ts:39-42), and STAGE_IDS has no 'proposal' and spells the verbal stage 'verbal' (deal-shape.ts:18-27). Workspace setup offers and writes 'proposal' and 'verbal-yes' (src/onboarding/seeding/draft.ts:21-35, 44-46; lib/seed-writer.ts:171; lib/cloud-mirror.ts:127), and both demo books seed 'proposal' deals (js/demo-seed-data-smb.js:152, 162). The walkthrough shows the result: Chomps, stored as 'proposal', appears as '$64k · Prospect' (corpus-smb/deal-workspace.txt:226). The probe p2.cjs shows table rows 'proposal' and 'verbal-yes' loading as 'prospect', the shared list being rewritten to 'prospect', and the table row itself becoming 'prospect' after one edit. Getting to Signed and Future Autopsy test for 'proposal' / 'verbal-yes' (src/getting-to-signed/lib/cross-room.ts:60-64; src/future-autopsy/lib/action-plan.ts:108) and stop recognising the deal. Severity 3 stands; it predates the language work. The deals table's stage column is free text with no check constraint (supabase-workspace-persistence.sql:77), so adding 'proposal' is safe for stored data. Writing back the stored spelling unless the user changes the stage is the careful choice, and asking the other areas to accept both 'verbal' and 'verbal-yes' closes the reverse mismatch. One stage list for the whole product is correctly raised as an owner decision.",
+      "checked": "src/deal-workspace/lib/deal-bridge.ts:39-42,99,145; src/deal-workspace/lib/deal-shape.ts:18-61; src/onboarding/seeding/draft.ts:21-46; src/onboarding/seeding/lib/seed-writer.ts:166-184; src/getting-to-signed/lib/cross-room.ts:55-66; src/future-autopsy/lib/action-plan.ts:100-112; corpus-smb/deal-workspace.txt:226; re-ran dw3-work/probe/p2.cjs; ran the real modules in dwv-work/probe/v1.cjs ('proposal' and 'verbal-yes' both read as 'prospect')"
+    },
+    {
+      "findingId": "DW-026",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Workspace setup writes momentum: \"flat\", forecast: \"pipeline\" and createdAt (src/onboarding/seeding/lib/seed-writer.ts:181-183). legacyDealToDeal reads only created_at / updated_at, forecastCategory / forecast_category and the three momentum values (deal-bridge.ts:44-47, 103-105, 117-118), so for these deals no date is read and daysBetween(undefined) is 0 (recovery.ts:34-36): the inactivity factor can never apply while the deal is read from the browser list. Minor, because a signed-in workspace normally reads the table, where the database sets both dates. Accepting the camel-case spellings is correct and touches nothing stored. For momentum, leave 'flat' unset: it was a default written by setup, not something the user chose, and mapping it to 'Neutral' would put a value in the editor the user never entered.",
+      "checked": "src/deal-workspace/lib/deal-bridge.ts:44-47,84-120; src/onboarding/seeding/lib/seed-writer.ts:166-184; src/deal-workspace/lib/recovery.ts:34-39,57-63; ran the real modules in dwv-work/probe/v1.cjs (a setup-written deal came back with no momentum, forecast or dates)"
+    },
+    {
+      "findingId": "DW-027",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Line 113 prints the section heading 'NEXT MOVE' above the fields Next step, Next step date, Forecast and Momentum; the walkthrough shows it in the editor the default screen opens. 'Move' as a noun is the private label the migration map retires, and the field under it already uses the ordinary 'Next step', so the reader is asked to treat the two as the same thing. 'NEXT STEP & FORECAST' names what the section holds and follows the pattern of the heading above it ('ACCOUNT & STAGE').",
+      "checked": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:94-132; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md row 'one move'"
+    },
+    {
+      "findingId": "DW-028",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Line 104 is a plain text input whose handler is patch({ value: Number(v) || 0 }) and whose value is redrawn from the number. Number(\"48,\"), Number(\"$\") and Number(\"48k\") are NaN, so the amount becomes 0 the moment a comma, dollar sign or letter is typed, with no message; the oldest version avoids this with type=\"number\" (src/deal-workspace/components/DealHealthForm.tsx:140-155), so the current editor is a step back. A deal saved at 0 drops out of the pipeline total and the at-risk dollar figure. Stripping everything except digits and the decimal point keeps the number the user typed, and inputMode needs only an optional prop on the shared TextInput (src/components/input.tsx:15-36). Known limit, visible to the user rather than silent: the field shows the parsed number, so a typed decimal point is not displayed.",
+      "checked": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:103-105; src/components/input.tsx:15-36; src/deal-workspace/components/DealHealthForm.tsx:139-156"
+    },
+    {
+      "findingId": "DW-029",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The stakeholder name box (line 212) has only a placeholder and the role list (lines 213-220) has nothing; neither sits inside a FormField, which is what gives the other controls their names (src/components/input.tsx:101-103 wraps the control in a <label>). The shared TextInput and Select take no accessible-name prop today (input.tsx:15-22, 61-70). With two or more stakeholders a screen-reader user gets a run of unnamed boxes and lists. An optional ariaLabel prop on the two shared controls is the smallest change and affects no other caller; 'Stakeholder name' and 'Stakeholder role' are plain.",
+      "checked": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:196-239; src/components/input.tsx:15-36,61-113"
+    },
+    {
+      "findingId": "DW-030",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "'Add one' (line 203) depends on the 'Stakeholders' label beside it; read alone it has no object. 'Back' (line 173) calls closeDealEditor, which drops the draft, and Esc or a click outside the drawer do the same (src/components/feedback.tsx:64-68), so the label reads as navigation while the effect is discarding edits. Both minor, as filed. 'Add stakeholder' and 'Cancel' are the conventional labels. Asking before discarding a changed draft is accurate to what happens and uses three short strings; if it is built on the shared Modal, note that its own close button is already labelled 'Cancel' (feedback.tsx:96), so an inline confirm row in the form footer is simpler. forms.test.tsx:57 clicks 'Add one' and must be updated with the label.",
+      "checked": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:166-178,196-205; src/components/feedback.tsx:58-103; src/deal-workspace/ds/forms.test.tsx:53-59"
+    },
+    {
+      "findingId": "DW-031",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Checked each claim. Future Autopsy only copies the loss reason into its deal object (src/future-autopsy/lib/deal-loader.ts:111-117); a search of that area finds no other read, so 'feeds … Future Autopsy' is not true. Founding GTM does use it, in the section titled Loss patterns (src/founding-gtm/lib/sections.ts:586, 646-658), and the readiness assessment counts a lost deal as analysed when it has a reason (src/dashboard/lib/readiness-aggregator.ts:209-212). 'the founding-GTM win/loss section' is not a name the product shows anywhere. The replacement states the two real uses and nothing more.",
+      "checked": "src/deal-workspace/ds/components/LossReasonModalDS.tsx:75-80; src/future-autopsy/lib/deal-loader.ts:111-117; src/founding-gtm/lib/sections.ts:586,646-658; src/dashboard/lib/readiness-aggregator.ts:200-214"
+    },
+    {
+      "findingId": "DW-032",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "A small real point: 'What would have moved this?' leaves out both the object and the direction, so the reader has to supply 'this deal' and 'forward'. It is a placeholder on an optional field, so severity 1 is right. The proposed replacement changes the questions rather than completing them: 'What changed on the buyer's side?' narrows an open question (a loss can turn on the seller's side or a competitor), and 'What would you do differently next time?' is a different question from what would have changed this outcome. Completing the sentence keeps the original judgment, and 'move a deal forward' is the ordinary use the brief's disputed-terms table says stays.",
+      "finalProposed": "\"What changed? What would have moved this deal forward?\" (same text at src/deal-workspace/components/LossReasonModal.tsx:101, see DW-055).",
+      "checked": "src/deal-workspace/ds/components/LossReasonModalDS.tsx:88-95; AUDIT_BRIEF.md §3 disputed terms (move)"
+    },
+    {
+      "findingId": "DW-033",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "DEAL_CSV_COLUMNS writes the stored keys: d.stage, d.momentum, d.forecastCategory, d.lossReason (src/deal-workspace/state.ts:203, 213-215), so the file reads 'evaluation', 'poc', 'best_case', 'champion_left' where the product shows 'Solution Fit', 'PoC / Pilot', 'Best case', 'Champion Left / Reorg'. Stakeholders are not exported. The second builder in src/deal-workspace/lib/export-csv.ts uses STAGE_LABELS and includes stakeholders, and nothing imports it (searched src). Using the labels the product already shows is accurate and the tests assert only row counts (state.test.ts:58-90), so nothing is weakened. 'Value (USD)' matches the editor's field label. Deleting the unused file is safe.",
+      "checked": "src/deal-workspace/state.ts:200-235; src/deal-workspace/lib/export-csv.ts:16-75; src/deal-workspace/lib/deal-shape.ts:30-39,72-78; src/deal-workspace/state.test.ts:58-90"
+    },
+    {
+      "findingId": "DW-034",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Four seeded deals carry forecastCategory:'bestCase' (js/demo-seed-data-smb.js:134, 145; js/demo-seed-data-ent.js:277, 312). The editor's option value is 'best_case' in both versions of the form (src/deal-workspace/ds/components/DealHealthFormDS.tsx:57; src/deal-workspace/components/DealHealthForm.tsx:50), and a search of src and js finds no other reader of either spelling, so the field shows 'Unset' for those deals and the export prints 'bestCase'. Changing the four seed values is correct and affects nothing else.",
+      "checked": "js/demo-seed-data-smb.js:134,145; js/demo-seed-data-ent.js:277,312; src/deal-workspace/ds/components/DealHealthFormDS.tsx:54-60,125-127"
+    },
+    {
+      "findingId": "DW-035",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "All seven strings are in the source (DealWorkspaceDS.tsx:79-97) and render in the previous-version walkthrough (corpus-ds/deal-workspace.txt:63-68). This screen is reachable with ?v4=0 or the room_deal_workspace_v4_off flag (src/deal-workspace/main.tsx:85-90), so it is in scope. 'Forge the evidence' is the metalworking image the interaction patch replaced with opening Pilot Desk, 'Pre-mortem a deal' has an exact approved replacement ('Review deal risk'), and none of the four links names where it goes. The proposal reuses the default screen's link labels, so one destination has one name across versions, and the title names the deal the links will carry (this version does pass the focused deal, lines 85-98).",
+      "checked": "src/deal-workspace/ds/DealWorkspaceDS.tsx:77-102; src/deal-workspace/main.tsx:57-91; corpus-ds/deal-workspace.txt:63-68; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md rows 'Pre-mortem a deal', 'TAKE A DEAL SOMEWHERE IT GETS RESOLVED'"
+    },
+    {
+      "findingId": "DW-036",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "toPulling returns verb: \"Pre-mortem\" (adapters.ts:57) and the card link is t(\"Pre-mortem\") (DealCard.tsx:38); the walkthrough shows 'Pre-mortem United Airlines' in the top bar and 'Pre-mortem · United Airlines' in the Why panel. Batch 03 replaces 'Pre-mortem' with 'Review loss risk', which is what the default screen's link to the same place says (DealWorkspaceV4.tsx:150). I checked how the shared bar prints it: verb and account are separate styled pieces, and the Why button joins them with a dot (src/components/navigation.tsx:134-135, 169), the same pattern other areas use ('Update the deal' + account), so 'Review loss risk' + 'United Airlines' fits without changing the shared bar. Updating the assertion at adapters.test.ts:61 follows the string and does not weaken the test.",
+      "checked": "src/deal-workspace/ds/lib/adapters.ts:51-62; src/deal-workspace/ds/components/DealCard.tsx:37-39; src/components/navigation.tsx:132-135,167-170; src/deal-workspace/ds/lib/adapters.test.ts:59-66; corpus-ds/deal-workspace.txt:3,26,78"
+    },
+    {
+      "findingId": "DW-037",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "HealthStrip.tsx:42 labels the count of deals outside the lower-risk band 'NEED A MOVE'; lines 32-35 print 'N critical', 'N at risk' or 'Pipeline healthy'. The walkthrough shows '1 critical' and 'NEED A MOVE'. 'Move' as the private recommendation noun is the migration map's 'one move' case, and 'critical' is a third name for the band the default screen calls 'High risk'. 'Pipeline healthy' is shown whenever no open deal scores 80 or more, which is less than the phrase claims. I checked the proposed labels against the counts: the stat is critical plus at-risk, which is what 'elevated risk' means on the default screen and the Dashboard; the chip shows the high-band count when there is one, otherwise the middle-band count, which then equals the elevated count. All four labels are accurate.",
+      "checked": "src/deal-workspace/ds/components/HealthStrip.tsx:25-47; corpus-ds/deal-workspace.txt:6,12; src/dashboard/v4/lib/cockpit.ts:177-179,233"
+    },
+    {
+      "findingId": "DW-038",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "RecoveryBoard.tsx:66 and :79 head the two groups 'NEEDS INTERVENTION' and 'KEEP HONEST'; both render (corpus-ds/deal-workspace.txt:19, 38). 'KEEP HONEST' is the clear failure: an instruction with no object, built on a judgment word the owner's 2026-11-09 rule removes, and nothing says it is the lower-risk group. 'NEEDS INTERVENTION' is plain English on its own, but this group is every deal scoring 80 or more, which the default screen and the Dashboard both call elevated risk; one name for one set is the stronger reason to change it. 'ELEVATED RISK' / 'LOWER RISK' match those screens, and the region name 'Open deals in order of risk' says what is ordered and by what, in the form COPY_STANDARD.md §26 prefers.",
+      "checked": "src/deal-workspace/ds/components/RecoveryBoard.tsx:46-88; corpus-ds/deal-workspace.txt:19,38; COPY_STANDARD.md §26"
+    },
+    {
+      "findingId": "DW-039",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "All four strings are in the source (RecoveryBoard.tsx:26, 29, 35, 40). 'Ranks deals by how close they are to going stale' presents the order as a countdown to failure, which the score is not (recovery.ts:12-13 says so), and 'the smallest corrective move' is the private recommendation noun. 'Load the first deal' points at a control no version has (see DW-010). The link goes to /cold-call-studio/ with no return information, unlike every other link out of this area. The replacement text is accurate; one wording change for consistency with DW-010: the same thing is called 'open deals' and 'live deals' in the proposed line 29.",
+      "finalProposed": "Line 26: t(\"NO OPEN DEALS\"). Line 29: t(\"A deal is created when you log a booked meeting in Cold Call Studio. Deals you enter during workspace setup also appear here.\", { class: \"body\" }). Line 35: t(\"Deal Workspace lists open deals in order of risk and shows a recommended next step for each. The order uses time since the last update, next-step status and close date.\", { class: \"body\" }) (the proposed single sentence is 29 words; two sentences read more easily and stay inside the voice check's sentence length). Link: label t(\"Prepare a cold call\"), href buildDealWorkspaceHref({ href: \"/cold-call-studio/\", roomLabel: \"Cold Call Studio\" }).",
+      "checked": "src/deal-workspace/ds/components/RecoveryBoard.tsx:21-44; src/deal-workspace/lib/recovery.ts:4-20; src/deal-workspace/lib/handoff.ts:34-58"
+    },
+    {
+      "findingId": "DW-040",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "FilterChips.tsx:14 labels the inactivity filter 'Stalled' and :22 names the control 'Filter the board'; 'Stalled' renders (corpus-ds/deal-workspace.txt:17). The filter only knows the deal record is 7 or more days old, so 'Stalled' states a conclusion, and the default screen uses a different word for the same filter. The fix should end on one label for both versions. Under DW-019 the accurate label is 'No recent updates', because the time measured is since the deal record changed; if the owner instead keeps the activity wording and makes it true, both versions use the approved 'No recent activity'. The 'This quarter' chip on line 15 changes with DW-018.",
+      "finalProposed": "Line 14: t(\"No recent updates\") (the same label as src/deal-workspace/v4/DealWorkspaceV4.tsx:53 after DW-019; 'No recent activity' on both if the owner keeps the activity wording). Line 15: t(\"Closing this quarter\") per DW-018. Line 22: t(\"Filter deals\").",
+      "checked": "src/deal-workspace/ds/components/FilterChips.tsx:11-27; src/deal-workspace/v4/DealWorkspaceV4.tsx:50-55; corpus-ds/deal-workspace.txt:17"
+    },
+    {
+      "findingId": "DW-041",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "DealCard.tsx:69 passes the raw score and the shared card prints it as a bare numeral (src/components/system.tsx:136). Nothing on the card says it is a risk score or which direction is worse; the default screen shows no score at all. On a fallback screen this is medium at most, as filed. An optional caption on the shared card is the smallest change: existing callers that do not pass it are unaffected, and 'risk score' names the number without inventing a range.",
+      "checked": "src/deal-workspace/ds/components/DealCard.tsx:61-72; src/components/system.tsx:106-141"
+    },
+    {
+      "findingId": "DW-042",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "DealCard.tsx:54 prints 'On pace.' for a lower-risk deal with no risk factors (corpus-ds/deal-workspace.txt:62). Nothing on the card measures pace against a plan; the condition in code is simply that the list of factors is empty. 'No risk factors recorded.' says exactly that.",
+      "checked": "src/deal-workspace/ds/components/DealCard.tsx:43-58; corpus-ds/deal-workspace.txt:62"
+    },
+    {
+      "findingId": "DW-043",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "registry.ts:128 reads 'Add a deal or create one through an upstream workflow.' and renders in the previous version's help panel (corpus-ds/deal-workspace.txt:85). No version of Deal Workspace can add a deal (see DW-010), and 'an upstream workflow' does not tell the user where to go. This is the help layer, which COPY_STANDARD.md §16 says must be the most literal writing. The replacement is accurate; as in DW-010 and DW-039 it should not call the same deals 'open' and 'live' in one sentence.",
+      "finalProposed": "ifStuck: \"An empty page means no open deals are recorded. A deal is created when you log a booked meeting in Cold Call Studio. Deals you enter during workspace setup also appear here.\"",
+      "checked": "src/lib/operator-help/registry.ts:122-129; corpus-ds/deal-workspace.txt:85; COPY_STANDARD.md §16"
+    },
+    {
+      "findingId": "DW-044",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Hero.tsx:24 is the oldest version's only heading, 'Make the board confess where it is weak.', with the button 'Find weakest' (line 36). The oldest version is reachable with ?v4=0&ds=0 or the room_deal_workspace_legacy flag (src/deal-workspace/main.tsx:64-90), so it is in scope. The heading gives the deal list a human act and does not say what the page shows; 'weakest' names no measure. The proposed heading and region name are plain and accurate. The button label needs a correction: the button sets the filter to 'at-risk' and opens the panel's ranked list (lines 31-34), and that list is the first eight open deals in order of risk whatever their band (TargetFolio.tsx:221), so it does not show only deals at elevated risk.",
+      "finalProposed": "Line 24: t(\"Open deals in order of risk\", { class: \"body\" }). Line 36: {t(\"Show highest-risk deals\")} →. Line 21: aria-label t(\"Deal Workspace summary\").",
+      "checked": "src/deal-workspace/components/Hero.tsx:19-49; src/deal-workspace/components/TargetFolio.tsx:217-236; src/deal-workspace/main.tsx:57-91"
+    },
+    {
+      "findingId": "DW-045",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Read InterventionRail end to end: the three rows are built from groupByRail(filteredByQuery) (line 100) and the filter value is only passed to the toolbar and the caption (lines 131-135); nothing uses it to hide a row. So 'Showing only deals in the critical lane.' and the other two captions (lines 292-298) are printed while every row stays on screen, and the buttons toggle keys that mean something else in the other versions (lines 220-251). Making the buttons do what the caption says is a small, contained change. One correction to the names: the second row holds only the first middle-band deal (groupByRail, line 61) and the rest of that band sits in the third row (line 62), so calling the second row and its button 'Elevated risk' would put elevated-risk deals under 'Other'. Name the second row for what it is. For the list's accessible name use the same words as the previous version's control (DW-040).",
+      "finalProposed": "Render a row only when its scope is selected: first row when the filter is 'all' or 'at-risk', second when 'all' or 'stalled', third when 'all' or 'this-quarter'. Caption label (line 309): t(\"Showing\"). Values: t(\"High risk\") / t(\"Review next\") / t(\"Other open deals\") / t(\"All open deals\"). Sentences: t(\"Only deals in the high-risk band.\", { class: \"body\" }) / t(\"Only the next deal to review after the high-risk deals.\", { class: \"body\" }) / t(\"Only the remaining open deals.\", { class: \"body\" }) / t(\"In order of risk, not pipeline stage.\", { class: \"body\" }). Button labels (lines 221, 231, 241): t(\"High risk\"), t(\"Review next\"), t(\"Other\"). List name (line 219): t(\"Filter deals\").",
+      "checked": "src/deal-workspace/components/InterventionRail.tsx:53-64,84-186,219-252,287-315"
+    },
+    {
+      "findingId": "DW-046",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The row names and all six sentences are in the source (InterventionRail.tsx:139-181). 'If you leave them, they're going to drag the rest of the board down' is a prediction the score does not make, delivered as a threat; 'Keep honest' is a judgment word with no object; the third description explains the page layout rather than the deals; 'critical lane', 'the reserve' and 'the board is clean' need translating. Two corrections to the replacement. The second row is one deal, not the elevated-risk band (line 61), so it should not carry the band's name (same point as DW-045). 'Each has several recorded risk factors' can be exact: a score of 150 cannot be reached by one factor (the largest single factor is 100, recovery.ts:59), so every deal in the first row has two or more.",
+      "finalProposed": "Row 1: name t(\"High risk\"); description t(\"Review these this week. Each has two or more recorded risk factors.\", { class: \"body\" }); empty t(\"No open deals are in the high-risk band.\", { class: \"body\" }). Row 2: name t(\"Review next\"); description t(\"The next deal to review after the high-risk deals.\", { class: \"body\" }); empty t(\"No open deals are in the elevated-risk band.\", { class: \"body\" }) ('moderate-risk band' if the middle band is renamed under DW-012). Row 3: name t(\"Other open deals\"); description t(\"The remaining open deals, shown as short tags. Select one to show it in the panel above.\", { class: \"body\" }); empty t(\"No other open deals.\", { class: \"body\" }).",
+      "checked": "src/deal-workspace/components/InterventionRail.tsx:53-64,137-183; src/deal-workspace/lib/recovery.ts:57-94"
+    },
+    {
+      "findingId": "DW-047",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "'Run intervention' only selects the first deal of the first or second row (InterventionRail.tsx:126-130, 253-259); the row buttons 'Recover now' and 'Tighten path' only select that deal (lines 77-78, 393); the search box is labelled 'Search intervention docket' and matches account and champion names (lines 93-97, 209). The labels promise actions that are not performed, and 'docket' and 'rail' are internal names. The replacements describe what each control does. 'Keep honest' at line 79 is never shown as a row button because lower-band deals render as tags, but replacing it with 'View deal' is harmless and removes the phrase from the file.",
+      "checked": "src/deal-workspace/components/InterventionRail.tsx:74-80,91-98,104-133,202-259,369-417"
+    },
+    {
+      "findingId": "DW-048",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "reserveLabelFor returns 'Stale' when the deal has no next step (line 447), which says nothing about how recently it was touched, and 'Healthy' for anything else under the threshold (line 450). TargetFolio.tsx:161 and :226 print the stored band key ('critical', 'at-risk', 'healthy') as the badge text. All confirmed in the source. The proposal fixes three of the four labels but leaves 'At risk' at line 449 for the middle band while mapping the same band to another name in the badges, so one band would still have two names on one page. Take every band label from one place.",
+      "finalProposed": "InterventionRail.tsx:447 t(\"No next step\"); :449 and :450 and TargetFolio.tsx:161 and :226: print LANE_META[lane].title from src/deal-workspace/v4/lib/views.ts (High risk / the middle band's name / Lower risk; the middle band is 'Elevated risk' today and 'Moderate risk' after DW-012), so all three versions name the bands the same way. Move the three band names into src/deal-workspace/lib (beside the band thresholds in recovery.ts) and have views.ts read them from there, so the two older versions do not import from the v4 folder.",
+      "checked": "src/deal-workspace/components/InterventionRail.tsx:443-451; src/deal-workspace/components/TargetFolio.tsx:155-171,220-233; src/deal-workspace/v4/lib/views.ts:25-44"
+    },
+    {
+      "findingId": "DW-049",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "TargetFolio.tsx:71 and :80 present the panel's deal as 'Commissioned case' and 'The deal to work on first. If this one is lost, the rest of the board matters less.' The deal shown by default is the open deal with the highest value (src/deal-workspace/state.ts:122-128), not the highest-ranked by risk, so the claim is unsupported, and the second sentence is a maxim. The label change is right. The proposed body line is only true before the user selects a deal: once a deal is selected it would still say 'Shown by default because it has the highest value'. Make the line follow the same condition as the label.",
+      "finalProposed": "Line 71: {focusedDealId.value ? t(\"Selected deal\") : t(\"Largest open deal\")} (import focusedDealId from \"../state\"). Line 68: aria-label `${focusedDealId.value ? \"Selected deal\" : \"Largest open deal\"}: ${deal.accountName}`. Line 80: focusedDealId.value ? t(\"Select another deal in the list below to show it here.\", { class: \"body\" }) : t(\"Shown by default because it has the highest value. Select any deal in the list below to show it here.\", { class: \"body\" }). OWNER DECISION, unchanged: default this panel to the highest-risk deal instead, as the default screen does.",
+      "checked": "src/deal-workspace/components/TargetFolio.tsx:46-84; src/deal-workspace/state.ts:107-129"
+    },
+    {
+      "findingId": "DW-050",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The four tab names, the count line, the empty line, 'Recover X first.', 'Stalled · no next step set', 'Open 9-field detail', 'Folio view' and the 'Evidence' row label are all in the source (TargetFolio.tsx:33-38, 98, 110, 126, 152-153, 182, 192; FolioDock.tsx:21). 'Drags', 'one-session win', 'weighted truth' and 'recovery queue' are four private names in one tab strip; 'Stalled' is asserted from a missing next step alone. The replacements are accurate with one exception: the fourth tab lists only the first eight deals in order of risk, each with its recommended step (lines 221-231), so 'All open deals' overstates it whenever more than eight are open (both demo books have twelve). Name it for what distinguishes it from the first tab, which shows risk factors.",
+      "finalProposed": "Tabs (lines 34-37): t(\"Deals at risk\"), t(\"Highest-risk deal\"), t(\"Pipeline value\"), t(\"Recommended steps\"). Lines 152-153: `${drags.length} open ${drags.length === 1 ? \"deal\" : \"deals\"} at elevated risk`. Line 182: t(\"No open deals.\", { class: \"body\" }). Line 192: 'Review <strong>{account}</strong> first.' Line 110: t(\"No next step is recorded\"). Line 126: {t(\"Edit deal details\")} →. FolioDock.tsx:21: aria-label t(\"Deal views\"). Line 98: label t(\"Use case\"), values t(\"Not recorded\") or the use case text.",
+      "checked": "src/deal-workspace/components/TargetFolio.tsx:33-38,86-136,141-237; src/deal-workspace/components/FolioDock.tsx:19-41"
+    },
+    {
+      "findingId": "DW-051",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The 'Weighted truth' tab prints the unweighted total (TargetFolio.tsx:200-205) followed by 'Weighted truth = stage probability × value. Stage isn't truth unless next-step truth backs it up.' (line 209). No weighted figure is computed, and the second sentence is an aphorism. The first proposed repair, computing a weighted figure from Deal Workspace's own STAGE_PROB table, should not be made: Quota Workback owns the weighted pipeline number and uses a different table (src/quota-workback/lib/coverage.ts:29-40: prospect 0.1, discovery 0.3, proposal 0.65, negotiation 0.8, unknown 0.3; Deal Workspace's table has prospect 0, discovery 0.1, negotiation 0.75), so the same pipeline would show two different weighted totals. That conflicts with the owner's decision that a number shown in more than one area comes from the area that owns it (AUDIT_BRIEF.md §4). Use the proposal's minimum instead.",
+      "finalProposed": "Lines 204-205: `${fmtMoney(total)} open pipeline across ${all.length} open ${all.length === 1 ? \"deal\" : \"deals\"} (not weighted by stage).` Delete the sentence at line 209. Tab name per DW-050: 'Pipeline value'. If a weighted figure is wanted here later, read it from Quota Workback's coverage calculation rather than a second probability table.",
+      "checked": "src/deal-workspace/components/TargetFolio.tsx:199-215; src/deal-workspace/lib/deal-shape.ts:52-61; src/quota-workback/lib/coverage.ts:29-40,67-68,122; AUDIT_BRIEF.md §4"
+    },
+    {
+      "findingId": "DW-052",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "All of the strings are in the source (HandoffStrip.tsx:46-90): 'CARRY THE RECOVERY FORWARD', 'Push X into intervention.', 'Carries the focal deal into the destination.', 'Pin a deal above first…', 'Pre-mortem this deal', 'Forge the evidence', 'Rehearse the negotiation', 'Deploy an advisor'. This is the strip the area's instructions name. The replacement labels match the default screen. One accuracy point on the sub-line: focal is the computed focused deal (line 34), which is the largest open deal until the user selects one (state.ts:115-129), so 'The selected deal opens with you' is said even when nothing was selected; and the other branch only occurs when there are no open deals, where 'Select a deal above first' cannot be done.",
+      "finalProposed": "Kicker (48): t(\"CONTINUE WORKING THIS DEAL\"). Title (51-52): focal ? `Open ${focal.accountName} in another area` : t(\"Open a deal in another area\"). Sub (56-58): focal ? t(\"The deal shown in the panel above opens with you.\", { class: \"body\" }) : t(\"No open deal is shown above. Choose the deal on the next page.\", { class: \"body\" }). Links (69, 76, 83, 90): t(\"Review deal risk\"), t(\"Run a pilot\"), t(\"Getting to Signed\"), t(\"Call in a favor\"). Region name (46): t(\"Continue working this deal\").",
+      "checked": "src/deal-workspace/components/HandoffStrip.tsx:33-94; src/deal-workspace/state.ts:115-129; src/deal-workspace/v4/DealWorkspaceV4.tsx:303-309"
+    },
+    {
+      "findingId": "DW-053",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "InterventionRail.tsx:110 and TargetFolio.tsx:53-54 both tell the user to add a deal; no version has a control for it (see DW-010). 'The workspace will rank intervention urgency here' is private vocabulary, and the panel promises 'the highest-risk deal' while it shows the highest-value one (DW-049). The TargetFolio text is also not passed through t(). Same replacement as the default screen's empty state, with the same wording correction (one word for open deals).",
+      "finalProposed": "InterventionRail.tsx:110: t(\"No open deals. A deal is created when you log a booked meeting in Cold Call Studio. Deals you enter during workspace setup also appear here.\", { class: \"body\" }). TargetFolio.tsx:53-54: {t(\"No open deal to show.\", { class: \"body\" })}.",
+      "checked": "src/deal-workspace/components/InterventionRail.tsx:102-116; src/deal-workspace/components/TargetFolio.tsx:49-58"
+    },
+    {
+      "findingId": "DW-054",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The oldest version's inline editor has the same four points as the current one: section title 'Next move' over the Next step field (DealHealthForm.tsx:175), '← Back to folio' for a button that discards the edits (lines 362-369), '+ Add' with no object (line 434), and a stakeholder name box with only a placeholder plus an unnamed role list (lines 445-475). 'Folio' is an internal name for the panel. The replacements match those accepted for the current editor (DW-027, DW-029, DW-030). One small change: 'Cancel' should lose the back arrow, which signals navigation.",
+      "finalProposed": "Line 175: t(\"Next step & forecast\"). Line 368: {t(\"Cancel\")} (no arrow). Line 434: + {t(\"Add stakeholder\")}. Add aria-label={t(\"Stakeholder name\")} to the input at lines 445-457 and aria-label={t(\"Stakeholder role\")} to the select at lines 458-475.",
+      "checked": "src/deal-workspace/components/DealHealthForm.tsx:174-177,361-378,425-503"
+    },
+    {
+      "findingId": "DW-055",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "LossReasonModal.tsx:76 and :101 carry the same two strings as the current dialog. The first is inaccurate for the reasons checked under DW-031 (Future Autopsy does not read the loss reason; 'founding-GTM win/loss section' is not a name the product shows), so its replacement stands. The placeholder should take the wording settled under DW-032, which completes the original question instead of replacing it.",
+      "finalProposed": "Line 76: \"Pick the closest reason. Loss reasons appear in Founding GTM's loss-patterns section and count toward your readiness assessment.\" Line 101: \"What changed? What would have moved this deal forward?\"",
+      "checked": "src/deal-workspace/components/LossReasonModal.tsx:73-108; src/future-autopsy/lib/deal-loader.ts:111-117; src/founding-gtm/lib/sections.ts:586,646-658"
+    },
+    {
+      "findingId": "DW-056",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Confirmed in the source: aria-label 'Workspace truth' on the stat tiles (MicroGrid.tsx:31), 'Lane scope' on the scope buttons (InterventionRail.tsx:219), '`${critical} critical`' in the top-bar text (DealWorkspace.tsx:59), and a dialog with role=\"dialog\" and no name (LossReasonModal.tsx:57). A screen-reader user hears the two internal names as region names and the dialog with none. Minor, as filed. One change for consistency: name the scope buttons as the previous version names its filter control ('Filter deals', DW-040), which is also what they do once DW-045 is applied.",
+      "finalProposed": "MicroGrid.tsx:31: t(\"Pipeline totals\"). InterventionRail.tsx:219: t(\"Filter deals\"). DealWorkspace.tsx:59: `${critical} high risk`. LossReasonModal.tsx:57: add aria-label={`Loss reason · ${target.accountName}`}.",
+      "checked": "src/deal-workspace/components/MicroGrid.tsx:30-46; src/deal-workspace/components/InterventionRail.tsx:219; src/deal-workspace/DealWorkspace.tsx:51-62; src/deal-workspace/components/LossReasonModal.tsx:56-62"
+    },
+    {
+      "findingId": "DW-057",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The recipe promises 'Open Deal Workspace pre-filtered to the five most stalled open deals' and sends the ids in ?ids= (src/skills/recipes/whats-at-risk.md:4-12; src/skills/lib/dispatcher.ts:132-148). main.tsx reads only the continuity parameters and acts on focusObject (lines 130-140), and a search of src/deal-workspace finds no read of 'ids'. So if the skill navigates, the page opens unfiltered. Applying the id list in one shared place and showing a line that says where the scope came from, with a way to clear it, is the direct repair; the three views can read one filtered list of open deals so the change is small in each. The new description drops 'most stalled', which the ranking does not conclude. It has to land together with the sending side (DASH-032), otherwise the skill still never arrives.",
+      "checked": "src/skills/recipes/whats-at-risk.md:1-25; src/skills/lib/dispatcher.ts:131-149; src/deal-workspace/main.tsx:125-141"
+    },
+    {
+      "findingId": "DW-058",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "saveDealEdit's catch branch reports the error and returns the deal (persistence.ts:169-172); handleSave then closes the editor exactly as after a successful save (DealHealthFormDS.tsx:73-85; the oldest form does the same, DealHealthForm.tsx:90-100). The user sees the drawer close and the list update and has no way to know the cloud write failed; the next load from the table drops the edit. The local copy and the browser list are written before the cloud call (lines 148-149), so 'It is kept in this browser for now' is accurate. Returning whether the cloud write succeeded and keeping the editor open with a calm, specific message is the right behavior. Four callers take the return value (both forms and both loss-reason dialogs) and persistence.test.ts covers it; all need the new shape.",
+      "checked": "src/deal-workspace/lib/persistence.ts:147-173; src/deal-workspace/ds/components/DealHealthFormDS.tsx:73-85; src/deal-workspace/components/DealHealthForm.tsx:90-100; src/deal-workspace/ds/components/LossReasonModalDS.tsx:37-51"
+    },
+    {
+      "findingId": "DW-059",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "src/deal-workspace/index.html:13 still reads 'Find the weakest deals first. Recovery queue + a board for stepping in before the deal goes lost.' It is static text that shows in link previews and browser history, and 'before the deal goes lost' presents the ranking as a forecast. Minor. The replacement follows the migration map's description of the area ('Review open deals, next steps, and risk') and says what the page shows.",
+      "checked": "src/deal-workspace/index.html:11-14; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md navigation row 'Deal Workspace'"
+    },
+    {
+      "findingId": "DW-060",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "views.ts:42 and :104 caption the lower band 'no immediate risk action'; 'risk action' is not something a seller does, which is the awkward literalism the owner asked to be found. The link at DealWorkspaceV4.tsx:309 reads 'Getting to signed' while the area is 'Getting to Signed' everywhere else, including the workspace map on the same page. Both minor. The capitalisation fix stands. 'No action needed now' says more than is true: a lower-band deal can still have a factor and a recommended step (after DW-021, 'Set a dated next step with the buyer.'), and the row beside the caption would then contradict it. Say that nothing is urgent, and change the row sentence that uses the same phrase.",
+      "finalProposed": "src/deal-workspace/v4/lib/views.ts:42 and :104: \"no urgent action\". src/deal-workspace/v4/DealWorkspaceV4.tsx:103: t(\"No urgent action is needed. Review the next step when the deal changes.\", { class: \"body\" }). DealWorkspaceV4.tsx:309: t(\"Getting to Signed\").",
+      "checked": "src/deal-workspace/v4/lib/views.ts:38-43,104; src/deal-workspace/v4/DealWorkspaceV4.tsx:103,309"
+    },
+    {
+      "findingId": "DW-061",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Under the heading 'What changes if you act' (FollowPeek.tsx:135) two of the three deal answers are further instructions (follow-data.ts:328, 331), and the link under it adds 'Review the recorded conditions and update the next step.' to the recommended step (line 312), which the walkthrough shows as two instructions in a row. Minor, and the file belongs to the shared related-activity card. Two of the proposed sentences claim more than the score does. 'Recording … current activity … lowers its risk score': logged activity does not enter the score (see DW-019). 'Keeping the next step dated keeps this deal in the lower-risk band': a deal with a dated next step can still reach the middle band on the update-time and close-date factors alone (70 + 30). The middle-band sentence already in the file is the right model: a hedged consequence.",
+      "finalProposed": "follow-data.ts:328 (high band): `Updating the missing or overdue items can reduce the recorded risk. Confirm the close date with ${clean}'s buying team before relying on it.` Line 331 (lower band): \"The risk assessment reflects the latest deal information when the next step is kept current.\" Line 312: \"The deal-risk assessment will update when the next step is recorded.\" (the consequence sentence approved in 14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[40]). Route to the reviewer of src/lib/follow.",
+      "checked": "src/lib/follow/follow-data.ts:279-332; src/lib/follow/FollowPeek.tsx:126-146; corpus-smb/deal-workspace.txt:229-233; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/14_HIGH_SEVERITY_INTERACTION_PATCH_MANIFEST.json records[40]"
+    },
+    {
+      "findingId": "DW-062",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Extracted the map's text. Section 2 defines Healthy as 'backed by a real dated next step'; in code the lower band is any score under 80, and a deal with no next step at all scores 60 and sits there (recovery.ts:66-68, 90-94). Section 3 opens with 'Stage is not truth unless these back it up.' Section 4 says the loss reason 'feeds Playbook loss patterns'; no area is called Playbook, and the reason is used by Founding GTM's Loss patterns section and the readiness assessment (checked under DW-031). The map names the bands only as Critical / At-risk / Healthy. This file is scanned by the copy audit and embedded in the tester walkthrough, so wrong statements here get repeated. The proposed rows match the thresholds in recovery.ts exactly. If the middle band is renamed under DW-012, use that name in the 'shown as' note.",
+      "checked": "deliverables/room-capability-maps/deal-workspace-capability-map-2026-07-07.html (sections 2-4, text extracted); src/deal-workspace/lib/recovery.ts:65-94"
+    },
+    {
+      "findingId": "DW-063",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "health-snapshot.ts:59-65 publishes the first five ranked deals whatever their band, with cause: a.causes[0] ?? a.nextMove and stage: a.deal.stage. So a deal with no risk factor is published with its recommended step under the name 'cause', and the only information about the factor is the sentence, which is why the Dashboard matches words in it and reads a day count out of it (src/dashboard/v4/lib/cockpit.ts:188; src/dashboard/lib/snapshot-aggregator.ts:105-111). Adding stable fields beside the existing ones keeps current readers working and gives them data to read instead of text. It depends on the factor list from DW-017.",
+      "checked": "src/deal-workspace/lib/health-snapshot.ts:24-78; src/dashboard/lib/snapshot-aggregator.ts:78-111; src/dashboard/v4/lib/cockpit.ts:188; ran the real modules in dwv-work/probe/v1.cjs (a deal with no factors was published with its recommended step as 'cause')"
+    },
+    {
+      "findingId": "DW-064",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "TIER1 and TIER2 at tools/language-remediation/copy-audit.js:9-10 contain none of the phrases that remain in the two older versions, and the only allowlist entry for this area is the one in InterventionRail.tsx (copy-allowlist.json:849). The scan does cover src, so these files are read; they pass because, apart from that one allowlisted value, none of the listed words occurs in their strings. The original linter spec defines Tier 2 as 'warn and require review', and the control document says neither list is the full specification, so adding review phrases is within their intent and bans nothing. Cost to plan for: the proposed phrases are not rare. Across the scanned paths 'carry the' occurs about 60 times, 'next move' about 48 and 'pre-mortem' about 30 (many in comments and other areas), and each new warning needs a rewrite or a reviewed allowlist entry. A walk of the oldest version (?v4=0&ds=0) is the more direct way to get these screens read.",
+      "checked": "tools/language-remediation/copy-audit.js:9-12,64; tools/language-remediation/copy-allowlist.json:849; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/12_COPY_LINTER_AND_CI_SPEC.md (Tier 2); grep counts over src, supabase/functions, deliverables/room-capability-maps; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/00_ANTAEUS_FINAL_AUDIT_CONTROL.md ('Why the lists differ')"
+    }
+  ],
+  "dispositionChallenges": [
+    {
+      "recordId": "HS-040",
+      "issue": "Evidence is real (the link text 'Set a dated next step with the buyer. Review the recorded conditions and update the next step.' is at corpus-smb/deal-workspace.txt:193, built from src/deal-workspace/lib/recovery.ts:99 and src/lib/follow/follow-data.ts:312). The status is too generous. This record has an approved exact replacement whose second sentence states a consequence ('The deal-risk assessment will update when the next step is recorded.'). The current second sentence is a second instruction that repeats the first, so it does not carry the same meaning, and the reviewer's own DW-061 proposes putting the approved sentence at follow-data.ts:312. Until that change lands the second half of this record is not met. INV-0040 (same string, no replacement specified) can keep its status.",
+      "suggestedStatus": "STILL MISSING"
+    },
+    {
+      "recordId": "HS-094",
+      "issue": "currentText is given as a template ('Account priority {n}/99 · {n} signals · newest: {signal headline}') instead of the rendered text. For the deal this record was captured on, the line renders today as 'Account priority 22/99 · 2 signals · newest: Seasonal ramp — tens of thousands of holiday hires across stores and fulfillment every year' (corpus/deal-workspace.txt:606). The approved replacement also rewrote the signal headline ('newest: seasonal hiring ramp across stores and fulfillment'); that half is unchanged in the seed (js/demo-seed-data-ent.js:87). The reviewer says under INV-0094 that the headline is ordinary English and was kept, which is a fair judgment, but this record's note should say so and quote the rendered line. Status can stand with that correction; the headline itself belongs to the demo-seed reviewer (it is also read out in Cold Call Studio's call lines, corpus/cold-call-studio.txt:171-174).",
+      "suggestedStatus": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY"
+    },
+    {
+      "recordId": "B3-X-061",
+      "issue": "Evidence is real and the status is right today ('No recent activity' at src/deal-workspace/v4/DealWorkspaceV4.tsx:53). It will not survive the reviewer's own DW-019: the filter and the factor behind it measure time since the deal record was updated, not activity, and the accurate label differs from the approved one. If DW-019 is applied, this record and B3-X-064 (whose first clause is '… days since last recorded activity') should be re-recorded as implemented differently for accuracy, with the note that the exact replacement was not kept because it claims more than the code measures. If the owner instead makes the activity wording true, both stay IMPLEMENTED.",
+      "suggestedStatus": "IMPLEMENTED DIFFERENTLY BUT ACCEPTABLY"
+    }
+  ],
+  "missed": [
+    {
+      "id": "DEAL-WORKSPACE-M01",
+      "category": "FUNC",
+      "severity": 2,
+      "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+      "line": 253,
+      "generation": "v4",
+      "state": "Default screen while deals are loading, when the load fails, and in a workspace with no open deals (also the previous and oldest versions, which show their empty states during the load)",
+      "current": "The page has no loading state and no load-error state. state.ts:32 defines `loaded`, but no screen reads it, and it is never set when both the deals table and the browser list are empty (loadDeals falls through to loadFromLegacyMirror, which returns without calling setAllDeals: src/deal-workspace/lib/persistence.ts:81-107, 115-121). With zero open deals buildHero returns calm: true (src/deal-workspace/v4/lib/views.ts:57-61; confirmed by calling it with an empty list), so the headline reads 'No elevated-risk deals in the current ranking. No active deal currently crosses the at-risk threshold.' in green with '$0' / 'at risk right now' (lines 253-261), above 'No live deals yet. Add one, or wait for one from a cold call.' (line 285). A failed load is only reported to error tracking (persistence.ts:94-96).",
+      "problem": "Three different situations look the same and all read as an all-clear: deals have not arrived yet, deals could not be loaded, and there are no deals. A signed-in user on a slow or failed connection sees a green statement that no deal has elevated risk and '$0 at risk right now', which the product does not know. A new workspace gets a risk headline about a ranking that has nothing in it. The reviewer covered the save failure (DW-058) and the empty-list sentence (DW-010) but not these states.",
+      "governing": "AUDIT_BRIEF.md §5 States (empty, loading, error); COPY_STANDARD.md §21 (claims discipline); CLAUDE.md Part II §6 (loading / error: never blank, never swallowed).",
+      "proposed": "(1) Set loaded.value = true when loadDeals finishes on every path (a finally in src/deal-workspace/lib/persistence.ts loadDeals, and at the end of the catch branch in src/deal-workspace/main.tsx:111-123). (2) Add loadFailed: Signal<boolean> to src/deal-workspace/state.ts; set it true in loadDeals' catch and false on success. (3) In DealWorkspaceV4: while !loaded.value show the headline t(\"Loading deals…\") with no dollar figure and no list message. When loaded and there are no open deals, show the headline <b>{t(\"No open deals.\")}</b> in the neutral style, without '$0 / at risk right now'; the list area keeps the DW-010 sentence. When loadFailed.value, show above the views: t(\"Deals could not be loaded from your workspace. This page shows the deals saved in this browser. Reload to try again.\", { class: \"body\" }). Apply the same loading check to src/deal-workspace/ds/components/RecoveryBoard.tsx:21 and src/deal-workspace/components/InterventionRail.tsx:102 so their empty states do not show before the load ends. Add a component test for the three states.",
+      "testsAffected": [
+        "src/deal-workspace/lib/persistence.test.ts",
+        "src/deal-workspace/v4/lib/views.test.ts"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "DEAL-WORKSPACE-M02",
+      "category": "FUNC",
+      "severity": 1,
+      "file": "src/deal-workspace/main.tsx",
+      "line": 130,
+      "generation": "shared",
+      "state": "Arriving from Getting to Signed ('Update the deal') or Call in a Favor with /deal-workspace/?deal=<id>",
+      "current": "The comment at lines 125-129 says a caller may pass `?focusObject=` '(or `?deal=` historically)', but the code reads only readContinuity().focusObject (lines 130-140), and readContinuity does not read `deal` (src/lib/continuity.ts:69-76). Getting to Signed and Call in a Favor both send the deal id in ?deal= (src/getting-to-signed/lib/handoff.ts:69; src/call-in-a-favor/lib/handoff.ts:53).",
+      "problem": "The deal id is ignored. The deal opens only when focusObject also carries an account name that matches; Call in a Favor sends the placeholder 'Advisor deployment' when it has no account name (call-in-a-favor/lib/handoff.ts:57), and two deals at the same account open whichever comes first. The Getting to Signed reviewer filed the same gap from the sending side (GTS-030); it is recorded here because the fix belongs in this file, next to the ?ids= change in DW-057.",
+      "governing": "AUDIT_BRIEF.md §5 Function (URL params, cross-area handoffs).",
+      "proposed": "In src/deal-workspace/main.tsx after the load: const dealParam = new URLSearchParams(window.location.search).get(\"deal\"); const match = (dealParam && allDeals.value.find((d) => d.id === dealParam)) || (focus ? allDeals.value.find((d) => d.id === focus || d.accountName.toLowerCase() === focus.toLowerCase()) : undefined); if (match) openDealEditor(match). Add a test that ?deal=<id> opens that deal when two deals share an account name.",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "DEAL-WORKSPACE-M03",
+      "category": "CLAIM",
+      "severity": 1,
+      "file": "src/deal-workspace/ds/components/RecoveryBoard.tsx",
+      "line": 55,
+      "generation": "ds",
+      "state": "Previous version, workspace where every deal is closed (won or lost), filter on 'All'",
+      "current": "total counts all deals including closed ones (line 19). When there are deals but none is open, ranked is empty, filtered is empty, and the page prints t(\"No deals match the current filter.\") (lines 51-57) with the filter on 'All'.",
+      "problem": "No filter is applied, so the sentence is untrue and sends the user to the filter control to fix something that is not filtered. The actual condition is that there are no open deals.",
+      "governing": "COPY_STANDARD.md §21 (claims discipline); AUDIT_BRIEF.md §5 States (empty).",
+      "proposed": "Lines 54-56: {dealFilter.value === \"all\" ? t(\"No open deals.\", { class: \"body\" }) : t(\"No deals match the current filter.\", { class: \"body\" })}.",
+      "testsAffected": [
+        "src/deal-workspace/ds/ds-components.test.tsx"
+      ],
+      "confidence": "high"
+    },
+    {
+      "id": "DEAL-WORKSPACE-M04",
+      "category": "LANG-B",
+      "severity": 1,
+      "file": "src/deal-workspace/components/InterventionRail.tsx",
+      "line": 381,
+      "generation": "legacy",
+      "state": "Oldest version, a deal row in the first or second row of the list, for a deal with no next step",
+      "current": "The row lists the first risk factor (line 378-379), then adds t(\"No dated next step\") whenever the next-step text is empty (lines 380-382), then t(\"Use case not recorded\") (383-385). For a deal with no recent-update factor the first risk factor is already 'No next step is recorded' (src/deal-workspace/lib/recovery.ts:67), so the row reads 'No next step is recorded' followed by 'No dated next step'.",
+      "problem": "The same fact is printed twice in two wordings, and the second wording is wrong: it is shown for a missing next step, not for a next step without a date (a deal with an undated next step does not get it). Reachable: no next step (60) plus a close date this quarter (30) puts a freshly edited deal in the middle band.",
+      "governing": "ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/01_OWNER_REQUIREMENTS.md required work 10 (duplicate explanations, inconsistent terms).",
+      "proposed": "Replace lines 377-382 with the engine's own sentences: const detailPieces: string[] = [...props.assessment.causes.slice(0, 2)]; and keep the use-case line. The engine already lists 'No next step is recorded' when it applies, so the separate line is not needed.",
+      "testsAffected": [],
+      "confidence": "high"
+    },
+    {
+      "id": "DEAL-WORKSPACE-M05",
+      "category": "LANG-A",
+      "severity": 2,
+      "file": "src/deal-workspace/ds/components/LossReasonModalDS.tsx",
+      "line": 59,
+      "generation": "shared",
+      "state": "Loss-reason dialog on the default screen and the previous version, shown after a deal has been saved as Closed Lost",
+      "current": "The dialog is built on the shared Modal, which adds its own button labelled t(\"Cancel\") beside 'Save the reason' (src/components/feedback.tsx:91-97). That button, Esc and a click outside all call closeLossReason, which only closes the dialog (src/deal-workspace/state.ts:179-181). The deal was already saved as Closed Lost before the dialog opened (src/deal-workspace/ds/components/DealHealthFormDS.tsx:78-84). The oldest version labels the same button 'Skip for now' (src/deal-workspace/components/LossReasonModal.tsx:118). The editor has no loss-reason field and closed deals are not listed anywhere (see DEAL-WORKSPACE-M06), so a skipped reason cannot be added later.",
+      "problem": "'Cancel' in a dialog that appears right after choosing Closed Lost reads as cancelling the loss. It does not: the deal stays lost and only the reason is skipped. A user who picked the wrong stage and presses Cancel believes the change was undone. The dialog is not reached by either walkthrough, so this was read from source.",
+      "governing": "COPY_STANDARD.md §14 (verb + object; a control says what it does); original 12_COPY_LINTER_AND_CI_SPEC.md PR checklist ('CTA predicts the resulting action').",
+      "proposed": "Give the shared Modal an optional cancelLabel prop (default t(\"Cancel\"), so other callers are unchanged) and pass cancelLabel={t(\"Skip the reason\")} from LossReasonModalDS. Add one line under the hint: t(\"The deal is already saved as Closed Lost.\", { class: \"body\" }). In the oldest version change 'Skip for now' (LossReasonModal.tsx:118) to t(\"Skip the reason\") as well, because nothing offers the reason again later.",
+      "testsAffected": [
+        "src/deal-workspace/ds/forms.test.tsx"
+      ],
+      "confidence": "medium"
+    },
+    {
+      "id": "DEAL-WORKSPACE-M06",
+      "category": "FUNC",
+      "severity": 2,
+      "file": "src/deal-workspace/v4/DealWorkspaceV4.tsx",
+      "line": 296,
+      "generation": "v4",
+      "state": "Any screen version after a deal is saved with stage Closed Won or Closed Lost",
+      "current": "All three versions build their lists from open deals only: the default screen from activeDeals (lines 235-236), the previous version in src/deal-workspace/ds/components/RecoveryBoard.tsx:46, the oldest in src/deal-workspace/components/InterventionRail.tsx:86. Closed deals appear only as counts: lines 296-298 here, src/deal-workspace/ds/components/HealthStrip.tsx:44, src/deal-workspace/components/MicroGrid.tsx:41-44. Nothing lists them or opens one.",
+      "problem": "Once a deal is saved as Closed Won or Closed Lost it leaves every list and there is no control that opens it again. A stage chosen by mistake cannot be corrected, a loss reason skipped in the dialog cannot be added, and loss notes cannot be read or edited in this area. The only way back is a link from another area that carries the account name (src/deal-workspace/main.tsx:130-140). The Stage list in the editor offers both closed stages with no warning that the deal will leave the page.",
+      "governing": "AUDIT_BRIEF.md §5 (trace each feature through every interaction state; error handling and recovery); COPY_STANDARD.md §1 (what the user can do next).",
+      "proposed": "Make the two closed counts open the deals they count. In the closed-deals bar (lines 296-300) render each count as a button that shows or hides a short list under the bar: one row per closed deal with account, value, close date, loss reason label where there is one, and an 'Open' button that calls openDealEditor(deal). The editor already loads any deal, and saving a closed deal with an open stage returns it to the lists. OWNER DECISION on the form (a list under the bar, or a 'Closed' filter chip); the previous and oldest versions can link to the same list or stay as they are.",
+      "testsAffected": [],
+      "confidence": "high"
+    }
+  ]
+}

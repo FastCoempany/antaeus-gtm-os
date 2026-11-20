@@ -1,0 +1,548 @@
+{
+  "area": "terms-and-rules",
+  "verdicts": [
+    {
+      "findingId": "TERMS-001",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The label is at src/briefing/components/PatternCard.tsx:117 and the same list on the conflicting-evidence card is headed 'Recommended actions' (src/briefing/components/ContrarianRail.tsx:68), so the default Briefing shows two names for one list. 'Moves' here is the recommendation noun the brief's disputed-terms table names ('Recommended moves'), not an ordinary verb. 'Recommended actions' is the wording already on the screen; BRIEFING-PIPELINE-010 and BRIEFING-UI-014 propose the same. The test at PatternCard.test.tsx:68 is a negative check (queryByText(\"Recommended moves\") is null); change its string to the new label or it passes for the wrong reason.",
+      "checked": "src/briefing/components/PatternCard.tsx:117; src/briefing/components/ContrarianRail.tsx:68; src/briefing/components/PatternCard.test.tsx:68"
+    },
+    {
+      "findingId": "TERMS-002",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The kicker is at DealHealthFormDS.tsx:113, directly above the field 'Next step', and it renders in the default walkthrough (corpus/deal-workspace.txt:152, 391; corpus-smb/deal-workspace.txt:148, 339) because the default drawer uses this form (DealDrawer.tsx:22). 'NEXT STEP' as the kicker would repeat the label of the first field under it and would not name the other three fields in the section (Next step date, Forecast, Momentum). The neighbouring kicker is 'ACCOUNT & STAGE', so the same pattern fits. DW-027 proposes the same text. The oldest form has the same heading as 'Next move' (src/deal-workspace/components/DealHealthForm.tsx:175) and should change with it.",
+      "finalProposed": "DealHealthFormDS.tsx:113: t(\"NEXT STEP & FORECAST\"). Oldest form, src/deal-workspace/components/DealHealthForm.tsx:175: t(\"Next step & forecast\").",
+      "checked": "src/deal-workspace/ds/components/DealHealthFormDS.tsx:95-131; src/deal-workspace/ds/components/DealDrawer.tsx:22; src/deal-workspace/components/DealHealthForm.tsx:175"
+    },
+    {
+      "findingId": "TERMS-003",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The kicker 'SHARE THIS KIT' is at SharePanel.tsx:175, 191 and 211 and the aria-label at 173, 189 and 209. The panel opens from the default Founding GTM screen (src/founding-gtm/v4/FoundingGtmV4.tsx:88) and renders in both walkthrough books (corpus/founding-gtm.txt:84, corpus-smb/founding-gtm.txt:87). The title two lines below already says 'the handoff document', and the migration map retires 'handoff kit'. The replacement is four words (inside the six-word label limit) and uses the name the screen already uses. READINESS-041 proposes the same two strings.",
+      "checked": "src/founding-gtm/components/SharePanel.tsx:173-211; src/founding-gtm/v4/FoundingGtmV4.tsx:54-88"
+    },
+    {
+      "findingId": "TERMS-004",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The three sentences are at SharePanel.tsx:213, 216-218 and 259-260, as plain JSX text outside t(). Each uses 'the kit' for what the rest of the screen calls the handoff document. The replacements change only that noun, keep 'snapshot' (which matches the row button 'Refresh snapshot' at line 341 and the revoke action at 349, both of which exist), and 'a new hire' matches the signed-out title at line 177. READINESS-041 offers 'fixed copy' instead of 'snapshot'; keep 'snapshot' so the sentence and the button use one word.",
+      "checked": "src/founding-gtm/components/SharePanel.tsx:209-260, 341-349"
+    },
+    {
+      "findingId": "TERMS-005",
+      "real": "AMENDED",
+      "fix": "AMENDED",
+      "reason": "The section name is at workspace-tables.ts:97 and renders in the 'What's included?' list as 'Things the system noticed — observations about your work' (corpus-smb/settings.txt:29). It is a section heading that narrates what the system perceived, which the migration map row 'what the system saw' retires and COPY_STANDARD §9 lists ('notices'). Severity should be 1, not 2: the same line names the records plainly, so a first-time user is not left guessing. The proposed 'Automatic observations' would render 'Automatic observations — observations about your work', a repeat the reviewer noticed. The list already drops a table label that equals its section name (SettingsV4.tsx:225), which is why 'Deals' and 'Pilots' show as one plain line. Giving the section the table's own label uses that and needs no second rename. Restore reads Object.values(sections) (cloud-sync.ts:484), so files downloaded under the old name still restore.",
+      "finalProposed": "workspace-tables.ts:97: observations: \"Observations about your work\" (the table label at line 172 stays the same, so the list shows the single line 'Observations about your work'). Update the section name in src/settings/lib/cloud-sync.test.ts:333, 425 and src/settings/lib/workspace-export-formats.test.ts:36, 37, 46, 111.",
+      "checked": "src/settings/lib/workspace-tables.ts:85-102, 172; src/settings/v4/SettingsV4.tsx:222-231; src/settings/lib/cloud-sync.ts:481-486"
+    },
+    {
+      "findingId": "TERMS-006",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Both strings are at BriefingLead.tsx:28-29 and the component is mounted on the default Briefing (BriefingV4.tsx:8). 'The read' is the noun use the original Briefing rewrite removes (07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md line 186: remove read as the generic noun for analysis). The block holds the one or two sentence summary the weekly run writes, so 'This week's market summary' says what it is in four words. BRIEFING-PIPELINE-011 proposes 'Summary of this week's analysis' for the same two strings; either is accurate, and the fix stage should apply one.",
+      "checked": "src/briefing/components/BriefingLead.tsx:22-32; src/briefing/v4/BriefingV4.tsx:8"
+    },
+    {
+      "findingId": "TERMS-007",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The three strings are at EmptyState.tsx:21, 25 and 31. The populated list calls the same items 'market updates' (PatternList.tsx:31), so 'market reads' in the empty state is a second, unexplained name. Two corrections to the replacement. First, the second sentence describes the wrong lists: this empty state belongs to the market-pattern list, while untracked companies and conflicting evidence have their own sections (PeripheryRail, ContrarianRail). A pattern is a recurring development with evidence and recommended actions (PatternCard.tsx), which is also how the original rewrite describes it. Second, 'evidence that disagrees with an assumption' should not be carried into new text: the section on the same screen is named 'Evidence that conflicts with an assumption' (ContrarianRail.tsx:96-98) and the migration map replaces 'the data disagrees'. BRIEFING-UI-019 rewrites the same strings with the noun 'analysis'; the fix stage should apply one version.",
+      "finalProposed": "Line 21: \"There are no market updates for this week yet.\" Line 25: \"Market updates appear here after the weekly market review runs. Each one summarizes a recurring development in your target market, with the evidence for it and recommended actions.\" Line 31: \"Each update lists its sources. You can open it to see the articles it used, how it was written and checked, and what it cost to produce.\"",
+      "checked": "src/briefing/components/EmptyState.tsx:16-36; src/briefing/components/PatternList.tsx:23-36; src/briefing/components/ContrarianRail.tsx:96-98"
+    },
+    {
+      "findingId": "TERMS-008",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The aria-label is at PatternList.tsx:29 and the visible count in the same region, at line 31, says 'N market update(s) this week'. The replacement makes the accessible name match the visible text.",
+      "checked": "src/briefing/components/PatternList.tsx:28-32"
+    },
+    {
+      "findingId": "TERMS-009",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The group label is at MarksBar.tsx:56. 'Rate this market update' matches the count line on the same list. BRIEFING-UI-022 proposes 'Rate this analysis' for the same attribute; either is plain, and the fix stage should apply one.",
+      "checked": "src/briefing/components/MarksBar.tsx:53-57"
+    },
+    {
+      "findingId": "TERMS-010",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The sentence is at ShowYourWork.tsx:56 and the aria-label at line 68. 'This read' and 'Reads created from now on' use the noun the original Briefing rewrite removes. The replacement changes only that noun and stays accurate: the branch renders when no source record exists for the card. BRIEFING-PIPELINE-025 proposes the same change with 'analysis'; the fix stage should apply one noun.",
+      "checked": "src/briefing/components/ShowYourWork.tsx:52-68"
+    },
+    {
+      "findingId": "TERMS-011",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The labels are at reads.ts:78-81 and 112 and print as '+ N <label>' (BriefingV4.tsx:429). 'Gone quiet' is the phrase the original rewrite replaced with 'No recent activity' (09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md line 70), and 'reads' is the retired noun. Four of the five replacements match what the checks record (supabase/functions/heartbeat/generators.ts:157, 237, 250, 307). The label for the discovery-call check is nine words and awkward; a shorter one says the same thing. BRIEFING-UI-010 covers the same lines.",
+      "finalProposed": "Line 78: \"more accounts with no new signals\". Line 79: \"more deals with no stage change\". Line 80: \"more pilots past their end date\". Line 81: \"more notes on discovery-call activity\". Line 112: \"more observations like these\".",
+      "checked": "src/briefing/v4/lib/reads.ts:77-113; src/briefing/v4/BriefingV4.tsx:426-431; supabase/functions/heartbeat/generators.ts:149-162, 235-255, 298-312, 355-358"
+    },
+    {
+      "findingId": "TERMS-012",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The four labels are at workspace-tables.ts:153, 155, 159 and 161 and render in the Briefing row of the download and delete list (corpus-smb/settings.txt:28). 'Briefing reads' is the retired noun in a list whose job is to say exactly what is downloaded or deleted. The replacements use 'market updates', the name the Briefing list gives these items (PatternList.tsx:31). No test asserts the label text (workspace-tables.test.ts:147-151 only checks that labels are non-empty and have no underscore).",
+      "checked": "src/settings/lib/workspace-tables.ts:149-164; src/settings/lib/workspace-tables.test.ts:147-151"
+    },
+    {
+      "findingId": "TERMS-013",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The sentence is at LandingStep.tsx:79, on the last step of the default onboarding flow. 'Still lives in your head' is the readiness metaphor the original remediation replaced (05_COPY_IMPLEMENTATION_MANIFEST_BATCH_01.json exact_replacements[34]) and the brief's disputed-terms table says to state the condition instead. The same line was filed and verified as ONBOARDING-013; its verified text states the condition, names what the user entered, and avoids describing the gap by what is absent ('is not written down for them'). Use that text so the two reviews give one answer.",
+      "finalProposed": "LandingStep.tsx:79 — 'The workspace now has who you sell to, {a} and {d}, and it flags deals that need attention. The rest of your sales process is not documented for another seller, so a new hire would still depend on you. Each week of recorded outreach, calls and deal updates makes it easier for someone else to pick up.' where {a} is '1 account' / '{n} accounts' from draft.accountNames.length and {d} is '1 open deal' / '{n} open deals' from draft.deals.length (validate the template through t(), then replace). This is the text verified for ONBOARDING-013.",
+      "checked": "src/onboarding/seeding/components/LandingStep.tsx:74-82; src/onboarding/seeding/draft.ts:51-52; audit/onboarding.verify.json ONBOARDING-013"
+    },
+    {
+      "findingId": "TERMS-014",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The sentence is built at supabase/functions/heartbeat/generators.ts:300-307 and mirrored at src/lib/observations/generators/proof-staleness.ts:63-69. It calls the pilot a 'proof' and its end date a 'readout window' in the product's own voice, while Pilot Desk says success criteria, 'approves the result' and pilot end date (src/pilot-desk/v4/PilotDeskV4.tsx:100, 418-423). The claim column holds the first line of the success criteria (src/pilot-desk/lib/poc-bridge.ts:183-196), so 'The pilot \"<criterion>\"' reads correctly. One addition: the current code prints '1 days ago'; write the singular while the line is being changed. The day-count readers still match (src/briefing/v4/lib/reads.ts:56 uses /(\\d+)\\s+day/). The test named 'falls back to pilot proof' is at proof-staleness.test.ts:106-112. BRIEFING-UI-012 covers the same lines with near-identical wording.",
+      "finalProposed": "In both files: subject = claim ? `The pilot \"${claim}\"` : \"A pilot\"; ownerClause = owner ? ` ${owner} approves the result.` : \"\"; overdueClause = daysOverdue === 0 ? \"reaches its planned end date today\" : `passed its planned end date ${daysOverdue} day${daysOverdue === 1 ? \"\" : \"s\"} ago`; text = `${subject} ${overdueClause} and no result is recorded.${ownerClause}`. Keep relatedObjectType \"proof\" and the generator id. Update proof-staleness.test.ts:106-112 to expect 'A pilot'.",
+      "checked": "supabase/functions/heartbeat/generators.ts:289-312; src/lib/observations/generators/proof-staleness.ts:60-77; src/lib/observations/generators/proof-staleness.test.ts:93-112; src/pilot-desk/lib/poc-bridge.ts:183-207"
+    },
+    {
+      "findingId": "TERMS-015",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "generators.ts:150 takes the stored stage value and line 157 prints it, so the sentence reads 'has been at poc for 12 days'. The stored values are the stage ids (src/deal-workspace/lib/deal-shape.ts:19-27) and Deal Workspace shows 'PoC / Pilot', 'Verbal Commit' and 'Solution Fit' for them (deal-shape.ts:30-39). The label map uses those exact labels. One gap in the proposed code: it drops the existing fallback, so a blank stage would print 'in the  stage'. Keep a fallback clause. The parsers that read the number still match 'for N days' (src/dashboard/lib/week-reads-filter.ts:29). BRIEFING-UI-042 proposes the same change but labels poc as 'Pilot'; use Deal Workspace's label so the sentence and the stage column agree.",
+      "finalProposed": "supabase/functions/heartbeat/generators.ts: add `const STAGE_LABEL: Record<string, string> = { prospect: \"Prospect\", discovery: \"Discovery\", evaluation: \"Solution Fit\", poc: \"PoC / Pilot\", negotiation: \"Negotiation\", verbal: \"Verbal Commit\" };`. At line 150: `const stageKey = d.stage.trim(); const stageClause = stageKey ? `in the ${STAGE_LABEL[stageKey] ?? stageKey} stage` : \"at an early stage\";`. At line 157: `${account} has been ${stageClause} for ${daysAtStage} days with ${nextStepClause}.`. Same change in src/lib/observations/generators/deal-decay.ts:149-154 (it can import STAGE_LABELS from src/deal-workspace/lib/deal-shape.ts). Update deal-decay.test.ts:230 to expect \"Negotiation\".",
+      "checked": "supabase/functions/heartbeat/generators.ts:128-162; src/lib/observations/generators/deal-decay.ts:147-154; src/deal-workspace/lib/deal-shape.ts:19-39; src/lib/observations/generators/deal-decay.test.ts:222-231"
+    },
+    {
+      "findingId": "TERMS-016",
+      "real": "AMENDED",
+      "fix": "CONFIRMED",
+      "reason": "The three strings are at phase-f-generators.ts:86, 98 and 103, and humanizeSkillId (line 129) title-cases the stored id, so the text names 'Cast Proof For Hottest Deal' although the shortcut's label is 'Plan a pilot for the highest-risk deal' (src/skills/recipes/cast-proof-for-hottest-deal.md:3). 'Without a parameter override' is not checked: the detector only compares the run count with a threshold (lines 152-170). One correction to the state: this text cannot reach a screen today. The writer's voice check reads a field that does not exist (phase-f-writer.ts:69 tests v.ok; the validator returns valid) and throws for every candidate, which BACKEND-CONTRACTS-030 reports and its verifier reproduced. The suggestion band does not appear in any of the three walkthroughs. The text will start to render when that defect is fixed, so it should be corrected in the same change. The replacement says what accepting does (the accepted settings are applied when the shortcut is opened by hand, src/skills/lib/phase-f-overrides.ts). One more test to update than the finding lists: phase-f-generators.test.ts:130-133 expects the title to contain 'Whats At Risk'. BRIEFING-UI-013 proposes similar sentences for the same lines.",
+      "checked": "supabase/functions/heartbeat/phase-f-generators.ts:84-134, 152-170; supabase/functions/heartbeat/phase-f-writer.ts:59-78; supabase/functions/heartbeat/voice-document.ts:113-166; src/skills/recipes/*.md; src/lib/phase-f/phase-f-generators.test.ts:130-148"
+    },
+    {
+      "findingId": "TERMS-017",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The strings are at phase-f-generators.ts:107, 115 and 119 and humanizeRoom (line 122) title-cases stored area ids, which include the retired names (src/lib/session/types.ts:50-57). The finding is right that the text has no input today: nothing outside src/lib/session calls setFocusedObject or pushRecentAction, so the check reads an empty list (phase-f-generators.ts:318-342). Severity 1 fits. The replacement names the current areas and describes what accepting does (an extra run of an existing check whose results appear under 'Your work'), instead of promising a 'short read at the top of your weekly brief'. The test at phase-f-generators.test.ts:167-171 expects 'weekly brief' and needs the new wording. BRIEFING-UI-013 covers the same lines.",
+      "checked": "supabase/functions/heartbeat/phase-f-generators.ts:106-127, 312-362; src/lib/session/types.ts:44-64; src/lib/phase-f/phase-f-generators.test.ts:150-171"
+    },
+    {
+      "findingId": "TERMS-018",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The four documents are built at src/pilot-desk/lib/docs.ts:82-161 and the quoted lines are there ('buyer-owned proof' 89, 'kill rules' 94, 'proof window' 98, 'decision proof' 102, 'proof claim' 106, 'the next move' 138, 'start the proof window' 159). They are written to be sent to a buyer and they use the product's retired names for the pilot's result, where the original rewrite asks for standard pilot language: success criteria, approver, end date, results summary (07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md line 200). Five corrections to the replacement. (1) The results-meeting agenda says 'Restate the decision question', so lines 89 and 125 must be the same sentence; the proposal gives two. (2) The label on the default screen is 'Who approves the result' (PilotDeskV4.tsx:423); use it instead of 'Result approver'. (3) The documents are titled PoC throughout, so do not switch to 'pilot' inside two lines. (4) 'instead of running on without one' is awkward. (5) The shared quality text on the same screens already calls these 'stop criteria' (src/pilot-desk/lib/quality.ts:124, 278), so use that term rather than 'stop conditions'. Two line numbers are off by one: the owner line is 85, and the email lines are 156-157.",
+      "finalProposed": "docs.ts — line 67 fallback \"[Who approves the result]\". Line 85 `Who approves the result: ${owner}`. Lines 89 and 125 (same sentence) `Can ${vendor} produce enough evidence for ${account} to make an expand / pause / stop decision?`. Line 94 \"Boundaries and stop criteria:\". Lines 97-100 \"The results meeting must answer:\\n1. What changed during the PoC?\\n2. Which criteria passed, failed, or stayed ambiguous?\\n3. What decision is now justified?\". Line 102 \"If the person who approves the result is not in the results meeting, the results cannot be used for the decision.\" Line 106 \"1. Confirm what the PoC has to show.\" Lines 115-117 \"4. Confirm who approves the result and the results meeting.\\nApprover: ${owner}\\nResults meeting: ${fmtDate(end)}\". Line 120 \"If the results cannot support a decision by the end date, the PoC stops instead of being extended.\" Line 122 `POC RESULTS MEETING AGENDA - ${account}`. Line 136 \"- Stop if a stop criterion was met.\" Line 138 \"5. Agree the next step.\" Line 142 `Subject: ${account} PoC scope and who approves the result`. Lines 156-157 `Who approves the result: ${owner}\\nResults meeting: ${fmtDate(end)}`. Line 159 \"If this still matches how you want to evaluate, we can confirm the PoC and set the start date.\" Keep the ProofDocs keys (scope, kickoff, readout, email). Update src/pilot-desk/lib/docs.test.ts:17 to the new agenda title.",
+      "checked": "src/pilot-desk/lib/docs.ts:56-164; src/pilot-desk/lib/docs.test.ts:15-18; src/pilot-desk/v4/PilotDeskV4.tsx:418-428"
+    },
+    {
+      "findingId": "TERMS-019",
+      "real": "AMENDED",
+      "fix": "AMENDED",
+      "reason": "The three notes are at src/call-in-a-favor/state.ts:236, 238 and 240 and are saved on the request record (advisor-bridge.ts:205). One correction to where they appear: no screen prints this note. The field at ds/components/DeskSide.tsx:162 (and components/SecondaryStack.tsx:177) is the contact's own notes, a different field. The request note reaches a reader only through the stored row and the Settings download. Severity 1 fits. 'Backchannel Desk' names a place the product does not have and 'spending advisor trust' is the retired model; 'Rerouted before sending.' is ordinary English and matches the button that sets it ('Reroute', ds/components/AskDesk.tsx:193), so it can stay. The test at state.test.ts:375-380 expects 'Ask sent', 'Held' and 'Rerouted'; only the first needs a new string.",
+      "finalProposed": "state.ts:236 \"Request sent from Call in a Favor.\" Line 238 \"Held: not sent.\" Line 240 unchanged. Update state.test.ts:377 to expect \"Request sent\". Notes already stored stay as they are.",
+      "checked": "src/call-in-a-favor/state.ts:222-245; src/call-in-a-favor/lib/advisor-bridge.ts:205; src/call-in-a-favor/ds/components/DeskSide.tsx:159-165; src/call-in-a-favor/state.test.ts:375-380"
+    },
+    {
+      "findingId": "TERMS-020",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The label is at BriefingV4.tsx:335, above a suggestion with the buttons 'Yes, make the change' and 'Later' and a close button named 'Dismiss this suggestion' (line 359). A one-word 'NOTICED' leaves the reader to supply who noticed what; COPY_STANDARD §9 lists 'notices'. 'SUGGESTION' matches the close button's own word. The band is not in any walkthrough because suggestions are not being written today (see TERMS-016), so this was checked in source only. BRIEFING-UI-005 proposes 'SUGGESTED CHANGE' for the same label; either is plain, and the fix stage should apply one.",
+      "checked": "src/briefing/v4/BriefingV4.tsx:319-366"
+    },
+    {
+      "findingId": "TERMS-021",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The prompt lines are where the finding says: contrarian-shared.ts:161 and its test copy src/briefing/lib/synthesis/contrarian.ts:161 ('<verb-led move>'), compose-shared.ts:57, 61 and 71 ('triggers fired', 'TRIGGER FIRES THIS RUN'), and briefing-pattern-critic/prompt.ts:134 ('Recommended moves:'). These are the names the model is given for the things it writes about, and the screen calls them recommended actions and matched monitoring rules. Severity 1 fits: the risk is a model repeating its input. One omission: the lead-sentence prompt has a test copy at src/briefing/lib/compose/lead.ts:81, 85 and 95 with the same three strings, and src/briefing/lib/compose/lead.test.ts:97-99 asserts '(no triggers fired this run)'. Both copies must change together. BRIEFING-PIPELINE-014 proposes '<recommended action, starting with a verb>' for line 161; either wording works.",
+      "finalProposed": "contrarian-shared.ts:161 and src/briefing/lib/synthesis/contrarian.ts:161: \"<verb-led recommended action>\". compose-shared.ts:57 and src/briefing/lib/compose/lead.ts:81: \"(no monitoring rules matched this run)\". compose-shared.ts:61 and lead.ts:85: `- \"${f.trigger_natural_language}\" matched: ${f.fire_summary} (${f.evidence_count} items)`. compose-shared.ts:71 and lead.ts:95: \"MONITORING RULES MATCHED THIS RUN:\". briefing-pattern-critic/prompt.ts:134: \"Recommended actions:\". Update lead.test.ts:97-99 to the new string. Field names (recommended_moves, trigger_fires) unchanged.",
+      "checked": "supabase/functions/briefing-pipeline/llm/contrarian-shared.ts:159-162; supabase/functions/briefing-pipeline/llm/compose-shared.ts:56-72; supabase/functions/briefing-pattern-critic/prompt.ts:134; src/briefing/lib/compose/lead.ts:81-95; src/briefing/lib/compose/lead.test.ts:97-99"
+    },
+    {
+      "findingId": "TERMS-022",
+      "real": "AMENDED",
+      "fix": "AMENDED",
+      "reason": "Part of this is wrong and part is right. Wrong: the eleven Discovery script files are scanned. copy-audit.js:84-85 adds every js/discovery-segment-runtime*.js file to the list beside TARGETS, and copy-audit.test.js:14 exercises one. Right: privacy.html, terms.html, index.html, preview.html, auth/callback/index.html, js/demo-seed-runtime.js, js/onboarding.js and js/supabase-config.js are served (tools/deploy/build-cloudflare-assets.js:30-65; the two scripts are loaded by login.html, signup.html and the sign-in callback) and are not in TARGETS; the Tier-2 pattern at line 65 matches exact word forms, so plurals pass; js/discovery-frameworks.js is scanned although no page loads it. The 17 mockup pages are served and unscanned, with 13 uses of 'you are the system' and 7 of 'the machine' by a case-insensitive count (the finding says 15). That part is not an open defect: the owner's 2026-11-09 note (CLAUDE.md session log) records them as gated, noindexed mockups left on purpose, to be rewritten when one is promoted, and ONBOARDING-072 was verified on that basis. Adding the eight served files is safe today: none contains a Tier-1 phrase (checked with the tool's own pattern); js/onboarding.js and js/supabase-config.js add Tier-2 review rows only.",
+      "finalProposed": "tools/language-remediation/copy-audit.js: add to TARGETS \"privacy.html\", \"terms.html\", \"index.html\", \"preview.html\", \"auth/callback/index.html\", \"js/demo-seed-runtime.js\", \"js/onboarding.js\", \"js/supabase-config.js\". Do not add the Discovery script files (line 84 already includes them). Build each Tier-2 pattern with an optional plural (`${esc(phrase)}s?`); Tier-2 rows are review warnings, so this cannot fail the gate. Remove \"js/discovery-frameworks.js\" from TARGETS only if the unused file is deleted. Record the 17 mockup pages as excluded review mockups in the audit's scope notes, citing the owner's 2026-11-09 note; no owner decision is needed unless one of them is to be promoted or unpublished.",
+      "checked": "tools/language-remediation/copy-audit.js:9-12, 65, 84-85; tools/language-remediation/copy-audit.test.js:14; tools/deploy/build-cloudflare-assets.js:30-118; src/discovery-studio/index.html:30-40; CLAUDE.md session log 2026-11-09"
+    },
+    {
+      "findingId": "TERMS-023",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "src/call-in-a-favor/index.html:6 is '<title>Advisor Deploy | Antaeus GTM OS</title>'. Nothing sets the title at runtime (no document.title in src) and no test asserts it. The browser tab, history and bookmarks show the retired name for the default page.",
+      "checked": "src/call-in-a-favor/index.html:6; grep document.title / toHaveTitle in src, tests, tools"
+    },
+    {
+      "findingId": "TERMS-024",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "src/pilot-desk/index.html:6 is '<title>PoC Framework | Antaeus GTM OS</title>'. Same check as TERMS-023: no runtime title and no test on it.",
+      "checked": "src/pilot-desk/index.html:6"
+    },
+    {
+      "findingId": "TERMS-025",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "src/prospecting-desk/index.html:6 is '<title>Sourcing Workbench | Antaeus GTM OS</title>'. Same check as TERMS-023.",
+      "checked": "src/prospecting-desk/index.html:6"
+    },
+    {
+      "findingId": "TERMS-026",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "src/getting-to-signed/index.html:6 is '<title>Negotiation | Antaeus</title>'. Same check as TERMS-023. The replacement also changes the suffix to 'Antaeus GTM OS', which is what most area pages use; harmless.",
+      "checked": "src/getting-to-signed/index.html:6"
+    },
+    {
+      "findingId": "TERMS-027",
+      "real": "AMENDED",
+      "fix": "CONFIRMED",
+      "reason": "The placeholder is at handoff.ts:57, 71 and 85 and the test at handoff.test.ts:80-83 expects it. The project's rule is stated in deliverables/audit/continuity-params-2026-05.md, Invariant 8, and the fourth builder in the same file already follows it (line 92 comment). One correction to where it shows: the previous screen calls these builders from ds/components/AskDesk.tsx:198-213, only when a deal is selected, so the placeholder appears there only for a deal with a blank account name. It is reachable on the oldest screen, where the links render with no deal selected (components/SecondaryStack.tsx:338-367). The change is correct and minimal: buildAdvisorRoomHref already leaves the parameter out when it is empty (line 35). Changing the test to expect no focusObject parameter corrects it; it does not weaken it.",
+      "checked": "src/call-in-a-favor/lib/handoff.ts:24-88; src/call-in-a-favor/lib/handoff.test.ts:80-83; src/call-in-a-favor/ds/components/AskDesk.tsx:198-213; src/call-in-a-favor/components/SecondaryStack.tsx:336-378; deliverables/audit/continuity-params-2026-05.md:115-121"
+    },
+    {
+      "findingId": "TERMS-028",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The kicker is at TopbarDS.tsx:15. 'The daily read' names the Briefing with the retired noun. 'DAILY SUMMARY' would sit directly above the heading 'What changed this week.' (line 16), so the kicker and heading would disagree about the period. The default screen's kicker is the single word 'BRIEFING' (BriefingV4.tsx:317); use that. BRIEFING-UI-046 proposes the same kicker and also rewrites the heading and the sentence under it (lines 16-21), which this finding does not cover. The note about retiring the ?v4=0 fallback is an owner decision and should stay one.",
+      "finalProposed": "TopbarDS.tsx:15: t(\"BRIEFING\"). Apply the heading and sub-line from BRIEFING-UI-046 in the same edit.",
+      "checked": "src/briefing/ds/components/TopbarDS.tsx:12-24; src/briefing/v4/BriefingV4.tsx:317"
+    },
+    {
+      "findingId": "TERMS-029",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The skip link is at BriefingDS.tsx:53 and the oldest screen has the same text at Briefing.tsx:50, outside t(). The replacement would be inaccurate half the time: the link jumps to the main region, which shows 'Your work' by default and 'Your market' only after the view is switched (BriefingDS.tsx:47-48). The default screen's link says 'Skip to your work' because that screen always starts there. For these two screens the link target is the whole page body, so name it that way.",
+      "finalProposed": "BriefingDS.tsx:53: t(\"Skip to main content\"). Briefing.tsx:50: the same string, wrapped in t().",
+      "checked": "src/briefing/ds/BriefingDS.tsx:46-58; src/briefing/Briefing.tsx:44-53; src/briefing/v4/BriefingV4.tsx:309"
+    },
+    {
+      "findingId": "TERMS-030",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The quoted strings are at WorkspaceReads.tsx:51, 75, 76, 127/142/152/168, 155 and 220, and the component renders on the previous and oldest Briefing screens. The replacements are accurate but cover only part of the file. The same component also shows 'Deals going stale' (74), 'Discovery rhythm' (77), 'Reading your work…' (145), 'WORKSPACE · NOTHING TO SURFACE' (153), 'YOUR WORK · THIS WEEK' (170) and 'N reads surfaced' (172-173). BRIEFING-UI-044 and -045 give one consistent set for all of them; apply that set so the file is changed once. The dismiss button on the default screen is named 'Dismiss this analysis' (BriefingV4.tsx:411); use the same name here. The tests at WorkspaceReads.test.tsx:43-45, 58-60 and 75 assert the old strings and need the new ones.",
+      "finalProposed": "WorkspaceReads.tsx — line 51 \"Couldn't load changes in your deals and accounts.\"; group labels (74-77) \"Deals with no stage change\", \"Watched accounts with no new signals\", \"Pilots past their end date\", \"Discovery-call activity\"; aria-label (127, 142, 152, 168) \"Changes in your deals and accounts\"; line 145 \"Loading changes in your deals and accounts…\"; line 153 \"YOUR DEALS AND ACCOUNTS\"; line 155 \"No material changes are currently detected in your active deals or watched accounts.\"; line 170 \"CHANGES IN YOUR DEALS AND ACCOUNTS\"; lines 172-173 `${n} change${n === 1 ? \"\" : \"s\"} detected`; line 220 \"Dismiss this analysis\". Update WorkspaceReads.test.tsx:43-45, 58-60, 75.",
+      "checked": "src/briefing/components/WorkspaceReads.tsx:42-55, 74-77, 122-175, 220; src/briefing/components/WorkspaceReads.test.tsx:38-76; src/briefing/v4/BriefingV4.tsx:394-411"
+    },
+    {
+      "findingId": "TERMS-031",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The label is at SuggestionsSection.tsx:56, on the suggestion card of the previous and oldest Briefing screens. The software speaks in the first person about noticing. 'What was observed:' is the same replacement BRIEFING-UI-049 gives. No test asserts the label text (SuggestionsSection.test.tsx:65 only names it in a test title).",
+      "checked": "src/briefing/components/SuggestionsSection.tsx:51-62; src/briefing/components/SuggestionsSection.test.tsx:65"
+    },
+    {
+      "findingId": "TERMS-032",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The sentence is at OutdoorsEventsChip.tsx:19, outside t(). 'Gatherings the system found' narrates the software and uses the word the original rewrite replaced with 'events'. The migration map's description of this area is 'Find events where target buyers may be present'; use that phrase rather than 'events relevant to your category', which is close but is not the approved description. The kicker on the same chip, 'ALSO OUT THERE' (line 17), is not in this finding and should change with it. BRIEFING-UI-048 proposes both strings.",
+      "finalProposed": "OutdoorsEventsChip.tsx:19: t(\"Outdoors Events — events where your target buyers may be present\", { class: \"body\" }). Line 17: t(\"UPCOMING EVENTS\").",
+      "checked": "src/briefing/components/OutdoorsEventsChip.tsx:14-25; ANTAEUS_FINAL_AUDIT_CONTROL_PACKET_2026-11-16/antaeus-audit-control/original-working-set/02_LANGUAGE_MIGRATION_MAP.md line 87"
+    },
+    {
+      "findingId": "TERMS-033",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The three strings are at AdvisorDeployDS.tsx:35, 41 and 64. The previous screen is headed 'ADVISOR DEPLOY' and counts 'carriers' and 'loops', while every link that leads here says Call in a Favor. The replacements use the default screen's words (contact, request). One problem: the side-column label at line 64 is a t() label, and 'Contacts who can help and request results' is seven words, over the six-word limit the voice check enforces (src/lib/voice/validator.ts). Shorten it.",
+      "finalProposed": "L35: `${advisorCount} contacts · ${loopCount} requests` · L41: t(\"CALL IN A FAVOR\") · L64: t(\"Contacts and request results\")",
+      "checked": "src/call-in-a-favor/ds/AdvisorDeployDS.tsx:30-67; src/lib/voice/validator.ts (label limit); src/call-in-a-favor/v4/CallInAFavorV4.tsx:137-214"
+    },
+    {
+      "findingId": "TERMS-034",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Every quoted string is at the cited line of AskDesk.tsx (107, 120, 137, 140, 150, 157, 160, 162, 174, 176, 183, 193, 200-202, 209, 210). 'Carrier', 'ask moment', 'spend the trust', 'deployment' and 'return the loop' are the retired model's words, and the default screen says contact, what you need, request and outcome (CallInAFavorV4.tsx:204-289). 'Review deal risk' and 'Run a pilot' match the original rewrite (09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md line 78) and the default Deal Workspace link (DealWorkspaceV4.tsx:306). Three corrections. (1) Line 162: the value printed after the label already begins 'Aim: …' (src/call-in-a-favor/lib/moments.ts:23-104), so 'What you are asking for: Aim: an introduction…' would carry two labels; drop the label. (2) Line 193: the button only records the request as redirected (state.ts:239-240); it does not ask anyone, so 'Ask someone else' promises an action that does not happen. Keep 'Reroute'. (3) Line 107 is one half of a pair: when no one is saved the same field says 'No advisors yet'. Change both halves so the field does not use two words for the same people.",
+      "finalProposed": "L107: t(\"Choose a contact…\") and, in the same expression, t(\"No contacts yet\") · L120: \"IS THE REQUEST READY TO SEND?\" · L137: \"Who can help\" · L140: \"What you need\" · L150: \"EVIDENCE TO MENTION\" · L157: \"Contact:\" · L160: \"No contact selected\" · L162: remove the 'Return:' label and print generated.outcome on its own (it already starts 'Aim:') · L174: \"LOG THE REQUEST\" · L176: \"Request outcome\" · L183: \"Choose a deal and a contact first.\" · L193: unchanged · L200-202: \"Continue working this deal\" / \"TRACK THE OUTCOME\" / \"Record what came of the request on the deal.\" · L209: \"Review deal risk\" · L210: \"Run a pilot\"",
+      "checked": "src/call-in-a-favor/ds/components/AskDesk.tsx:100-213; src/call-in-a-favor/lib/moments.ts:23-104; src/call-in-a-favor/state.ts:234-241; src/call-in-a-favor/ds/ds-components.test.tsx:58-63"
+    },
+    {
+      "findingId": "TERMS-035",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at DeskSide.tsx:91, 92, 164, 245 and 246. 'Rolodex', 'carriers' and 'desk read' name the contact list and the results block in the retired model's words. The block under 'DESK READ' shows counts of saved people, matched deals, requests awaiting an outcome and requests marked successful (src/call-in-a-favor/lib/impact.ts:70-76), so 'Request results' describes it. One addition: the empty line directly under the renamed list heading still says 'No advisors registered yet — add one below to start routing.' (line 95); change it with the heading so the list does not use two words for the same people.",
+      "finalProposed": "L91: \"Contacts who can help\" · L92: \"CONTACTS WHO CAN HELP\" · L95: \"No contacts added yet. Add one below.\" · L164: \"What could you ask this person for?\" · L245: \"Request results\" · L246: \"REQUEST RESULTS\"",
+      "checked": "src/call-in-a-favor/ds/components/DeskSide.tsx:91-96, 159-165, 244-261; src/call-in-a-favor/lib/impact.ts:59-113"
+    },
+    {
+      "findingId": "TERMS-036",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The heading and label are at ThreadRail.tsx:16-17 and ColdCallStudioDS.tsx:60, and the one-word chip prints the verb field at ThreadRail.tsx:29 and ThreadConsole.tsx:60 (hold, pull, tighten, trade, lock, release, from src/cold-call-studio/lib/threads.ts). 'Threads' is the private name for the call steps, and the default screen calls the same list the 'Call plan' with named steps (ColdCallStudioV4.tsx:52-56, 166). The chip adds nothing a reader can use. Of the two options offered, removing it is the right one: the step number is already printed beside each title (ThreadRail.tsx:27, ThreadConsole.tsx:58).",
+      "finalProposed": "ThreadRail.tsx:16 aria-label t(\"Call steps\"); :17 t(\"CALL STEPS\"); ColdCallStudioDS.tsx:60 t(\"Call steps\"). Remove the verb chip at ThreadRail.tsx:29 and ThreadConsole.tsx:60 (the step number already shows). The verb field in threads.ts can stay as data.",
+      "checked": "src/cold-call-studio/ds/components/ThreadRail.tsx:13-35; src/cold-call-studio/ds/components/ThreadConsole.tsx:55-62; src/cold-call-studio/ds/ColdCallStudioDS.tsx:59-63; src/cold-call-studio/lib/threads.ts:14-135"
+    },
+    {
+      "findingId": "TERMS-037",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "AccountBar.tsx:29 builds the option as '<name> · <number>' with no word for the number, and the oldest screen labels the same number 'priority' (components/AccountRow.tsx:43). That replacement is right. The second half needs a different name: the panel at line 57 shows a preparation score out of 100, what is weakest and what to do (ds/lib/adapters.ts:54-66), not the list of call steps, so 'Call plan' would mislabel it. The Discovery panel with the same label (discovery-studio/ds/components/CallReadDS.tsx:31) shows the next-step status and the count of things learned.",
+      "finalProposed": "AccountBar.tsx:29: `${a.name} · priority ${a.heat}` · AccountBar.tsx:57: aria-label={t(\"Call preparation score\")} · src/discovery-studio/ds/components/CallReadDS.tsx:31: aria-label={t(\"Call status\")}",
+      "checked": "src/cold-call-studio/ds/components/AccountBar.tsx:25-69; src/cold-call-studio/ds/lib/adapters.ts:54-74; src/cold-call-studio/components/AccountRow.tsx:43; src/discovery-studio/ds/components/CallReadDS.tsx:19-36"
+    },
+    {
+      "findingId": "TERMS-038",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The two sentences are at ReadinessPanel.tsx:24 and 39 and the same pair is on the oldest screen. 'Lives in your head … nothing to inherit' is the exact metaphor the original remediation replaced, and the last state still says 'handoff kit' and 'advisors lit up'. The finding covers two of the five sentences in this table; the other three carry the same problem ('improvising the system', 'sanity-checks'). The same table was filed as DASH-043 and DASH-050 and verified: use the five sentences the default panel already shows (src/dashboard/v4/ClimbDrawer.tsx:47-68) through one shared constant, so all three screens say the same thing. That is better than writing two new sentences that exist on no other screen.",
+      "finalProposed": "As verified for DASH-043 and DASH-050: move HERO_READ from src/dashboard/v4/ClimbDrawer.tsx:47-68 into src/lib/readiness (for example VERDICT_READ in types.ts) and use it in src/dashboard/today/components/ReadinessPanel.tsx in place of VERDICT_SUBTITLE (lines 22-42) and in src/dashboard/components/ReadinessDrawer.tsx (lines 25-45).",
+      "checked": "src/dashboard/today/components/ReadinessPanel.tsx:22-42; src/dashboard/v4/ClimbDrawer.tsx:47-68; audit/dashboard.verify.json DASH-043, DASH-050"
+    },
+    {
+      "findingId": "TERMS-039",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at WeekReads.tsx:58, 101, 105, 129, 133 and 146, with the same set on the oldest screen. 'Reads' is the retired noun, 'what the system noticed' narrates the software, and 'thinner signals' does not say what the 7-day setting shows. The same strings were filed as DASH-039 and verified with a fuller text that also covers the toggle (lines 111-116) and separates the two empty cases (nothing at all, or everything hidden by the 14-day setting). Use that text so both reviews give one answer and the heading matches the name used for the same list on Briefing.",
+      "finalProposed": "As verified for DASH-039, in both files. Heading: t(\"CHANGES IN YOUR DEALS AND ACCOUNTS\"). Sub-heading: t(\"Scheduled checks on your deals, watched accounts, pilots and discovery calls\", { class: \"body\" }). Toggle accessible name: t(\"Show deals by days in stage\"); options t(\"14+ days in stage\") and t(\"7+ days in stage\"). Empty when the setting has hidden everything: t(\"Items about deals that have been in one stage for 7 to 13 days are hidden. Choose 7+ days to show them.\", { class: \"body\" }); empty when there is nothing: t(\"No material changes are currently detected in your active deals or watched accounts.\", { class: \"body\" }). Error: \"Couldn't load changes in your deals and accounts.\" Dismiss (accessible name): t(\"Dismiss this item\"). Section name (WeekReadsCard.tsx:98): t(\"Changes in your deals and accounts\"). Update tests/e2e/smoke.spec.ts:176-181.",
+      "checked": "src/dashboard/today/components/WeekReads.tsx:58-146; audit/dashboard.verify.json DASH-039"
+    },
+    {
+      "findingId": "TERMS-040",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at QueueRead.tsx:41, 57 and 71. 'Most pressured' uses the private pressure construct and 'gone quiet' is the phrase the original rewrite replaced with 'No recent activity'. The same lines were filed as DASH-035 and verified. Two differences from this proposal: the tag marks the first row of a ranked list, so it should say that ('Ranked first'), and the first zone's heading is being renamed 'HIGHEST PRIORITY' under DASH-034, so the tag must not repeat it; and the zone holds deals only, so the heading names them.",
+      "finalProposed": "As verified for DASH-035: QueueRead.tsx:39-43 → offsetTag={i === 0 && annotate && o.id === ranked[0]?.id ? t(\"— Ranked first\") : undefined}; :57 → t(\"DEALS WITH NO RECENT RECORDED ACTIVITY\"); :69-71 → t(\"recommended actions\"), t(\"highest priority\"), t(\"no recent activity\"); :27 → t(\"Recommended actions, in priority order\").",
+      "checked": "src/dashboard/today/components/QueueRead.tsx:27-71; audit/dashboard.verify.json DASH-034, DASH-035"
+    },
+    {
+      "findingId": "TERMS-041",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The sentences are at brief-narrative.ts:26 and 72 and the oldest top bar builds 'N moves queued' at src/dashboard/components/Topbar.tsx:51. 'Moves' is the recommendation noun in generated text. Changing the noun alone would leave a wrong number: the counts come from capped subsets (three and four items), which DASH-022 and DASH-045 report and their verifier reproduced ('3 deals in recovery, 4 moves queued' while the list holds 5 deals and 5 outreach items). Apply the verified texts, which fix the noun and the count together; the empty text at lines 23-30 is covered by DASHBOARD-M04.",
+      "finalProposed": "brief-narrative.ts:50-52 and 71-73 as verified for DASH-022 (count the full list by kind: 'N open deals to review', 'N accounts to contact', 'N setup items'). Lines 23-30 as in DASHBOARD-M04: headline \"No recommended actions yet.\"; sentence \"Add an account to watch in Signal Console or an open deal in Deal Workspace to get a first recommendation.\" Topbar.tsx:47-52 as verified for DASH-045: `${n} recommended action(s)`. Update brief-narrative.test.ts:39-45.",
+      "checked": "src/dashboard/lib/brief-narrative.ts:23-30, 50-76; src/dashboard/components/Topbar.tsx:47-52; audit/dashboard.verify.json DASH-022, DASH-045, DASHBOARD-M04"
+    },
+    {
+      "findingId": "TERMS-042",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at HealthStrip.tsx:42 and RecoveryBoard.tsx:35 and 66. 'NEED A MOVE' is the private recommendation label and does not say what is counted (deals in the two higher-risk groups, HealthStrip.tsx:28). The same lines were filed as DW-037, DW-038 and DW-039 and verified with different words: the default screen calls these deals 'elevated risk' and keeps 'high risk' for the top group (DealWorkspaceV4.tsx:214-256), so 'AT RISK' for the count and 'HIGH RISK' for a heading that also holds the at-risk group would not match it. Use the verified texts so the two reviews give one answer.",
+      "finalProposed": "As verified for DW-037, DW-038 and DW-039. HealthStrip.tsx:42 t(\"AT ELEVATED RISK\"); :32 `${critical} high risk`; :34 `${atRisk} at elevated risk`; :35 t(\"No elevated-risk deals\"). RecoveryBoard.tsx:66 t(\"ELEVATED RISK\"); :79 t(\"LOWER RISK\"); :35 t(\"Deal Workspace lists open deals in order of risk, using time since the last update, next-step status and close date, and shows a recommended next step for each.\", { class: \"body\" }).",
+      "checked": "src/deal-workspace/ds/components/HealthStrip.tsx:28-42; src/deal-workspace/ds/components/RecoveryBoard.tsx:26-41, 62-79; src/deal-workspace/v4/DealWorkspaceV4.tsx:214-261; audit/deal-workspace.verify.json DW-037, DW-038, DW-039"
+    },
+    {
+      "findingId": "TERMS-043",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The link labels are at DealWorkspaceDS.tsx:84, 89 and 93 and DealCard.tsx:38. 'Pre-mortem', 'forge' and 'deploy' are the retired verbs. The replacements are the default screen's own link labels: 'Review deal risk', 'Run a pilot', 'Call in a favor' (DealWorkspaceV4.tsx:305-307) and 'Review loss risk' on the deal itself (line 150), and they match the original rewrite (09_REWRITE_BATCH_03_EXECUTION_AND_UTILITY.md lines 75 and 78). DW-035 and DW-036 make the same changes and were verified; DW-035 also renames the strip's kicker and title, which this finding leaves out.",
+      "checked": "src/deal-workspace/ds/DealWorkspaceDS.tsx:78-99; src/deal-workspace/ds/components/DealCard.tsx:37-39; src/deal-workspace/v4/DealWorkspaceV4.tsx:150, 305-309"
+    },
+    {
+      "findingId": "TERMS-044",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at DiscoveryStudioDS.tsx:96, 138 and 160 and RecoverRail.tsx:35 (plain JSX text on a component both older screens use). 'Your next move' is the private label inside a slogan heading, and the default screen says framework, suggested response and recovery prompts (DiscoveryStudioV4.tsx:184, 339, 403). Three of the four replacements are right. The second adds a reason the code does not support: frameworks are organized by what the seller sells, not by 'kind of buyer', and nothing ties a switch to the buyer. Keep the instruction and drop the invented condition; 'actually' goes because it is a judgment word under COPY_STANDARD §26.",
+      "finalProposed": "L96: t(\"See a suggested response for whatever the buyer says.\", { class: \"body\" }) · L138: t(\"Change the framework only if the conversation changes.\", { class: \"body\" }) · L160: t(\"Call tools\") · RecoverRail.tsx:35: t(\"No recovery prompts are available for this framework.\", { class: \"body\" })",
+      "checked": "src/discovery-studio/ds/DiscoveryStudioDS.tsx:93-98, 134-140, 160; src/discovery-studio/components/RecoverRail.tsx:31-36; src/discovery-studio/v4/DiscoveryStudioV4.tsx:184-192, 339, 400-405"
+    },
+    {
+      "findingId": "TERMS-045",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at HandoffStripDS.tsx:27 and 38, and the oldest screen has 'Pre-mortem this deal' as plain text at components/HandoffStrip.tsx:59. Line 27 is more than a wording problem: nothing in Discovery Studio writes the next step to the deal. The links carry only the account name (src/discovery-studio/lib/handoff.ts:58-64) and no file under src/discovery-studio writes to the deal record or the deals table. 'Next step saved to the deal.' would state the same thing that does not happen. Say what is true and what to do. 'Review deal risk' matches the original rewrite and the default Deal Workspace link.",
+      "finalProposed": "HandoffStripDS.tsx:27: t(\"Next step set. Add it to the deal in Deal Workspace.\", { class: \"body\" }) · :38: t(\"Review deal risk\") · src/discovery-studio/components/HandoffStrip.tsx:59: t(\"Review deal risk\")",
+      "checked": "src/discovery-studio/ds/components/HandoffStripDS.tsx:20-42; src/discovery-studio/components/HandoffStrip.tsx:54-60; src/discovery-studio/lib/handoff.ts:58-72; grep for deal writes under src/discovery-studio (none)"
+    },
+    {
+      "findingId": "TERMS-046",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Both sentences are at WorkedMemory.tsx:35 and 69-70, as plain JSX text. 'Covered ground' is an idiom for the questions already covered. The replacements say that. Minor, as filed. The panel's own heading, 'Worked memory' (lines 32-33), is not in this finding and has the same problem; it is filed separately.",
+      "checked": "src/discovery-studio/components/WorkedMemory.tsx:30-37, 64-71"
+    },
+    {
+      "findingId": "TERMS-047",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The strings are at FoundingGtmDS.tsx:82, 122, 123 and 125 and ds/lib/adapters.ts:59. 'Kit' is the retired name; the default screen heads the same page 'Sales handoff' (FoundingGtmV4.tsx:54). The new label is six words, inside the label limit. 'Read-only' replaces 'read-mode'. The replacement sentence is accurate: the sections are computed from recorded deals, outreach and calls and cannot be edited on this page.",
+      "checked": "src/founding-gtm/ds/FoundingGtmDS.tsx:79-131; src/founding-gtm/ds/lib/adapters.ts:50-61; src/founding-gtm/v4/FoundingGtmV4.tsx:54-57"
+    },
+    {
+      "findingId": "TERMS-048",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at PinnedCaseDS.tsx:54, 60, 83 and 201 and LedgerDS.tsx:25. 'What kills this in N days' states a loss as certain and the intro promises 'what kills it in 45 days' although the number is computed per deal (line 79). The replacements follow the default screen ('at … risk of stalling or being lost within the next N days', 'When to consider closing the deal', FutureAutopsyV4.tsx:145, 262). One omission: line 82 is the other half of the same pair, 'What wins this in {days} days.', shown in the 'If corrected' view, and it is just as certain. Change both. AE-022 covers the same lines with 'Review window: N days' wording; the fix stage should apply one version.",
+      "finalProposed": "L54: t(\"Choose a deal from the list to review its loss risk.\", { class: \"body\" }) · L60: t(\"Future Autopsy reviews an open deal for loss risk: the recorded risk factors, what often happens next, and the corrective actions to take.\", { class: \"body\" }) · L82: t(\"What would lower the risk within the next {days} days.\", { class: \"body\" }) · L83: t(\"What could stall or lose this deal within the next {days} days.\", { class: \"body\" }) · L201: t(\"When to consider closing the deal.\") · LedgerDS.tsx:25: t(\"No open deals to review. Add a deal in Deal Workspace and it will appear here.\", { class: \"body\" })",
+      "checked": "src/future-autopsy/ds/components/PinnedCaseDS.tsx:48-63, 78-97, 201; src/future-autopsy/ds/components/LedgerDS.tsx:21-27; src/future-autopsy/v4/FutureAutopsyV4.tsx:110-112, 145, 256-262"
+    },
+    {
+      "findingId": "TERMS-049",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "PinnedCaseDS.tsx:142 and components/ForensicSheets.tsx:184 print the condition's id with underscores turned into spaces ('eb engaged', 'poc success criteria locked'). The proposed label table has two problems. It names a field that does not exist (the item has id, title and story, not text; src/future-autopsy/lib/autopsy-data.ts:190-203), and the list is padded to five entries with ids 'momentum_1', 'momentum_2' and so on (lines 197-204), which the table would not cover. The sentence printed beside the label already says the condition in plain words ('A dated next step is set and accepted by both sides.', autopsy-data.ts:78-95), so the label adds nothing. Remove it. AE-022 and AE-023 propose the same.",
+      "finalProposed": "PinnedCaseDS.tsx:141-143 and src/future-autopsy/components/ForensicSheets.tsx:183-185: remove the label span and print only the sentence ({w.story}). No new table.",
+      "checked": "src/future-autopsy/ds/components/PinnedCaseDS.tsx:137-146; src/future-autopsy/components/ForensicSheets.tsx:180-188; src/future-autopsy/lib/autopsy-data.ts:62-96, 186-205"
+    },
+    {
+      "findingId": "TERMS-050",
+      "real": "AMENDED",
+      "fix": "AMENDED",
+      "reason": "The heading is at src/birdseye/BirdseyeFloat.tsx:133, not in the file the finding cites (that file only mounts the helper at line 77). It is not confined to previous-version screens: the shared page header mounts it (src/lib/room-chrome.tsx:68), and it renders on the default Briefing in both books (corpus/briefing.txt:161, corpus-smb/briefing.txt:185). Severity 1 still fits. The same heading was filed as DASH-029 and verified as 'BIRDSEYE · RECOMMENDED NEXT ACTION': the name stays and a plain description follows it, which the standard allows for a stable product object, and tests/e2e/smoke.spec.ts:280-281 asserts that the heading contains 'BIRDSEYE'. 'Next action' also avoids 'next step', which on these screens means the deal's next step. Use the verified text.",
+      "finalProposed": "src/birdseye/BirdseyeFloat.tsx:133: \"BIRDSEYE · RECOMMENDED NEXT ACTION\", with the button and panel names from DASH-029 (line 98 'Show recommended next action' / 'Hide recommended next action'; line 130 'Recommended next action'). If the owner does not want 'Birdseye' as a visible name, drop it and update tests/e2e/smoke.spec.ts:281.",
+      "checked": "src/birdseye/BirdseyeFloat.tsx:96-162; src/lib/room-chrome.tsx:68; tests/e2e/smoke.spec.ts:256-291; audit/dashboard.verify.json DASH-029"
+    },
+    {
+      "findingId": "TERMS-051",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at RouteControls.tsx:112, 132 and 163 and ds/lib/adapters.ts:51. 'Counterparty', 'seed pushbacks' and 'the line you won't cross' are the words the original rewrite replaced. Two of the replacements need correcting. Line 132: changing this select does not change the example objections. setAskMoment changes only the topic and the suggested opening line (src/getting-to-signed/state.ts:76-94), and the function that would pick an objection by topic is never called (lib/seed-scripts.ts:246), so 'It changes the example objections below' repeats a false statement. Line 163: the original rewrite's term is 'non-negotiable limit'. The visible label 'Counterparty' at line 110 should change with its accessible name. The field is labelled 'Walkaway' (line 160), so keep that spelling in the status text. GTS-043, GTS-044 and GTS-045 cover the same lines.",
+      "finalProposed": "L110: t(\"Who you're negotiating with\") · L112: label={t(\"Customer-side role\")} · L128: label={t(\"Topic\")} · L131-134: t(\"The subject of this conversation. Changing it suggests an opening line, unless you have written your own.\", { class: \"body\" }) · L163: t(\"Your non-negotiable limit: the price or terms below which you end the negotiation.\", { class: \"body\" }) · adapters.ts:51: \"Walkaway position not set\"",
+      "checked": "src/getting-to-signed/ds/components/RouteControls.tsx:109-136, 159-166; src/getting-to-signed/state.ts:76-94; src/getting-to-signed/lib/seed-scripts.ts:246-271; src/getting-to-signed/ds/lib/adapters.ts:50-54"
+    },
+    {
+      "findingId": "TERMS-052",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at RehearsalObject.tsx:157, 163, 271 and 286. Two of the three replacements would state things that are not true. Line 271: nothing is saved to the linked deal. This area only reads the deal list (src/getting-to-signed/lib/cross-room.ts:51) and writes its own saved negotiations and lessons (lib/persistence.ts:53, 74); the four items in the strip are plain links. Lines 157 and 163: the three steps are fixed examples that no control can edit (state.ts:41 and 193 always set SEED_LADDER_DEFAULT), so 'What you can trade' would present '5% off list' as the seller's own option. GTS-048 and GTS-053 report both points. 'Review deal risk' is right.",
+      "finalProposed": "L157: t(\"EXAMPLE CONCESSIONS\") · L163: aria-label={t(\"Example concessions\")} · L271: t(\"Each link opens with this deal selected. This page does not copy the outcome to the deal: record it in Deal Workspace.\", { class: \"body\" }) · L286: t(\"Review deal risk\")",
+      "checked": "src/getting-to-signed/ds/components/RehearsalObject.tsx:155-170, 262-290; src/getting-to-signed/state.ts:41, 193; src/getting-to-signed/lib/cross-room.ts:51; src/getting-to-signed/lib/persistence.ts:53, 74"
+    },
+    {
+      "findingId": "TERMS-053",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The strings are at CueLadder.tsx:17-18, LinkedinPlaybookDS.tsx:39 and 62, CueStage.tsx:33, 37 and 76, MethodSheetsDS.tsx:67 and ds/lib/adapters.ts:89. 'Cue' and 'cue ladder' are private names for the five steps; the default screen says step, action and message templates (LinkedInPlaybookV4.tsx:59-63, 220, 257). The count at line 39 is the number of logged actions (state.ts:100), so 'actions logged' is accurate. 'Compose the line' is the switchboard word for writing a message. Each new label is inside the six-word limit.",
+      "checked": "src/linkedin-playbook/ds/components/CueLadder.tsx:14-20; src/linkedin-playbook/ds/LinkedinPlaybookDS.tsx:38-62; src/linkedin-playbook/ds/components/CueStage.tsx:33-76; src/linkedin-playbook/ds/components/MethodSheetsDS.tsx:63-69; src/linkedin-playbook/ds/lib/adapters.ts:84-93; src/linkedin-playbook/v4/LinkedInPlaybookV4.tsx:43-63, 180-257"
+    },
+    {
+      "findingId": "TERMS-054",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at StepsDS.tsx:69, 74, 264, 328, 343, 344 and 353. 'Seeded', 'moves', 'wakes up' and 'land sharper' are retired terms. The same lines were filed as ONBOARDING-045, -046, -052, -053 and -054 and verified, and that review found facts this proposal gets wrong. The first thing asked is the company name and the ICP is the fifth step (StepsDS.tsx:91, 220), so 'The first question is a one-line description of who you sell to' is false; three answers are required, not one. 'The Dashboard is ready when you finish' drops what the sentence was for (where the answers go). Use the verified texts so both reviews give one answer.",
+      "finalProposed": "As verified for ONBOARDING-045, -046, -052, -053 and -054. StepsDS.tsx:69 t(\"What you enter is saved to your workspace.\", { class: \"body\" }); :70 'Your ideal customer profile (ICP) goes to ICP Studio, your first account to Signal Console and your quota to Quota Workback.' :73-74 bold part 'Three answers are required.' then 'Your role, what you sell and who you sell it to, and a one-sentence ICP. Company name, a first account and your quota are optional.' :264 'Why now? One recent change at this company (optional)'. :327-328 keep 'Worth filling:' and the list; second sentence 'You can finish without them.' :340 'Setup is complete.' :343 'Your answers are saved to your workspace. Welcome shows your highest-priority action.' :344 'Nothing was saved on this device. You can still open the workspace and enter your ICP, accounts and quota there.' :353 'See your highest-priority action'. The oldest screen (src/onboarding/components/Steps.tsx) takes the same texts under ONBOARDING-055 to -057.",
+      "checked": "src/onboarding/ds/components/StepsDS.tsx:62-78, 91, 220, 253-264, 289-353; audit/onboarding.verify.json ONBOARDING-045, -046, -052, -053, -054"
+    },
+    {
+      "findingId": "TERMS-055",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The two descriptions are at src/onboarding/lib/types.ts:34 and 59 and render under the role buttons on both older onboarding screens. 'Everything you can't keep in your head' is the metaphor the brief's disputed-terms table replaces with the actual condition. The same table was filed as ONBOARDING-049 and WELCOME-038, covering all five role descriptions (lines 34, 44, 49, 54, 59), and both were verified with one set of sentences. Use that set; this proposal gives different words for the same two lines and leaves the other three.",
+      "finalProposed": "As verified for ONBOARDING-049 and WELCOME-038: types.ts:34 \"You are still the one selling. Antaeus documents the sales process so it does not depend on your memory.\" · :44 \"You own the sales function. Antaeus records the process your team runs.\" · :49 \"You are documenting the sales process for the next 3-5 hires.\" · :54 \"You run day-to-day sales work and need the highest-priority account or deal shown first.\" · :59 \"You advise from outside. Antaeus shows you the recorded state of accounts and deals.\"",
+      "checked": "src/onboarding/lib/types.ts:34-59; audit/onboarding.verify.json ONBOARDING-049; audit/welcome.verify.json WELCOME-038"
+    },
+    {
+      "findingId": "TERMS-056",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at SendLinePanel.tsx:67, 70, 73, 79, 88, 90 and 105, OperatorRack.tsx:42 and OutboundStudioDS.tsx:65 and 74. The switchboard words (the line, the rack, routing, temperature) are the whole explanation of how a message is drafted; the default screen says message and current outreach stage. One correction: the proposed sentence for line 79 says 'the inputs on the left', but this layout puts the message on the left and the inputs on the right, and below it on narrow windows (src/components/components.css:696-709). Drop the direction. The test at ds-components.test.tsx:59 expects 'Copy the line' and needs the new label.",
+      "finalProposed": "L67 aria-label t(\"The message\") · L70 t(\"NO MESSAGE YET\") · L73 t(\"Enter the account and contact. Antaeus then drafts the message.\", { class: \"body\" }) · L79 t(\"The message is drafted from what you enter: the contact, the current outreach stage and the trigger.\", { class: \"body\" }) · L88 `Message for ${r.accountName}` · L90 t(\"THE MESSAGE\") · L105 t(\"Copy message\") · OperatorRack.tsx:42 t(\"MESSAGE INPUTS\") · OutboundStudioDS.tsx:65 t(\"Message inputs\") · :74 t(\"Other outreach for this account\", { class: \"body\" }). Update ds-components.test.tsx:59.",
+      "checked": "src/outbound-studio/ds/components/SendLinePanel.tsx:65-111; src/outbound-studio/ds/components/OperatorRack.tsx:38-63; src/outbound-studio/ds/OutboundStudioDS.tsx:64-76; src/components/layout.tsx:139-156; src/components/components.css:696-709; src/outbound-studio/ds/ds-components.test.tsx:55-61"
+    },
+    {
+      "findingId": "TERMS-057",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "TEMPERATURE_LABELS is at src/outbound-studio/lib/types.ts:36-42 and is printed by the previous screen's 'Temperature' field and message log (ds/components/OperatorRack.tsx:35, 52; TouchLogDS.tsx:54) and by the oldest screen (components/Switchboard.tsx:111; TouchLog.tsx:100). The default screen shows 'First outreach', 'Following up', 'Contact replied', 'Active conversation' and 'Approval / contract' for the same stored keys (v4/OutboundStudioV4.tsx:54-60), so the generations disagree about what 'warm' means. The constant is used for display only, so changing its values is safe for stored messages; no test asserts the label text. The field label to rename is at OperatorRack.tsx:52.",
+      "checked": "src/outbound-studio/lib/types.ts:26-42; src/outbound-studio/ds/components/OperatorRack.tsx:35, 52; src/outbound-studio/v4/OutboundStudioV4.tsx:53-60; grep TEMPERATURE_LABELS in src"
+    },
+    {
+      "findingId": "TERMS-058",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The three sentences are at OutdoorsEventsDS.tsx:43, DiscoveryConsoleDS.tsx:30 and EventListDS.tsx:121. 'The system reads … gatherings … direct, adjacent, indirect' is the wording the original rewrite replaced. The replacements match the default screen's three groups (events about your category, events for your buyers' roles, broader related events; OutdoorsEventsV4.tsx:51-53) and keep 'you decide'. OE-031 and OE-034 cover the same lines and also the headline at line 39 ('Where people are gathering, found for you.') and the kicker 'DISCOVERY HASN'T RUN YET', which this finding leaves out; apply them together.",
+      "checked": "src/outdoors-events/ds/OutdoorsEventsDS.tsx:38-46; src/outdoors-events/ds/components/DiscoveryConsoleDS.tsx:27-33; src/outdoors-events/ds/components/EventListDS.tsx:115-125; src/outdoors-events/v4/OutdoorsEventsV4.tsx:51-53, 132-161"
+    },
+    {
+      "findingId": "TERMS-059",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The strings are at PocFrameworkDS.tsx:37, 38 and 60: the retired area name, a count of pilots called 'cast', and 'Shape the molds' as the name of the form. The replacements are the current area name, 'saved' for the count of saved pilots, and 'Pilot setup'.",
+      "checked": "src/pilot-desk/ds/PocFrameworkDS.tsx:36-60"
+    },
+    {
+      "findingId": "TERMS-060",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at ForgeForm.tsx:66, 84, 113 and 155, and the test at ds-components.test.tsx:34 expects 'Cast the evidence'. Three replacements match the default screen and the original rewrite ('Who approves the result', 'Save pilot setup'). The fourth does not: 'When you'll stop' is the label the original rewrite itself replaced (07_REWRITE_BATCH_02_STRATEGIC_AND_DIAGNOSTIC.md line 112), and this field holds a list of stop conditions, one per line (its help text at line 114 says so). The quality panel on the same screen already calls them 'Stop criteria' (src/pilot-desk/lib/quality.ts:124, 278); use that.",
+      "finalProposed": "L66: t(\"SET UP THE PILOT\") · L84: t(\"Who approves the result\") · L113: t(\"Stop criteria\") · L155: t(\"Save pilot setup\"). Update ds-components.test.tsx:34.",
+      "checked": "src/pilot-desk/ds/components/ForgeForm.tsx:66-155; src/pilot-desk/ds/ds-components.test.tsx:31-35; src/pilot-desk/lib/quality.ts:124, 278; src/pilot-desk/v4/PilotDeskV4.tsx:420-428"
+    },
+    {
+      "findingId": "TERMS-061",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at ProofObject.tsx:47, 111, 117, 124, 136 and 180. 'Mold', 'kill', 'readout' and 'next move' are the retired words. The replacements are right except for one word: use 'Stop criteria', the name the shared quality text gives the same part on this screen (src/pilot-desk/lib/quality.ts:124, 278), so the meter and the part list agree. 'LEAST COMPLETE PART · NEXT STEP' is six words by the voice check's count, which is the limit.",
+      "finalProposed": "L47: t(\"Results meeting\") · L111: t(\"Owner — who approves the result\", { class: \"body\" }) · L117: t(\"Stop criteria — when the pilot ends\", { class: \"body\" }) · L124: t(\"The five parts of the pilot\") · L136: t(\"LEAST COMPLETE PART · NEXT STEP\") · L180: t(\"Review deal risk\")",
+      "checked": "src/pilot-desk/ds/components/ProofObject.tsx:44-48, 105-136, 171-182; src/pilot-desk/lib/quality.ts:124, 278; src/lib/voice/validator.ts (word count)"
+    },
+    {
+      "findingId": "TERMS-062",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "SourcingWorkbenchDS.tsx:35 heads the previous screen with the retired area name; that replacement is right. The second label needs different words. 'Cold entry' is at ds/lib/adapters.ts:27, the last of five options: Network intro, Evidence, Live signal, Local advantage, Cold entry. It means none of the other four applies, so 'No existing connection' is inaccurate (a live signal or a local advantage is not a connection). 'Cold outreach' is the ordinary sales term for exactly this and keeps the meaning.",
+      "finalProposed": "SourcingWorkbenchDS.tsx:35: t(\"PROSPECTING DESK\") · ds/lib/adapters.ts:27: t(\"Cold outreach\")",
+      "checked": "src/prospecting-desk/ds/SourcingWorkbenchDS.tsx:34-36; src/prospecting-desk/ds/lib/adapters.ts:22-28; src/prospecting-desk/lib/types.ts:39-43"
+    },
+    {
+      "findingId": "TERMS-063",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at SettingsCardsDS.tsx:430 and 474, and the oldest screen has them at components/SettingsCards.tsx:113-114, 434, 647 and 660. 'Motions' stands for an unnamed set of records and 'retunes the activation path' is internal. The replacement for line 430 promises more than the code does today: re-running setup replaces a watched account that is entered again (its earlier signals are lost from the browser copy) and resets the Quota Workback rates to fixed defaults (src/onboarding/seeding/lib/seed-writer.ts:132-139, 212-228), which ONBOARDING-035 reports and its verifier confirmed. 'Your ICPs, accounts, deals, signals and logged outreach are kept' is true only after that fix (merge instead of replace) is in. Until then, stop the sentence before the promise. On line 474, 'every row' should also become 'every record', the word the default screen uses.",
+      "finalProposed": "SettingsCardsDS.tsx:430: t(\"Changed roles or starting fresh? Re-run onboarding to update your setup answers.\", { class: \"body\" }). Add the second sentence, \"Your ICPs, accounts, deals, signals and logged outreach are kept.\", only together with the ONBOARDING-035 change. Line 474: \"Permanently delete every record in your workspace — ICPs, deals, pilot evidence, signals, favor requests, discovery call logs, and saved documents. Your account stays intact. This is irreversible. Export a backup first if you want a copy.\" Same two changes at src/settings/components/SettingsCards.tsx:113-114, 434, 647 and 660.",
+      "checked": "src/settings/ds/components/SettingsCardsDS.tsx:427-477; src/settings/components/SettingsCards.tsx:113-114, 434, 647, 660; src/onboarding/seeding/lib/seed-writer.ts:132-139, 212-228; audit/onboarding.verify.json ONBOARDING-035"
+    },
+    {
+      "findingId": "TERMS-064",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "HealthStrip.tsx:28 labels the count of accounts scoring 75 or more 'HOT ≥ 75' (the count is snapshot.readyCount), while the band function calls only 91 and above 'Hot' and 75-90 'Active' (src/signal-console/lib/heat.ts:111-115). The card line built at ds/lib/adapters.ts:58 prints 'Hot · 92 — 3 signals', so on one screen 'hot' means two different thresholds, and the number has no name. The fix keeps the stored band keys and changes only what is displayed, which is safe for the saved health summary. Two small changes: write 'out of 99', as the default LinkedIn Playbook does for the same score (LinkedInPlaybookV4.tsx:194), and rename the neighbouring stat 'ON THE RADAR' (line 27) in the same edit, since TERMS-081 makes that change on the oldest screen. The test at adapters.test.ts:45 only checks that the line contains 'signals'.",
+      "finalProposed": "HealthStrip.tsx:27 t(\"WATCHED ACCOUNTS\"); :28 t(\"PRIORITY 75+\"). ds/lib/adapters.ts:58: `Priority ${m.heat} out of 99 (${BAND_WORD[m.band]}) — ${signalPhrase}${recentPhrase}` with `const BAND_WORD: Record<HeatBand, string> = { Hot: \"very high\", Active: \"high\", Watch: \"medium\", Low: \"low\" }`. heatBand() keeps returning the stored keys.",
+      "checked": "src/signal-console/ds/components/HealthStrip.tsx:18-29; src/signal-console/ds/lib/adapters.ts:50-62; src/signal-console/lib/heat.ts:111-115; src/signal-console/ds/lib/adapters.test.ts:33-53; src/linkedin-playbook/v4/LinkedInPlaybookV4.tsx:194"
+    },
+    {
+      "findingId": "TERMS-065",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at ActionsObject.tsx:29, 31 and 32, src/welcome/lib/engine.ts:69, WelcomeDS.tsx:103 and ds/lib/adapters.ts:47. 'Moves' is the recommendation noun, 'the action that compounds' gives no basis for choosing, and 'anchors' names the setup milestones. The same strings were filed as WELCOME-019 and WELCOME-021 and verified. Two differences matter. The verified heading is 'Recommended next steps' with 'Start with the first step.' beneath it. And the generated line at engine.ts:69 cannot be fixed by swapping the noun: it prints a lower-cased milestone name ('Next step: first icp saved.') above a first card that may say something else, so the verified change builds it from the first action instead.",
+      "finalProposed": "As verified for WELCOME-019 and WELCOME-021. ActionsObject.tsx:29 \"Recommended next steps\"; :31 \"RECOMMENDED NEXT STEPS\"; :32 \"Start with the first step.\" ds/lib/adapters.ts:47 `${m.completed} of ${m.total} setup milestones complete`. WelcomeDS.tsx:103 \"Setup milestones\". engine.ts:68-70: build the headline from the first action's title (\"Next step: define your first ICP.\"), as set out in the WELCOME-021 verdict. Oldest screen src/welcome/components/ActionStack.tsx:15-21 as verified for WELCOME-018.",
+      "checked": "src/welcome/ds/components/ActionsObject.tsx:29-32; src/welcome/lib/engine.ts:68-70; audit/welcome.verify.json WELCOME-018, WELCOME-019, WELCOME-021"
+    },
+    {
+      "findingId": "TERMS-066",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "Every quoted string is in the source: FoundingGtmShare.tsx:26, 28, 36, 38, 46, 55, 57, 68, 70-71, 74 and 81, and SectionFrame.tsx:69-70 and 88, which draws each section on this page. This is the page a new hire opens from a share link, with no sign-in and no other screen to explain it, and it calls the document a 'kit' nine times, its author 'the operator', and each section's note 'SURPRISE'. The sender's own screen says sales handoff and 'Key observation' (FoundingGtmV4.tsx:54, 139). The replacements name the document the same way, describe the seven sections in words that match their titles, and say what the readiness state measures. No test file exists for this page, so nothing asserts the old text.",
+      "checked": "src/founding-gtm-share/FoundingGtmShare.tsx:10-81; src/founding-gtm/components/SectionFrame.tsx:60-93; src/founding-gtm/v4/FoundingGtmV4.tsx:54-57, 131-139"
+    },
+    {
+      "findingId": "TERMS-067",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The quoted strings are in the oldest Call in a Favor files (DeskBoard.tsx:128-350; AdvisorDeploy.tsx:33; Topbar.tsx:20-22; SecondaryStack.tsx as cited). The screen is headed with the retired area name and uses carrier, ask moment, blotter, rolodex, deploy and desk read. The replacements follow the default screen's words and the original rewrite ('network-assisted deal support'). Three corrections, the same as for the previous screen (TERMS-034). (1) Line 271 is a t() label; 'Not the right contact for this request yet' is eight words, over the six-word limit. (2) 'Reroute' (line 330) only records the request as redirected; it does not ask anyone, so keep it, and keep it in the sentence at SecondaryStack.tsx:255. (3) The empty option in the same select as 'Who can help' says 'No advisors registered' (line 188); change it with the label. The note about deleting the oldest screens is an owner decision and should stay one.",
+      "finalProposed": "As proposed, except: DeskBoard.tsx:271 aria-label t(\"Not the right contact yet\"); :330 unchanged ('Reroute'); :188 t(\"No contacts yet\"); SecondaryStack.tsx:255 \"No requests logged yet. Use Send, Hold or Reroute above and the request appears here.\"",
+      "checked": "src/call-in-a-favor/components/DeskBoard.tsx:128-350; src/call-in-a-favor/AdvisorDeploy.tsx:33; src/call-in-a-favor/components/Topbar.tsx:20-22; src/call-in-a-favor/components/SecondaryStack.tsx:336-378; src/call-in-a-favor/state.ts:234-241"
+    },
+    {
+      "findingId": "TERMS-068",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The strings are at TalkLoom.tsx:114, 123, 130, 157 and 258, Topbar.tsx:36 and 40, AccountRow.tsx:54 and CallMemory.tsx:31 and 34. 'Threads', 'pull' and 'weave … into one live route' are the loom metaphor for the call's steps, and the default screen calls the same list the Call plan with named steps (ColdCallStudioV4.tsx:52-56, 166). The replacements are plain and match what each control holds: the steps, the current step, the notes field, the person being called, and the list of logged calls.",
+      "checked": "src/cold-call-studio/components/TalkLoom.tsx:114-258; src/cold-call-studio/components/Topbar.tsx:36-40; src/cold-call-studio/components/AccountRow.tsx:54; src/cold-call-studio/components/CallMemory.tsx:31-34; src/cold-call-studio/v4/ColdCallStudioV4.tsx:52-56, 166-167"
+    },
+    {
+      "findingId": "TERMS-069",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "Every quoted string is in the oldest Deal Workspace files at the cited lines. The same screen was filed line by line as DW-044 to DW-056 and all thirteen were verified. Use those texts: they cover every string here, and they correct three things this proposal states that the code does not do. (1) The main panel shows the open deal with the highest value, not the highest risk (src/deal-workspace/state.ts:122-128), so 'Highest-risk deal' and 'The open deal with the highest risk score' would be false. (2) No weighted figure is calculated on the 'Weighted truth' tab (TargetFolio.tsx:199-212 prints an unweighted total), so a sentence defining 'Weighted pipeline' has nothing to refer to; the verified change deletes it. (3) The three row buttons only select a deal (InterventionRail.tsx:77-79), so they become 'Review now', 'Review next' and 'View deal' rather than risk names. The section heading in the editor becomes 'Next step & forecast', as in TERMS-002.",
+      "finalProposed": "Apply the verified texts of DW-044 (Hero.tsx:21, 24, 36), DW-045, DW-046, DW-047, DW-048 and DW-053 (InterventionRail.tsx), DW-049, DW-050 and DW-051 (TargetFolio.tsx), DW-052 (HandoffStrip.tsx:46-90), DW-054 (DealHealthForm.tsx:175, 368, 434) and DW-056 (MicroGrid.tsx:31) in place of this finding's list.",
+      "checked": "src/deal-workspace/components/Hero.tsx:24, 36; src/deal-workspace/components/HandoffStrip.tsx:46-90; src/deal-workspace/components/InterventionRail.tsx:77-79, 106-302; src/deal-workspace/components/TargetFolio.tsx:34-37, 68-80, 199-212; src/deal-workspace/state.ts:114-129; audit/deal-workspace.verify.json DW-044 to DW-056"
+    },
+    {
+      "findingId": "TERMS-070",
+      "real": "CONFIRMED",
+      "fix": "AMENDED",
+      "reason": "The strings are at DiscoveryStudio.tsx:87, 90, 135, 140 and 145, components/HandoffStrip.tsx:38-52 and CompressionToggle.tsx:30-32. 'Canonical Control Face' and 'Ledger spine.' are internal design vocabulary shown as the page's heading. The replacements are plain and the three compression hints match what each setting does (all questions, the essential ones, the current section with the recovery prompts). One correction, the same as TERMS-044: 'moves to a different kind of buyer' adds a condition the code does not support, since frameworks are organized by what the seller sells.",
+      "finalProposed": "As proposed, except DiscoveryStudio.tsx:135: \"Change the framework only if the conversation changes.\"",
+      "checked": "src/discovery-studio/DiscoveryStudio.tsx:84-145; src/discovery-studio/components/HandoffStrip.tsx:29-53; src/discovery-studio/components/CompressionToggle.tsx:25-33; src/discovery-studio/v4/DiscoveryStudioV4.tsx:212-254"
+    },
+    {
+      "findingId": "TERMS-071",
+      "real": "CONFIRMED",
+      "fix": "CONFIRMED",
+      "reason": "The strings are at src/founding-gtm/components/HandoffStrip.tsx:28, 30, 32 and 35 (verified by search: 'Carry the kit forward' at line 28, 'The kit is read-mode here' at 35) and Topbar.tsx:37. 'Kit' is the retired name and 'read-mode' means read-only. The replacements match the ones for the previous screen (TERMS-047) so the two older screens say the same thing, and the sentence about where the content comes from is accurate: the sections are computed from recorded deals, outreach and calls.",
+      "checked": "src/founding-gtm/components/HandoffStrip.tsx:28-36; src/founding-gtm/components/Topbar.tsx:37; src/founding-gtm/ds/FoundingGtmDS.tsx:121-131"
+    }
+  ],
+  "dispositionChallenges": [],
+  "missed": []
+}
